@@ -29,32 +29,370 @@
         private void InitializeComponent()
         {
             panelSidebar = new Panel();
+            bBackup = new BotonSidebar();
+            bAgregarPersonal = new BotonSidebar();
+            bCerrarSesion = new BotonSidebar();
+            bProcedimientos = new BotonSidebar();
+            bPacientes = new BotonSidebar();
+            bHospitalizacion = new BotonSidebar();
+            bHistorial = new BotonSidebar();
+            bConsultas = new BotonSidebar();
+            bHome = new BotonSidebar();
+            bCitas = new BotonSidebar();
+            label1 = new Label();
+            labelSH = new Label();
+            labelClinicks = new Label();
+            lNombreUsuario = new Label();
+            lRolUsuario = new Label();
+            panelSidebar.SuspendLayout();
             SuspendLayout();
             // 
             // panelSidebar
             // 
             panelSidebar.AutoScroll = true;
-            panelSidebar.Dock = DockStyle.Left;
+            panelSidebar.Controls.Add(bBackup);
+            panelSidebar.Controls.Add(bAgregarPersonal);
+            panelSidebar.Controls.Add(bCerrarSesion);
+            panelSidebar.Controls.Add(bProcedimientos);
+            panelSidebar.Controls.Add(bPacientes);
+            panelSidebar.Controls.Add(bHospitalizacion);
+            panelSidebar.Controls.Add(bHistorial);
+            panelSidebar.Controls.Add(bConsultas);
+            panelSidebar.Controls.Add(bHome);
+            panelSidebar.Controls.Add(bCitas);
+            panelSidebar.Controls.Add(label1);
+            panelSidebar.Controls.Add(labelSH);
+            panelSidebar.Controls.Add(labelClinicks);
             panelSidebar.Location = new Point(0, 0);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(200, 450);
+            panelSidebar.Size = new Size(200, 655);
             panelSidebar.TabIndex = 0;
-            panelSidebar.Paint += panel1_Paint;
+            panelSidebar.Paint += panelSidebar_Paint;
+            // 
+            // bBackup
+            // 
+            bBackup.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bBackup.BorderRadius = 10;
+            bBackup.ClickColor = Color.FromArgb(192, 192, 192);
+            bBackup.FlatAppearance.BorderSize = 0;
+            bBackup.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bBackup.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bBackup.FlatStyle = FlatStyle.Flat;
+            bBackup.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bBackup.HoverColor = Color.FromArgb(224, 224, 224);
+            bBackup.Image = Resource1.file_earmark_arrow_down;
+            bBackup.ImageAlign = ContentAlignment.MiddleLeft;
+            bBackup.IsActive = false;
+            bBackup.Location = new Point(12, 552);
+            bBackup.Name = "bBackup";
+            bBackup.NormalColor = Color.White;
+            bBackup.Size = new Size(175, 23);
+            bBackup.TabIndex = 12;
+            bBackup.TabStop = false;
+            bBackup.Text = "Realizar Backup";
+            bBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bBackup.UseVisualStyleBackColor = true;
+            // 
+            // bAgregarPersonal
+            // 
+            bAgregarPersonal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bAgregarPersonal.BorderRadius = 10;
+            bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
+            bAgregarPersonal.FlatAppearance.BorderSize = 0;
+            bAgregarPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bAgregarPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bAgregarPersonal.FlatStyle = FlatStyle.Flat;
+            bAgregarPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bAgregarPersonal.HoverColor = Color.FromArgb(224, 224, 224);
+            bAgregarPersonal.Image = Resource1.plus_square;
+            bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
+            bAgregarPersonal.IsActive = false;
+            bAgregarPersonal.Location = new Point(12, 581);
+            bAgregarPersonal.Name = "bAgregarPersonal";
+            bAgregarPersonal.NormalColor = Color.White;
+            bAgregarPersonal.Size = new Size(175, 23);
+            bAgregarPersonal.TabIndex = 11;
+            bAgregarPersonal.TabStop = false;
+            bAgregarPersonal.Text = "Agregar Personal";
+            bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bAgregarPersonal.UseVisualStyleBackColor = true;
+            // 
+            // bCerrarSesion
+            // 
+            bCerrarSesion.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bCerrarSesion.BorderRadius = 10;
+            bCerrarSesion.ClickColor = Color.FromArgb(192, 192, 192);
+            bCerrarSesion.FlatAppearance.BorderSize = 0;
+            bCerrarSesion.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bCerrarSesion.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bCerrarSesion.FlatStyle = FlatStyle.Flat;
+            bCerrarSesion.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bCerrarSesion.HoverColor = Color.FromArgb(224, 224, 224);
+            bCerrarSesion.Image = Resource1.box_arrow_right;
+            bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
+            bCerrarSesion.IsActive = false;
+            bCerrarSesion.Location = new Point(12, 610);
+            bCerrarSesion.Name = "bCerrarSesion";
+            bCerrarSesion.NormalColor = Color.White;
+            bCerrarSesion.Size = new Size(175, 23);
+            bCerrarSesion.TabIndex = 10;
+            bCerrarSesion.TabStop = false;
+            bCerrarSesion.Text = "Cerrar Sesión";
+            bCerrarSesion.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bCerrarSesion.UseVisualStyleBackColor = true;
+            // 
+            // bProcedimientos
+            // 
+            bProcedimientos.BorderRadius = 10;
+            bProcedimientos.ClickColor = Color.FromArgb(192, 192, 192);
+            bProcedimientos.FlatAppearance.BorderSize = 0;
+            bProcedimientos.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bProcedimientos.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bProcedimientos.FlatStyle = FlatStyle.Flat;
+            bProcedimientos.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bProcedimientos.HoverColor = Color.FromArgb(224, 224, 224);
+            bProcedimientos.Image = Resource1.bandaid;
+            bProcedimientos.ImageAlign = ContentAlignment.MiddleLeft;
+            bProcedimientos.IsActive = false;
+            bProcedimientos.Location = new Point(12, 330);
+            bProcedimientos.Name = "bProcedimientos";
+            bProcedimientos.NormalColor = Color.White;
+            bProcedimientos.Size = new Size(175, 23);
+            bProcedimientos.TabIndex = 9;
+            bProcedimientos.TabStop = false;
+            bProcedimientos.Text = "Procedimientos";
+            bProcedimientos.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bProcedimientos.UseVisualStyleBackColor = true;
+            // 
+            // bPacientes
+            // 
+            bPacientes.BorderRadius = 10;
+            bPacientes.ClickColor = Color.FromArgb(192, 192, 192);
+            bPacientes.FlatAppearance.BorderSize = 0;
+            bPacientes.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bPacientes.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bPacientes.FlatStyle = FlatStyle.Flat;
+            bPacientes.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bPacientes.HoverColor = Color.FromArgb(224, 224, 224);
+            bPacientes.Image = Resource1.people_fill;
+            bPacientes.ImageAlign = ContentAlignment.MiddleLeft;
+            bPacientes.IsActive = false;
+            bPacientes.Location = new Point(12, 301);
+            bPacientes.Name = "bPacientes";
+            bPacientes.NormalColor = Color.White;
+            bPacientes.Size = new Size(175, 23);
+            bPacientes.TabIndex = 8;
+            bPacientes.TabStop = false;
+            bPacientes.Text = "Pacientes";
+            bPacientes.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bPacientes.UseVisualStyleBackColor = true;
+            // 
+            // bHospitalizacion
+            // 
+            bHospitalizacion.BorderRadius = 10;
+            bHospitalizacion.ClickColor = Color.FromArgb(192, 192, 192);
+            bHospitalizacion.FlatAppearance.BorderSize = 0;
+            bHospitalizacion.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bHospitalizacion.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bHospitalizacion.FlatStyle = FlatStyle.Flat;
+            bHospitalizacion.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bHospitalizacion.HoverColor = Color.FromArgb(224, 224, 224);
+            bHospitalizacion.Image = Resource1.hospital_fill;
+            bHospitalizacion.ImageAlign = ContentAlignment.MiddleLeft;
+            bHospitalizacion.IsActive = false;
+            bHospitalizacion.Location = new Point(12, 272);
+            bHospitalizacion.Name = "bHospitalizacion";
+            bHospitalizacion.NormalColor = Color.White;
+            bHospitalizacion.Size = new Size(175, 23);
+            bHospitalizacion.TabIndex = 7;
+            bHospitalizacion.TabStop = false;
+            bHospitalizacion.Text = "Hospitalizacion";
+            bHospitalizacion.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bHospitalizacion.UseVisualStyleBackColor = true;
+            // 
+            // bHistorial
+            // 
+            bHistorial.BorderRadius = 10;
+            bHistorial.ClickColor = Color.FromArgb(192, 192, 192);
+            bHistorial.FlatAppearance.BorderSize = 0;
+            bHistorial.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bHistorial.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bHistorial.FlatStyle = FlatStyle.Flat;
+            bHistorial.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bHistorial.HoverColor = Color.FromArgb(224, 224, 224);
+            bHistorial.Image = Resource1.file_post;
+            bHistorial.ImageAlign = ContentAlignment.MiddleLeft;
+            bHistorial.IsActive = false;
+            bHistorial.Location = new Point(12, 243);
+            bHistorial.Name = "bHistorial";
+            bHistorial.NormalColor = Color.White;
+            bHistorial.Size = new Size(175, 23);
+            bHistorial.TabIndex = 6;
+            bHistorial.TabStop = false;
+            bHistorial.Text = "Historial Medico";
+            bHistorial.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bHistorial.UseVisualStyleBackColor = true;
+            // 
+            // bConsultas
+            // 
+            bConsultas.BorderRadius = 10;
+            bConsultas.ClickColor = Color.FromArgb(192, 192, 192);
+            bConsultas.FlatAppearance.BorderSize = 0;
+            bConsultas.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bConsultas.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bConsultas.FlatStyle = FlatStyle.Flat;
+            bConsultas.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bConsultas.HoverColor = Color.FromArgb(224, 224, 224);
+            bConsultas.Image = Resource1.file_medical_fill;
+            bConsultas.ImageAlign = ContentAlignment.MiddleLeft;
+            bConsultas.IsActive = false;
+            bConsultas.Location = new Point(12, 214);
+            bConsultas.Name = "bConsultas";
+            bConsultas.NormalColor = Color.White;
+            bConsultas.Size = new Size(175, 23);
+            bConsultas.TabIndex = 5;
+            bConsultas.TabStop = false;
+            bConsultas.Text = "Consultas";
+            bConsultas.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bConsultas.UseVisualStyleBackColor = true;
+            // 
+            // bHome
+            // 
+            bHome.BorderRadius = 10;
+            bHome.ClickColor = Color.FromArgb(192, 192, 192);
+            bHome.FlatAppearance.BorderSize = 0;
+            bHome.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bHome.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bHome.FlatStyle = FlatStyle.Flat;
+            bHome.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bHome.HoverColor = Color.FromArgb(224, 224, 224);
+            bHome.Image = Resource1.house_door1;
+            bHome.ImageAlign = ContentAlignment.MiddleLeft;
+            bHome.IsActive = false;
+            bHome.Location = new Point(12, 156);
+            bHome.Name = "bHome";
+            bHome.NormalColor = Color.White;
+            bHome.Size = new Size(175, 23);
+            bHome.TabIndex = 4;
+            bHome.TabStop = false;
+            bHome.Text = "Home";
+            bHome.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bHome.UseVisualStyleBackColor = true;
+            // 
+            // bCitas
+            // 
+            bCitas.BorderRadius = 10;
+            bCitas.ClickColor = Color.FromArgb(192, 192, 192);
+            bCitas.FlatAppearance.BorderSize = 0;
+            bCitas.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bCitas.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bCitas.FlatStyle = FlatStyle.Flat;
+            bCitas.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bCitas.HoverColor = Color.FromArgb(224, 224, 224);
+            bCitas.Image = Resource1.calendar_event;
+            bCitas.ImageAlign = ContentAlignment.MiddleLeft;
+            bCitas.IsActive = false;
+            bCitas.Location = new Point(12, 185);
+            bCitas.Name = "bCitas";
+            bCitas.NormalColor = Color.White;
+            bCitas.Size = new Size(175, 23);
+            bCitas.TabIndex = 1;
+            bCitas.TabStop = false;
+            bCitas.Text = "Citas";
+            bCitas.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bCitas.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(26, 125);
+            label1.Name = "label1";
+            label1.Size = new Size(161, 17);
+            label1.TabIndex = 3;
+            label1.Text = "NAVEGACION PRINCIPAL";
+            // 
+            // labelSH
+            // 
+            labelSH.AccessibleRole = AccessibleRole.None;
+            labelSH.Anchor = AnchorStyles.Top;
+            labelSH.AutoSize = true;
+            labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelSH.Location = new Point(30, 58);
+            labelSH.Name = "labelSH";
+            labelSH.Size = new Size(148, 20);
+            labelSH.TabIndex = 2;
+            labelSH.Text = "Sistema Hospitalario";
+            labelSH.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelClinicks
+            // 
+            labelClinicks.AutoSize = true;
+            labelClinicks.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelClinicks.Location = new Point(67, 33);
+            labelClinicks.Name = "labelClinicks";
+            labelClinicks.Size = new Size(77, 25);
+            labelClinicks.TabIndex = 1;
+            labelClinicks.Text = "Clinicks";
+            labelClinicks.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lNombreUsuario
+            // 
+            lNombreUsuario.AutoSize = true;
+            lNombreUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lNombreUsuario.Location = new Point(887, 18);
+            lNombreUsuario.Name = "lNombreUsuario";
+            lNombreUsuario.Size = new Size(121, 15);
+            lNombreUsuario.TabIndex = 1;
+            lNombreUsuario.Text = "Dr Emanuel Gonzalez";
+            // 
+            // lRolUsuario
+            // 
+            lRolUsuario.AutoSize = true;
+            lRolUsuario.BackColor = Color.DodgerBlue;
+            lRolUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lRolUsuario.ForeColor = Color.White;
+            lRolUsuario.Location = new Point(923, 33);
+            lRolUsuario.Name = "lRolUsuario";
+            lRolUsuario.Size = new Size(47, 15);
+            lRolUsuario.TabIndex = 2;
+            lRolUsuario.Text = "Medico";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            BackColor = Color.White;
+            ClientSize = new Size(1038, 655);
+            Controls.Add(lRolUsuario);
+            Controls.Add(lNombreUsuario);
             Controls.Add(panelSidebar);
             Name = "Form1";
             Text = "Form1";
             Resize += Form1_Resize;
+            panelSidebar.ResumeLayout(false);
+            panelSidebar.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Panel panelSidebar;
+        private Label labelClinicks;
+        private Label label1;
+        private Label labelSH;
+        private BotonSidebar bCitas;
+        private BotonSidebar bHome;
+        private BotonSidebar bProcedimientos;
+        private BotonSidebar bPacientes;
+        private BotonSidebar bHospitalizacion;
+        private BotonSidebar bHistorial;
+        private BotonSidebar bConsultas;
+        private BotonSidebar bBackup;
+        private BotonSidebar bAgregarPersonal;
+        private BotonSidebar bCerrarSesion;
+        private Label lNombreUsuario;
+        private Label lRolUsuario;
     }
 }
