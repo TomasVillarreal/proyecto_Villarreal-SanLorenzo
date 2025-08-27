@@ -32,13 +32,9 @@
             bBackup = new BotonSidebar();
             bAgregarPersonal = new BotonSidebar();
             bCerrarSesion = new BotonSidebar();
-            bProcedimientos = new BotonSidebar();
             bPacientes = new BotonSidebar();
-            bHospitalizacion = new BotonSidebar();
             bHistorial = new BotonSidebar();
-            bConsultas = new BotonSidebar();
             bHome = new BotonSidebar();
-            bCitas = new BotonSidebar();
             label1 = new Label();
             labelSH = new Label();
             labelClinicks = new Label();
@@ -53,13 +49,9 @@
             panelSidebar.Controls.Add(bBackup);
             panelSidebar.Controls.Add(bAgregarPersonal);
             panelSidebar.Controls.Add(bCerrarSesion);
-            panelSidebar.Controls.Add(bProcedimientos);
             panelSidebar.Controls.Add(bPacientes);
-            panelSidebar.Controls.Add(bHospitalizacion);
             panelSidebar.Controls.Add(bHistorial);
-            panelSidebar.Controls.Add(bConsultas);
             panelSidebar.Controls.Add(bHome);
-            panelSidebar.Controls.Add(bCitas);
             panelSidebar.Controls.Add(label1);
             panelSidebar.Controls.Add(labelSH);
             panelSidebar.Controls.Add(labelClinicks);
@@ -71,7 +63,7 @@
             // 
             // bBackup
             // 
-            bBackup.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bBackup.Anchor = AnchorStyles.Bottom;
             bBackup.BorderRadius = 10;
             bBackup.ClickColor = Color.FromArgb(192, 192, 192);
             bBackup.FlatAppearance.BorderSize = 0;
@@ -95,7 +87,7 @@
             // 
             // bAgregarPersonal
             // 
-            bAgregarPersonal.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bAgregarPersonal.Anchor = AnchorStyles.Bottom;
             bAgregarPersonal.BorderRadius = 10;
             bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
             bAgregarPersonal.FlatAppearance.BorderSize = 0;
@@ -119,7 +111,7 @@
             // 
             // bCerrarSesion
             // 
-            bCerrarSesion.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            bCerrarSesion.Anchor = AnchorStyles.Bottom;
             bCerrarSesion.BorderRadius = 10;
             bCerrarSesion.ClickColor = Color.FromArgb(192, 192, 192);
             bCerrarSesion.FlatAppearance.BorderSize = 0;
@@ -141,29 +133,6 @@
             bCerrarSesion.TextImageRelation = TextImageRelation.ImageBeforeText;
             bCerrarSesion.UseVisualStyleBackColor = true;
             // 
-            // bProcedimientos
-            // 
-            bProcedimientos.BorderRadius = 10;
-            bProcedimientos.ClickColor = Color.FromArgb(192, 192, 192);
-            bProcedimientos.FlatAppearance.BorderSize = 0;
-            bProcedimientos.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bProcedimientos.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bProcedimientos.FlatStyle = FlatStyle.Flat;
-            bProcedimientos.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bProcedimientos.HoverColor = Color.FromArgb(224, 224, 224);
-            bProcedimientos.Image = Resource1.bandaid;
-            bProcedimientos.ImageAlign = ContentAlignment.MiddleLeft;
-            bProcedimientos.IsActive = false;
-            bProcedimientos.Location = new Point(12, 330);
-            bProcedimientos.Name = "bProcedimientos";
-            bProcedimientos.NormalColor = Color.White;
-            bProcedimientos.Size = new Size(175, 23);
-            bProcedimientos.TabIndex = 9;
-            bProcedimientos.TabStop = false;
-            bProcedimientos.Text = "Procedimientos";
-            bProcedimientos.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bProcedimientos.UseVisualStyleBackColor = true;
-            // 
             // bPacientes
             // 
             bPacientes.BorderRadius = 10;
@@ -177,7 +146,7 @@
             bPacientes.Image = Resource1.people_fill;
             bPacientes.ImageAlign = ContentAlignment.MiddleLeft;
             bPacientes.IsActive = false;
-            bPacientes.Location = new Point(12, 301);
+            bPacientes.Location = new Point(12, 214);
             bPacientes.Name = "bPacientes";
             bPacientes.NormalColor = Color.White;
             bPacientes.Size = new Size(175, 23);
@@ -186,29 +155,6 @@
             bPacientes.Text = "Pacientes";
             bPacientes.TextImageRelation = TextImageRelation.ImageBeforeText;
             bPacientes.UseVisualStyleBackColor = true;
-            // 
-            // bHospitalizacion
-            // 
-            bHospitalizacion.BorderRadius = 10;
-            bHospitalizacion.ClickColor = Color.FromArgb(192, 192, 192);
-            bHospitalizacion.FlatAppearance.BorderSize = 0;
-            bHospitalizacion.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bHospitalizacion.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bHospitalizacion.FlatStyle = FlatStyle.Flat;
-            bHospitalizacion.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bHospitalizacion.HoverColor = Color.FromArgb(224, 224, 224);
-            bHospitalizacion.Image = Resource1.hospital_fill;
-            bHospitalizacion.ImageAlign = ContentAlignment.MiddleLeft;
-            bHospitalizacion.IsActive = false;
-            bHospitalizacion.Location = new Point(12, 272);
-            bHospitalizacion.Name = "bHospitalizacion";
-            bHospitalizacion.NormalColor = Color.White;
-            bHospitalizacion.Size = new Size(175, 23);
-            bHospitalizacion.TabIndex = 7;
-            bHospitalizacion.TabStop = false;
-            bHospitalizacion.Text = "Hospitalizacion";
-            bHospitalizacion.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bHospitalizacion.UseVisualStyleBackColor = true;
             // 
             // bHistorial
             // 
@@ -223,7 +169,7 @@
             bHistorial.Image = Resource1.file_post;
             bHistorial.ImageAlign = ContentAlignment.MiddleLeft;
             bHistorial.IsActive = false;
-            bHistorial.Location = new Point(12, 243);
+            bHistorial.Location = new Point(12, 185);
             bHistorial.Name = "bHistorial";
             bHistorial.NormalColor = Color.White;
             bHistorial.Size = new Size(175, 23);
@@ -232,29 +178,6 @@
             bHistorial.Text = "Historial Medico";
             bHistorial.TextImageRelation = TextImageRelation.ImageBeforeText;
             bHistorial.UseVisualStyleBackColor = true;
-            // 
-            // bConsultas
-            // 
-            bConsultas.BorderRadius = 10;
-            bConsultas.ClickColor = Color.FromArgb(192, 192, 192);
-            bConsultas.FlatAppearance.BorderSize = 0;
-            bConsultas.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bConsultas.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bConsultas.FlatStyle = FlatStyle.Flat;
-            bConsultas.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bConsultas.HoverColor = Color.FromArgb(224, 224, 224);
-            bConsultas.Image = Resource1.file_medical_fill;
-            bConsultas.ImageAlign = ContentAlignment.MiddleLeft;
-            bConsultas.IsActive = false;
-            bConsultas.Location = new Point(12, 214);
-            bConsultas.Name = "bConsultas";
-            bConsultas.NormalColor = Color.White;
-            bConsultas.Size = new Size(175, 23);
-            bConsultas.TabIndex = 5;
-            bConsultas.TabStop = false;
-            bConsultas.Text = "Consultas";
-            bConsultas.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bConsultas.UseVisualStyleBackColor = true;
             // 
             // bHome
             // 
@@ -279,29 +202,6 @@
             bHome.TextImageRelation = TextImageRelation.ImageBeforeText;
             bHome.UseVisualStyleBackColor = true;
             // 
-            // bCitas
-            // 
-            bCitas.BorderRadius = 10;
-            bCitas.ClickColor = Color.FromArgb(192, 192, 192);
-            bCitas.FlatAppearance.BorderSize = 0;
-            bCitas.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bCitas.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bCitas.FlatStyle = FlatStyle.Flat;
-            bCitas.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bCitas.HoverColor = Color.FromArgb(224, 224, 224);
-            bCitas.Image = Resource1.calendar_event;
-            bCitas.ImageAlign = ContentAlignment.MiddleLeft;
-            bCitas.IsActive = false;
-            bCitas.Location = new Point(12, 185);
-            bCitas.Name = "bCitas";
-            bCitas.NormalColor = Color.White;
-            bCitas.Size = new Size(175, 23);
-            bCitas.TabIndex = 1;
-            bCitas.TabStop = false;
-            bCitas.Text = "Citas";
-            bCitas.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bCitas.UseVisualStyleBackColor = true;
-            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -315,7 +215,6 @@
             // labelSH
             // 
             labelSH.AccessibleRole = AccessibleRole.None;
-            labelSH.Anchor = AnchorStyles.Top;
             labelSH.AutoSize = true;
             labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelSH.Location = new Point(30, 58);
@@ -382,13 +281,9 @@
         private Label labelClinicks;
         private Label label1;
         private Label labelSH;
-        private BotonSidebar bCitas;
         private BotonSidebar bHome;
-        private BotonSidebar bProcedimientos;
         private BotonSidebar bPacientes;
-        private BotonSidebar bHospitalizacion;
         private BotonSidebar bHistorial;
-        private BotonSidebar bConsultas;
         private BotonSidebar bBackup;
         private BotonSidebar bAgregarPersonal;
         private BotonSidebar bCerrarSesion;
