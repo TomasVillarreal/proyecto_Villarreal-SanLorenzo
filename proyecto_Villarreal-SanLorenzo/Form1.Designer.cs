@@ -40,6 +40,7 @@
             labelClinicks = new Label();
             lNombreUsuario = new Label();
             lRolUsuario = new Label();
+            panelDefault = new Panel();
             panelSidebar.SuspendLayout();
             SuspendLayout();
             // 
@@ -84,6 +85,7 @@
             bBackup.Text = "Realizar Backup";
             bBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
             bBackup.UseVisualStyleBackColor = true;
+            bBackup.Click += bBackup_Click;
             // 
             // bAgregarPersonal
             // 
@@ -155,6 +157,7 @@
             bPacientes.Text = "Pacientes";
             bPacientes.TextImageRelation = TextImageRelation.ImageBeforeText;
             bPacientes.UseVisualStyleBackColor = true;
+            bPacientes.Click += bPacientes_Click;
             // 
             // bHistorial
             // 
@@ -257,12 +260,22 @@
             lRolUsuario.TabIndex = 2;
             lRolUsuario.Text = "Medico";
             // 
+            // panelDefault
+            // 
+            panelDefault.BackColor = Color.FromArgb(245, 245, 245);
+            panelDefault.Location = new Point(240, 58);
+            panelDefault.Name = "panelDefault";
+            panelDefault.Size = new Size(768, 575);
+            panelDefault.TabIndex = 3;
+            panelDefault.Paint += panelDefault_Paint;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1038, 655);
+            Controls.Add(panelDefault);
             Controls.Add(lRolUsuario);
             Controls.Add(lNombreUsuario);
             Controls.Add(panelSidebar);
@@ -289,5 +302,6 @@
         private BotonSidebar bCerrarSesion;
         private Label lNombreUsuario;
         private Label lRolUsuario;
+        private Panel panelDefault;
     }
 }

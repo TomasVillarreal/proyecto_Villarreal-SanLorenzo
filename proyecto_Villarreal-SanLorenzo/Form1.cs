@@ -22,5 +22,38 @@ namespace proyecto_Villarreal_SanLorenzo
             panelSidebar.Invalidate();
             panelSidebar.Update();
         }
+
+        private void bPacientes_Click(object sender, EventArgs e)
+        {
+            panelDefault.Controls.Clear();
+            PacientesControl pacientesControl = new PacientesControl();
+            pacientesControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(pacientesControl);
+        }
+
+        private void panelDefault_Paint(object sender, PaintEventArgs e)
+        {
+            Color bordeColor = ColorTranslator.FromHtml("#C0C0C0");
+
+            int grosor = 1; // Grosor del borde
+
+            // Dibuja el borde
+            ControlPaint.DrawBorder(
+                e.Graphics,
+                panelDefault.ClientRectangle,
+                bordeColor, grosor, ButtonBorderStyle.Solid,   // Left
+                bordeColor, grosor, ButtonBorderStyle.Solid,   // Top
+                bordeColor, grosor, ButtonBorderStyle.Solid,   // Right
+                bordeColor, grosor, ButtonBorderStyle.Solid    // Bottom
+            );
+        }
+
+        private void bBackup_Click(object sender, EventArgs e)
+        {
+            panelDefault.Controls.Clear();
+            PacientesControl pacientesControl = new PacientesControl();
+            pacientesControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(pacientesControl);
+        }
     }
 }
