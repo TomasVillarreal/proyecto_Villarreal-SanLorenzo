@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panelSidebar = new Panel();
             bBackup = new BotonSidebar();
             bAgregarPersonal = new BotonSidebar();
@@ -41,6 +42,7 @@
             lNombreUsuario = new Label();
             lRolUsuario = new Label();
             panelDefault = new Panel();
+            timerBackup = new System.Windows.Forms.Timer(components);
             panelSidebar.SuspendLayout();
             SuspendLayout();
             // 
@@ -303,5 +305,6 @@
         private Label lNombreUsuario;
         private Label lRolUsuario;
         private Panel panelDefault;
+        private System.Windows.Forms.Timer timerBackup;
     }
 }

@@ -93,6 +93,16 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap circulo_plus {
+            get {
+                object obj = ResourceManager.GetObject("circulo_plus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap file_earmark_arrow_down {
             get {
                 object obj = ResourceManager.GetObject("file_earmark_arrow_down", resourceCulture);

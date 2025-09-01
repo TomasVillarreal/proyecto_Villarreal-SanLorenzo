@@ -29,23 +29,64 @@
         private void InitializeComponent()
         {
             panelBordes1 = new PanelBordes();
+            dgPaciente = new DataGridView();
+            tBusquedaPacientes = new TextBox();
+            lListaPacientes = new Label();
             lTituloPacientes = new Label();
             lSubtituloPacientes = new Label();
             bRegistrarPaciente = new Button();
-            lListaPacientes = new Label();
-            tBusquedaPacientes = new TextBox();
+            cNombrePaciente = new DataGridViewTextBoxColumn();
+            cDniPaciente = new DataGridViewTextBoxColumn();
+            cTelefonoPaciente = new DataGridViewTextBoxColumn();
+            cHistorial = new DataGridViewButtonColumn();
+            cEditarPaciente = new DataGridViewButtonColumn();
+            cEliminarPaciente = new DataGridViewButtonColumn();
             panelBordes1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgPaciente).BeginInit();
             SuspendLayout();
             // 
             // panelBordes1
             // 
             panelBordes1.BackColor = Color.White;
+            panelBordes1.Controls.Add(dgPaciente);
             panelBordes1.Controls.Add(tBusquedaPacientes);
             panelBordes1.Controls.Add(lListaPacientes);
             panelBordes1.Location = new Point(23, 131);
             panelBordes1.Name = "panelBordes1";
             panelBordes1.Size = new Size(723, 417);
             panelBordes1.TabIndex = 0;
+            // 
+            // dgPaciente
+            // 
+            dgPaciente.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgPaciente.BackgroundColor = Color.White;
+            dgPaciente.BorderStyle = BorderStyle.None;
+            dgPaciente.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgPaciente.Columns.AddRange(new DataGridViewColumn[] { cNombrePaciente, cDniPaciente, cTelefonoPaciente, cHistorial, cEditarPaciente, cEliminarPaciente });
+            dgPaciente.Location = new Point(13, 81);
+            dgPaciente.Name = "dgPaciente";
+            dgPaciente.Size = new Size(697, 322);
+            dgPaciente.TabIndex = 4;
+            dgPaciente.CellContentClick += dgPaciente_CellContentClick;
+            // 
+            // tBusquedaPacientes
+            // 
+            tBusquedaPacientes.ForeColor = SystemColors.ActiveBorder;
+            tBusquedaPacientes.Location = new Point(13, 36);
+            tBusquedaPacientes.Name = "tBusquedaPacientes";
+            tBusquedaPacientes.Size = new Size(248, 23);
+            tBusquedaPacientes.TabIndex = 3;
+            tBusquedaPacientes.Text = "Buscar por DNI";
+            // 
+            // lListaPacientes
+            // 
+            lListaPacientes.AutoSize = true;
+            lListaPacientes.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lListaPacientes.Location = new Point(12, 12);
+            lListaPacientes.Name = "lListaPacientes";
+            lListaPacientes.Size = new Size(139, 21);
+            lListaPacientes.TabIndex = 2;
+            lListaPacientes.Text = "Lista de Pacientes";
             // 
             // lTituloPacientes
             // 
@@ -72,31 +113,47 @@
             // 
             bRegistrarPaciente.BackColor = SystemColors.Highlight;
             bRegistrarPaciente.ForeColor = Color.Transparent;
-            bRegistrarPaciente.Location = new Point(629, 45);
+            bRegistrarPaciente.Image = Resource1.circulo_plus;
+            bRegistrarPaciente.Location = new Point(637, 42);
             bRegistrarPaciente.Name = "bRegistrarPaciente";
-            bRegistrarPaciente.Size = new Size(96, 37);
+            bRegistrarPaciente.Size = new Size(96, 40);
             bRegistrarPaciente.TabIndex = 3;
             bRegistrarPaciente.Text = "Registrar Paciente";
+            bRegistrarPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
             bRegistrarPaciente.UseVisualStyleBackColor = false;
             // 
-            // lListaPacientes
+            // cNombrePaciente
             // 
-            lListaPacientes.AutoSize = true;
-            lListaPacientes.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lListaPacientes.Location = new Point(12, 12);
-            lListaPacientes.Name = "lListaPacientes";
-            lListaPacientes.Size = new Size(139, 21);
-            lListaPacientes.TabIndex = 2;
-            lListaPacientes.Text = "Lista de Pacientes";
+            cNombrePaciente.HeaderText = "Nombre";
+            cNombrePaciente.Name = "cNombrePaciente";
             // 
-            // tBusquedaPacientes
+            // cDniPaciente
             // 
-            tBusquedaPacientes.ForeColor = SystemColors.ActiveBorder;
-            tBusquedaPacientes.Location = new Point(13, 36);
-            tBusquedaPacientes.Name = "tBusquedaPacientes";
-            tBusquedaPacientes.Size = new Size(248, 23);
-            tBusquedaPacientes.TabIndex = 3;
-            tBusquedaPacientes.Text = "Buscar por DNI";
+            cDniPaciente.HeaderText = "DNI";
+            cDniPaciente.Name = "cDniPaciente";
+            // 
+            // cTelefonoPaciente
+            // 
+            cTelefonoPaciente.HeaderText = "Telefono";
+            cTelefonoPaciente.Name = "cTelefonoPaciente";
+            // 
+            // cHistorial
+            // 
+            cHistorial.HeaderText = "Ver Historial";
+            cHistorial.Name = "cHistorial";
+            cHistorial.Text = "Ver Historial";
+            // 
+            // cEditarPaciente
+            // 
+            cEditarPaciente.HeaderText = "Editar";
+            cEditarPaciente.Name = "cEditarPaciente";
+            cEditarPaciente.Text = "Editar";
+            // 
+            // cEliminarPaciente
+            // 
+            cEliminarPaciente.HeaderText = "Eliminar";
+            cEliminarPaciente.Name = "cEliminarPaciente";
+            cEliminarPaciente.Text = "Eliminar";
             // 
             // PacientesControl
             // 
@@ -109,6 +166,7 @@
             Name = "PacientesControl";
             panelBordes1.ResumeLayout(false);
             panelBordes1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgPaciente).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -121,5 +179,12 @@
         private Button bRegistrarPaciente;
         private TextBox tBusquedaPacientes;
         private Label lListaPacientes;
+        private DataGridView dgPaciente;
+        private DataGridViewTextBoxColumn cNombrePaciente;
+        private DataGridViewTextBoxColumn cDniPaciente;
+        private DataGridViewTextBoxColumn cTelefonoPaciente;
+        private DataGridViewButtonColumn cHistorial;
+        private DataGridViewButtonColumn cEditarPaciente;
+        private DataGridViewButtonColumn cEliminarPaciente;
     }
 }

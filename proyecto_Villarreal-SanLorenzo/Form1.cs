@@ -17,6 +17,36 @@ namespace proyecto_Villarreal_SanLorenzo
             );
         }
 
+        public void IniciarTimerBackup(int milisegundos, string ruta)
+        {
+            timerBackup.Enabled = true;
+            timerBackup.Interval = milisegundos;
+
+            timerBackup.Tick += (s, e) =>
+            {
+                RealizarBackup(ruta);
+            };
+
+            timerBackup.Start();
+        }
+
+        public void PararTimer()
+        {
+            timerBackup.Stop();
+            timerBackup.Enabled = false;
+        }
+
+        public bool MarchaTimer()
+        {
+            return timerBackup.Enabled;
+        }
+
+
+        public void RealizarBackup(string ruta)
+        {
+            MessageBox.Show("Se ha realizado un backup!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void Form1_Resize(object sender, EventArgs e)
         {
             panelSidebar.Invalidate();
@@ -51,9 +81,12 @@ namespace proyecto_Villarreal_SanLorenzo
         private void bBackup_Click(object sender, EventArgs e)
         {
             panelDefault.Controls.Clear();
-            PacientesControl pacientesControl = new PacientesControl();
-            pacientesControl.Dock = DockStyle.Fill;
-            panelDefault.Controls.Add(pacientesControl);
+            BackupControl backupControl = new BackupControl();
+            backupControl.EstablecerFormPadre(this);
+            backupControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(backupControl);
         }
+
+        
     }
 }
