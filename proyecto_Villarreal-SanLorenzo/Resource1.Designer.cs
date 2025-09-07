@@ -153,6 +153,16 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mask_doctor {
+            get {
+                object obj = ResourceManager.GetObject("mask_doctor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap people_fill {
             get {
                 object obj = ResourceManager.GetObject("people_fill", resourceCulture);
@@ -166,6 +176,16 @@ namespace proyecto_Villarreal_SanLorenzo {
         internal static System.Drawing.Bitmap person_circle {
             get {
                 object obj = ResourceManager.GetObject("person_circle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap personal {
+            get {
+                object obj = ResourceManager.GetObject("personal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

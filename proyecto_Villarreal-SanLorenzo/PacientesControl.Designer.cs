@@ -30,17 +30,17 @@
         {
             panelBordes1 = new PanelBordes();
             dgPaciente = new DataGridView();
+            cDniPaciente = new DataGridViewTextBoxColumn();
+            cNombrePaciente = new DataGridViewTextBoxColumn();
+            cTelefonoPaciente = new DataGridViewTextBoxColumn();
+            cHistorial = new DataGridViewButtonColumn();
+            cEditarPaciente = new DataGridViewButtonColumn();
+            cEliminarPaciente = new DataGridViewButtonColumn();
             tBusquedaPacientes = new TextBox();
             lListaPacientes = new Label();
             lTituloPacientes = new Label();
             lSubtituloPacientes = new Label();
             bRegistrarPaciente = new Button();
-            cNombrePaciente = new DataGridViewTextBoxColumn();
-            cDniPaciente = new DataGridViewTextBoxColumn();
-            cTelefonoPaciente = new DataGridViewTextBoxColumn();
-            cHistorial = new DataGridViewButtonColumn();
-            cEditarPaciente = new DataGridViewButtonColumn();
-            cEliminarPaciente = new DataGridViewButtonColumn();
             panelBordes1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgPaciente).BeginInit();
             SuspendLayout();
@@ -58,16 +58,50 @@
             // 
             // dgPaciente
             // 
+            dgPaciente.AllowUserToAddRows = false;
             dgPaciente.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgPaciente.BackgroundColor = Color.White;
             dgPaciente.BorderStyle = BorderStyle.None;
             dgPaciente.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgPaciente.Columns.AddRange(new DataGridViewColumn[] { cNombrePaciente, cDniPaciente, cTelefonoPaciente, cHistorial, cEditarPaciente, cEliminarPaciente });
+            dgPaciente.Columns.AddRange(new DataGridViewColumn[] { cDniPaciente, cNombrePaciente, cTelefonoPaciente, cHistorial, cEditarPaciente, cEliminarPaciente });
             dgPaciente.Location = new Point(13, 81);
             dgPaciente.Name = "dgPaciente";
             dgPaciente.Size = new Size(697, 322);
             dgPaciente.TabIndex = 4;
             dgPaciente.CellContentClick += dgPaciente_CellContentClick;
+            // 
+            // cDniPaciente
+            // 
+            cDniPaciente.HeaderText = "DNI";
+            cDniPaciente.Name = "cDniPaciente";
+            // 
+            // cNombrePaciente
+            // 
+            cNombrePaciente.HeaderText = "Nombre";
+            cNombrePaciente.Name = "cNombrePaciente";
+            // 
+            // cTelefonoPaciente
+            // 
+            cTelefonoPaciente.HeaderText = "Telefono";
+            cTelefonoPaciente.Name = "cTelefonoPaciente";
+            // 
+            // cHistorial
+            // 
+            cHistorial.HeaderText = "Ver Historial";
+            cHistorial.Name = "cHistorial";
+            cHistorial.Text = "Ver Historial";
+            // 
+            // cEditarPaciente
+            // 
+            cEditarPaciente.HeaderText = "Editar";
+            cEditarPaciente.Name = "cEditarPaciente";
+            cEditarPaciente.Text = "Editar";
+            // 
+            // cEliminarPaciente
+            // 
+            cEliminarPaciente.HeaderText = "Eliminar";
+            cEliminarPaciente.Name = "cEliminarPaciente";
+            cEliminarPaciente.Text = "Eliminar";
             // 
             // tBusquedaPacientes
             // 
@@ -121,39 +155,7 @@
             bRegistrarPaciente.Text = "Registrar Paciente";
             bRegistrarPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
             bRegistrarPaciente.UseVisualStyleBackColor = false;
-            // 
-            // cNombrePaciente
-            // 
-            cNombrePaciente.HeaderText = "Nombre";
-            cNombrePaciente.Name = "cNombrePaciente";
-            // 
-            // cDniPaciente
-            // 
-            cDniPaciente.HeaderText = "DNI";
-            cDniPaciente.Name = "cDniPaciente";
-            // 
-            // cTelefonoPaciente
-            // 
-            cTelefonoPaciente.HeaderText = "Telefono";
-            cTelefonoPaciente.Name = "cTelefonoPaciente";
-            // 
-            // cHistorial
-            // 
-            cHistorial.HeaderText = "Ver Historial";
-            cHistorial.Name = "cHistorial";
-            cHistorial.Text = "Ver Historial";
-            // 
-            // cEditarPaciente
-            // 
-            cEditarPaciente.HeaderText = "Editar";
-            cEditarPaciente.Name = "cEditarPaciente";
-            cEditarPaciente.Text = "Editar";
-            // 
-            // cEliminarPaciente
-            // 
-            cEliminarPaciente.HeaderText = "Eliminar";
-            cEliminarPaciente.Name = "cEliminarPaciente";
-            cEliminarPaciente.Text = "Eliminar";
+            bRegistrarPaciente.Click += bRegistrarPaciente_Click;
             // 
             // PacientesControl
             // 
@@ -164,6 +166,7 @@
             Controls.Add(lTituloPacientes);
             Controls.Add(panelBordes1);
             Name = "PacientesControl";
+            Load += PacientesControl_Load;
             panelBordes1.ResumeLayout(false);
             panelBordes1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgPaciente).EndInit();
@@ -180,8 +183,8 @@
         private TextBox tBusquedaPacientes;
         private Label lListaPacientes;
         private DataGridView dgPaciente;
-        private DataGridViewTextBoxColumn cNombrePaciente;
         private DataGridViewTextBoxColumn cDniPaciente;
+        private DataGridViewTextBoxColumn cNombrePaciente;
         private DataGridViewTextBoxColumn cTelefonoPaciente;
         private DataGridViewButtonColumn cHistorial;
         private DataGridViewButtonColumn cEditarPaciente;

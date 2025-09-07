@@ -114,6 +114,7 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             FormPadre?.PararTimer();
             MessageBox.Show("Se detuvo la creacion de backups!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            bPararIntevaloBackup.Visible=false;
         }
 
         

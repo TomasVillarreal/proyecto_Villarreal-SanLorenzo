@@ -31,7 +31,7 @@
             components = new System.ComponentModel.Container();
             panelSidebar = new Panel();
             bBackup = new BotonSidebar();
-            bAgregarPersonal = new BotonSidebar();
+            bPersonal = new BotonSidebar();
             bCerrarSesion = new BotonSidebar();
             bPacientes = new BotonSidebar();
             bHistorial = new BotonSidebar();
@@ -50,7 +50,7 @@
             // 
             panelSidebar.AutoScroll = true;
             panelSidebar.Controls.Add(bBackup);
-            panelSidebar.Controls.Add(bAgregarPersonal);
+            panelSidebar.Controls.Add(bPersonal);
             panelSidebar.Controls.Add(bCerrarSesion);
             panelSidebar.Controls.Add(bPacientes);
             panelSidebar.Controls.Add(bHistorial);
@@ -89,29 +89,30 @@
             bBackup.UseVisualStyleBackColor = true;
             bBackup.Click += bBackup_Click;
             // 
-            // bAgregarPersonal
+            // bPersonal
             // 
-            bAgregarPersonal.Anchor = AnchorStyles.Bottom;
-            bAgregarPersonal.BorderRadius = 10;
-            bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
-            bAgregarPersonal.FlatAppearance.BorderSize = 0;
-            bAgregarPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bAgregarPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bAgregarPersonal.FlatStyle = FlatStyle.Flat;
-            bAgregarPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bAgregarPersonal.HoverColor = Color.FromArgb(224, 224, 224);
-            bAgregarPersonal.Image = Resource1.plus_square;
-            bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
-            bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(12, 581);
-            bAgregarPersonal.Name = "bAgregarPersonal";
-            bAgregarPersonal.NormalColor = Color.White;
-            bAgregarPersonal.Size = new Size(175, 23);
-            bAgregarPersonal.TabIndex = 11;
-            bAgregarPersonal.TabStop = false;
-            bAgregarPersonal.Text = "Agregar Personal";
-            bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bAgregarPersonal.UseVisualStyleBackColor = true;
+            bPersonal.Anchor = AnchorStyles.Bottom;
+            bPersonal.BorderRadius = 10;
+            bPersonal.ClickColor = Color.FromArgb(192, 192, 192);
+            bPersonal.FlatAppearance.BorderSize = 0;
+            bPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bPersonal.FlatStyle = FlatStyle.Flat;
+            bPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bPersonal.HoverColor = Color.FromArgb(224, 224, 224);
+            bPersonal.Image = Resource1.personal;
+            bPersonal.ImageAlign = ContentAlignment.MiddleLeft;
+            bPersonal.IsActive = false;
+            bPersonal.Location = new Point(12, 581);
+            bPersonal.Name = "bPersonal";
+            bPersonal.NormalColor = Color.White;
+            bPersonal.Size = new Size(175, 23);
+            bPersonal.TabIndex = 11;
+            bPersonal.TabStop = false;
+            bPersonal.Text = "Personal";
+            bPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bPersonal.UseVisualStyleBackColor = true;
+            bPersonal.Click += bAgregarPersonal_Click;
             // 
             // bCerrarSesion
             // 
@@ -300,7 +301,7 @@
         private BotonSidebar bPacientes;
         private BotonSidebar bHistorial;
         private BotonSidebar bBackup;
-        private BotonSidebar bAgregarPersonal;
+        private BotonSidebar bPersonal;
         private BotonSidebar bCerrarSesion;
         private Label lNombreUsuario;
         private Label lRolUsuario;

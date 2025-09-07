@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,11 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class PacientesControl : UserControlProyecto
     {
+
+        public event EventHandler AbrirOtroControl;
+        string connectionString = "Server=localhost;Database=proyecto_Villarreal-SanLorenzo;Trusted_Connection=True;";
+
+
         public PacientesControl()
         {
             InitializeComponent();
@@ -37,12 +43,47 @@ namespace proyecto_Villarreal_SanLorenzo
 
                     if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
                     {
-                        // Aquí dni ya tiene el valor
                         dgPaciente.Rows.RemoveAt(e.RowIndex);
                         MessageBox.Show("Se ha eliminado al paciente de DNI " + dni, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
-        }   
+
+        }
+
+        private void CargarDatos()
+        {
+            using (SqlConnection db = new SqlConnection(connectionString))
+            {
+                string query = "SELECT dni_paciente, nombre_paciente + ' ' + apellido_paciente AS nombre_completo, telefono_paciente FROM Paciente";
+
+                SqlCommand cmd = new SqlCommand(query, db);
+                db.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                dgPaciente.Rows.Clear(); // limpiar filas anteriores
+
+                while (reader.Read())
+                {
+                    dgPaciente.Rows.Add(
+                        reader["dni_paciente"],
+                        reader["nombre_completo"],
+                        reader["telefono_paciente"]
+                    );
+                }
+
+                db.Close();
+            }
+        }
+
+        private void bRegistrarPaciente_Click(object sender, EventArgs e)
+        {
+            AbrirOtroControl?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void PacientesControl_Load(object sender, EventArgs e)
+        {
+            CargarDatos();
+        }
     }
 }
