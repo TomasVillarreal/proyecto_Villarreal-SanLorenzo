@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design.Serialization;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -19,6 +23,42 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             InitializeComponent();
         }
+        public static bool VerifCredenciales(string nombreUsuario, string password)
+        {
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+            string queryVerif = "SELECT password FROM Usuario WHERE nombre = @nombreUsuario";
+
+            using (SqlConnection connection = new SqlConnection(connectionStirng))
+            {
+                using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
+                {
+                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario); // Corregido
+
+                    try
+                    {
+                        connection.Open();
+                        object resultado = cmd.ExecuteScalar();
+
+                        if (resultado != null)
+                        {
+                            string contraseñaAlmacenada = resultado.ToString();
+                            return (password == contraseñaAlmacenada);
+                        }
+                        else
+                        {
+                            return false; // El usuario no existe
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al verificar credenciales: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
 
         private void bIniciarSesion_Click(object sender, EventArgs e)
         {
@@ -33,7 +73,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (usuario == "admin" && password == "1234")
+            if (VerifCredenciales(usuario, password))
             {
                 Form1 formHome = new Form1();
                 formHome.Show();
@@ -42,7 +82,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             else
             {
-                MessageBox.Show("Usuario y/o contraseña incorrectos!",
+                MessageBox.Show("Credenciales incorrectas. Intente nuevamente",
                     "Error inicio de sesión", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
