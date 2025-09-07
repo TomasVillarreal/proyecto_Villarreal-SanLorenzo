@@ -42,7 +42,7 @@
             labelPass = new Label();
             tbPass = new TextBox();
             bIniciarSesion = new Button();
-            bOjo = new Button();
+            bMostrarPass = new Button();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             flowLayoutPanel2.SuspendLayout();
@@ -198,28 +198,29 @@
             bIniciarSesion.UseVisualStyleBackColor = true;
             bIniciarSesion.Click += bIniciarSesion_Click;
             // 
-            // bOjo
+            // bMostrarPass
             // 
-            bOjo.Cursor = Cursors.Hand;
-            bOjo.FlatAppearance.BorderColor = Color.Silver;
-            bOjo.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            bOjo.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            bOjo.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bOjo.ForeColor = Color.Black;
-            bOjo.Image = (Image)resources.GetObject("bOjo.Image");
-            bOjo.Location = new Point(553, 317);
-            bOjo.Name = "bOjo";
-            bOjo.Size = new Size(33, 29);
-            bOjo.TabIndex = 13;
-            bOjo.UseVisualStyleBackColor = true;
-            bOjo.Click += bOjo_Click;
+            bMostrarPass.Cursor = Cursors.Hand;
+            bMostrarPass.FlatAppearance.BorderColor = Color.Silver;
+            bMostrarPass.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            bMostrarPass.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            bMostrarPass.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bMostrarPass.ForeColor = Color.Black;
+            bMostrarPass.Image = Resource1.ojoCerrado;
+            bMostrarPass.Location = new Point(553, 317);
+            bMostrarPass.Name = "bMostrarPass";
+            bMostrarPass.Size = new Size(33, 29);
+            bMostrarPass.TabIndex = 13;
+            bMostrarPass.UseVisualStyleBackColor = true;
+            bMostrarPass.Click += bMostrarPass_Click;
             // 
             // Form_login
             // 
+            AcceptButton = bIniciarSesion;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 512);
-            Controls.Add(bOjo);
+            Controls.Add(bMostrarPass);
             Controls.Add(bIniciarSesion);
             Controls.Add(tbPass);
             Controls.Add(flowLayoutPanel1);
@@ -256,6 +257,6 @@
         private Label labelPass;
         private TextBox tbPass;
         private Button bIniciarSesion;
-        private Button bOjo;
+        private Button bMostrarPass;
     }
 }
