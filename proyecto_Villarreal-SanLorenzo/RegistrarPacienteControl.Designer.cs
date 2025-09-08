@@ -176,6 +176,7 @@
             Controls.Add(tApellidoPacienteRegistro);
             Controls.Add(tNombrePacienteRegistro);
             Name = "RegistrarPacienteControl";
+            KeyDown += RegistrarPacienteControl_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }

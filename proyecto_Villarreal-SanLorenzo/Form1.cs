@@ -49,13 +49,14 @@ namespace proyecto_Villarreal_SanLorenzo
             MessageBox.Show("Se ha realizado un backup!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void Uc1_AbrirOtroControl(object sender, EventArgs e)
+        private void UserControlProyecto_AbrirOtroControl(object sender, AbrirEdicionEventArgs e)
         {
             panelDefault.Controls.Clear();
-            RegistrarPacienteControl registrarPaciente = new RegistrarPacienteControl();
-            registrarPaciente.Dock = DockStyle.Fill;
-            panelDefault.Controls.Add(registrarPaciente);
-
+            if (e.control != null)
+            {
+                e.control.Dock = DockStyle.Fill;
+                panelDefault.Controls.Add(e.control);
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -68,7 +69,7 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             panelDefault.Controls.Clear();
             PacientesControl pacientesControl = new PacientesControl();
-            pacientesControl.AbrirOtroControl += Uc1_AbrirOtroControl;
+            pacientesControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
             pacientesControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(pacientesControl);
         }
@@ -103,7 +104,7 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             panelDefault.Controls.Clear();
             PersonalControl personalControl = new PersonalControl();
-            personalControl.AbrirOtroControl += Uc1_AbrirOtroControl;
+            personalControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
             personalControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(personalControl);
         }

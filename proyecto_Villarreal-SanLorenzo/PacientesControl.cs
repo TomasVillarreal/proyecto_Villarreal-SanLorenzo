@@ -14,7 +14,7 @@ namespace proyecto_Villarreal_SanLorenzo
     public partial class PacientesControl : UserControlProyecto
     {
 
-        public event EventHandler AbrirOtroControl;
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
         string connectionString = "Server=localhost;Database=proyecto_Villarreal-SanLorenzo;Trusted_Connection=True;";
 
 
@@ -32,36 +32,62 @@ namespace proyecto_Villarreal_SanLorenzo
             DataGridViewRow pacienteClickeado = dgPaciente.Rows[e.RowIndex];
             int dni = 0;
 
-            if (columnaClickeada.HeaderText == "cEliminarPaciente")
+            if (columnaClickeada.Name == "cEliminarPaciente")
             {
                 DialogResult confirmacion = MessageBox.Show(
                 "¿Está seguro que desea eliminar este registro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (confirmacion == DialogResult.Yes)
                 {
-                    object valorCelda = pacienteClickeado.Cells["DNI"].Value;
+                    object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
 
                     if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
                     {
+                        using (SqlConnection db = new SqlConnection(connectionString))
+                        {
+                            string queryEliminarLogico = "UPDATE Paciente SET visible = 0 WHERE dni_paciente = @dni";
+
+                            using (SqlCommand cmd = new SqlCommand(queryEliminarLogico, db))
+                            {
+                                cmd.Parameters.AddWithValue("@dni", dni);
+
+                                db.Open();
+                                cmd.ExecuteNonQuery();
+                                db.Close();
+                            }
+                        }
                         dgPaciente.Rows.RemoveAt(e.RowIndex);
                         MessageBox.Show("Se ha eliminado al paciente de DNI " + dni, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+                }
+            } else if (columnaClickeada.Name == "cEditarPaciente")
+            {
+                object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
+
+                if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
+                {
+                    RegistrarPacienteControl registrarPaciente = new RegistrarPacienteControl(dni);
+
+                    registrarPaciente.AbrirOtroControl += this.AbrirOtroControl;
+                    registrarPaciente.ControlPadre = this;
+
+                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(dni, registrarPaciente, true));
                 }
             }
 
         }
 
-        private void CargarDatos()
+        public void CargarDatos()
         {
             using (SqlConnection db = new SqlConnection(connectionString))
             {
-                string query = "SELECT dni_paciente, nombre_paciente + ' ' + apellido_paciente AS nombre_completo, telefono_paciente FROM Paciente";
+                string query = "SELECT dni_paciente, nombre_paciente + ' ' + apellido_paciente AS nombre_completo, telefono_paciente FROM Paciente WHERE visible = 1";
 
                 SqlCommand cmd = new SqlCommand(query, db);
                 db.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
-                dgPaciente.Rows.Clear(); // limpiar filas anteriores
+                dgPaciente.Rows.Clear();
 
                 while (reader.Read())
                 {
@@ -78,7 +104,9 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bRegistrarPaciente_Click(object sender, EventArgs e)
         {
-            AbrirOtroControl?.Invoke(this, EventArgs.Empty);
+            RegistrarPacienteControl registrarPaciente = new RegistrarPacienteControl();
+
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, registrarPaciente, false));
         }
 
         private void PacientesControl_Load(object sender, EventArgs e)

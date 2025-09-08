@@ -12,7 +12,7 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class PersonalControl : UserControlProyecto
     {
-        public event EventHandler AbrirOtroControl;
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
         public PersonalControl()
         {
@@ -49,7 +49,8 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bRegistrarPersonal_Click(object sender, EventArgs e)
         {
-            AbrirOtroControl?.Invoke(this, EventArgs.Empty);
+            RegistrarUsuarioControl registrarUsuario = new RegistrarUsuarioControl();
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, registrarUsuario, false));
         }
     }
 }

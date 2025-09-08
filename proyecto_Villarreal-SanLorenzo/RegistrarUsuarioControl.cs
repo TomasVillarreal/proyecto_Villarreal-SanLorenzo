@@ -30,19 +30,20 @@ namespace proyecto_Villarreal_SanLorenzo
                     "telefono_paciente, fecha_nacimiento_paciente, visible) VALUES (@dni, @nombre, @apellido, @direccion," +
                     "@telefono, @fecha_nacimiento, @visible)";
 
-                SqlCommand cmd = new SqlCommand(queryAgregar, db);
+                using (SqlCommand cmd = new SqlCommand(queryAgregar, db))
+                {
+                    cmd.Parameters.AddWithValue("@dni", tDniPacienteRegistro.Text);
+                    cmd.Parameters.AddWithValue("@nombre", tNombrePacienteRegistro.Text);
+                    cmd.Parameters.AddWithValue("@apellido", tApellidoPacienteRegistro.Text);
+                    cmd.Parameters.AddWithValue("@direccion", tDireccionPacienteRegistro.Text);
+                    cmd.Parameters.AddWithValue("@telefono", tTelefonoPacienteRegistro.Text);
+                    cmd.Parameters.AddWithValue("@fecha_nacimiento", tFechaPacienteRegistro.Value.Date);
+                    cmd.Parameters.AddWithValue("@visible", 1);
 
-                cmd.Parameters.AddWithValue("@dni", tDniPacienteRegistro.Text);
-                cmd.Parameters.AddWithValue("@nombre", tNombrePacienteRegistro.Text);
-                cmd.Parameters.AddWithValue("@apellido", tApellidoPacienteRegistro.Text);
-                cmd.Parameters.AddWithValue("@direccion", tDireccionPacienteRegistro.Text);
-                cmd.Parameters.AddWithValue("@telefono", tTelefonoPacienteRegistro.Text);
-                cmd.Parameters.AddWithValue("@fecha_nacimiento", tFechaPacienteRegistro.Value.Date);
-                cmd.Parameters.AddWithValue("@visible", 1);
-
-                db.Open();
-                cmd.ExecuteNonQuery();
-                db.Close();
+                    db.Open();
+                    cmd.ExecuteNonQuery();
+                    db.Close();
+                }
             }
         }
 
