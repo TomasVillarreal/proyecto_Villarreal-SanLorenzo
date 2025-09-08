@@ -25,7 +25,7 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         public static bool VerifCredenciales(string nombreUsuario, string password)
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             string queryVerif = "SELECT password FROM Usuario WHERE nombre = @nombreUsuario";
 
