@@ -103,10 +103,10 @@ namespace proyecto_Villarreal_SanLorenzo
         private void bAgregarPersonal_Click(object sender, EventArgs e)
         {
             panelDefault.Controls.Clear();
-            PersonalControl personalControl = new PersonalControl();
-            personalControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
-            personalControl.Dock = DockStyle.Fill;
-            panelDefault.Controls.Add(personalControl);
+            PersonalControl pesonalControl = new PersonalControl();
+            pesonalControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
+            pesonalControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(pesonalControl);
         }
     }
 }
