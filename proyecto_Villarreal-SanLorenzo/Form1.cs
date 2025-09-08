@@ -22,5 +22,16 @@ namespace proyecto_Villarreal_SanLorenzo
             panelSidebar.Invalidate();
             panelSidebar.Update();
         }
+
+        private void bCerrarSesion_Click(object sender, EventArgs e)
+        {
+            //Llama al metodo el cual cierra la sesion.
+            SesionUsuario.CerrarSesion();
+
+            //Luego redirige al usuario al form-login
+            Form_login formLogin = new Form_login();
+            formLogin.Show();
+            this.Close();
+        }
     }
 }

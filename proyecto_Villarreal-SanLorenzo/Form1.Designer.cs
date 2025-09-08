@@ -56,8 +56,9 @@
             panelSidebar.Controls.Add(labelSH);
             panelSidebar.Controls.Add(labelClinicks);
             panelSidebar.Location = new Point(0, 0);
+            panelSidebar.Margin = new Padding(3, 4, 3, 4);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(200, 655);
+            panelSidebar.Size = new Size(229, 873);
             panelSidebar.TabIndex = 0;
             panelSidebar.Paint += panelSidebar_Paint;
             // 
@@ -75,10 +76,11 @@
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(12, 552);
+            bBackup.Location = new Point(36, 736);
+            bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
-            bBackup.Size = new Size(175, 23);
+            bBackup.Size = new Size(200, 31);
             bBackup.TabIndex = 12;
             bBackup.TabStop = false;
             bBackup.Text = "Realizar Backup";
@@ -99,10 +101,11 @@
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(12, 581);
+            bAgregarPersonal.Location = new Point(36, 775);
+            bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;
-            bAgregarPersonal.Size = new Size(175, 23);
+            bAgregarPersonal.Size = new Size(200, 31);
             bAgregarPersonal.TabIndex = 11;
             bAgregarPersonal.TabStop = false;
             bAgregarPersonal.Text = "Agregar Personal";
@@ -123,15 +126,17 @@
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(12, 610);
+            bCerrarSesion.Location = new Point(36, 813);
+            bCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
-            bCerrarSesion.Size = new Size(175, 23);
+            bCerrarSesion.Size = new Size(200, 31);
             bCerrarSesion.TabIndex = 10;
             bCerrarSesion.TabStop = false;
             bCerrarSesion.Text = "Cerrar Sesión";
             bCerrarSesion.TextImageRelation = TextImageRelation.ImageBeforeText;
             bCerrarSesion.UseVisualStyleBackColor = true;
+            bCerrarSesion.Click += bCerrarSesion_Click;
             // 
             // bPacientes
             // 
@@ -146,10 +151,11 @@
             bPacientes.Image = Resource1.people_fill;
             bPacientes.ImageAlign = ContentAlignment.MiddleLeft;
             bPacientes.IsActive = false;
-            bPacientes.Location = new Point(12, 214);
+            bPacientes.Location = new Point(14, 285);
+            bPacientes.Margin = new Padding(3, 4, 3, 4);
             bPacientes.Name = "bPacientes";
             bPacientes.NormalColor = Color.White;
-            bPacientes.Size = new Size(175, 23);
+            bPacientes.Size = new Size(200, 31);
             bPacientes.TabIndex = 8;
             bPacientes.TabStop = false;
             bPacientes.Text = "Pacientes";
@@ -169,10 +175,11 @@
             bHistorial.Image = Resource1.file_post;
             bHistorial.ImageAlign = ContentAlignment.MiddleLeft;
             bHistorial.IsActive = false;
-            bHistorial.Location = new Point(12, 185);
+            bHistorial.Location = new Point(14, 247);
+            bHistorial.Margin = new Padding(3, 4, 3, 4);
             bHistorial.Name = "bHistorial";
             bHistorial.NormalColor = Color.White;
-            bHistorial.Size = new Size(175, 23);
+            bHistorial.Size = new Size(200, 31);
             bHistorial.TabIndex = 6;
             bHistorial.TabStop = false;
             bHistorial.Text = "Historial Medico";
@@ -192,10 +199,11 @@
             bHome.Image = Resource1.house_door1;
             bHome.ImageAlign = ContentAlignment.MiddleLeft;
             bHome.IsActive = false;
-            bHome.Location = new Point(12, 156);
+            bHome.Location = new Point(14, 208);
+            bHome.Margin = new Padding(3, 4, 3, 4);
             bHome.Name = "bHome";
             bHome.NormalColor = Color.White;
-            bHome.Size = new Size(175, 23);
+            bHome.Size = new Size(200, 31);
             bHome.TabIndex = 4;
             bHome.TabStop = false;
             bHome.Text = "Home";
@@ -206,9 +214,9 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(26, 125);
+            label1.Location = new Point(30, 167);
             label1.Name = "label1";
-            label1.Size = new Size(161, 17);
+            label1.Size = new Size(210, 23);
             label1.TabIndex = 3;
             label1.Text = "NAVEGACION PRINCIPAL";
             // 
@@ -217,9 +225,9 @@
             labelSH.AccessibleRole = AccessibleRole.None;
             labelSH.AutoSize = true;
             labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelSH.Location = new Point(30, 58);
+            labelSH.Location = new Point(34, 77);
             labelSH.Name = "labelSH";
-            labelSH.Size = new Size(148, 20);
+            labelSH.Size = new Size(188, 25);
             labelSH.TabIndex = 2;
             labelSH.Text = "Sistema Hospitalario";
             labelSH.TextAlign = ContentAlignment.MiddleCenter;
@@ -228,9 +236,9 @@
             // 
             labelClinicks.AutoSize = true;
             labelClinicks.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelClinicks.Location = new Point(67, 33);
+            labelClinicks.Location = new Point(77, 44);
             labelClinicks.Name = "labelClinicks";
-            labelClinicks.Size = new Size(77, 25);
+            labelClinicks.Size = new Size(95, 32);
             labelClinicks.TabIndex = 1;
             labelClinicks.Text = "Clinicks";
             labelClinicks.TextAlign = ContentAlignment.MiddleCenter;
@@ -239,9 +247,9 @@
             // 
             lNombreUsuario.AutoSize = true;
             lNombreUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNombreUsuario.Location = new Point(887, 18);
+            lNombreUsuario.Location = new Point(1014, 24);
             lNombreUsuario.Name = "lNombreUsuario";
-            lNombreUsuario.Size = new Size(121, 15);
+            lNombreUsuario.Size = new Size(155, 20);
             lNombreUsuario.TabIndex = 1;
             lNombreUsuario.Text = "Dr Emanuel Gonzalez";
             // 
@@ -251,21 +259,22 @@
             lRolUsuario.BackColor = Color.DodgerBlue;
             lRolUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lRolUsuario.ForeColor = Color.White;
-            lRolUsuario.Location = new Point(923, 33);
+            lRolUsuario.Location = new Point(1055, 44);
             lRolUsuario.Name = "lRolUsuario";
-            lRolUsuario.Size = new Size(47, 15);
+            lRolUsuario.Size = new Size(60, 20);
             lRolUsuario.TabIndex = 2;
             lRolUsuario.Text = "Medico";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1038, 655);
+            ClientSize = new Size(1186, 873);
             Controls.Add(lRolUsuario);
             Controls.Add(lNombreUsuario);
             Controls.Add(panelSidebar);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = "Form1";
             Resize += Form1_Resize;

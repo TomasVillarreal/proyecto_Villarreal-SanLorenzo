@@ -23,37 +23,41 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             InitializeComponent();
         }
-        public static bool VerifCredenciales(string nombreUsuario, string password)
+        public static int VerifCredenciales(string nombreUsuario, string password)
         {
             string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            string queryVerif = "SELECT password FROM Usuario WHERE nombre = @nombreUsuario";
+            //Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado.
+            string queryVerif = "SELECT id_usuario, password FROM Usuario WHERE nombre = @nombreUsuario";
 
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
                 using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
                 {
-                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario); // Corregido
+                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
 
                     try
                     {
                         connection.Open();
-                        object resultado = cmd.ExecuteScalar();
+                        SqlDataReader reader = cmd.ExecuteReader();
 
-                        if (resultado != null)
+                        if (reader.Read())
                         {
-                            string contraseñaAlmacenada = resultado.ToString();
-                            return (password == contraseñaAlmacenada);
+                            string contraseñaAlmacenada = reader["password"].ToString();
+
+                            if(password == contraseñaAlmacenada)
+                            {
+                                int id_usuario = Convert.ToInt32(reader["id_usuario"]);
+                                return id_usuario;
+                            }
+                            
                         }
-                        else
-                        {
-                            return false; // El usuario no existe
-                        }
+                        return 0; //El usuario no existe o contraseña incorrecta
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error al verificar credenciales: " + ex.Message);
-                        return false;
+                        return -1;
                     }
                 }
             }
@@ -73,15 +77,19 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (VerifCredenciales(usuario, password))
+            int id_usuario = VerifCredenciales(usuario, password);
+
+            if (id_usuario > 0)
             {
+                //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
                 Form1 formHome = new Form1();
                 formHome.Show();
 
                 this.Hide();
             }
-            else
+            else if(id_usuario == 0)
             {
+                //El usuario no existe o contraseña incorrecta
                 MessageBox.Show("Credenciales incorrectas. Intente nuevamente",
                     "Error inicio de sesión", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
