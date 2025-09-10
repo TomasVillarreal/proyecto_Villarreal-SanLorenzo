@@ -16,6 +16,7 @@ namespace proyecto_Villarreal_SanLorenzo
         public FormHome()
         {
             InitializeComponent();
+            this.Load += FormHome_Load;
         }
         private void FormHome_Load(object sender, EventArgs e)
           {

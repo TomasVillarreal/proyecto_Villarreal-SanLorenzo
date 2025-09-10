@@ -28,13 +28,13 @@ namespace proyecto_Villarreal_SanLorenzo
             //Cadena de conexión
             string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            //Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
-            string queryVerif = "SELECT u.id_usuario, u.password, u.nombre_usuario, u.apellido_usuario, r.nombre_rol " +
-                "               FROM Usuario AS u " +
-                "               JOIN Rol AS r " +
-                "               ON u.id_rol = r.id_rol " +
-                "               WHERE u.nombre_usuario = @nombreUsuario";
-           
+            // Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
+            string queryVerif = "SELECT u.id_usuario AS id_usuario, u.password AS password, u.nombre_usuario AS nombre_usuario, u.apellido_usuario AS apellido_usuario, u.id_rol AS id_rol, r.nombre_rol AS nombre_rol " +
+                                "FROM Usuario AS u " +
+                                "JOIN Rol AS r " +
+                                "ON u.id_rol = r.id_rol " +
+                                "WHERE u.nombre_usuario = @nombreUsuario";
+
             //Crea la conexión con la base de datos
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
@@ -56,10 +56,13 @@ namespace proyecto_Villarreal_SanLorenzo
                             if (password == contraseñaAlmacenada)
                             {
                                 // Almacena los datos del usuario
-                                SesionUsuario.id_usuario = Convert.ToInt32(reader["id_usuario"]);
-                                SesionUsuario.id_rol = Convert.ToInt32(reader["id_rol"]);
-                                SesionUsuario.nombre_usuario = reader["nombre_usuario"].ToString();
-                                SesionUsuario.apellido_usuario = reader["apellido_usuario"].ToString();
+                                SesionUsuario.IniciarSesion(
+                                    Convert.ToInt32(reader["id_usuario"]),
+                                    Convert.ToInt32(reader["id_rol"]),
+                                    reader["nombre_usuario"].ToString(),
+                                    reader["apellido_usuario"].ToString(),
+                                    reader["nombre_rol"].ToString()
+                                );
 
                                 return SesionUsuario.id_usuario;
                             }

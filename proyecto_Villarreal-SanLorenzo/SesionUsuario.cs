@@ -19,22 +19,23 @@ namespace proyecto_Villarreal_SanLorenzo
 
 
         //Metodo para iniciar la sesion
-        public static void IniciarSesion(int id_usuario,int id_rol, string nombre, string apellido, string nombre_rol)
+        public static void IniciarSesion(int idUsuario,int idRol, string nombre, string apellido, string nombreRol)
         {
-            id_usuario = id_usuario;
-            id_rol = id_rol;
-            nombre_usuario = nombre;
-            apellido_usuario = apellido;
+            SesionUsuario.id_usuario = idUsuario;
+            SesionUsuario.id_rol = idRol;
+            SesionUsuario.nombre_usuario = nombre;
+            SesionUsuario.apellido_usuario = apellido;
+            SesionUsuario.nombre_rol = nombreRol;
         }
 
         //Metodo para cerrar la sesion
         public static void CerrarSesion()
         {
-            id_usuario = 0; //Indica que no hay usuario
-            id_rol = 0;
-            nombre_usuario = null;
-            apellido_usuario = null;
-            nombre_rol = null;
+            SesionUsuario.id_usuario = 0;
+            SesionUsuario.id_rol = 0;
+            SesionUsuario.nombre_usuario = null;
+            SesionUsuario.apellido_usuario = null;
+            SesionUsuario.nombre_rol = null;
         }
 
         //Metodo para verificar si la sesion esta activa
