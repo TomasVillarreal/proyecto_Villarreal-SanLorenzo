@@ -1,12 +1,64 @@
+using System.Data.SqlClient;
+
 namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class Form1 : Form
-    {
-        public Form1()
+    {        
+        private void Form1_Load(object sender, EventArgs e)
         {
-            InitializeComponent();
+           // cargarDatosUsuario();
+
         }
 
+        private void CargarDatosUsuario()
+        {
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+            string queryUsuario = "SELECT nombre,apellido,id_rol FROM Usuario WHERE id_usuario = @id_usuario";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(queryUsuario, connection))
+                {
+                    try
+                    {
+                        cmd.Parameters.AddWithValue("@id_usuario", SesionUsuario.Id_usuario);
+
+                        connection.Open();
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            //Se guarda el rol del usuario (representado por su id)
+                            int rol = Convert.ToInt32(reader["id_rol"]);
+
+                            if(rol == 1)
+                            {
+                                lRolUsuario.Text = "Gerente";
+
+                            }else if(rol == 2)
+                            {
+                                lRolUsuario.Text = "Médico";
+                            }else if(rol == 3)
+                            {
+                                lRolUsuario.Text = "Gerente";
+                            }
+
+                                
+                           
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+
+        }
+       // lNombreUsuario.Text = reader["nombre"].ToString() + " " + reader["apellido"].ToString();
         private void panelSidebar_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, panelSidebar.ClientRectangle,
@@ -33,5 +85,7 @@ namespace proyecto_Villarreal_SanLorenzo
             formLogin.Show();
             this.Close();
         }
+
+
     }
 }

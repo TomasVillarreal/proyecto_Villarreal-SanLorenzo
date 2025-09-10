@@ -25,15 +25,19 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         public static int VerifCredenciales(string nombreUsuario, string password)
         {
+            //Cadena de conexión
             string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             //Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado.
             string queryVerif = "SELECT id_usuario, password FROM Usuario WHERE nombre = @nombreUsuario";
 
+            //Crea la conexión con la base de datos
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
+                //Comando que asocia la consulta con la conexión
                 using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
                 {
+                    //Asocia el valor del parametro con el valor en la base de datos
                     cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
 
                     try
@@ -45,12 +49,13 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             string contraseñaAlmacenada = reader["password"].ToString();
 
-                            if(password == contraseñaAlmacenada)
+                            if (password == contraseñaAlmacenada)
                             {
                                 int id_usuario = Convert.ToInt32(reader["id_usuario"]);
                                 return id_usuario;
                             }
-                            
+                            reader.Close();
+
                         }
                         return 0; //El usuario no existe o contraseña incorrecta
                     }
@@ -87,7 +92,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
                 this.Hide();
             }
-            else if(id_usuario == 0)
+            else if (id_usuario == 0)
             {
                 //El usuario no existe o contraseña incorrecta
                 MessageBox.Show("Credenciales incorrectas. Intente nuevamente",
@@ -101,7 +106,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bMostrarPass_Click(object sender, EventArgs e)
         {
-            if(passVisibile == false)
+            if (passVisibile == false)
             {
                 tbPass.PasswordChar = '\0';
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
@@ -113,6 +118,11 @@ namespace proyecto_Villarreal_SanLorenzo
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
                 passVisibile = false;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -43,6 +43,7 @@
             tbPass = new TextBox();
             bIniciarSesion = new Button();
             bMostrarPass = new Button();
+            button1 = new Button();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             flowLayoutPanel2.SuspendLayout();
@@ -190,9 +191,9 @@
             bIniciarSesion.FlatStyle = FlatStyle.Flat;
             bIniciarSesion.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bIniciarSesion.ForeColor = Color.Black;
-            bIniciarSesion.Location = new Point(301, 390);
+            bIniciarSesion.Location = new Point(192, 385);
             bIniciarSesion.Name = "bIniciarSesion";
-            bIniciarSesion.Size = new Size(135, 29);
+            bIniciarSesion.Size = new Size(122, 29);
             bIniciarSesion.TabIndex = 12;
             bIniciarSesion.Text = "Iniciar Sesión";
             bIniciarSesion.UseVisualStyleBackColor = true;
@@ -214,12 +215,32 @@
             bMostrarPass.UseVisualStyleBackColor = true;
             bMostrarPass.Click += bMostrarPass_Click;
             // 
+            // button1
+            // 
+            button1.Cursor = Cursors.Hand;
+            button1.FlatAppearance.BorderColor = Color.Silver;
+            button1.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            button1.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.Black;
+            button1.Image = Resource1.cerrar_sesion__1_;
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.Location = new Point(386, 385);
+            button1.Name = "button1";
+            button1.Size = new Size(123, 29);
+            button1.TabIndex = 14;
+            button1.Text = "Salir";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form_login
             // 
             AcceptButton = bIniciarSesion;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 512);
+            Controls.Add(button1);
             Controls.Add(bMostrarPass);
             Controls.Add(bIniciarSesion);
             Controls.Add(tbPass);
@@ -258,5 +279,6 @@
         private TextBox tbPass;
         private Button bIniciarSesion;
         private Button bMostrarPass;
+        private Button button1;
     }
 }
