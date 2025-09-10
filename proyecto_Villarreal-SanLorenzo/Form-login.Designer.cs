@@ -54,7 +54,7 @@
             // 
             labelClinicks.AutoSize = true;
             labelClinicks.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelClinicks.Location = new Point(301, 141);
+            labelClinicks.Location = new Point(313, 139);
             labelClinicks.Name = "labelClinicks";
             labelClinicks.Size = new Size(95, 32);
             labelClinicks.TabIndex = 2;
@@ -65,7 +65,7 @@
             // 
             labelBienvenido.AutoSize = true;
             labelBienvenido.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelBienvenido.Location = new Point(289, 46);
+            labelBienvenido.Location = new Point(296, 45);
             labelBienvenido.Name = "labelBienvenido";
             labelBienvenido.Size = new Size(135, 32);
             labelBienvenido.TabIndex = 3;
@@ -76,7 +76,7 @@
             // 
             labelA.AutoSize = true;
             labelA.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelA.Location = new Point(335, 94);
+            labelA.Location = new Point(342, 93);
             labelA.Name = "labelA";
             labelA.Size = new Size(30, 32);
             labelA.TabIndex = 4;
@@ -88,11 +88,11 @@
             labelSH.AccessibleRole = AccessibleRole.None;
             labelSH.AutoSize = true;
             labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelSH.Location = new Point(266, 202);
+            labelSH.Location = new Point(233, 190);
             labelSH.Name = "labelSH";
-            labelSH.Size = new Size(188, 25);
+            labelSH.Size = new Size(286, 25);
             labelSH.TabIndex = 6;
-            labelSH.Text = "Sistema Hospitalario";
+            labelSH.Text = "Sistema de Gestión de Pacientes";
             labelSH.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tbUsuario

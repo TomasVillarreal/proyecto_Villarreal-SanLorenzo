@@ -28,9 +28,13 @@ namespace proyecto_Villarreal_SanLorenzo
             //Cadena de conexión
             string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            //Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado.
-            string queryVerif = "SELECT id_usuario, password FROM Usuario WHERE nombre = @nombreUsuario";
-
+            //Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
+            string queryVerif = "SELECT u.id_usuario, u.password, u.nombre_usuario, u.apellido_usuario, r.nombre_rol " +
+                "               FROM Usuario AS u " +
+                "               JOIN Rol AS r " +
+                "               ON u.id_rol = r.id_rol " +
+                "               WHERE u.nombre_usuario = @nombreUsuario";
+           
             //Crea la conexión con la base de datos
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
@@ -51,8 +55,13 @@ namespace proyecto_Villarreal_SanLorenzo
 
                             if (password == contraseñaAlmacenada)
                             {
-                                int id_usuario = Convert.ToInt32(reader["id_usuario"]);
-                                return id_usuario;
+                                // Almacena los datos del usuario
+                                SesionUsuario.id_usuario = Convert.ToInt32(reader["id_usuario"]);
+                                SesionUsuario.id_rol = Convert.ToInt32(reader["id_rol"]);
+                                SesionUsuario.nombre_usuario = reader["nombre_usuario"].ToString();
+                                SesionUsuario.apellido_usuario = reader["apellido_usuario"].ToString();
+
+                                return SesionUsuario.id_usuario;
                             }
                             reader.Close();
 
@@ -87,7 +96,7 @@ namespace proyecto_Villarreal_SanLorenzo
             if (id_usuario > 0)
             {
                 //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
-                Form1 formHome = new Form1();
+                FormHome formHome = new FormHome();
                 formHome.Show();
 
                 this.Hide();
