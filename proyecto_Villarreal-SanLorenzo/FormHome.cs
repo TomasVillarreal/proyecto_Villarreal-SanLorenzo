@@ -43,10 +43,10 @@ namespace proyecto_Villarreal_SanLorenzo
         private void panelSidebar_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, panelSidebar.ClientRectangle,
-            Color.Transparent, 0, ButtonBorderStyle.None,  // Left
-            Color.Transparent, 0, ButtonBorderStyle.None,                      // Top
-            ColorTranslator.FromHtml("#E0E0E0"), 1, ButtonBorderStyle.Solid,                      // Right
-            Color.Transparent, 0, ButtonBorderStyle.None                       // Bottom
+            Color.Transparent, 0, ButtonBorderStyle.None,
+            Color.Transparent, 0, ButtonBorderStyle.None,                     
+            ColorTranslator.FromHtml("#E0E0E0"), 1, ButtonBorderStyle.Solid,                      
+            Color.Transparent, 0, ButtonBorderStyle.None                      
             );
         }
 

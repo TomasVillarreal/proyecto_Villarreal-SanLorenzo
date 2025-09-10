@@ -11,7 +11,6 @@ namespace proyecto_Villarreal_SanLorenzo
         //Información del usuario a almacenar durante su sesión
         //Constructores
         public static int id_usuario { get; set; }
-
         public static int id_rol { get; set; }
         public static string nombre_usuario { get; set; }
         public static string apellido_usuario { get; set; }

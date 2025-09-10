@@ -17,7 +17,7 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class Form_login : Form
     {
-        private bool passVisibile = false; //Utilizado para el btn que muestra la oculta el password.
+        private bool passVisible = false; //Utilizado para el btn que muestra la oculta el password.
 
         public Form_login()
         {
@@ -29,7 +29,12 @@ namespace proyecto_Villarreal_SanLorenzo
             string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             // Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
-            string queryVerif = "SELECT u.id_usuario AS id_usuario, u.password AS password, u.nombre_usuario AS nombre_usuario, u.apellido_usuario AS apellido_usuario, u.id_rol AS id_rol, r.nombre_rol AS nombre_rol " +
+            string queryVerif = "SELECT u.id_usuario AS id_usuario, " +
+                                        "u.password AS password, " +
+                                        "u.nombre_usuario AS nombre_usuario, " +
+                                        "u.apellido_usuario AS apellido_usuario," +
+                                        "u.id_rol AS id_rol, " +
+                                        "r.nombre_rol AS nombre_rol " +
                                 "FROM Usuario AS u " +
                                 "JOIN Rol AS r " +
                                 "ON u.id_rol = r.id_rol " +
@@ -55,7 +60,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
                             if (password == contraseñaAlmacenada)
                             {
-                                // Almacena los datos del usuario
+                                //Se almacenan los datos del usuario
                                 SesionUsuario.IniciarSesion(
                                     Convert.ToInt32(reader["id_usuario"]),
                                     Convert.ToInt32(reader["id_rol"]),
@@ -118,17 +123,17 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bMostrarPass_Click(object sender, EventArgs e)
         {
-            if (passVisibile == false)
+            if (passVisible == false)
             {
                 tbPass.PasswordChar = '\0';
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
-                passVisibile = true;
+                passVisible = true;
             }
             else
             {
                 tbPass.PasswordChar = '*';
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
-                passVisibile = false;
+                passVisible = false;
             }
         }
 
