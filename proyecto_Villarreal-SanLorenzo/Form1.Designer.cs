@@ -207,6 +207,7 @@
             bHome.Text = "Home";
             bHome.TextImageRelation = TextImageRelation.ImageBeforeText;
             bHome.UseVisualStyleBackColor = true;
+            bHome.Click += bHome_Click;
             // 
             // label1
             // 
@@ -284,6 +285,7 @@
             Controls.Add(panelSidebar);
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             Resize += Form1_Resize;
             panelSidebar.ResumeLayout(false);
             panelSidebar.PerformLayout();

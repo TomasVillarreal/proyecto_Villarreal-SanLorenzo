@@ -108,5 +108,21 @@ namespace proyecto_Villarreal_SanLorenzo
             personalControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(personalControl);
         }
+
+        private void bHome_Click(object sender, EventArgs e)
+        {
+            panelDefault.Controls.Clear();
+            HomeControl homeControl = new HomeControl();
+            homeControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(homeControl);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            panelDefault.Controls.Clear();
+            HomeControl homeControl = new HomeControl();
+            homeControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(homeControl);
+        }
     }
 }
