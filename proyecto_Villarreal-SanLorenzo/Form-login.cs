@@ -69,7 +69,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                     reader["nombre_usuario"].ToString(),
                                     reader["apellido_usuario"].ToString(),
                                     reader["nombre_rol"].ToString(),
-                                    Convert.ToInt32(reader["telefono"]),
+                                    Convert.ToInt64(reader["telefono"]),
                                     reader["email"].ToString()
                                 );
 

@@ -15,12 +15,12 @@ namespace proyecto_Villarreal_SanLorenzo
         public static string nombre_usuario { get; set; }
         public static string apellido_usuario { get; set; }
         public static string nombre_rol { get; set; }
-        public static int telefono_usuario { get; set; }
+        public static long telefono_usuario { get; set; }
         public static string email_usuario { get; set; }
 
 
         //Metodo para iniciar la sesion
-        public static void IniciarSesion(int idUsuario,int idRol, string nombre, string apellido, string nombreRol, int telefono, string email)
+        public static void IniciarSesion(int idUsuario,int idRol, string nombre, string apellido, string nombreRol, long telefono, string email)
         {
             SesionUsuario.id_usuario = idUsuario;
             SesionUsuario.id_rol = idRol;
