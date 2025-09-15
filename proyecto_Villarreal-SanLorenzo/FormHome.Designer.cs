@@ -82,7 +82,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(90, 736);
+            bBackup.Location = new Point(8, 756);
             bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
@@ -107,7 +107,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(90, 775);
+            bAgregarPersonal.Location = new Point(8, 795);
             bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;
@@ -117,6 +117,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bAgregarPersonal.Text = "Agregar Personal";
             bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
             bAgregarPersonal.UseVisualStyleBackColor = true;
+            bAgregarPersonal.Click += bAgregarPersonal_Click;
             // 
             // bCerrarSesion
             // 
@@ -132,7 +133,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(90, 813);
+            bCerrarSesion.Location = new Point(-3, 834);
             bCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
@@ -220,7 +221,7 @@ namespace proyecto_Villarreal_SanLorenzo
             // 
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(30, 167);
+            label1.Location = new Point(12, 164);
             label1.Name = "label1";
             label1.Size = new Size(210, 23);
             label1.TabIndex = 3;

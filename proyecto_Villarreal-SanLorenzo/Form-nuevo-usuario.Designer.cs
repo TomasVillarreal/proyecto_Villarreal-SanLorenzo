@@ -153,6 +153,7 @@
             botonSidebar3.Text = "Cerrar Sesión";
             botonSidebar3.TextImageRelation = TextImageRelation.ImageBeforeText;
             botonSidebar3.UseVisualStyleBackColor = true;
+            botonSidebar3.Click += botonSidebar3_Click;
             // 
             // botonSidebar2
             // 
@@ -791,6 +792,7 @@
             rbMedico.TabStop = true;
             rbMedico.Text = "Médico";
             rbMedico.UseVisualStyleBackColor = true;
+            rbMedico.CheckedChanged += rbRolCheck;
             // 
             // rbEnfermero
             // 
@@ -802,6 +804,7 @@
             rbEnfermero.TabStop = true;
             rbEnfermero.Text = "Enfermero";
             rbEnfermero.UseVisualStyleBackColor = true;
+            rbEnfermero.CheckedChanged += rbRolCheck;
             // 
             // rbPersonalAdmin
             // 
@@ -813,6 +816,7 @@
             rbPersonalAdmin.TabStop = true;
             rbPersonalAdmin.Text = "Personal Administrativo";
             rbPersonalAdmin.UseVisualStyleBackColor = true;
+            rbPersonalAdmin.CheckedChanged += rbRolCheck;
             // 
             // rbGerente
             // 
@@ -824,6 +828,7 @@
             rbGerente.TabStop = true;
             rbGerente.Text = "Gerente";
             rbGerente.UseVisualStyleBackColor = true;
+            rbGerente.CheckedChanged += rbRolCheck;
             // 
             // panelFormularios
             // 

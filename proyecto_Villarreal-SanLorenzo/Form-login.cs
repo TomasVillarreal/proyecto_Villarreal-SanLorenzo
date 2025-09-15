@@ -31,14 +31,14 @@ namespace proyecto_Villarreal_SanLorenzo
             // Consulta a la bd por el 'password' ingresado de acuerdo al 'email' ingresado
             string queryVerif = @"
                                 SELECT u.id_usuario AS id_usuario,
-                                       u.password AS password,
+                                       u.password_usuario AS password,
                                        u.nombre_usuario AS nombre_usuario,
                                        u.apellido_usuario AS apellido_usuario,
                                        u.telefono AS telefono_usuario,
-                                       u.email AS email_usuario,
+                                       u.email_usuario AS email_usuario,
                                        u.id_rol AS id_rol,
                                        r.nombre_rol AS nombre_rol
-                                FROM Usuario AS u
+                                FROM Usuarios AS u
                                 JOIN Rol AS r ON u.id_rol = r.id_rol
                                 WHERE u.email_usuario = @email";
 
@@ -69,8 +69,8 @@ namespace proyecto_Villarreal_SanLorenzo
                                     reader["nombre_usuario"].ToString(),
                                     reader["apellido_usuario"].ToString(),
                                     reader["nombre_rol"].ToString(),
-                                    Convert.ToInt64(reader["telefono"]),
-                                    reader["email"].ToString()
+                                    Convert.ToInt64(reader["telefono_usuario"]),
+                                    reader["email_usuario"].ToString()
                                 );
 
                                 return SesionUsuario.id_usuario;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 using BCrypt.Net; //Usado para hashear el password
 
 namespace proyecto_Villarreal_SanLorenzo
@@ -26,42 +27,53 @@ namespace proyecto_Villarreal_SanLorenzo
             this.Close();
         }
 
-        private int rbRolCheck(object sender, EventArgs e)
+        private void rbRolCheck(object sender, EventArgs e)
         {
-            int rol = 0;
             if (rbMedico.Checked)
             {
                 lTitulo2.Text = "Médico";
                 lTitulo2.ForeColor = Color.Black;
                 flowLayoutPanel10.Visible = true;
-                rol = 2;
             }
             else if (rbEnfermero.Checked)
             {
                 lTitulo2.Text = "Enfermero";
                 lTitulo2.ForeColor = Color.Black;
                 flowLayoutPanel10.Visible = true;
-                rol = 3;
             }
             else if (rbPersonalAdmin.Checked)
             {
                 lTitulo2.Text = "Administrativo";
                 lTitulo2.ForeColor = Color.Black;
                 flowLayoutPanel10.Visible = false;
-                rol = 4;
-
             }
             else if (rbGerente.Checked)
             {
                 lTitulo2.Text = "Gerente";
                 lTitulo2.ForeColor = Color.Black;
                 flowLayoutPanel10.Visible = false;
-                rol = 1;
-
             }
-            return rol;
         }
 
+        public int obtenerIdRolSeleccionado()
+        {
+            if (rbMedico.Checked)
+            {
+                return 2;
+            }
+            else if (rbEnfermero.Checked)
+            {
+                return 3;
+            }
+            else if (rbPersonalAdmin.Checked)
+            {
+                return 4;
+            }
+            else
+            {
+                return 1;
+            }
+        }
         public bool CheckRadioButtons()
         {
             foreach (Control control in flowLayoutPanel10.Controls)
@@ -188,14 +200,14 @@ namespace proyecto_Villarreal_SanLorenzo
                 return; //Detiene la ejecución del método
             }
 
-            string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
+            int id_rol = obtenerIdRolSeleccionado();//Llamo al metodo y asigno su valor de retorno a la variable
+        string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
             string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
             string emailUsuario = tbEmail.Text.Trim().ToLower();
             string telefono_string = tbTelefono.Text.Trim();
             long telefono_usuario = Convert.ToInt64(telefono_string);//Este se guarad en la bd
             string password_usuario = tbPassUsuario.Text;
-            string passwrod_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
-            int id_rol = rbRolCheck(sender, e);//Llamo al metodo y asigno su valor de retorno a la variable
+            string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
             //string especialidad = cbEspecialidades.Text;
 
             if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
@@ -207,18 +219,61 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            try
-            {
-
-            }catch(Exception ex)
-            {
-
-            }
+            CrearUsuario(id_rol, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
         }
 
-        public static void CrearUsuario()
+        //Creacion del usuario
+        public static void CrearUsuario(int rol, string nombre, string apellido, string email, long telefono, string password)
         {
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
+            string queryNuevoUsuario = "INSERT INTO Usuarios (rol, nombre_usuario, apellido_usuario, email_usuario, telefono, password_usuario)," +
+                                        "VALUES (@id_rol,@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
+
+            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            {
+                using (SqlCommand cmd = new SqlCommand(queryNuevoUsuario, connecction))
+                {
+                    cmd.Parameters.AddWithValue("@id_rol", rol);
+                    cmd.Parameters.AddWithValue("@nombre_usuario", nombre);
+                    cmd.Parameters.AddWithValue("@apellido_usuario", apellido);
+                    cmd.Parameters.AddWithValue("@email_usuario", email);
+                    cmd.Parameters.AddWithValue("@telefono", telefono);
+                    cmd.Parameters.AddWithValue("@password_usuario", password);
+                    try
+                    {
+                        connecction.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Usuario registrado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se pudo registrar al usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al conectar con la base de datos: {ex.Message}", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    }
+
+                }
+            }
+
+        }
+
+        private void botonSidebar3_Click(object sender, EventArgs e)
+        {
+            //Llama al metodo el cual cierra la sesion.
+            SesionUsuario.CerrarSesion();
+
+            //Luego redirige al usuario al form-login
+            Form_login formLogin = new Form_login();
+            formLogin.Show();
+            this.Close();
         }
     }
 }

@@ -19,34 +19,34 @@ namespace proyecto_Villarreal_SanLorenzo
             this.Load += FormHome_Load;
         }
         private void FormHome_Load(object sender, EventArgs e)
-          {
-              CargarDatosUsuario();
-          }
+        {
+            CargarDatosUsuario();
+        }
 
-          private void CargarDatosUsuario()
-          {
-                //Verifica si existe sesion activa
-                if (SesionUsuario.SesionActiva())
-                {
-                    string nombre_rol = SesionUsuario.nombre_rol;
-                    string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
+        private void CargarDatosUsuario()
+        {
+            //Verifica si existe sesion activa
+            if (SesionUsuario.SesionActiva())
+            {
+                string nombre_rol = SesionUsuario.nombre_rol;
+                string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
 
-                    lRol.Text = nombre_rol;
-                    lNombreUsuario.Text = nombre_completo;
-                }
-                else
-                {
-                    // En caso en que la sesión no esté activa
-                    MessageBox.Show("No se encontró información de la sesión.");
-                }
+                lRol.Text = nombre_rol;
+                lNombreUsuario.Text = nombre_completo;
+            }
+            else
+            {
+                // En caso en que la sesión no esté activa
+                MessageBox.Show("No se encontró información de la sesión.");
+            }
         }
         private void panelSidebar_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, panelSidebar.ClientRectangle,
             Color.Transparent, 0, ButtonBorderStyle.None,
-            Color.Transparent, 0, ButtonBorderStyle.None,                     
-            ColorTranslator.FromHtml("#E0E0E0"), 1, ButtonBorderStyle.Solid,                      
-            Color.Transparent, 0, ButtonBorderStyle.None                      
+            Color.Transparent, 0, ButtonBorderStyle.None,
+            ColorTranslator.FromHtml("#E0E0E0"), 1, ButtonBorderStyle.Solid,
+            Color.Transparent, 0, ButtonBorderStyle.None
             );
         }
 
@@ -64,6 +64,13 @@ namespace proyecto_Villarreal_SanLorenzo
             //Luego redirige al usuario al form-login
             Form_login formLogin = new Form_login();
             formLogin.Show();
+            this.Close();
+        }
+
+        private void bAgregarPersonal_Click(object sender, EventArgs e)
+        {
+            Form_nuevo_usuario formularioUsuarios = new Form_nuevo_usuario();
+            formularioUsuarios.Show();
             this.Close();
         }
     }
