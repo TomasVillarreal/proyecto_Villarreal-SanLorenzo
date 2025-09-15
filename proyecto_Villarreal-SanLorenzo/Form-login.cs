@@ -17,43 +17,69 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class Form_login : Form
     {
-        private bool passVisibile = false; //Utilizado para el btn que muestra la oculta el password.
+        private bool passVisible = false; //Utilizado para el btn que muestra la oculta el password.
 
         public Form_login()
         {
             InitializeComponent();
         }
-        public static bool VerifCredenciales(string nombreUsuario, string password)
+        public static int VerifCredenciales(string nombreUsuario, string password)
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            //Cadena de conexión
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            string queryVerif = "SELECT password FROM Usuario WHERE nombre = @nombreUsuario";
+            // Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
+            string queryVerif = "SELECT u.id_usuario AS id_usuario, " +
+                                        "u.password AS password, " +
+                                        "u.nombre_usuario AS nombre_usuario, " +
+                                        "u.apellido_usuario AS apellido_usuario," +
+                                        "u.id_rol AS id_rol, " +
+                                        "r.nombre_rol AS nombre_rol " +
+                                "FROM Usuario AS u " +
+                                "JOIN Rol AS r " +
+                                "ON u.id_rol = r.id_rol " +
+                                "WHERE u.nombre_usuario = @nombreUsuario";
 
+            //Crea la conexión con la base de datos
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
+                //Comando que asocia la consulta con la conexión
                 using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
                 {
-                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario); // Corregido
+                    //Asocia el valor del parametro con el valor en la base de datos
+                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
 
                     try
                     {
                         connection.Open();
-                        object resultado = cmd.ExecuteScalar();
+                        SqlDataReader reader = cmd.ExecuteReader();
 
-                        if (resultado != null)
+                        if (reader.Read())
                         {
-                            string contraseñaAlmacenada = resultado.ToString();
-                            return (password == contraseñaAlmacenada);
+                            string contraseñaAlmacenada = reader["password"].ToString();
+
+                            if (password == contraseñaAlmacenada)
+                            {
+                                //Se almacenan los datos del usuario
+                                SesionUsuario.IniciarSesion(
+                                    Convert.ToInt32(reader["id_usuario"]),
+                                    Convert.ToInt32(reader["id_rol"]),
+                                    reader["nombre_usuario"].ToString(),
+                                    reader["apellido_usuario"].ToString(),
+                                    reader["nombre_rol"].ToString()
+                                );
+
+                                return SesionUsuario.id_usuario;
+                            }
+                            reader.Close();
+
                         }
-                        else
-                        {
-                            return false; // El usuario no existe
-                        }
+                        return 0; //El usuario no existe o contraseña incorrecta
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error al verificar credenciales: " + ex.Message);
-                        return false;
+                        return -1;
                     }
                 }
             }
@@ -73,15 +99,19 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (VerifCredenciales(usuario, password))
+            int id_usuario = VerifCredenciales(usuario, password);
+
+            if (id_usuario > 0)
             {
-                Form1 formHome = new Form1();
+                //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
+                FormHome formHome = new FormHome();
                 formHome.Show();
 
                 this.Hide();
             }
-            else
+            else if (id_usuario == 0)
             {
+                //El usuario no existe o contraseña incorrecta
                 MessageBox.Show("Credenciales incorrectas. Intente nuevamente",
                     "Error inicio de sesión", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -93,18 +123,23 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bMostrarPass_Click(object sender, EventArgs e)
         {
-            if(passVisibile == false)
+            if (passVisible == false)
             {
                 tbPass.PasswordChar = '\0';
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
-                passVisibile = true;
+                passVisible = true;
             }
             else
             {
                 tbPass.PasswordChar = '*';
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
-                passVisibile = false;
+                passVisible = false;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

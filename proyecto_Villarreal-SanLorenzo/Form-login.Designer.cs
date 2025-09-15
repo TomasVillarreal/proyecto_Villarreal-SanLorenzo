@@ -43,6 +43,7 @@
             tbPass = new TextBox();
             bIniciarSesion = new Button();
             bMostrarPass = new Button();
+            button1 = new Button();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             flowLayoutPanel2.SuspendLayout();
@@ -53,7 +54,7 @@
             // 
             labelClinicks.AutoSize = true;
             labelClinicks.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelClinicks.Location = new Point(301, 141);
+            labelClinicks.Location = new Point(313, 139);
             labelClinicks.Name = "labelClinicks";
             labelClinicks.Size = new Size(95, 32);
             labelClinicks.TabIndex = 2;
@@ -64,7 +65,7 @@
             // 
             labelBienvenido.AutoSize = true;
             labelBienvenido.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelBienvenido.Location = new Point(289, 46);
+            labelBienvenido.Location = new Point(296, 45);
             labelBienvenido.Name = "labelBienvenido";
             labelBienvenido.Size = new Size(135, 32);
             labelBienvenido.TabIndex = 3;
@@ -75,7 +76,7 @@
             // 
             labelA.AutoSize = true;
             labelA.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelA.Location = new Point(335, 94);
+            labelA.Location = new Point(342, 93);
             labelA.Name = "labelA";
             labelA.Size = new Size(30, 32);
             labelA.TabIndex = 4;
@@ -87,11 +88,11 @@
             labelSH.AccessibleRole = AccessibleRole.None;
             labelSH.AutoSize = true;
             labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelSH.Location = new Point(266, 202);
+            labelSH.Location = new Point(233, 190);
             labelSH.Name = "labelSH";
-            labelSH.Size = new Size(188, 25);
+            labelSH.Size = new Size(286, 25);
             labelSH.TabIndex = 6;
-            labelSH.Text = "Sistema Hospitalario";
+            labelSH.Text = "Sistema de Gestión de Pacientes";
             labelSH.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tbUsuario
@@ -190,9 +191,9 @@
             bIniciarSesion.FlatStyle = FlatStyle.Flat;
             bIniciarSesion.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bIniciarSesion.ForeColor = Color.Black;
-            bIniciarSesion.Location = new Point(301, 390);
+            bIniciarSesion.Location = new Point(192, 385);
             bIniciarSesion.Name = "bIniciarSesion";
-            bIniciarSesion.Size = new Size(135, 29);
+            bIniciarSesion.Size = new Size(122, 29);
             bIniciarSesion.TabIndex = 12;
             bIniciarSesion.Text = "Iniciar Sesión";
             bIniciarSesion.UseVisualStyleBackColor = true;
@@ -214,12 +215,32 @@
             bMostrarPass.UseVisualStyleBackColor = true;
             bMostrarPass.Click += bMostrarPass_Click;
             // 
+            // button1
+            // 
+            button1.Cursor = Cursors.Hand;
+            button1.FlatAppearance.BorderColor = Color.Silver;
+            button1.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            button1.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.Black;
+            button1.Image = Resource1.cerrar_sesion__1_;
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.Location = new Point(386, 385);
+            button1.Name = "button1";
+            button1.Size = new Size(123, 29);
+            button1.TabIndex = 14;
+            button1.Text = "Salir";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form_login
             // 
             AcceptButton = bIniciarSesion;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 512);
+            Controls.Add(button1);
             Controls.Add(bMostrarPass);
             Controls.Add(bIniciarSesion);
             Controls.Add(tbPass);
@@ -258,5 +279,6 @@
         private TextBox tbPass;
         private Button bIniciarSesion;
         private Button bMostrarPass;
+        private Button button1;
     }
 }
