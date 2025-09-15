@@ -23,22 +23,24 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             InitializeComponent();
         }
-        public static int VerifCredenciales(string nombreUsuario, string password)
+        public static int VerifCredenciales(string email_usuario, string password)
         {
             //Cadena de conexión
             string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            // Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
-            string queryVerif = "SELECT u.id_usuario AS id_usuario, " +
-                                        "u.password AS password, " +
-                                        "u.nombre_usuario AS nombre_usuario, " +
-                                        "u.apellido_usuario AS apellido_usuario," +
-                                        "u.id_rol AS id_rol, " +
-                                        "r.nombre_rol AS nombre_rol " +
-                                "FROM Usuario AS u " +
-                                "JOIN Rol AS r " +
-                                "ON u.id_rol = r.id_rol " +
-                                "WHERE u.nombre_usuario = @nombreUsuario";
+            // Consulta a la bd por el 'password' ingresado de acuerdo al 'email' ingresado
+            string queryVerif = @"
+                                SELECT u.id_usuario AS id_usuario,
+                                       u.password AS password,
+                                       u.nombre_usuario AS nombre_usuario,
+                                       u.apellido_usuario AS apellido_usuario,
+                                       u.telefono AS telefono_usuario,
+                                       u.email AS email_usuario,
+                                       u.id_rol AS id_rol,
+                                       r.nombre_rol AS nombre_rol
+                                FROM Usuario AS u
+                                JOIN Rol AS r ON u.id_rol = r.id_rol
+                                WHERE u.email_usuario = @email";
 
             //Crea la conexión con la base de datos
             using (SqlConnection connection = new SqlConnection(connectionStirng))
@@ -47,7 +49,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
                 {
                     //Asocia el valor del parametro con el valor en la base de datos
-                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
+                    cmd.Parameters.AddWithValue("@email", email_usuario);
 
                     try
                     {
@@ -66,7 +68,9 @@ namespace proyecto_Villarreal_SanLorenzo
                                     Convert.ToInt32(reader["id_rol"]),
                                     reader["nombre_usuario"].ToString(),
                                     reader["apellido_usuario"].ToString(),
-                                    reader["nombre_rol"].ToString()
+                                    reader["nombre_rol"].ToString(),
+                                    Convert.ToInt32(reader["telefono"]),
+                                    reader["email"].ToString()
                                 );
 
                                 return SesionUsuario.id_usuario;

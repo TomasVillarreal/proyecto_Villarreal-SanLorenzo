@@ -45,49 +45,48 @@
             lNombreUsuario = new Label();
             lRol = new Label();
             flowLayoutPanel5 = new FlowLayoutPanel();
-            tbApellidoUsuario = new TextBox();
-            lApellidoUsuario = new Label();
             pictureBox3 = new PictureBox();
+            lApellidoUsuario = new Label();
+            tbApellidoUsuario = new TextBox();
             flowLayoutPanel6 = new FlowLayoutPanel();
-            tbEmail = new TextBox();
-            lEmail = new Label();
             pictureBox1 = new PictureBox();
+            lEmail = new Label();
+            tbEmail = new TextBox();
             flowLayoutPanel7 = new FlowLayoutPanel();
-            tbRol = new TextBox();
-            lRolUsuario = new Label();
             pictureBox2 = new PictureBox();
+            lTelefonoUsuario = new Label();
+            tbTelefono = new TextBox();
             flowLayoutPanel9 = new FlowLayoutPanel();
-            button1 = new Button();
-            tbConfirmPass = new TextBox();
-            lConfirmPass = new Label();
             pictureBox5 = new PictureBox();
+            lConfirmPass = new Label();
+            tbConfirmPass = new TextBox();
+            button1 = new Button();
             flowLayoutPanel8 = new FlowLayoutPanel();
-            bMostrarPass = new Button();
-            tbPassUsuario = new TextBox();
-            lPassUsuario = new Label();
             pictureBox4 = new PictureBox();
+            lPassUsuario = new Label();
+            tbPassUsuario = new TextBox();
+            bMostrarPass = new Button();
             flowLayoutPanel4 = new FlowLayoutPanel();
-            tbNomUsuario = new TextBox();
-            lNomUsuario = new Label();
             pbUsuario = new PictureBox();
+            lNomUsuario = new Label();
+            tbNomUsuario = new TextBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
-            flowLayoutPanel2 = new FlowLayoutPanel();
-            label4 = new Label();
-            label2 = new Label();
-            label3 = new Label();
             lTitulo1 = new Label();
+            label3 = new Label();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            label2 = new Label();
+            label4 = new Label();
             flowLayoutPanel3 = new FlowLayoutPanel();
-            rbGerente = new RadioButton();
-            rbPersonalAdmin = new RadioButton();
-            rbEnfermero = new RadioButton();
             rbMedico = new RadioButton();
+            rbEnfermero = new RadioButton();
+            rbPersonalAdmin = new RadioButton();
+            rbGerente = new RadioButton();
             panelFormularios = new Panel();
+            cbEspecialidades = new ComboBox();
             bRegistrarUsuario = new Button();
             flowLayoutPanel10 = new FlowLayoutPanel();
             pictureBox6 = new PictureBox();
             lEspecialidad = new Label();
-            textBox1 = new TextBox();
-            button2 = new Button();
             panelSidebar.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -424,15 +423,15 @@
             flowLayoutPanel5.Size = new Size(380, 37);
             flowLayoutPanel5.TabIndex = 21;
             // 
-            // tbApellidoUsuario
+            // pictureBox3
             // 
-            tbApellidoUsuario.Cursor = Cursors.Hand;
-            tbApellidoUsuario.ForeColor = Color.DarkGray;
-            tbApellidoUsuario.Location = new Point(134, 3);
-            tbApellidoUsuario.Name = "tbApellidoUsuario";
-            tbApellidoUsuario.Size = new Size(216, 27);
-            tbApellidoUsuario.TabIndex = 18;
-            tbApellidoUsuario.Text = "perez";
+            pictureBox3.BackColor = Color.White;
+            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
+            pictureBox3.Location = new Point(3, 3);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(31, 23);
+            pictureBox3.TabIndex = 20;
+            pictureBox3.TabStop = false;
             // 
             // lApellidoUsuario
             // 
@@ -446,15 +445,15 @@
             lApellidoUsuario.Text = "Apellido:";
             lApellidoUsuario.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pictureBox3
+            // tbApellidoUsuario
             // 
-            pictureBox3.BackColor = Color.White;
-            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(3, 3);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(31, 23);
-            pictureBox3.TabIndex = 20;
-            pictureBox3.TabStop = false;
+            tbApellidoUsuario.Cursor = Cursors.Hand;
+            tbApellidoUsuario.ForeColor = Color.DarkGray;
+            tbApellidoUsuario.Location = new Point(134, 3);
+            tbApellidoUsuario.Name = "tbApellidoUsuario";
+            tbApellidoUsuario.Size = new Size(216, 27);
+            tbApellidoUsuario.TabIndex = 18;
+            tbApellidoUsuario.Text = "perez";
             // 
             // flowLayoutPanel6
             // 
@@ -466,15 +465,15 @@
             flowLayoutPanel6.Size = new Size(380, 52);
             flowLayoutPanel6.TabIndex = 21;
             // 
-            // tbEmail
+            // pictureBox1
             // 
-            tbEmail.Cursor = Cursors.Hand;
-            tbEmail.ForeColor = Color.DarkGray;
-            tbEmail.Location = new Point(117, 3);
-            tbEmail.Name = "tbEmail";
-            tbEmail.Size = new Size(216, 27);
-            tbEmail.TabIndex = 18;
-            tbEmail.Text = "juan@gmail.com";
+            pictureBox1.BackColor = Color.White;
+            pictureBox1.Image = Resource1.email_icon;
+            pictureBox1.Location = new Point(3, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(38, 37);
+            pictureBox1.TabIndex = 19;
+            pictureBox1.TabStop = false;
             // 
             // lEmail
             // 
@@ -488,58 +487,57 @@
             lEmail.Text = "Email:";
             lEmail.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pictureBox1
+            // tbEmail
             // 
-            pictureBox1.BackColor = Color.White;
-            pictureBox1.Image = Resource1.email_icon;
-            pictureBox1.Location = new Point(3, 3);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(38, 37);
-            pictureBox1.TabIndex = 19;
-            pictureBox1.TabStop = false;
+            tbEmail.Cursor = Cursors.Hand;
+            tbEmail.ForeColor = Color.DarkGray;
+            tbEmail.Location = new Point(117, 3);
+            tbEmail.Name = "tbEmail";
+            tbEmail.Size = new Size(216, 27);
+            tbEmail.TabIndex = 18;
+            tbEmail.Text = "juan@gmail.com";
             // 
             // flowLayoutPanel7
             // 
             flowLayoutPanel7.Controls.Add(pictureBox2);
-            flowLayoutPanel7.Controls.Add(lRolUsuario);
-            flowLayoutPanel7.Controls.Add(tbRol);
+            flowLayoutPanel7.Controls.Add(lTelefonoUsuario);
+            flowLayoutPanel7.Controls.Add(tbTelefono);
             flowLayoutPanel7.Location = new Point(541, 226);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
             flowLayoutPanel7.Size = new Size(380, 49);
             flowLayoutPanel7.TabIndex = 22;
             // 
-            // tbRol
-            // 
-            tbRol.Cursor = Cursors.Hand;
-            tbRol.ForeColor = Color.DarkGray;
-            tbRol.Location = new Point(95, 3);
-            tbRol.Name = "tbRol";
-            tbRol.Size = new Size(216, 27);
-            tbRol.TabIndex = 18;
-            tbRol.Text = "Rol";
-            tbRol.TextAlign = HorizontalAlignment.Center;
-            // 
-            // lRolUsuario
-            // 
-            lRolUsuario.AccessibleRole = AccessibleRole.None;
-            lRolUsuario.AutoSize = true;
-            lRolUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lRolUsuario.Location = new Point(45, 0);
-            lRolUsuario.Name = "lRolUsuario";
-            lRolUsuario.Size = new Size(44, 25);
-            lRolUsuario.TabIndex = 16;
-            lRolUsuario.Text = "Rol:";
-            lRolUsuario.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // pictureBox2
             // 
             pictureBox2.BackColor = Color.White;
-            pictureBox2.Image = Resource1.rol;
+            pictureBox2.Image = Resource1.telefono;
             pictureBox2.Location = new Point(3, 3);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(36, 34);
+            pictureBox2.Size = new Size(39, 34);
             pictureBox2.TabIndex = 19;
             pictureBox2.TabStop = false;
+            // 
+            // lTelefonoUsuario
+            // 
+            lTelefonoUsuario.AccessibleRole = AccessibleRole.None;
+            lTelefonoUsuario.AutoSize = true;
+            lTelefonoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lTelefonoUsuario.Location = new Point(48, 0);
+            lTelefonoUsuario.Name = "lTelefonoUsuario";
+            lTelefonoUsuario.Size = new Size(90, 25);
+            lTelefonoUsuario.TabIndex = 16;
+            lTelefonoUsuario.Text = "Telefono:";
+            lTelefonoUsuario.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tbTelefono
+            // 
+            tbTelefono.Cursor = Cursors.Hand;
+            tbTelefono.ForeColor = Color.DarkGray;
+            tbTelefono.Location = new Point(144, 3);
+            tbTelefono.Name = "tbTelefono";
+            tbTelefono.Size = new Size(216, 27);
+            tbTelefono.TabIndex = 18;
+            tbTelefono.Text = "3794123456";
             // 
             // flowLayoutPanel9
             // 
@@ -551,6 +549,38 @@
             flowLayoutPanel9.Name = "flowLayoutPanel9";
             flowLayoutPanel9.Size = new Size(519, 45);
             flowLayoutPanel9.TabIndex = 23;
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.BackColor = Color.White;
+            pictureBox5.Image = Resource1.candado;
+            pictureBox5.Location = new Point(3, 3);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(38, 37);
+            pictureBox5.TabIndex = 19;
+            pictureBox5.TabStop = false;
+            // 
+            // lConfirmPass
+            // 
+            lConfirmPass.AccessibleRole = AccessibleRole.None;
+            lConfirmPass.AutoSize = true;
+            lConfirmPass.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lConfirmPass.Location = new Point(47, 0);
+            lConfirmPass.Name = "lConfirmPass";
+            lConfirmPass.Size = new Size(206, 25);
+            lConfirmPass.TabIndex = 16;
+            lConfirmPass.Text = "Confirmar Contraseña:";
+            lConfirmPass.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tbConfirmPass
+            // 
+            tbConfirmPass.Cursor = Cursors.Hand;
+            tbConfirmPass.ForeColor = Color.DarkGray;
+            tbConfirmPass.Location = new Point(259, 3);
+            tbConfirmPass.Name = "tbConfirmPass";
+            tbConfirmPass.Size = new Size(216, 27);
+            tbConfirmPass.TabIndex = 18;
+            tbConfirmPass.Text = "Confirme su contraseña";
             // 
             // button1
             // 
@@ -567,38 +597,6 @@
             button1.TabIndex = 20;
             button1.UseVisualStyleBackColor = true;
             // 
-            // tbConfirmPass
-            // 
-            tbConfirmPass.Cursor = Cursors.Hand;
-            tbConfirmPass.ForeColor = Color.DarkGray;
-            tbConfirmPass.Location = new Point(259, 3);
-            tbConfirmPass.Name = "tbConfirmPass";
-            tbConfirmPass.Size = new Size(216, 27);
-            tbConfirmPass.TabIndex = 18;
-            tbConfirmPass.Text = "Confirme su contraseña";
-            // 
-            // lConfirmPass
-            // 
-            lConfirmPass.AccessibleRole = AccessibleRole.None;
-            lConfirmPass.AutoSize = true;
-            lConfirmPass.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lConfirmPass.Location = new Point(47, 0);
-            lConfirmPass.Name = "lConfirmPass";
-            lConfirmPass.Size = new Size(206, 25);
-            lConfirmPass.TabIndex = 16;
-            lConfirmPass.Text = "Confirmar Contraseña:";
-            lConfirmPass.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // pictureBox5
-            // 
-            pictureBox5.BackColor = Color.White;
-            pictureBox5.Image = Resource1.candado;
-            pictureBox5.Location = new Point(3, 3);
-            pictureBox5.Name = "pictureBox5";
-            pictureBox5.Size = new Size(38, 37);
-            pictureBox5.TabIndex = 19;
-            pictureBox5.TabStop = false;
-            // 
             // flowLayoutPanel8
             // 
             flowLayoutPanel8.Controls.Add(pictureBox4);
@@ -609,6 +607,38 @@
             flowLayoutPanel8.Name = "flowLayoutPanel8";
             flowLayoutPanel8.Size = new Size(428, 45);
             flowLayoutPanel8.TabIndex = 22;
+            // 
+            // pictureBox4
+            // 
+            pictureBox4.BackColor = Color.White;
+            pictureBox4.Image = Resource1.candado;
+            pictureBox4.Location = new Point(3, 3);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(38, 37);
+            pictureBox4.TabIndex = 19;
+            pictureBox4.TabStop = false;
+            // 
+            // lPassUsuario
+            // 
+            lPassUsuario.AccessibleRole = AccessibleRole.None;
+            lPassUsuario.AutoSize = true;
+            lPassUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lPassUsuario.Location = new Point(47, 0);
+            lPassUsuario.Name = "lPassUsuario";
+            lPassUsuario.Size = new Size(114, 25);
+            lPassUsuario.TabIndex = 16;
+            lPassUsuario.Text = "Contraseña:";
+            lPassUsuario.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tbPassUsuario
+            // 
+            tbPassUsuario.Cursor = Cursors.Hand;
+            tbPassUsuario.ForeColor = Color.DarkGray;
+            tbPassUsuario.Location = new Point(167, 3);
+            tbPassUsuario.Name = "tbPassUsuario";
+            tbPassUsuario.Size = new Size(216, 27);
+            tbPassUsuario.TabIndex = 18;
+            tbPassUsuario.Text = "Ingrese su contraseña";
             // 
             // bMostrarPass
             // 
@@ -625,38 +655,6 @@
             bMostrarPass.TabIndex = 20;
             bMostrarPass.UseVisualStyleBackColor = true;
             // 
-            // tbPassUsuario
-            // 
-            tbPassUsuario.Cursor = Cursors.Hand;
-            tbPassUsuario.ForeColor = Color.DarkGray;
-            tbPassUsuario.Location = new Point(167, 3);
-            tbPassUsuario.Name = "tbPassUsuario";
-            tbPassUsuario.Size = new Size(216, 27);
-            tbPassUsuario.TabIndex = 18;
-            tbPassUsuario.Text = "Ingrese su contraseña";
-            // 
-            // lPassUsuario
-            // 
-            lPassUsuario.AccessibleRole = AccessibleRole.None;
-            lPassUsuario.AutoSize = true;
-            lPassUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lPassUsuario.Location = new Point(47, 0);
-            lPassUsuario.Name = "lPassUsuario";
-            lPassUsuario.Size = new Size(114, 25);
-            lPassUsuario.TabIndex = 16;
-            lPassUsuario.Text = "Contraseña:";
-            lPassUsuario.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // pictureBox4
-            // 
-            pictureBox4.BackColor = Color.White;
-            pictureBox4.Image = Resource1.candado;
-            pictureBox4.Location = new Point(3, 3);
-            pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(38, 37);
-            pictureBox4.TabIndex = 19;
-            pictureBox4.TabStop = false;
-            // 
             // flowLayoutPanel4
             // 
             flowLayoutPanel4.Controls.Add(pbUsuario);
@@ -667,15 +665,15 @@
             flowLayoutPanel4.Size = new Size(380, 37);
             flowLayoutPanel4.TabIndex = 20;
             // 
-            // tbNomUsuario
+            // pbUsuario
             // 
-            tbNomUsuario.Cursor = Cursors.Hand;
-            tbNomUsuario.ForeColor = Color.DarkGray;
-            tbNomUsuario.Location = new Point(134, 3);
-            tbNomUsuario.Name = "tbNomUsuario";
-            tbNomUsuario.Size = new Size(216, 27);
-            tbNomUsuario.TabIndex = 18;
-            tbNomUsuario.Text = "juan";
+            pbUsuario.BackColor = Color.White;
+            pbUsuario.Image = (Image)resources.GetObject("pbUsuario.Image");
+            pbUsuario.Location = new Point(3, 3);
+            pbUsuario.Name = "pbUsuario";
+            pbUsuario.Size = new Size(31, 23);
+            pbUsuario.TabIndex = 19;
+            pbUsuario.TabStop = false;
             // 
             // lNomUsuario
             // 
@@ -689,58 +687,36 @@
             lNomUsuario.Text = "Nombre:";
             lNomUsuario.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pbUsuario
+            // tbNomUsuario
             // 
-            pbUsuario.BackColor = Color.White;
-            pbUsuario.Image = (Image)resources.GetObject("pbUsuario.Image");
-            pbUsuario.Location = new Point(3, 3);
-            pbUsuario.Name = "pbUsuario";
-            pbUsuario.Size = new Size(31, 23);
-            pbUsuario.TabIndex = 19;
-            pbUsuario.TabStop = false;
+            tbNomUsuario.Cursor = Cursors.Hand;
+            tbNomUsuario.ForeColor = Color.DarkGray;
+            tbNomUsuario.Location = new Point(134, 3);
+            tbNomUsuario.Name = "tbNomUsuario";
+            tbNomUsuario.Size = new Size(216, 27);
+            tbNomUsuario.TabIndex = 18;
+            tbNomUsuario.Text = "juan";
             // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Controls.Add(lTitulo1);
             flowLayoutPanel1.Controls.Add(label3);
             flowLayoutPanel1.Controls.Add(flowLayoutPanel2);
-            flowLayoutPanel1.Location = new Point(265, 17);
+            flowLayoutPanel1.Location = new Point(279, 15);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(488, 36);
             flowLayoutPanel1.TabIndex = 0;
             // 
-            // flowLayoutPanel2
+            // lTitulo1
             // 
-            flowLayoutPanel2.Controls.Add(label2);
-            flowLayoutPanel2.Controls.Add(label4);
-            flowLayoutPanel2.Location = new Point(3, 35);
-            flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(488, 36);
-            flowLayoutPanel2.TabIndex = 18;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Transparent;
-            label4.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = Color.Gray;
-            label4.Location = new Point(321, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(97, 32);
-            label4.TabIndex = 17;
-            label4.Text = "Usuario";
-            label4.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(312, 32);
-            label2.TabIndex = 16;
-            label2.Text = "Ingrese los datos del nuevo";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
+            lTitulo1.AutoSize = true;
+            lTitulo1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lTitulo1.Location = new Point(3, 0);
+            lTitulo1.Name = "lTitulo1";
+            lTitulo1.Size = new Size(312, 32);
+            lTitulo1.TabIndex = 16;
+            lTitulo1.Text = "Ingrese los datos del nuevo";
+            lTitulo1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
@@ -755,16 +731,38 @@
             label3.Text = "Usuario";
             label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lTitulo1
+            // flowLayoutPanel2
             // 
-            lTitulo1.AutoSize = true;
-            lTitulo1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTitulo1.Location = new Point(3, 0);
-            lTitulo1.Name = "lTitulo1";
-            lTitulo1.Size = new Size(312, 32);
-            lTitulo1.TabIndex = 16;
-            lTitulo1.Text = "Ingrese los datos del nuevo";
-            lTitulo1.TextAlign = ContentAlignment.MiddleCenter;
+            flowLayoutPanel2.Controls.Add(label2);
+            flowLayoutPanel2.Controls.Add(label4);
+            flowLayoutPanel2.Location = new Point(3, 35);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(488, 36);
+            flowLayoutPanel2.TabIndex = 18;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(3, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(312, 32);
+            label2.TabIndex = 16;
+            label2.Text = "Ingrese los datos del nuevo";
+            label2.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.BackColor = Color.Transparent;
+            label4.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.Gray;
+            label4.Location = new Point(321, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(97, 32);
+            label4.TabIndex = 17;
+            label4.Text = "Usuario";
+            label4.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // flowLayoutPanel3
             // 
@@ -777,27 +775,16 @@
             flowLayoutPanel3.Size = new Size(499, 36);
             flowLayoutPanel3.TabIndex = 19;
             // 
-            // rbGerente
+            // rbMedico
             // 
-            rbGerente.AutoSize = true;
-            rbGerente.Location = new Point(386, 3);
-            rbGerente.Name = "rbGerente";
-            rbGerente.Size = new Size(82, 24);
-            rbGerente.TabIndex = 4;
-            rbGerente.TabStop = true;
-            rbGerente.Text = "Gerente";
-            rbGerente.UseVisualStyleBackColor = true;
-            // 
-            // rbPersonalAdmin
-            // 
-            rbPersonalAdmin.AutoSize = true;
-            rbPersonalAdmin.Location = new Point(194, 3);
-            rbPersonalAdmin.Name = "rbPersonalAdmin";
-            rbPersonalAdmin.Size = new Size(186, 24);
-            rbPersonalAdmin.TabIndex = 3;
-            rbPersonalAdmin.TabStop = true;
-            rbPersonalAdmin.Text = "Personal Administrativo";
-            rbPersonalAdmin.UseVisualStyleBackColor = true;
+            rbMedico.AutoSize = true;
+            rbMedico.Location = new Point(3, 3);
+            rbMedico.Name = "rbMedico";
+            rbMedico.Size = new Size(80, 24);
+            rbMedico.TabIndex = 1;
+            rbMedico.TabStop = true;
+            rbMedico.Text = "Médico";
+            rbMedico.UseVisualStyleBackColor = true;
             // 
             // rbEnfermero
             // 
@@ -810,16 +797,27 @@
             rbEnfermero.Text = "Enfermero";
             rbEnfermero.UseVisualStyleBackColor = true;
             // 
-            // rbMedico
+            // rbPersonalAdmin
             // 
-            rbMedico.AutoSize = true;
-            rbMedico.Location = new Point(3, 3);
-            rbMedico.Name = "rbMedico";
-            rbMedico.Size = new Size(80, 24);
-            rbMedico.TabIndex = 1;
-            rbMedico.TabStop = true;
-            rbMedico.Text = "Médico";
-            rbMedico.UseVisualStyleBackColor = true;
+            rbPersonalAdmin.AutoSize = true;
+            rbPersonalAdmin.Location = new Point(194, 3);
+            rbPersonalAdmin.Name = "rbPersonalAdmin";
+            rbPersonalAdmin.Size = new Size(186, 24);
+            rbPersonalAdmin.TabIndex = 3;
+            rbPersonalAdmin.TabStop = true;
+            rbPersonalAdmin.Text = "Personal Administrativo";
+            rbPersonalAdmin.UseVisualStyleBackColor = true;
+            // 
+            // rbGerente
+            // 
+            rbGerente.AutoSize = true;
+            rbGerente.Location = new Point(386, 3);
+            rbGerente.Name = "rbGerente";
+            rbGerente.Size = new Size(82, 24);
+            rbGerente.TabIndex = 4;
+            rbGerente.TabStop = true;
+            rbGerente.Text = "Gerente";
+            rbGerente.UseVisualStyleBackColor = true;
             // 
             // panelFormularios
             // 
@@ -838,6 +836,17 @@
             panelFormularios.Name = "panelFormularios";
             panelFormularios.Size = new Size(1060, 715);
             panelFormularios.TabIndex = 8;
+            // 
+            // cbEspecialidades
+            // 
+            cbEspecialidades.ForeColor = Color.DarkGray;
+            cbEspecialidades.FormattingEnabled = true;
+            cbEspecialidades.Items.AddRange(new object[] { "Clínica", "Obstetricia", "Pediatría", "Cardiología" });
+            cbEspecialidades.Location = new Point(175, 3);
+            cbEspecialidades.Name = "cbEspecialidades";
+            cbEspecialidades.Size = new Size(225, 28);
+            cbEspecialidades.TabIndex = 25;
+            cbEspecialidades.Text = "Seleccione su especialidad";
             // 
             // bRegistrarUsuario
             // 
@@ -862,9 +871,8 @@
             // 
             flowLayoutPanel10.Controls.Add(pictureBox6);
             flowLayoutPanel10.Controls.Add(lEspecialidad);
-            flowLayoutPanel10.Controls.Add(textBox1);
-            flowLayoutPanel10.Controls.Add(button2);
-            flowLayoutPanel10.Location = new Point(297, 378);
+            flowLayoutPanel10.Controls.Add(cbEspecialidades);
+            flowLayoutPanel10.Location = new Point(325, 373);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
             flowLayoutPanel10.Size = new Size(428, 45);
             flowLayoutPanel10.TabIndex = 23;
@@ -890,31 +898,6 @@
             lEspecialidad.TabIndex = 16;
             lEspecialidad.Text = "Especialidad:";
             lEspecialidad.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // textBox1
-            // 
-            textBox1.Cursor = Cursors.Hand;
-            textBox1.ForeColor = Color.DarkGray;
-            textBox1.Location = new Point(175, 3);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(216, 27);
-            textBox1.TabIndex = 18;
-            textBox1.Text = "Ingrese su contraseña";
-            // 
-            // button2
-            // 
-            button2.Cursor = Cursors.Hand;
-            button2.FlatAppearance.BorderColor = Color.Silver;
-            button2.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            button2.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            button2.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button2.ForeColor = Color.Black;
-            button2.Image = Resource1.ojoCerrado;
-            button2.Location = new Point(3, 46);
-            button2.Name = "button2";
-            button2.Size = new Size(33, 29);
-            button2.TabIndex = 20;
-            button2.UseVisualStyleBackColor = true;
             // 
             // Form_nuevo_usuario
             // 
@@ -989,8 +972,8 @@
         private TextBox tbEmail;
         private FlowLayoutPanel flowLayoutPanel7;
         private PictureBox pictureBox2;
-        private Label lRolUsuario;
-        private TextBox tbRol;
+        private Label lTelefonoUsuario;
+        private TextBox tbTelefono;
         private FlowLayoutPanel flowLayoutPanel9;
         private PictureBox pictureBox5;
         private Label lConfirmPass;
@@ -1021,7 +1004,6 @@
         private FlowLayoutPanel flowLayoutPanel10;
         private PictureBox pictureBox6;
         private Label lEspecialidad;
-        private TextBox textBox1;
-        private Button button2;
+        private ComboBox cbEspecialidades;
     }
 }

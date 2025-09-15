@@ -100,11 +100,12 @@
             tbUsuario.BackColor = Color.WhiteSmoke;
             tbUsuario.BorderStyle = BorderStyle.FixedSingle;
             tbUsuario.Cursor = Cursors.Hand;
-            tbUsuario.ForeColor = Color.Black;
-            tbUsuario.Location = new Point(358, 256);
+            tbUsuario.ForeColor = Color.DarkGray;
+            tbUsuario.Location = new Point(358, 261);
             tbUsuario.Name = "tbUsuario";
             tbUsuario.Size = new Size(189, 27);
             tbUsuario.TabIndex = 7;
+            tbUsuario.Text = "Ingrese su email";
             // 
             // flowLayoutPanel1
             // 
@@ -175,12 +176,13 @@
             tbPass.BackColor = Color.WhiteSmoke;
             tbPass.BorderStyle = BorderStyle.FixedSingle;
             tbPass.Cursor = Cursors.Hand;
-            tbPass.ForeColor = Color.Black;
+            tbPass.ForeColor = Color.DarkGray;
             tbPass.Location = new Point(358, 317);
             tbPass.Name = "tbPass";
             tbPass.PasswordChar = '*';
             tbPass.Size = new Size(189, 27);
             tbPass.TabIndex = 11;
+            tbPass.Text = "contraseña";
             // 
             // bIniciarSesion
             // 
