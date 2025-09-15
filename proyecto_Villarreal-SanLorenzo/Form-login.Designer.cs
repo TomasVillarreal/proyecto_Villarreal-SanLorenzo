@@ -239,6 +239,7 @@
             AcceptButton = bIniciarSesion;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(800, 512);
             Controls.Add(button1);
             Controls.Add(bMostrarPass);
