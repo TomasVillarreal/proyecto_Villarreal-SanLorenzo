@@ -201,7 +201,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             int id_rol = obtenerIdRolSeleccionado();//Llamo al metodo y asigno su valor de retorno a la variable
-        string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
+            string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
             string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
             string emailUsuario = tbEmail.Text.Trim().ToLower();
             string telefono_string = tbTelefono.Text.Trim();
