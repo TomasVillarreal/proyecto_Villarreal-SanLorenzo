@@ -43,5 +43,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+       
     }
 }

@@ -41,6 +41,11 @@
             lTelefonoPacienteRegistro = new Label();
             lFechaPacienteRegistro = new Label();
             bRegistrarPaciente = new Button();
+            lErrorNombre = new Label();
+            lErrorApellido = new Label();
+            lErrorDni = new Label();
+            lErrorDireccion = new Label();
+            lErrorTelefono = new Label();
             SuspendLayout();
             // 
             // tNombrePacienteRegistro
@@ -49,6 +54,8 @@
             tNombrePacienteRegistro.Name = "tNombrePacienteRegistro";
             tNombrePacienteRegistro.Size = new Size(272, 23);
             tNombrePacienteRegistro.TabIndex = 0;
+            tNombrePacienteRegistro.KeyPress += tbTextoCaracteresPacienteRegistro_KeyPress;
+            tNombrePacienteRegistro.PreviewKeyDown += textBoxControl_PreviewKeyDown;
             // 
             // tApellidoPacienteRegistro
             // 
@@ -56,6 +63,8 @@
             tApellidoPacienteRegistro.Name = "tApellidoPacienteRegistro";
             tApellidoPacienteRegistro.Size = new Size(272, 23);
             tApellidoPacienteRegistro.TabIndex = 1;
+            tApellidoPacienteRegistro.KeyPress += tbTextoCaracteresPacienteRegistro_KeyPress;
+            tApellidoPacienteRegistro.PreviewKeyDown += textBoxControl_PreviewKeyDown;
             // 
             // tDniPacienteRegistro
             // 
@@ -63,6 +72,8 @@
             tDniPacienteRegistro.Name = "tDniPacienteRegistro";
             tDniPacienteRegistro.Size = new Size(662, 23);
             tDniPacienteRegistro.TabIndex = 2;
+            tDniPacienteRegistro.KeyPress += tbNumerico_KeyPress;
+            tDniPacienteRegistro.PreviewKeyDown += textBoxControl_PreviewKeyDown;
             // 
             // tDireccionPacienteRegistro
             // 
@@ -70,6 +81,8 @@
             tDireccionPacienteRegistro.Name = "tDireccionPacienteRegistro";
             tDireccionPacienteRegistro.Size = new Size(662, 23);
             tDireccionPacienteRegistro.TabIndex = 3;
+            tDireccionPacienteRegistro.KeyPress += tbDireccion_KeyPress;
+            tDireccionPacienteRegistro.PreviewKeyDown += textBoxControl_PreviewKeyDown;
             // 
             // tTelefonoPacienteRegistro
             // 
@@ -77,14 +90,18 @@
             tTelefonoPacienteRegistro.Name = "tTelefonoPacienteRegistro";
             tTelefonoPacienteRegistro.Size = new Size(662, 23);
             tTelefonoPacienteRegistro.TabIndex = 4;
+            tTelefonoPacienteRegistro.KeyPress += tbNumerico_KeyPress;
+            tTelefonoPacienteRegistro.PreviewKeyDown += textBoxControl_PreviewKeyDown;
             // 
             // tFechaPacienteRegistro
             // 
             tFechaPacienteRegistro.Format = DateTimePickerFormat.Short;
             tFechaPacienteRegistro.Location = new Point(49, 440);
+            tFechaPacienteRegistro.MaxDate = new DateTime(2025, 9, 20, 0, 0, 0, 0);
             tFechaPacienteRegistro.Name = "tFechaPacienteRegistro";
             tFechaPacienteRegistro.Size = new Size(94, 23);
             tFechaPacienteRegistro.TabIndex = 6;
+            tFechaPacienteRegistro.Value = new DateTime(2025, 9, 20, 0, 0, 0, 0);
             // 
             // lNombrePacienteRegistro
             // 
@@ -132,9 +149,9 @@
             lTelefonoPacienteRegistro.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lTelefonoPacienteRegistro.Location = new Point(49, 323);
             lTelefonoPacienteRegistro.Name = "lTelefonoPacienteRegistro";
-            lTelefonoPacienteRegistro.Size = new Size(68, 20);
+            lTelefonoPacienteRegistro.Size = new Size(223, 20);
             lTelefonoPacienteRegistro.TabIndex = 11;
-            lTelefonoPacienteRegistro.Text = "Telefono";
+            lTelefonoPacienteRegistro.Text = "Telefono (sin el codigo de area)";
             // 
             // lFechaPacienteRegistro
             // 
@@ -158,10 +175,70 @@
             bRegistrarPaciente.UseVisualStyleBackColor = false;
             bRegistrarPaciente.Click += bRegistrarPaciente_Click;
             // 
+            // lErrorNombre
+            // 
+            lErrorNombre.AutoSize = true;
+            lErrorNombre.ForeColor = Color.Red;
+            lErrorNombre.Location = new Point(49, 129);
+            lErrorNombre.Name = "lErrorNombre";
+            lErrorNombre.Size = new Size(38, 15);
+            lErrorNombre.TabIndex = 14;
+            lErrorNombre.Text = "label1";
+            lErrorNombre.Visible = false;
+            // 
+            // lErrorApellido
+            // 
+            lErrorApellido.AutoSize = true;
+            lErrorApellido.ForeColor = Color.Red;
+            lErrorApellido.Location = new Point(439, 129);
+            lErrorApellido.Name = "lErrorApellido";
+            lErrorApellido.Size = new Size(38, 15);
+            lErrorApellido.TabIndex = 15;
+            lErrorApellido.Text = "label2";
+            lErrorApellido.Visible = false;
+            // 
+            // lErrorDni
+            // 
+            lErrorDni.AutoSize = true;
+            lErrorDni.ForeColor = Color.Red;
+            lErrorDni.Location = new Point(49, 210);
+            lErrorDni.Name = "lErrorDni";
+            lErrorDni.Size = new Size(38, 15);
+            lErrorDni.TabIndex = 16;
+            lErrorDni.Text = "label3";
+            lErrorDni.Visible = false;
+            // 
+            // lErrorDireccion
+            // 
+            lErrorDireccion.AutoSize = true;
+            lErrorDireccion.ForeColor = Color.Red;
+            lErrorDireccion.Location = new Point(49, 297);
+            lErrorDireccion.Name = "lErrorDireccion";
+            lErrorDireccion.Size = new Size(38, 15);
+            lErrorDireccion.TabIndex = 17;
+            lErrorDireccion.Text = "label4";
+            lErrorDireccion.Visible = false;
+            // 
+            // lErrorTelefono
+            // 
+            lErrorTelefono.AutoSize = true;
+            lErrorTelefono.ForeColor = Color.Red;
+            lErrorTelefono.Location = new Point(47, 381);
+            lErrorTelefono.Name = "lErrorTelefono";
+            lErrorTelefono.Size = new Size(38, 15);
+            lErrorTelefono.TabIndex = 18;
+            lErrorTelefono.Text = "label5";
+            lErrorTelefono.Visible = false;
+            // 
             // RegistrarPacienteControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(lErrorTelefono);
+            Controls.Add(lErrorDireccion);
+            Controls.Add(lErrorDni);
+            Controls.Add(lErrorApellido);
+            Controls.Add(lErrorNombre);
             Controls.Add(bRegistrarPaciente);
             Controls.Add(lFechaPacienteRegistro);
             Controls.Add(lTelefonoPacienteRegistro);
@@ -196,5 +273,10 @@
         private Label lTelefonoPacienteRegistro;
         private Label lFechaPacienteRegistro;
         private Button bRegistrarPaciente;
+        private Label lErrorNombre;
+        private Label lErrorApellido;
+        private Label lErrorDni;
+        private Label lErrorDireccion;
+        private Label lErrorTelefono;
     }
 }
