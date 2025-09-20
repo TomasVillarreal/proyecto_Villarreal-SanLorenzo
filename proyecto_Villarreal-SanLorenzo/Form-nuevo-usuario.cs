@@ -18,6 +18,7 @@ namespace proyecto_Villarreal_SanLorenzo
         public Form_nuevo_usuario()
         {
             this.InitializeComponent();
+            CargarRoles();
         }
 
         private void botonSidebar2_Click(object sender, EventArgs e)
@@ -27,170 +28,17 @@ namespace proyecto_Villarreal_SanLorenzo
             this.Close();
         }
 
-        private void rbRolCheck(object sender, EventArgs e)
+       /* private int ObtenerIdRol(string nombreRol)
         {
-            if (rbMedico.Checked)
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
-                lTitulo2.Text = "Médico";
-                lTitulo2.ForeColor = Color.Black;
-                flowLayoutPanel10.Visible = true;
-            }
-            else if (rbEnfermero.Checked)
-            {
-                lTitulo2.Text = "Enfermero";
-                lTitulo2.ForeColor = Color.Black;
-                flowLayoutPanel10.Visible = true;
-            }
-            else if (rbPersonalAdmin.Checked)
-            {
-                lTitulo2.Text = "Administrativo";
-                lTitulo2.ForeColor = Color.Black;
-                flowLayoutPanel10.Visible = false;
-            }
-            else if (rbGerente.Checked)
-            {
-                lTitulo2.Text = "Gerente";
-                lTitulo2.ForeColor = Color.Black;
-                flowLayoutPanel10.Visible = false;
-            }
-        }
-
-        public int obtenerIdRolSeleccionado()
-        {
-            if (rbMedico.Checked)
-            {
-                return 2;
-            }
-            else if (rbEnfermero.Checked)
-            {
-                return 3;
-            }
-            else if (rbPersonalAdmin.Checked)
-            {
-                return 4;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        public bool CheckRadioButtons()
-        {
-            foreach (Control control in flowLayoutPanel10.Controls)
-            {
-                if (control is RadioButton)
-                {
-                    RadioButton rb = (RadioButton)control;
-                    if (rb.Checked)
-                    {
-                        return true;//Hay un radioButton seleccionado
-                    }
-                }
-            }
-            return false; //Ninguno fue seleccionado
-        }
-
-        private void tbNomUsuario_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            //Permite letras, la tecla de retroceso y espacio en caso de nombres compuestos
-            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
-            {
-                e.Handled = true; //Evita el ingreso de caracteres no deseados o numeros
-            }
-        }
-
-        private void tbApellidoUsuario_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void tbEmail_Validating(object sender, CancelEventArgs e)
-        {
-            //Verifica si el usuario ingreso el carácter '@'
-            if (!tbEmail.Text.Contains("@"))
-            {
-                //Si no lo contiene, muestra un mensaje de error
-                MessageBox.Show("El correo electrónico debe contener un '@'.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                //Cancela la validación
-                e.Cancel = true;
-            }
-        }
-
-        private void tbTelefono_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            //Permite que el usuario solo ingrese numeros (0-9) y la tecla de retroceso
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-            {
-                e.Handled = true; //Cancela la entrada de cualquier otro carácter
-            }
-        }
-
-        private void bMostrarPass_Click(object sender, EventArgs e)
-        {
-            if (passVisible == false)
-            {
-                tbPassUsuario.PasswordChar = '\0';
-                bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
-                passVisible = true;
-            }
-            else
-            {
-                tbPassUsuario.PasswordChar = '*';
-                bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
-                passVisible = false;
-            }
-        }
-
-        private void bMostrarConfPass_Click(object sender, EventArgs e)
-        {
-            if (passVisible == false)
-            {
-                tbConfirmPass.PasswordChar = '\0';
-                bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
-                passVisible = true;
-            }
-            else
-            {
-                tbConfirmPass.PasswordChar = '*';
-                bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
-                passVisible = false;
-            }
-
-        }
-
-        private bool CheckPassword()//Metodo que compara la contraseña y la confirmacion de contraseña
-        {
-            string password = tbPassUsuario.Text;
-            string confirmPassword = tbConfirmPass.Text;
-
-            if (password == confirmPassword)
-            {
-                return true;
-            }
-            else
-            {
-                MessageBox.Show("Error al confirmar la contraseña.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
 
             }
-        }
+        }*/
 
-        private string HashPassword(string password)//Metodo que hashea el password
-        {
-            //Hashea la contraseña con una salt de 12
-            return BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));
-        }
 
-        private bool VerfiPassword(string password, string hashedPassword)//Metodo que verifica el password con el hash
-        {
-            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
-        }
-
-        private void bRegistrarUsuario_Click(object sender, EventArgs e)
+        private void bRegistrarUsuario_Click(object sender, EventArgs e, CancelEventArgs c)
         {
 
             if (cbEspecialidades.SelectedIndex < 0)
@@ -200,7 +48,17 @@ namespace proyecto_Villarreal_SanLorenzo
                 return; //Detiene la ejecución del método
             }
 
-            int id_rol = obtenerIdRolSeleccionado();//Llamo al metodo y asigno su valor de retorno a la variable
+            //Verifica si el usuario ingreso el carácter '@'
+            if (!tbEmail.Text.Contains("@"))
+            {
+                MessageBox.Show("El correo electrónico debe contener un '@'.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                c.Cancel = true;//Cancela la validación
+
+                tbEmail.Clear();
+            }
+
+           // int id_rol = obtenerIdRolSeleccionado();//Llamo al metodo y asigno su valor de retorno a la variable
             string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
             string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
             string emailUsuario = tbEmail.Text.Trim().ToLower();
@@ -208,7 +66,6 @@ namespace proyecto_Villarreal_SanLorenzo
             long telefono_usuario = Convert.ToInt64(telefono_string);//Este se guarad en la bd
             string password_usuario = tbPassUsuario.Text;
             string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
-            //string especialidad = cbEspecialidades.Text;
 
             if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
                 string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
@@ -219,7 +76,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            CrearUsuario(id_rol, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
+           // CrearUsuario(//id_rol, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
         }
 
         //Creacion del usuario
@@ -274,6 +131,121 @@ namespace proyecto_Villarreal_SanLorenzo
             Form_login formLogin = new Form_login();
             formLogin.Show();
             this.Close();
+        }
+
+
+        private void tbNomUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')//Permite letras, la tecla de retroceso y espacio en caso de nombres compuestos
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tbApellidoUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tbTelefono_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))//Permite que el usuario solo ingrese numeros (0-9) y la tecla de retroceso
+            {
+                e.Handled = true;
+            }
+        }
+        private void bMostrarPass1_Click(object sender, EventArgs e)
+        {
+            if (passVisible == false)
+            {
+                tbConfirmPass.PasswordChar = '\0';
+                bMostrarPass1.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
+                passVisible = true;
+            }
+            else
+            {
+                tbConfirmPass.PasswordChar = '*';
+                bMostrarPass1.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
+                passVisible = false;
+            }
+        }
+
+        private void bMostrarConfPass2_Click(object sender, EventArgs e)
+        {
+            if (passVisible == false)
+            {
+                tbConfirmPass.PasswordChar = '\0';
+                bMostrarConfPass2.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
+                passVisible = true;
+            }
+            else
+            {
+                tbConfirmPass.PasswordChar = '*';
+                bMostrarConfPass2.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
+                passVisible = false;
+            }
+        }
+
+        private void CargarRoles() //Metodo que carga los roles al combobox
+        {
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM Rol", connecction))
+                {
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+                    DataTable dataTable = new DataTable();
+
+                    dataAdapter.Fill(dataTable);
+
+                    comboBoxRoles.DataSource = dataTable;
+                    comboBoxRoles.DisplayMember = "nombre_rol";
+                    comboBoxRoles.ValueMember = "id_rol";
+
+                }
+                try
+                {
+                    connecction.Open();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar los roles.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+        private bool CheckPassword()//Metodo que compara la contraseña y la confirmacion de contraseña
+        {
+            string password = tbPassUsuario.Text;
+            string confirmPassword = tbConfirmPass.Text;
+
+            if (password == confirmPassword)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Error al confirmar la contraseña.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+
+            }
+        }
+
+        private string HashPassword(string password)//Metodo que hashea el password
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));//Hashea la contraseña con una salt de 12
+        }
+
+        private bool VerfiPassword(string password, string hashedPassword)//Metodo que verifica el password con el hash
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
     }
 }

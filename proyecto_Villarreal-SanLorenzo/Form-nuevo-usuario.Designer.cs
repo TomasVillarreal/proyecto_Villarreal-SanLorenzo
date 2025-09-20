@@ -54,11 +54,11 @@
             lTelefonoUsuario = new Label();
             flowLayoutPanel9 = new FlowLayoutPanel();
             tbConfirmPass = new TextBox();
-            bMostrarConfPass = new Button();
+            bMostrarConfPass2 = new Button();
             lConfirmPass = new Label();
             flowLayoutPanel8 = new FlowLayoutPanel();
             tbPassUsuario = new TextBox();
-            bMostrarPass = new Button();
+            bMostrarPass1 = new Button();
             lPassUsuario = new Label();
             flowLayoutPanel4 = new FlowLayoutPanel();
             tbNomUsuario = new TextBox();
@@ -69,12 +69,10 @@
             label2 = new Label();
             label4 = new Label();
             lTitulo2 = new Label();
-            flowLayoutPanel3 = new FlowLayoutPanel();
-            rbMedico = new RadioButton();
-            rbEnfermero = new RadioButton();
-            rbPersonalAdmin = new RadioButton();
-            rbGerente = new RadioButton();
             panelFormularios = new Panel();
+            label3 = new Label();
+            flowLayoutPanel3 = new FlowLayoutPanel();
+            comboBoxRoles = new ComboBox();
             bRegistrarUsuario = new Button();
             flowLayoutPanel10 = new FlowLayoutPanel();
             lEspecialidad = new Label();
@@ -88,8 +86,8 @@
             flowLayoutPanel4.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
-            flowLayoutPanel3.SuspendLayout();
             panelFormularios.SuspendLayout();
+            flowLayoutPanel3.SuspendLayout();
             flowLayoutPanel10.SuspendLayout();
             SuspendLayout();
             // 
@@ -108,10 +106,10 @@
             panelSidebar.Controls.Add(label1);
             panelSidebar.Controls.Add(labelSH);
             panelSidebar.Controls.Add(labelClinicks);
-            panelSidebar.Location = new Point(-3, 2);
+            panelSidebar.Location = new Point(-3, 9);
             panelSidebar.Margin = new Padding(3, 4, 3, 4);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(271, 787);
+            panelSidebar.Size = new Size(246, 780);
             panelSidebar.TabIndex = 1;
             // 
             // botonSidebar3
@@ -128,7 +126,7 @@
             botonSidebar3.Image = Resource1.box_arrow_right;
             botonSidebar3.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar3.IsActive = false;
-            botonSidebar3.Location = new Point(30, 746);
+            botonSidebar3.Location = new Point(18, 739);
             botonSidebar3.Margin = new Padding(3, 4, 3, 4);
             botonSidebar3.Name = "botonSidebar3";
             botonSidebar3.NormalColor = Color.White;
@@ -154,7 +152,7 @@
             botonSidebar2.Image = Resource1.plus_square;
             botonSidebar2.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar2.IsActive = false;
-            botonSidebar2.Location = new Point(30, 707);
+            botonSidebar2.Location = new Point(18, 700);
             botonSidebar2.Margin = new Padding(3, 4, 3, 4);
             botonSidebar2.Name = "botonSidebar2";
             botonSidebar2.NormalColor = Color.White;
@@ -180,7 +178,7 @@
             botonSidebar1.Image = Resource1.file_earmark_arrow_down;
             botonSidebar1.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar1.IsActive = false;
-            botonSidebar1.Location = new Point(30, 668);
+            botonSidebar1.Location = new Point(18, 661);
             botonSidebar1.Margin = new Padding(3, 4, 3, 4);
             botonSidebar1.Name = "botonSidebar1";
             botonSidebar1.NormalColor = Color.White;
@@ -205,7 +203,7 @@
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(131, 1423);
+            bBackup.Location = new Point(119, 1416);
             bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
@@ -230,7 +228,7 @@
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(131, 1462);
+            bAgregarPersonal.Location = new Point(119, 1455);
             bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;
@@ -255,7 +253,7 @@
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(131, 1500);
+            bCerrarSesion.Location = new Point(119, 1493);
             bCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
@@ -410,7 +408,7 @@
             // tbApellidoUsuario
             // 
             tbApellidoUsuario.Cursor = Cursors.Hand;
-            tbApellidoUsuario.ForeColor = Color.DarkGray;
+            tbApellidoUsuario.ForeColor = Color.Black;
             tbApellidoUsuario.Location = new Point(3, 3);
             tbApellidoUsuario.Name = "tbApellidoUsuario";
             tbApellidoUsuario.Size = new Size(269, 27);
@@ -432,7 +430,7 @@
             // flowLayoutPanel6
             // 
             flowLayoutPanel6.Controls.Add(tbEmail);
-            flowLayoutPanel6.Location = new Point(65, 223);
+            flowLayoutPanel6.Location = new Point(71, 379);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
             flowLayoutPanel6.Size = new Size(380, 45);
             flowLayoutPanel6.TabIndex = 21;
@@ -440,19 +438,18 @@
             // tbEmail
             // 
             tbEmail.Cursor = Cursors.Hand;
-            tbEmail.ForeColor = Color.DarkGray;
+            tbEmail.ForeColor = Color.Black;
             tbEmail.Location = new Point(3, 3);
             tbEmail.Name = "tbEmail";
             tbEmail.Size = new Size(286, 27);
             tbEmail.TabIndex = 18;
-            tbEmail.Validating += tbEmail_Validating;
             // 
             // lEmail
             // 
             lEmail.AccessibleRole = AccessibleRole.None;
             lEmail.AutoSize = true;
             lEmail.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lEmail.Location = new Point(65, 195);
+            lEmail.Location = new Point(71, 351);
             lEmail.Name = "lEmail";
             lEmail.Size = new Size(59, 25);
             lEmail.TabIndex = 16;
@@ -470,7 +467,7 @@
             // tbTelefono
             // 
             tbTelefono.Cursor = Cursors.Hand;
-            tbTelefono.ForeColor = Color.DarkGray;
+            tbTelefono.ForeColor = Color.Black;
             tbTelefono.Location = new Point(3, 3);
             tbTelefono.Name = "tbTelefono";
             tbTelefono.Size = new Size(269, 27);
@@ -492,7 +489,7 @@
             // flowLayoutPanel9
             // 
             flowLayoutPanel9.Controls.Add(tbConfirmPass);
-            flowLayoutPanel9.Controls.Add(bMostrarConfPass);
+            flowLayoutPanel9.Controls.Add(bMostrarConfPass2);
             flowLayoutPanel9.Location = new Point(549, 322);
             flowLayoutPanel9.Name = "flowLayoutPanel9";
             flowLayoutPanel9.Size = new Size(392, 45);
@@ -501,27 +498,27 @@
             // tbConfirmPass
             // 
             tbConfirmPass.Cursor = Cursors.Hand;
-            tbConfirmPass.ForeColor = Color.DarkGray;
+            tbConfirmPass.ForeColor = Color.Black;
             tbConfirmPass.Location = new Point(3, 3);
             tbConfirmPass.Name = "tbConfirmPass";
             tbConfirmPass.Size = new Size(269, 27);
             tbConfirmPass.TabIndex = 18;
             // 
-            // bMostrarConfPass
+            // bMostrarConfPass2
             // 
-            bMostrarConfPass.Cursor = Cursors.Hand;
-            bMostrarConfPass.FlatAppearance.BorderColor = Color.Silver;
-            bMostrarConfPass.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            bMostrarConfPass.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            bMostrarConfPass.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bMostrarConfPass.ForeColor = Color.Black;
-            bMostrarConfPass.Image = Resource1.ojoCerrado;
-            bMostrarConfPass.Location = new Point(278, 3);
-            bMostrarConfPass.Name = "bMostrarConfPass";
-            bMostrarConfPass.Size = new Size(33, 29);
-            bMostrarConfPass.TabIndex = 20;
-            bMostrarConfPass.UseVisualStyleBackColor = true;
-            bMostrarConfPass.Click += bMostrarConfPass_Click;
+            bMostrarConfPass2.Cursor = Cursors.Hand;
+            bMostrarConfPass2.FlatAppearance.BorderColor = Color.Silver;
+            bMostrarConfPass2.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            bMostrarConfPass2.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            bMostrarConfPass2.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bMostrarConfPass2.ForeColor = Color.Black;
+            bMostrarConfPass2.Image = Resource1.ojoCerrado;
+            bMostrarConfPass2.Location = new Point(278, 3);
+            bMostrarConfPass2.Name = "bMostrarConfPass2";
+            bMostrarConfPass2.Size = new Size(33, 29);
+            bMostrarConfPass2.TabIndex = 20;
+            bMostrarConfPass2.UseVisualStyleBackColor = true;
+            bMostrarConfPass2.Click += bMostrarConfPass2_Click;
             // 
             // lConfirmPass
             // 
@@ -538,8 +535,8 @@
             // flowLayoutPanel8
             // 
             flowLayoutPanel8.Controls.Add(tbPassUsuario);
-            flowLayoutPanel8.Controls.Add(bMostrarPass);
-            flowLayoutPanel8.Location = new Point(65, 322);
+            flowLayoutPanel8.Controls.Add(bMostrarPass1);
+            flowLayoutPanel8.Location = new Point(68, 448);
             flowLayoutPanel8.Name = "flowLayoutPanel8";
             flowLayoutPanel8.Size = new Size(380, 45);
             flowLayoutPanel8.TabIndex = 22;
@@ -547,34 +544,34 @@
             // tbPassUsuario
             // 
             tbPassUsuario.Cursor = Cursors.Hand;
-            tbPassUsuario.ForeColor = Color.DarkGray;
+            tbPassUsuario.ForeColor = Color.Black;
             tbPassUsuario.Location = new Point(3, 3);
             tbPassUsuario.Name = "tbPassUsuario";
             tbPassUsuario.Size = new Size(286, 27);
             tbPassUsuario.TabIndex = 18;
             // 
-            // bMostrarPass
+            // bMostrarPass1
             // 
-            bMostrarPass.Cursor = Cursors.Hand;
-            bMostrarPass.FlatAppearance.BorderColor = Color.Silver;
-            bMostrarPass.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            bMostrarPass.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            bMostrarPass.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bMostrarPass.ForeColor = Color.Black;
-            bMostrarPass.Image = Resource1.ojoCerrado;
-            bMostrarPass.Location = new Point(295, 3);
-            bMostrarPass.Name = "bMostrarPass";
-            bMostrarPass.Size = new Size(33, 29);
-            bMostrarPass.TabIndex = 20;
-            bMostrarPass.UseVisualStyleBackColor = true;
-            bMostrarPass.Click += bMostrarPass_Click;
+            bMostrarPass1.Cursor = Cursors.Hand;
+            bMostrarPass1.FlatAppearance.BorderColor = Color.Silver;
+            bMostrarPass1.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            bMostrarPass1.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            bMostrarPass1.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bMostrarPass1.ForeColor = Color.Black;
+            bMostrarPass1.Image = Resource1.ojoCerrado;
+            bMostrarPass1.Location = new Point(295, 3);
+            bMostrarPass1.Name = "bMostrarPass1";
+            bMostrarPass1.Size = new Size(33, 29);
+            bMostrarPass1.TabIndex = 20;
+            bMostrarPass1.UseVisualStyleBackColor = true;
+            bMostrarPass1.Click += bMostrarPass1_Click;
             // 
             // lPassUsuario
             // 
             lPassUsuario.AccessibleRole = AccessibleRole.None;
             lPassUsuario.AutoSize = true;
             lPassUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lPassUsuario.Location = new Point(65, 294);
+            lPassUsuario.Location = new Point(71, 420);
             lPassUsuario.Name = "lPassUsuario";
             lPassUsuario.Size = new Size(109, 25);
             lPassUsuario.TabIndex = 16;
@@ -584,7 +581,7 @@
             // flowLayoutPanel4
             // 
             flowLayoutPanel4.Controls.Add(tbNomUsuario);
-            flowLayoutPanel4.Location = new Point(65, 147);
+            flowLayoutPanel4.Location = new Point(74, 311);
             flowLayoutPanel4.Name = "flowLayoutPanel4";
             flowLayoutPanel4.Size = new Size(380, 37);
             flowLayoutPanel4.TabIndex = 20;
@@ -592,7 +589,7 @@
             // tbNomUsuario
             // 
             tbNomUsuario.Cursor = Cursors.Hand;
-            tbNomUsuario.ForeColor = Color.DarkGray;
+            tbNomUsuario.ForeColor = Color.Black;
             tbNomUsuario.Location = new Point(3, 3);
             tbNomUsuario.Name = "tbNomUsuario";
             tbNomUsuario.Size = new Size(286, 27);
@@ -604,7 +601,7 @@
             lNomUsuario.AccessibleRole = AccessibleRole.None;
             lNomUsuario.AutoSize = true;
             lNomUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNomUsuario.Location = new Point(65, 119);
+            lNomUsuario.Location = new Point(74, 283);
             lNomUsuario.Name = "lNomUsuario";
             lNomUsuario.Size = new Size(83, 25);
             lNomUsuario.TabIndex = 16;
@@ -677,68 +674,11 @@
             lTitulo2.Text = "Usuario";
             lTitulo2.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel3
-            // 
-            flowLayoutPanel3.Controls.Add(rbMedico);
-            flowLayoutPanel3.Controls.Add(rbEnfermero);
-            flowLayoutPanel3.Controls.Add(rbPersonalAdmin);
-            flowLayoutPanel3.Controls.Add(rbGerente);
-            flowLayoutPanel3.Location = new Point(257, 78);
-            flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(499, 36);
-            flowLayoutPanel3.TabIndex = 19;
-            // 
-            // rbMedico
-            // 
-            rbMedico.AutoSize = true;
-            rbMedico.Location = new Point(3, 3);
-            rbMedico.Name = "rbMedico";
-            rbMedico.Size = new Size(80, 24);
-            rbMedico.TabIndex = 1;
-            rbMedico.TabStop = true;
-            rbMedico.Text = "Médico";
-            rbMedico.UseVisualStyleBackColor = true;
-            rbMedico.CheckedChanged += rbRolCheck;
-            // 
-            // rbEnfermero
-            // 
-            rbEnfermero.AutoSize = true;
-            rbEnfermero.Location = new Point(89, 3);
-            rbEnfermero.Name = "rbEnfermero";
-            rbEnfermero.Size = new Size(99, 24);
-            rbEnfermero.TabIndex = 2;
-            rbEnfermero.TabStop = true;
-            rbEnfermero.Text = "Enfermero";
-            rbEnfermero.UseVisualStyleBackColor = true;
-            rbEnfermero.CheckedChanged += rbRolCheck;
-            // 
-            // rbPersonalAdmin
-            // 
-            rbPersonalAdmin.AutoSize = true;
-            rbPersonalAdmin.Location = new Point(194, 3);
-            rbPersonalAdmin.Name = "rbPersonalAdmin";
-            rbPersonalAdmin.Size = new Size(186, 24);
-            rbPersonalAdmin.TabIndex = 3;
-            rbPersonalAdmin.TabStop = true;
-            rbPersonalAdmin.Text = "Personal Administrativo";
-            rbPersonalAdmin.UseVisualStyleBackColor = true;
-            rbPersonalAdmin.CheckedChanged += rbRolCheck;
-            // 
-            // rbGerente
-            // 
-            rbGerente.AutoSize = true;
-            rbGerente.Location = new Point(386, 3);
-            rbGerente.Name = "rbGerente";
-            rbGerente.Size = new Size(82, 24);
-            rbGerente.TabIndex = 4;
-            rbGerente.TabStop = true;
-            rbGerente.Text = "Gerente";
-            rbGerente.UseVisualStyleBackColor = true;
-            rbGerente.CheckedChanged += rbRolCheck;
-            // 
             // panelFormularios
             // 
             panelFormularios.BackColor = SystemColors.Control;
+            panelFormularios.Controls.Add(label3);
+            panelFormularios.Controls.Add(flowLayoutPanel3);
             panelFormularios.Controls.Add(lTitulo2);
             panelFormularios.Controls.Add(lConfirmPass);
             panelFormularios.Controls.Add(lPassUsuario);
@@ -747,7 +687,6 @@
             panelFormularios.Controls.Add(lApellidoUsuario);
             panelFormularios.Controls.Add(lNomUsuario);
             panelFormularios.Controls.Add(bRegistrarUsuario);
-            panelFormularios.Controls.Add(flowLayoutPanel3);
             panelFormularios.Controls.Add(flowLayoutPanel1);
             panelFormularios.Controls.Add(flowLayoutPanel4);
             panelFormularios.Controls.Add(flowLayoutPanel10);
@@ -756,10 +695,38 @@
             panelFormularios.Controls.Add(flowLayoutPanel7);
             panelFormularios.Controls.Add(flowLayoutPanel6);
             panelFormularios.Controls.Add(flowLayoutPanel5);
-            panelFormularios.Location = new Point(310, 74);
+            panelFormularios.Location = new Point(258, 56);
             panelFormularios.Name = "panelFormularios";
-            panelFormularios.Size = new Size(1060, 715);
+            panelFormularios.Size = new Size(1112, 733);
             panelFormularios.TabIndex = 8;
+            // 
+            // label3
+            // 
+            label3.AccessibleRole = AccessibleRole.None;
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(74, 99);
+            label3.Name = "label3";
+            label3.Size = new Size(39, 25);
+            label3.TabIndex = 25;
+            label3.Text = "Rol";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // flowLayoutPanel3
+            // 
+            flowLayoutPanel3.Controls.Add(comboBoxRoles);
+            flowLayoutPanel3.Location = new Point(74, 127);
+            flowLayoutPanel3.Name = "flowLayoutPanel3";
+            flowLayoutPanel3.Size = new Size(380, 37);
+            flowLayoutPanel3.TabIndex = 26;
+            // 
+            // comboBoxRoles
+            // 
+            comboBoxRoles.FormattingEnabled = true;
+            comboBoxRoles.Location = new Point(3, 3);
+            comboBoxRoles.Name = "comboBoxRoles";
+            comboBoxRoles.Size = new Size(286, 28);
+            comboBoxRoles.TabIndex = 0;
             // 
             // bRegistrarUsuario
             // 
@@ -773,19 +740,18 @@
             bRegistrarUsuario.ForeColor = Color.Black;
             bRegistrarUsuario.Image = Resource1.registrar_usuario;
             bRegistrarUsuario.ImageAlign = ContentAlignment.MiddleLeft;
-            bRegistrarUsuario.Location = new Point(376, 504);
+            bRegistrarUsuario.Location = new Point(395, 574);
             bRegistrarUsuario.Name = "bRegistrarUsuario";
             bRegistrarUsuario.Size = new Size(237, 47);
             bRegistrarUsuario.TabIndex = 24;
             bRegistrarUsuario.Text = "Registrar usuario";
             bRegistrarUsuario.UseVisualStyleBackColor = false;
-            bRegistrarUsuario.Click += bRegistrarUsuario_Click;
             // 
             // flowLayoutPanel10
             // 
             flowLayoutPanel10.Controls.Add(lEspecialidad);
             flowLayoutPanel10.Controls.Add(cbEspecialidades);
-            flowLayoutPanel10.Location = new Point(346, 391);
+            flowLayoutPanel10.Location = new Point(469, 513);
             flowLayoutPanel10.Name = "flowLayoutPanel10";
             flowLayoutPanel10.Size = new Size(460, 45);
             flowLayoutPanel10.TabIndex = 23;
@@ -842,10 +808,9 @@
             flowLayoutPanel1.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
-            flowLayoutPanel3.ResumeLayout(false);
-            flowLayoutPanel3.PerformLayout();
             panelFormularios.ResumeLayout(false);
             panelFormularios.PerformLayout();
+            flowLayoutPanel3.ResumeLayout(false);
             flowLayoutPanel10.ResumeLayout(false);
             flowLayoutPanel10.PerformLayout();
             ResumeLayout(false);
@@ -881,11 +846,11 @@
         private FlowLayoutPanel flowLayoutPanel9;
         private Label lConfirmPass;
         private TextBox tbConfirmPass;
-        private Button bMostrarConfPass;
+        private Button bMostrarConfPass2;
         private FlowLayoutPanel flowLayoutPanel8;
         private Label lPassUsuario;
         private TextBox tbPassUsuario;
-        private Button bMostrarPass;
+        private Button bMostrarPass1;
         private FlowLayoutPanel flowLayoutPanel4;
         private Label lNomUsuario;
         private TextBox tbNomUsuario;
@@ -895,15 +860,13 @@
         private FlowLayoutPanel flowLayoutPanel2;
         private Label label2;
         private Label label4;
-        private FlowLayoutPanel flowLayoutPanel3;
-        private RadioButton rbMedico;
-        private RadioButton rbEnfermero;
-        private RadioButton rbPersonalAdmin;
-        private RadioButton rbGerente;
         private Panel panelFormularios;
         private Button bRegistrarUsuario;
         private FlowLayoutPanel flowLayoutPanel10;
         private Label lEspecialidad;
         private ComboBox cbEspecialidades;
+        private Label label3;
+        private FlowLayoutPanel flowLayoutPanel3;
+        private ComboBox comboBoxRoles;
     }
 }
