@@ -200,7 +200,7 @@
             bIniciarSesion.Click += bIniciarSesion_Click;
             // 
             // bMostrarPass
-            // 
+            //
             bMostrarPass.Cursor = Cursors.Hand;
             bMostrarPass.FlatAppearance.BorderColor = Color.Silver;
             bMostrarPass.FlatAppearance.MouseDownBackColor = Color.LightGray;
