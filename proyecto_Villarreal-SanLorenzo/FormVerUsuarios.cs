@@ -17,6 +17,13 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             InitializeComponent();
             ObtenerRegistro();
+            CargarDatosUsuario();
+        }
+        private void CargarDatosUsuario()
+        {
+            string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
+            lNombreUsuario.Text = nombre_completo;
+            lRol.Text = SesionUsuario.RolActivo;
         }
 
         private void ObtenerRegistro()
@@ -188,6 +195,30 @@ namespace proyecto_Villarreal_SanLorenzo
             tbApellidoUsuario.Text = dataGridViewUsuarios.CurrentRow.Cells[2].Value.ToString();
             tbTelefono.Text = dataGridViewUsuarios.CurrentRow.Cells[3].Value.ToString();
             tbEmail.Text = dataGridViewUsuarios.CurrentRow.Cells[4].Value.ToString();
+        }
+
+        private void bHome_Click(object sender, EventArgs e)
+        {
+            FormHome formHome = new FormHome();
+            formHome.Show();
+            this.Close();
+        }
+
+        private void bPersonal_Click(object sender, EventArgs e)
+        {
+            Form_nuevo_usuario formularioUsuarios = new Form_nuevo_usuario();
+            formularioUsuarios.Show();
+            this.Close();
+        }
+
+        private void bSalir_Click(object sender, EventArgs e)
+        {
+            //Llama al metodo el cual cierra la sesion.
+            SesionUsuario.CerrarSesion();
+
+            Form_login formLogin = new Form_login();
+            formLogin.Show();
+            this.Close();
         }
     }
 }

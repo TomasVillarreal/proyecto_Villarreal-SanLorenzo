@@ -35,6 +35,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private void InitializeComponent()
         {
             panelSidebar = new Panel();
+            bUsuarios = new BotonSidebar();
             bBackup = new BotonSidebar();
             bAgregarPersonal = new BotonSidebar();
             bCerrarSesion = new BotonSidebar();
@@ -46,7 +47,6 @@ namespace proyecto_Villarreal_SanLorenzo
             labelClinicks = new Label();
             lNombreUsuario = new Label();
             lRol = new Label();
-            bUsuarios = new BotonSidebar();
             panelSidebar.SuspendLayout();
             SuspendLayout();
             // 
@@ -69,6 +69,32 @@ namespace proyecto_Villarreal_SanLorenzo
             panelSidebar.Size = new Size(244, 873);
             panelSidebar.TabIndex = 0;
             panelSidebar.Paint += panelSidebar_Paint;
+            // 
+            // bUsuarios
+            // 
+            bUsuarios.Anchor = AnchorStyles.Bottom;
+            bUsuarios.BorderRadius = 10;
+            bUsuarios.ClickColor = Color.FromArgb(192, 192, 192);
+            bUsuarios.FlatAppearance.BorderSize = 0;
+            bUsuarios.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bUsuarios.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bUsuarios.FlatStyle = FlatStyle.Flat;
+            bUsuarios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
+            bUsuarios.Image = Resource1.user_interface;
+            bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
+            bUsuarios.IsActive = false;
+            bUsuarios.Location = new Point(3, 324);
+            bUsuarios.Margin = new Padding(3, 4, 3, 4);
+            bUsuarios.Name = "bUsuarios";
+            bUsuarios.NormalColor = Color.White;
+            bUsuarios.Size = new Size(230, 31);
+            bUsuarios.TabIndex = 17;
+            bUsuarios.TabStop = false;
+            bUsuarios.Text = "Usuarios";
+            bUsuarios.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bUsuarios.UseVisualStyleBackColor = true;
+            bUsuarios.Click += bUsuarios_Click;
             // 
             // bBackup
             // 
@@ -279,31 +305,6 @@ namespace proyecto_Villarreal_SanLorenzo
             lRol.TabIndex = 6;
             lRol.Text = "Administrativo";
             lRol.TextAlign = ContentAlignment.TopCenter;
-            // 
-            // bUsuarios
-            // 
-            bUsuarios.Anchor = AnchorStyles.Bottom;
-            bUsuarios.BorderRadius = 10;
-            bUsuarios.ClickColor = Color.FromArgb(192, 192, 192);
-            bUsuarios.FlatAppearance.BorderSize = 0;
-            bUsuarios.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bUsuarios.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bUsuarios.FlatStyle = FlatStyle.Flat;
-            bUsuarios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
-            bUsuarios.Image = Resource1.user_interface;
-            bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
-            bUsuarios.IsActive = false;
-            bUsuarios.Location = new Point(3, 324);
-            bUsuarios.Margin = new Padding(3, 4, 3, 4);
-            bUsuarios.Name = "bUsuarios";
-            bUsuarios.NormalColor = Color.White;
-            bUsuarios.Size = new Size(230, 31);
-            bUsuarios.TabIndex = 17;
-            bUsuarios.TabStop = false;
-            bUsuarios.Text = "Usuarios";
-            bUsuarios.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bUsuarios.UseVisualStyleBackColor = true;
             // 
             // FormHome
             // 

@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             panelSidebar = new Panel();
-            botonSidebar3 = new BotonSidebar();
-            botonSidebar2 = new BotonSidebar();
+            bUsuarios = new BotonSidebar();
+            bSalir = new BotonSidebar();
+            bPersonal = new BotonSidebar();
             botonSidebar1 = new BotonSidebar();
             bBackup = new BotonSidebar();
             bAgregarPersonal = new BotonSidebar();
@@ -76,7 +77,6 @@
             comboBoxEsp = new ComboBox();
             flowLayoutPanel7 = new FlowLayoutPanel();
             tbTelefono = new TextBox();
-            bUsuarios = new BotonSidebar();
             panelSidebar.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
@@ -95,8 +95,8 @@
             // 
             panelSidebar.AutoScroll = true;
             panelSidebar.Controls.Add(bUsuarios);
-            panelSidebar.Controls.Add(botonSidebar3);
-            panelSidebar.Controls.Add(botonSidebar2);
+            panelSidebar.Controls.Add(bSalir);
+            panelSidebar.Controls.Add(bPersonal);
             panelSidebar.Controls.Add(botonSidebar1);
             panelSidebar.Controls.Add(bBackup);
             panelSidebar.Controls.Add(bAgregarPersonal);
@@ -107,63 +107,88 @@
             panelSidebar.Controls.Add(label1);
             panelSidebar.Controls.Add(labelSH);
             panelSidebar.Controls.Add(labelClinicks);
-            panelSidebar.Location = new Point(-3, 9);
+            panelSidebar.Location = new Point(-3, -29);
             panelSidebar.Margin = new Padding(3, 4, 3, 4);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(246, 780);
+            panelSidebar.Size = new Size(246, 818);
             panelSidebar.TabIndex = 1;
             // 
-            // botonSidebar3
+            // bUsuarios
             // 
-            botonSidebar3.Anchor = AnchorStyles.Bottom;
-            botonSidebar3.BorderRadius = 10;
-            botonSidebar3.ClickColor = Color.FromArgb(192, 192, 192);
-            botonSidebar3.FlatAppearance.BorderSize = 0;
-            botonSidebar3.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            botonSidebar3.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            botonSidebar3.FlatStyle = FlatStyle.Flat;
-            botonSidebar3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            botonSidebar3.HoverColor = Color.FromArgb(224, 224, 224);
-            botonSidebar3.Image = Resource1.box_arrow_right;
-            botonSidebar3.ImageAlign = ContentAlignment.MiddleLeft;
-            botonSidebar3.IsActive = false;
-            botonSidebar3.Location = new Point(18, 739);
-            botonSidebar3.Margin = new Padding(3, 4, 3, 4);
-            botonSidebar3.Name = "botonSidebar3";
-            botonSidebar3.NormalColor = Color.White;
-            botonSidebar3.Size = new Size(200, 31);
-            botonSidebar3.TabIndex = 15;
-            botonSidebar3.TabStop = false;
-            botonSidebar3.Text = "Cerrar Sesión";
-            botonSidebar3.TextImageRelation = TextImageRelation.ImageBeforeText;
-            botonSidebar3.UseVisualStyleBackColor = true;
-            botonSidebar3.Click += botonSidebar3_Click;
+            bUsuarios.Anchor = AnchorStyles.Bottom;
+            bUsuarios.BorderRadius = 10;
+            bUsuarios.ClickColor = Color.FromArgb(192, 192, 192);
+            bUsuarios.FlatAppearance.BorderSize = 0;
+            bUsuarios.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bUsuarios.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bUsuarios.FlatStyle = FlatStyle.Flat;
+            bUsuarios.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
+            bUsuarios.Image = Resource1.user_interface;
+            bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
+            bUsuarios.IsActive = false;
+            bUsuarios.Location = new Point(10, 316);
+            bUsuarios.Margin = new Padding(3, 4, 3, 4);
+            bUsuarios.Name = "bUsuarios";
+            bUsuarios.NormalColor = Color.White;
+            bUsuarios.Size = new Size(230, 31);
+            bUsuarios.TabIndex = 17;
+            bUsuarios.TabStop = false;
+            bUsuarios.Text = "Usuarios";
+            bUsuarios.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bUsuarios.UseVisualStyleBackColor = true;
+            bUsuarios.Click += bUsuarios_Click;
             // 
-            // botonSidebar2
+            // bSalir
             // 
-            botonSidebar2.Anchor = AnchorStyles.Bottom;
-            botonSidebar2.BorderRadius = 10;
-            botonSidebar2.ClickColor = Color.FromArgb(192, 192, 192);
-            botonSidebar2.FlatAppearance.BorderSize = 0;
-            botonSidebar2.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            botonSidebar2.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            botonSidebar2.FlatStyle = FlatStyle.Flat;
-            botonSidebar2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            botonSidebar2.HoverColor = Color.FromArgb(224, 224, 224);
-            botonSidebar2.Image = Resource1.plus_square;
-            botonSidebar2.ImageAlign = ContentAlignment.MiddleLeft;
-            botonSidebar2.IsActive = false;
-            botonSidebar2.Location = new Point(18, 700);
-            botonSidebar2.Margin = new Padding(3, 4, 3, 4);
-            botonSidebar2.Name = "botonSidebar2";
-            botonSidebar2.NormalColor = Color.White;
-            botonSidebar2.Size = new Size(200, 31);
-            botonSidebar2.TabIndex = 14;
-            botonSidebar2.TabStop = false;
-            botonSidebar2.Text = "Agregar Personal";
-            botonSidebar2.TextImageRelation = TextImageRelation.ImageBeforeText;
-            botonSidebar2.UseVisualStyleBackColor = true;
-            botonSidebar2.Click += botonSidebar2_Click;
+            bSalir.Anchor = AnchorStyles.Bottom;
+            bSalir.BorderRadius = 10;
+            bSalir.ClickColor = Color.FromArgb(192, 192, 192);
+            bSalir.FlatAppearance.BorderSize = 0;
+            bSalir.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bSalir.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bSalir.FlatStyle = FlatStyle.Flat;
+            bSalir.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bSalir.HoverColor = Color.FromArgb(224, 224, 224);
+            bSalir.Image = Resource1.box_arrow_right;
+            bSalir.ImageAlign = ContentAlignment.MiddleLeft;
+            bSalir.IsActive = false;
+            bSalir.Location = new Point(18, 777);
+            bSalir.Margin = new Padding(3, 4, 3, 4);
+            bSalir.Name = "bSalir";
+            bSalir.NormalColor = Color.White;
+            bSalir.Size = new Size(200, 31);
+            bSalir.TabIndex = 15;
+            bSalir.TabStop = false;
+            bSalir.Text = "Cerrar Sesión";
+            bSalir.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bSalir.UseVisualStyleBackColor = true;
+            bSalir.Click += bSalir_Click;
+            // 
+            // bPersonal
+            // 
+            bPersonal.Anchor = AnchorStyles.Bottom;
+            bPersonal.BorderRadius = 10;
+            bPersonal.ClickColor = Color.FromArgb(192, 192, 192);
+            bPersonal.FlatAppearance.BorderSize = 0;
+            bPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bPersonal.FlatStyle = FlatStyle.Flat;
+            bPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bPersonal.HoverColor = Color.FromArgb(224, 224, 224);
+            bPersonal.Image = Resource1.plus_square;
+            bPersonal.ImageAlign = ContentAlignment.MiddleLeft;
+            bPersonal.IsActive = false;
+            bPersonal.Location = new Point(18, 738);
+            bPersonal.Margin = new Padding(3, 4, 3, 4);
+            bPersonal.Name = "bPersonal";
+            bPersonal.NormalColor = Color.White;
+            bPersonal.Size = new Size(200, 31);
+            bPersonal.TabIndex = 14;
+            bPersonal.TabStop = false;
+            bPersonal.Text = "Agregar Personal";
+            bPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bPersonal.UseVisualStyleBackColor = true;
             // 
             // botonSidebar1
             // 
@@ -179,7 +204,7 @@
             botonSidebar1.Image = Resource1.file_earmark_arrow_down;
             botonSidebar1.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar1.IsActive = false;
-            botonSidebar1.Location = new Point(18, 661);
+            botonSidebar1.Location = new Point(18, 699);
             botonSidebar1.Margin = new Padding(3, 4, 3, 4);
             botonSidebar1.Name = "botonSidebar1";
             botonSidebar1.NormalColor = Color.White;
@@ -204,7 +229,7 @@
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(119, 1416);
+            bBackup.Location = new Point(119, 1454);
             bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
@@ -229,7 +254,7 @@
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(119, 1455);
+            bAgregarPersonal.Location = new Point(119, 1493);
             bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;
@@ -254,7 +279,7 @@
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(119, 1493);
+            bCerrarSesion.Location = new Point(119, 1531);
             bCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
@@ -336,6 +361,7 @@
             bHome.Text = "Home";
             bHome.TextImageRelation = TextImageRelation.ImageBeforeText;
             bHome.UseVisualStyleBackColor = true;
+            bHome.Click += bHome_Click;
             // 
             // label1
             // 
@@ -412,7 +438,7 @@
             tbApellidoUsuario.ForeColor = Color.Black;
             tbApellidoUsuario.Location = new Point(3, 3);
             tbApellidoUsuario.Name = "tbApellidoUsuario";
-            tbApellidoUsuario.Size = new Size(269, 27);
+            tbApellidoUsuario.Size = new Size(286, 27);
             tbApellidoUsuario.TabIndex = 18;
             tbApellidoUsuario.KeyPress += tbApellidoUsuario_KeyPress;
             // 
@@ -475,7 +501,7 @@
             flowLayoutPanel9.Controls.Add(bMostrarConfPass2);
             flowLayoutPanel9.Location = new Point(586, 341);
             flowLayoutPanel9.Name = "flowLayoutPanel9";
-            flowLayoutPanel9.Size = new Size(328, 43);
+            flowLayoutPanel9.Size = new Size(339, 43);
             flowLayoutPanel9.TabIndex = 23;
             // 
             // tbConfirmPass
@@ -484,7 +510,7 @@
             tbConfirmPass.ForeColor = Color.Black;
             tbConfirmPass.Location = new Point(3, 3);
             tbConfirmPass.Name = "tbConfirmPass";
-            tbConfirmPass.Size = new Size(269, 27);
+            tbConfirmPass.Size = new Size(286, 27);
             tbConfirmPass.TabIndex = 18;
             // 
             // bMostrarConfPass2
@@ -496,7 +522,7 @@
             bMostrarConfPass2.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bMostrarConfPass2.ForeColor = Color.Black;
             bMostrarConfPass2.Image = Resource1.ojoCerrado;
-            bMostrarConfPass2.Location = new Point(278, 3);
+            bMostrarConfPass2.Location = new Point(295, 3);
             bMostrarConfPass2.Name = "bMostrarConfPass2";
             bMostrarConfPass2.Size = new Size(33, 29);
             bMostrarConfPass2.TabIndex = 20;
@@ -691,6 +717,7 @@
             comboBoxRoles.Name = "comboBoxRoles";
             comboBoxRoles.Size = new Size(286, 28);
             comboBoxRoles.TabIndex = 0;
+            comboBoxRoles.SelectedIndexChanged += comboBoxRoles_SelectedIndexChanged;
             // 
             // bRegistrarUsuario
             // 
@@ -703,7 +730,7 @@
             bRegistrarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bRegistrarUsuario.ForeColor = Color.Black;
             bRegistrarUsuario.ImageAlign = ContentAlignment.MiddleLeft;
-            bRegistrarUsuario.Location = new Point(402, 545);
+            bRegistrarUsuario.Location = new Point(402, 558);
             bRegistrarUsuario.Name = "bRegistrarUsuario";
             bRegistrarUsuario.Size = new Size(237, 47);
             bRegistrarUsuario.TabIndex = 24;
@@ -738,14 +765,13 @@
             // 
             // comboBoxEsp
             // 
-            comboBoxEsp.ForeColor = Color.DarkGray;
+            comboBoxEsp.ForeColor = Color.Black;
             comboBoxEsp.FormattingEnabled = true;
             comboBoxEsp.Items.AddRange(new object[] { "Clínica", "Obstetricia", "Pediatría", "Cardiología" });
             comboBoxEsp.Location = new Point(3, 3);
             comboBoxEsp.Name = "comboBoxEsp";
             comboBoxEsp.Size = new Size(292, 28);
             comboBoxEsp.TabIndex = 25;
-            comboBoxEsp.SelectedIndexChanged += comboBoxEsp_SelectedIndexChanged;
             // 
             // flowLayoutPanel7
             // 
@@ -761,34 +787,9 @@
             tbTelefono.ForeColor = Color.Black;
             tbTelefono.Location = new Point(3, 3);
             tbTelefono.Name = "tbTelefono";
-            tbTelefono.Size = new Size(269, 27);
+            tbTelefono.Size = new Size(281, 27);
             tbTelefono.TabIndex = 18;
             tbTelefono.KeyPress += tbTelefono_KeyPress;
-            // 
-            // bUsuarios
-            // 
-            bUsuarios.Anchor = AnchorStyles.Bottom;
-            bUsuarios.BorderRadius = 10;
-            bUsuarios.ClickColor = Color.FromArgb(192, 192, 192);
-            bUsuarios.FlatAppearance.BorderSize = 0;
-            bUsuarios.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bUsuarios.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bUsuarios.FlatStyle = FlatStyle.Flat;
-            bUsuarios.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
-            bUsuarios.Image = Resource1.user_interface;
-            bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
-            bUsuarios.IsActive = false;
-            bUsuarios.Location = new Point(10, 324);
-            bUsuarios.Margin = new Padding(3, 4, 3, 4);
-            bUsuarios.Name = "bUsuarios";
-            bUsuarios.NormalColor = Color.White;
-            bUsuarios.Size = new Size(230, 31);
-            bUsuarios.TabIndex = 17;
-            bUsuarios.TabStop = false;
-            bUsuarios.Text = "Usuarios";
-            bUsuarios.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bUsuarios.UseVisualStyleBackColor = true;
             // 
             // Form_nuevo_usuario
             // 
@@ -841,10 +842,8 @@
         private Label labelSH;
         private Label labelClinicks;
         private BotonSidebar botonSidebar1;
-        private BotonSidebar botonSidebar2;
-        private BotonSidebar botonSidebar3;
-        private Label lNombreUsuario;
-        private Label lRol;
+        private BotonSidebar bPersonal;
+        private BotonSidebar bSalir;
         private FlowLayoutPanel flowLayoutPanel5;
         private Label lApellidoUsuario;
         private TextBox tbApellidoUsuario;
@@ -879,5 +878,7 @@
         private FlowLayoutPanel flowLayoutPanel7;
         private TextBox tbTelefono;
         private BotonSidebar bUsuarios;
+        public Label lNombreUsuario;
+        public Label lRol;
     }
 }

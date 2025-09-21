@@ -20,13 +20,13 @@ namespace proyecto_Villarreal_SanLorenzo
             this.InitializeComponent();
             CargarRoles();
             CargarEspecialidades();
+            CargarDatosUsuario();
         }
-
-        private void botonSidebar2_Click(object sender, EventArgs e)
+        private void CargarDatosUsuario()//Carga el nombre y el rol del usuario en sesion
         {
-            Form_nuevo_usuario formularioUsuarios = new Form_nuevo_usuario();
-            formularioUsuarios.Show();
-            this.Close();
+            string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
+            lNombreUsuario.Text = nombre_completo;
+            lRol.Text = SesionUsuario.RolActivo;
         }
 
         private int ObtenerIdEspecialidad(string nombre_especialidad)//Metodo con el cual se obtiene la especialidad del usuario nuevo
@@ -256,16 +256,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
-        private void botonSidebar3_Click(object sender, EventArgs e)
-        {
-            //Llama al metodo el cual cierra la sesion.
-            SesionUsuario.CerrarSesion();
-
-            //Luego redirige al usuario al form-login
-            Form_login formLogin = new Form_login();
-            formLogin.Show();
-            this.Close();
-        }
         private void tbNomUsuario_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')//Permite letras, la tecla de retroceso y espacio en caso de nombres compuestos
@@ -358,15 +348,37 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
-        private void comboBoxEsp_SelectedIndexChanged(object sender, EventArgs e)//Metodo que solo muestra el comboBox de especialidad al Medico/Enfermero
+
+        private void bHome_Click(object sender, EventArgs e)
+        {
+            FormHome formHome = new FormHome();
+            formHome.Show();
+            this.Close();
+        }
+        private void bUsuarios_Click(object sender, EventArgs e)
+        {
+            FormVerUsuarios formUsuario = new FormVerUsuarios();
+            formUsuario.Show();
+            this.Close();
+        }
+        private void bSalir_Click(object sender, EventArgs e)
+        {
+            //Llama al metodo el cual cierra la sesion.
+            SesionUsuario.CerrarSesion();
+
+            Form_login formLogin = new Form_login();
+            formLogin.Show();
+            this.Close();
+        }
+
+        private void comboBoxRoles_SelectedIndexChanged(object sender, EventArgs e)//Si el rol es Médico o Enfermero se muestra el ComboBoxEspecialidades
         {
             string rolSeleccionado = comboBoxRoles.Text.Trim().ToLower();
 
-            // Si el rol es Médico o Enfermero → muestro el ComboBoxEspecialidades
-            if (rolSeleccionado == "médico" || rolSeleccionado == "enfermero")
+            if (rolSeleccionado == "medico" || rolSeleccionado == "enfermero")
             {
                 comboBoxEsp.Visible = true;
-                lEspecialidad.Visible = true; // si tenés una etiqueta
+                lEspecialidad.Visible = true;
             }
             else
             {

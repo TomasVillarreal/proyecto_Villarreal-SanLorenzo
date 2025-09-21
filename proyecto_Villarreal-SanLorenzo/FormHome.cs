@@ -80,7 +80,6 @@ namespace proyecto_Villarreal_SanLorenzo
             //Llama al metodo el cual cierra la sesion.
             SesionUsuario.CerrarSesion();
 
-            //Luego redirige al usuario al form-login
             Form_login formLogin = new Form_login();
             formLogin.Show();
             this.Close();
@@ -89,6 +88,13 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             Form_nuevo_usuario formularioUsuarios = new Form_nuevo_usuario();
             formularioUsuarios.Show();
+            this.Close();
+        }
+
+        private void bUsuarios_Click(object sender, EventArgs e)
+        {
+            FormVerUsuarios formUsuarios = new FormVerUsuarios();
+            formUsuarios.Show();
             this.Close();
         }
     }
