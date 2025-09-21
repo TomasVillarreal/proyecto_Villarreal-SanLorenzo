@@ -42,8 +42,6 @@
             label1 = new Label();
             labelSH = new Label();
             labelClinicks = new Label();
-            lNombreUsuario = new Label();
-            lRol = new Label();
             flowLayoutPanel5 = new FlowLayoutPanel();
             tbApellidoUsuario = new TextBox();
             lApellidoUsuario = new Label();
@@ -77,6 +75,9 @@
             comboBoxEsp = new ComboBox();
             flowLayoutPanel7 = new FlowLayoutPanel();
             tbTelefono = new TextBox();
+            flowLayoutPanel11 = new FlowLayoutPanel();
+            lNombreUsuario = new Label();
+            lRol = new Label();
             panelSidebar.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
@@ -89,6 +90,7 @@
             flowLayoutPanel4.SuspendLayout();
             flowLayoutPanel10.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
+            flowLayoutPanel11.SuspendLayout();
             SuspendLayout();
             // 
             // panelSidebar
@@ -396,34 +398,6 @@
             labelClinicks.Text = "Clinicks";
             labelClinicks.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lNombreUsuario
-            // 
-            lNombreUsuario.AutoSize = true;
-            lNombreUsuario.BorderStyle = BorderStyle.FixedSingle;
-            lNombreUsuario.FlatStyle = FlatStyle.Flat;
-            lNombreUsuario.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNombreUsuario.ForeColor = Color.Black;
-            lNombreUsuario.Location = new Point(1243, 9);
-            lNombreUsuario.Name = "lNombreUsuario";
-            lNombreUsuario.Size = new Size(138, 22);
-            lNombreUsuario.TabIndex = 6;
-            lNombreUsuario.Text = "Emanuel Gonzalez";
-            lNombreUsuario.TextAlign = ContentAlignment.TopCenter;
-            // 
-            // lRol
-            // 
-            lRol.AutoSize = true;
-            lRol.BackColor = SystemColors.Highlight;
-            lRol.BorderStyle = BorderStyle.FixedSingle;
-            lRol.FlatStyle = FlatStyle.Flat;
-            lRol.ForeColor = Color.White;
-            lRol.Location = new Point(1262, 31);
-            lRol.Name = "lRol";
-            lRol.Size = new Size(108, 22);
-            lRol.TabIndex = 7;
-            lRol.Text = "Administrativo";
-            lRol.TextAlign = ContentAlignment.TopCenter;
-            // 
             // flowLayoutPanel5
             // 
             flowLayoutPanel5.Controls.Add(tbApellidoUsuario);
@@ -673,9 +647,9 @@
             panelFormularios.Controls.Add(flowLayoutPanel7);
             panelFormularios.Controls.Add(flowLayoutPanel6);
             panelFormularios.Controls.Add(flowLayoutPanel5);
-            panelFormularios.Location = new Point(258, 56);
+            panelFormularios.Location = new Point(258, 78);
             panelFormularios.Name = "panelFormularios";
-            panelFormularios.Size = new Size(1112, 733);
+            panelFormularios.Size = new Size(1112, 711);
             panelFormularios.TabIndex = 8;
             // 
             // lEspecialidad
@@ -792,15 +766,52 @@
             tbTelefono.TabIndex = 18;
             tbTelefono.KeyPress += tbTelefono_KeyPress;
             // 
+            // flowLayoutPanel11
+            // 
+            flowLayoutPanel11.Controls.Add(lNombreUsuario);
+            flowLayoutPanel11.Controls.Add(lRol);
+            flowLayoutPanel11.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel11.Location = new Point(1180, 3);
+            flowLayoutPanel11.Name = "flowLayoutPanel11";
+            flowLayoutPanel11.Size = new Size(190, 56);
+            flowLayoutPanel11.TabIndex = 35;
+            // 
+            // lNombreUsuario
+            // 
+            lNombreUsuario.AutoSize = true;
+            lNombreUsuario.BorderStyle = BorderStyle.FixedSingle;
+            lNombreUsuario.FlatStyle = FlatStyle.Flat;
+            lNombreUsuario.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lNombreUsuario.ForeColor = Color.Black;
+            lNombreUsuario.Location = new Point(3, 0);
+            lNombreUsuario.Name = "lNombreUsuario";
+            lNombreUsuario.Size = new Size(138, 22);
+            lNombreUsuario.TabIndex = 7;
+            lNombreUsuario.Text = "Emanuel Gonzalez";
+            lNombreUsuario.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // lRol
+            // 
+            lRol.AutoSize = true;
+            lRol.BackColor = SystemColors.Highlight;
+            lRol.BorderStyle = BorderStyle.FixedSingle;
+            lRol.FlatStyle = FlatStyle.Flat;
+            lRol.ForeColor = Color.White;
+            lRol.Location = new Point(3, 22);
+            lRol.Name = "lRol";
+            lRol.Size = new Size(108, 22);
+            lRol.TabIndex = 8;
+            lRol.Text = "Administrativo";
+            lRol.TextAlign = ContentAlignment.TopCenter;
+            // 
             // Form_nuevo_usuario
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1393, 792);
+            Controls.Add(flowLayoutPanel11);
             Controls.Add(panelFormularios);
-            Controls.Add(lRol);
-            Controls.Add(lNombreUsuario);
             Controls.Add(panelSidebar);
             Name = "Form_nuevo_usuario";
             Text = "Form_nuevo_usuario";
@@ -826,8 +837,9 @@
             flowLayoutPanel10.ResumeLayout(false);
             flowLayoutPanel7.ResumeLayout(false);
             flowLayoutPanel7.PerformLayout();
+            flowLayoutPanel11.ResumeLayout(false);
+            flowLayoutPanel11.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -879,6 +891,7 @@
         private FlowLayoutPanel flowLayoutPanel7;
         private TextBox tbTelefono;
         private BotonSidebar bUsuarios;
+        private FlowLayoutPanel flowLayoutPanel11;
         public Label lNombreUsuario;
         public Label lRol;
     }

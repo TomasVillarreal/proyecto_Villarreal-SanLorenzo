@@ -60,12 +60,14 @@
             bEditarUsuario = new Button();
             bEliminarUsuario = new Button();
             bAgregarUsuario = new Button();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             panelSidebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).BeginInit();
             flowLayoutPanel4.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // panelSidebar
@@ -85,10 +87,10 @@
             panelSidebar.Controls.Add(label1);
             panelSidebar.Controls.Add(labelSH);
             panelSidebar.Controls.Add(labelClinicks);
-            panelSidebar.Location = new Point(3, -4);
+            panelSidebar.Location = new Point(3, -25);
             panelSidebar.Margin = new Padding(3, 4, 3, 4);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(232, 765);
+            panelSidebar.Size = new Size(232, 786);
             panelSidebar.TabIndex = 1;
             // 
             // bUsuarios
@@ -105,7 +107,7 @@
             bUsuarios.Image = Resource1.user_interface;
             bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
             bUsuarios.IsActive = false;
-            bUsuarios.Location = new Point(3, 324);
+            bUsuarios.Location = new Point(3, 345);
             bUsuarios.Margin = new Padding(3, 4, 3, 4);
             bUsuarios.Name = "bUsuarios";
             bUsuarios.NormalColor = Color.White;
@@ -130,7 +132,7 @@
             bSalir.Image = Resource1.box_arrow_right;
             bSalir.ImageAlign = ContentAlignment.MiddleLeft;
             bSalir.IsActive = false;
-            bSalir.Location = new Point(16, 722);
+            bSalir.Location = new Point(16, 743);
             bSalir.Margin = new Padding(3, 4, 3, 4);
             bSalir.Name = "bSalir";
             bSalir.NormalColor = Color.White;
@@ -156,7 +158,7 @@
             bPersonal.Image = Resource1.plus_square;
             bPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bPersonal.IsActive = false;
-            bPersonal.Location = new Point(22, 644);
+            bPersonal.Location = new Point(22, 665);
             bPersonal.Margin = new Padding(3, 4, 3, 4);
             bPersonal.Name = "bPersonal";
             bPersonal.NormalColor = Color.White;
@@ -182,7 +184,7 @@
             botonSidebar1.Image = Resource1.file_earmark_arrow_down;
             botonSidebar1.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar1.IsActive = false;
-            botonSidebar1.Location = new Point(16, 683);
+            botonSidebar1.Location = new Point(16, 704);
             botonSidebar1.Margin = new Padding(3, 4, 3, 4);
             botonSidebar1.Name = "botonSidebar1";
             botonSidebar1.NormalColor = Color.White;
@@ -207,7 +209,7 @@
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(24, 1421);
+            bBackup.Location = new Point(24, 1442);
             bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
@@ -232,7 +234,7 @@
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(24, 1460);
+            bAgregarPersonal.Location = new Point(24, 1481);
             bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;
@@ -257,7 +259,7 @@
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(13, 1499);
+            bCerrarSesion.Location = new Point(13, 1520);
             bCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
@@ -381,7 +383,7 @@
             lRol.BorderStyle = BorderStyle.FixedSingle;
             lRol.FlatStyle = FlatStyle.Flat;
             lRol.ForeColor = Color.White;
-            lRol.Location = new Point(1096, 31);
+            lRol.Location = new Point(3, 22);
             lRol.Name = "lRol";
             lRol.Size = new Size(108, 22);
             lRol.TabIndex = 8;
@@ -395,7 +397,7 @@
             lNombreUsuario.FlatStyle = FlatStyle.Flat;
             lNombreUsuario.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lNombreUsuario.ForeColor = Color.Black;
-            lNombreUsuario.Location = new Point(1081, 9);
+            lNombreUsuario.Location = new Point(3, 0);
             lNombreUsuario.Name = "lNombreUsuario";
             lNombreUsuario.Size = new Size(138, 22);
             lNombreUsuario.TabIndex = 7;
@@ -410,6 +412,7 @@
             dataGridViewUsuarios.RowHeadersWidth = 51;
             dataGridViewUsuarios.Size = new Size(935, 433);
             dataGridViewUsuarios.TabIndex = 9;
+            dataGridViewUsuarios.CellClick += dataGridViewUsuarios_CellClick;
             // 
             // lTelefonoUsuario
             // 
@@ -578,11 +581,22 @@
             bAgregarUsuario.UseVisualStyleBackColor = true;
             bAgregarUsuario.Click += bAgregarUsuario_Click;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(lNombreUsuario);
+            flowLayoutPanel1.Controls.Add(lRol);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(1011, 12);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(208, 56);
+            flowLayoutPanel1.TabIndex = 34;
+            // 
             // FormVerUsuarios
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1231, 764);
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(bAgregarUsuario);
             Controls.Add(bEliminarUsuario);
             Controls.Add(bEditarUsuario);
@@ -595,8 +609,6 @@
             Controls.Add(flowLayoutPanel7);
             Controls.Add(flowLayoutPanel5);
             Controls.Add(dataGridViewUsuarios);
-            Controls.Add(lRol);
-            Controls.Add(lNombreUsuario);
             Controls.Add(panelSidebar);
             Name = "FormVerUsuarios";
             Text = "FormVerUsuarios";
@@ -611,6 +623,8 @@
             flowLayoutPanel5.PerformLayout();
             flowLayoutPanel6.ResumeLayout(false);
             flowLayoutPanel6.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -649,5 +663,6 @@
         private BotonSidebar bUsuarios;
         public Label lRol;
         public Label lNombreUsuario;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }

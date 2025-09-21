@@ -76,16 +76,17 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bEditarUsuario_Click(object sender, EventArgs e)
         {
-            if (dataGridViewUsuarios.SelectedRows.Count > 0)
+            if (dataGridViewUsuarios.CurrentRow != null)
             {
-                int idUsuario = Convert.ToInt32(dataGridViewUsuarios.SelectedRows[0].Cells["id_usuario"].Value);
+                int idUsuario = Convert.ToInt32(dataGridViewUsuarios.CurrentRow.Cells["id_usuario"].Value);
 
                 string nombre = tbNomUsuario.Text.Trim();
                 string apellido = tbApellidoUsuario.Text.Trim();
                 string telefono = tbTelefono.Text.Trim();
                 string email = tbEmail.Text.Trim();
 
-                if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) || string.IsNullOrEmpty(telefono) || string.IsNullOrEmpty(email))
+                if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) ||
+                    string.IsNullOrEmpty(telefono) || string.IsNullOrEmpty(email))
                 {
                     MessageBox.Show("Debe completar todos los campos antes de editar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -99,12 +100,13 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         connection.Open();
 
-                        string query = @"UPDATE Usuarios 
-                                 SET nombre_usuario = @nombre, 
-                                     apellido_usuario = @apellido, 
-                                     telefono_usuario = @telefono, 
-                                     email_usuario = @correo
-                                 WHERE id_usuario = @idUsuario";
+                        string query = @"
+                                        UPDATE Usuarios 
+                                        SET nombre_usuario = @nombre, 
+                                            apellido_usuario = @apellido, 
+                                            telefono_usuario = @telefono, 
+                                            email_usuario = @correo
+                                        WHERE id_usuario = @idUsuario";
 
                         using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
@@ -119,7 +121,7 @@ namespace proyecto_Villarreal_SanLorenzo
                             if (rowsAffected > 0)
                             {
                                 MessageBox.Show("Usuario actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ObtenerRegistro(); // refrescar el grid
+                                ObtenerRegistro();
                             }
                             else
                             {
@@ -188,6 +190,18 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Debe seleccionar un usuario de la tabla.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
+        }
+        private void dataGridViewUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow fila = dataGridViewUsuarios.Rows[e.RowIndex];
+
+                tbNomUsuario.Text = fila.Cells["nombre_usuario"].Value.ToString();
+                tbApellidoUsuario.Text = fila.Cells["apellido_usuario"].Value.ToString();
+                tbTelefono.Text = fila.Cells["telefono_usuario"].Value.ToString();
+                tbEmail.Text = fila.Cells["email_usuario"].Value.ToString();
+            }
         }
 
         private void bHome_Click(object sender, EventArgs e)

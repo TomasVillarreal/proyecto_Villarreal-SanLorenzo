@@ -45,9 +45,11 @@ namespace proyecto_Villarreal_SanLorenzo
             label1 = new Label();
             labelSH = new Label();
             labelClinicks = new Label();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             lNombreUsuario = new Label();
             lRol = new Label();
             panelSidebar.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // panelSidebar
@@ -278,6 +280,16 @@ namespace proyecto_Villarreal_SanLorenzo
             labelClinicks.Text = "Clinicks";
             labelClinicks.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(lNombreUsuario);
+            flowLayoutPanel1.Controls.Add(lRol);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(989, 12);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(185, 56);
+            flowLayoutPanel1.TabIndex = 35;
+            // 
             // lNombreUsuario
             // 
             lNombreUsuario.AutoSize = true;
@@ -285,10 +297,10 @@ namespace proyecto_Villarreal_SanLorenzo
             lNombreUsuario.FlatStyle = FlatStyle.Flat;
             lNombreUsuario.Font = new System.Drawing.Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lNombreUsuario.ForeColor = Color.Black;
-            lNombreUsuario.Location = new Point(1027, 9);
+            lNombreUsuario.Location = new Point(3, 0);
             lNombreUsuario.Name = "lNombreUsuario";
             lNombreUsuario.Size = new Size(138, 22);
-            lNombreUsuario.TabIndex = 5;
+            lNombreUsuario.TabIndex = 7;
             lNombreUsuario.Text = "Emanuel Gonzalez";
             lNombreUsuario.TextAlign = ContentAlignment.TopCenter;
             // 
@@ -299,10 +311,10 @@ namespace proyecto_Villarreal_SanLorenzo
             lRol.BorderStyle = BorderStyle.FixedSingle;
             lRol.FlatStyle = FlatStyle.Flat;
             lRol.ForeColor = Color.White;
-            lRol.Location = new Point(1042, 31);
+            lRol.Location = new Point(3, 22);
             lRol.Name = "lRol";
             lRol.Size = new Size(108, 22);
-            lRol.TabIndex = 6;
+            lRol.TabIndex = 8;
             lRol.Text = "Administrativo";
             lRol.TextAlign = ContentAlignment.TopCenter;
             // 
@@ -312,8 +324,7 @@ namespace proyecto_Villarreal_SanLorenzo
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1186, 873);
-            Controls.Add(lRol);
-            Controls.Add(lNombreUsuario);
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(panelSidebar);
             Margin = new Padding(3, 4, 3, 4);
             Name = "FormHome";
@@ -321,8 +332,9 @@ namespace proyecto_Villarreal_SanLorenzo
             Resize += FormHome_Resize;
             panelSidebar.ResumeLayout(false);
             panelSidebar.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -337,8 +349,9 @@ namespace proyecto_Villarreal_SanLorenzo
         private BotonSidebar bBackup;
         private BotonSidebar bAgregarPersonal;
         private BotonSidebar bCerrarSesion;
-        private Label lNombreUsuario;
-        private Label lRol;
         private BotonSidebar bUsuarios;
+        private FlowLayoutPanel flowLayoutPanel1;
+        public Label lNombreUsuario;
+        public Label lRol;
     }
 }

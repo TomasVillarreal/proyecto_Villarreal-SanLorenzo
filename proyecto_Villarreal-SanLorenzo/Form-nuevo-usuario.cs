@@ -108,6 +108,11 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
+            if (!CheckPassword())
+            {
+                return;
+            }
+
             int id_rol = ObtenerIdRol(comboBoxRoles.Text);
             string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
             string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
@@ -117,15 +122,15 @@ namespace proyecto_Villarreal_SanLorenzo
             string password_usuario = tbPassUsuario.Text;
             string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
 
-
             if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
-                string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
+               string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
             {
                 MessageBox.Show("Debe completar todos los campos!",
                     "Error inicio de sesión", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
+
             CrearUsuario(id_rol, especialidad, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
             FormVerUsuarios formUsuario = new FormVerUsuarios();
             formUsuario.Show();
@@ -200,7 +205,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
             using (SqlConnection connecction = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM Rol", connecction))
+                using (SqlCommand cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM Rol WHERE nombre_rol <> 'Gerente'", connecction))
                 {
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
 
@@ -229,9 +234,9 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            using (SqlConnection connecction = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades", connecction))
+                using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades WHERE nombre_especialidad IS NOT NULL AND LTRIM(RTRIM(nombre_especialidad)) <> ''", connection))
                 {
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
 
@@ -242,12 +247,10 @@ namespace proyecto_Villarreal_SanLorenzo
                     comboBoxEsp.DataSource = dataTable;
                     comboBoxEsp.DisplayMember = "nombre_especialidad";
                     comboBoxEsp.ValueMember = "id_especialidad";
-
                 }
                 try
                 {
-                    connecction.Open();
-
+                    connection.Open();
                 }
                 catch (Exception ex)
                 {
@@ -315,12 +318,13 @@ namespace proyecto_Villarreal_SanLorenzo
                 return false;
             }
 
-            if (comboBoxEsp.SelectedIndex < 0)
+            if (string.IsNullOrWhiteSpace(comboBoxEsp.Text))
             {
-                MessageBox.Show("Debe seleccionar una especialidad.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Debe seleccionar o escribir una especialidad.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 comboBoxEsp.Focus();
                 return false;
             }
+
             return true;
         }
         private bool CheckPassword()//Metodo que compara la contraseña y la confirmacion de contraseña
