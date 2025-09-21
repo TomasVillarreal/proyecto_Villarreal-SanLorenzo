@@ -93,6 +93,7 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+<<<<<<< HEAD
         internal static System.Drawing.Bitmap circulo_plus {
             get {
                 object obj = ResourceManager.GetObject("circulo_plus", resourceCulture);
@@ -106,6 +107,11 @@ namespace proyecto_Villarreal_SanLorenzo {
         internal static System.Drawing.Bitmap exclamation {
             get {
                 object obj = ResourceManager.GetObject("exclamation", resourceCulture);
+=======
+        internal static System.Drawing.Bitmap cerrar_sesion__1_ {
+            get {
+                object obj = ResourceManager.GetObject("cerrar-sesion (1)", resourceCulture);
+>>>>>>> 3824e0a449ccdfc3976b5bd4f06f3cbd88ca774e
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +169,25 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+<<<<<<< HEAD
         internal static System.Drawing.Bitmap mask_doctor {
             get {
                 object obj = ResourceManager.GetObject("mask_doctor", resourceCulture);
+=======
+        internal static System.Drawing.Bitmap ojoAbierto {
+            get {
+                object obj = ResourceManager.GetObject("ojoAbierto", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ojoCerrado {
+            get {
+                object obj = ResourceManager.GetObject("ojoCerrado", resourceCulture);
+>>>>>>> 3824e0a449ccdfc3976b5bd4f06f3cbd88ca774e
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

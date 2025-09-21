@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -117,4 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        5QAAAOUBj+WbPAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKcSURBVFhHtZc9
+        aBRRFIW/EDURkYiClYhFtEgTgthZBSGoQQuTSggaxC5WWqS2s1CIAXttFBVBS3+wshONYicYUMTGwh9U
+        FF25cia8d97Ozi6JxYGZc7575u1s9s2EVqtFLwImgPPAQ+CLFMfhTTjfpMKoEzAE3AHipJOCGfL5OhVG
+        OwGjwGtd4BNwETgG7JDiOLzIggl21HvaqTBcwADwTsXPgWFnEnZYTJzEzIAzrsJwAXMqfAFs9NwVjNg4
+        mfPcVRhWNgi8V9lRz+sUrGZidtDzjHXDisZV9NKzJsWMZsc9yzg3rGRSJXc9a1LMaHbSs4xzw0qmVXLb
+        sybFjGanPcs4N6xkViX3PGtSzGh21rOMc6Om5LpnTYqZbhZfGElBP/BbJTs9b1LMaDY6+j1f4dywkmoB
+        mz1rUsxUC/As49ywkqVuvsd2Sv5+ljzLODesZEolH4FTntdJF4+ZOJnyPGPdsKI+4IGKQiedcQH7Ez5m
+        +5zJeDdcwDrgmgp/APucSdhdyVPzasw64yqMdtIz4ZmK73uecG/FPAE2eN5OhVEn4JzKH3uWMHGH4uCQ
+        Z3UqDBewV69c1fdauykBb8T8AW4Bu51xFYYVzgA/VfoNuAJsdy7hR4AbwC/NfAaOOJfNuJGUnU0+9U1g
+        mzN10i74KLkbJ5xZYd1QwYFkF5z3vBtpK7+gju/xVTrzjysM2Ap80OBlz3uVfo5xsAxsKvLCgHkNPAXW
+        e96r9I74Sp1nitzg2HSqN+COW2gvAo6rM34l2ZPRwYPJ7ap9hPYqfbBqkzqcZQYuCLrkJauV/nGJg4XM
+        N6h6jzvtBatVdKo7e790aFFQ7Hx7gC1rpOiqdtPFTguIneyrwP+h6B6pXYAWMRZPvDVeSHRF55hf7y/I
+        ChhjGf3QYwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="pictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
+        4wAAAOMBD+bfpwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGwSURBVFhH3ZdL
+        K0VRFMd/EQPkFWYiMmMkPoAy8ZhKSvIYKmXiC/ANEEoGkgz4DAojeaSQZCAGjEwMKK9W7VurZd9z73nl
+        8at/nfb6r8e+nfbZF8LTCSwAl8Cz0wUwD3RYc5JUAFvAB/CZRRLbBMptclzq3C51s0dg1+nBxM6BGlsk
+        KoXAnip+DfQCBcojz/3AjfLJYNoTmVFV9BiosgZFNXCq/MPWEIUzV+wFaLJBDy3Aq8s5scGwNKrdrNtg
+        ABsqr94Gw9CtCo3ZYAATKq/LBsMwqArJi5cvfSpvwAbDMKQK9dhgADJsJk82EZkfH0CO3WWnVhsMoE3l
+        hTqeS4E54MAdKklqH5gFSmzTDMXAkfrp0tIhUGSbC+Mec1oasc2FRY8xLcmn+xtrHmNaWrXNhT83wJX7
+        UorkLbfxIMUe4M19qDI0uzXry6bYA9zZZM+tKEixB3gH2lWunHbWE6TYA4iegDJ3AZVnGw9SIgOI5ApW
+        61nPpf8zwDQw41nPpcQGiKrfOcCKx5iWlmxzYcpjTEuTtrkgfz5vPeakdQ9U2uYZ5HzfiXCw5COpuQ00
+        6IZfQeRHrp0KJqUAAAAASUVORK5CYII=
+</value>
+  </data>
 </root>

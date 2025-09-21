@@ -10,14 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+=======
+>>>>>>> 3824e0a449ccdfc3976b5bd4f06f3cbd88ca774e
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Update="RegistrarUsuarioControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+=======
+>>>>>>> 3824e0a449ccdfc3976b5bd4f06f3cbd88ca774e
     <Compile Update="Resource1.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
