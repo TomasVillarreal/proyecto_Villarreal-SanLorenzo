@@ -23,15 +23,18 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void HomeControl_Load(object sender, EventArgs e)
         {
+            // Coneccion a la base de datos para contar cuantas filas hay en la tabla de "Paciente"
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
+                    // Se crea la query para contar las filas
                     string queryNroPacientes = "SELECT COUNT (dni_paciente) FROM Paciente";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
                         db.Open();
+                        // Guardo el total y lo pongo en el texto del label correspondiente
                         int total_pacientes = (int)cmd.ExecuteScalar();
                         lNumeroPacientesActivos.Text = total_pacientes.ToString();
                         db.Close();

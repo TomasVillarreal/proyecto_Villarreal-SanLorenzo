@@ -5,24 +5,35 @@ using System.Windows.Forms;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
+    // Clase creada para los botones que se encuentran en el sidebar, tal que estos sean uniformes.
     public class BotonSidebar : Button
     {
-        // Propiedades
+        // Atributos que representan las propiedades de los botones.
+
+        // Este es el tamaño del radio de los bordes del boton, tal que los botones esten redondeados.
         public int BorderRadius { get; set; } = 10;
+
+        // Una serie de colores que puede tener el boton.
         public Color NormalColor { get; set; } = Color.White; // fondo base
         public Color HoverColor { get; set; } = ColorTranslator.FromHtml("#E0E0E0");
         public Color ClickColor { get; set; } = ColorTranslator.FromHtml("#C0C0C0");
-        public bool IsActive { get; set; } = false; // si el botón está seleccionado/activo
 
-        private bool isHover = false;
-        private bool isPressed = false;
+        // Booleanos que nos permitiran saber el estado en el cual se encuentra el boton.
+        public bool IsActive { get; set; } = false; // Si el boton esta activo
+        private bool isHover = false; // Si se pasa el mouse sobre el boton
+        private bool isPressed = false; // Si el boton es apretado
 
+        // Cuando se crea el boton, realizamos lo siguiente.
         public BotonSidebar()
         {
+            // Se le coloca el estilo del boton a un estilo flat por defecto para poder modificar cosas de este
             this.FlatStyle = FlatStyle.Flat;
+            // Se le pone el borde que tiene por defecto a 0
             this.FlatAppearance.BorderSize = 0;
+            // Hace que el boton no sea afectado por el TAB, si el usuario aprieta al tab.
             this.TabStop = false;
-            this.DoubleBuffered = true; // para dibujar suavemente
+            // Se activa la propiedad para que se puedan pintar los bordes sin que este parpadee
+            this.DoubleBuffered = true; 
 
             // Suscribimos eventos
             this.MouseEnter += (s, e) => { isHover = true; Invalidate(); };
@@ -32,6 +43,7 @@ namespace proyecto_Villarreal_SanLorenzo
             this.Resize += (s, e) => UpdateRegion();
         }
 
+        // Funcion que le asigna unos bordes redondeados al boton, con el valor que tiene el atributo.
         private void UpdateRegion()
         {
             var path = new GraphicsPath();
@@ -44,6 +56,7 @@ namespace proyecto_Villarreal_SanLorenzo
             this.Region = new Region(path);
         }
 
+        // Funcion que es ejecutada cada vez que se necesita pintar el boton
         protected override void OnPaint(PaintEventArgs pevent)
         {
             base.OnPaint(pevent);
@@ -51,29 +64,29 @@ namespace proyecto_Villarreal_SanLorenzo
             Graphics g = pevent.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Elegir color según estado
+            // Se elige el color segun el estado en el cual se encuentra el boton.
             Color fillColor = NormalColor;
             if (IsActive) fillColor = ClickColor;
             else if (isPressed) fillColor = ClickColor;
             else if (isHover) fillColor = HoverColor;
 
+            // Se pinta el fondo del boton con el color elegido
             using (SolidBrush brush = new SolidBrush(fillColor))
             {
                 g.FillRectangle(brush, this.ClientRectangle);
             }
 
-            // 2. Calcular tamaños
+            // Se calcula el tamaño para poder poner imagenes y el texto, tal que estos queden bien.
             Size textSize = TextRenderer.MeasureText(this.Text, this.Font);
             int spacing = 30; // espacio entre imagen y texto
             int totalWidth = textSize.Width;
             if (this.Image != null)
                 totalWidth += this.Image.Width + spacing;
 
-            // Coordenada X inicial para centrar bloque (imagen + texto)
             int startX = (this.Width - totalWidth) / 2;
             int centerY = this.Height / 2;
 
-            // 3. Dibujar imagen (si hay)
+            // Se dibuja la imagen, si es que existe.
             if (this.Image != null)
             {
                 int imgY = centerY - (this.Image.Height / 2);
@@ -81,7 +94,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 startX += this.Image.Width + spacing;
             }
 
-            // Dibujar texto centrado
+            // Se dibuja el texto.
             TextRenderer.DrawText(
                 g,
                 this.Text,

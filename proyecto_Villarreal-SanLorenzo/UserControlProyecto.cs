@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
+    // Clase creada para hacer que todos los usercontrol sean uniformes entre si.
     public class UserControlProyecto : UserControl
     {
+        // Cuando se crea este tipo de usercontrol:
         public UserControlProyecto()
         {
-            // Color de fondo por defecto
+            // Se le cambia el color de fondo a uno por defecto
             this.BackColor = ColorTranslator.FromHtml("#F5F5F5");
 
-            // Activar doble buffer para evitar parpadeos al pintar
+            // Propiedad que hace que no haya parpadeos al pintar los bordes.
             this.DoubleBuffered = true;
 
-            // Enganchar evento Paint para dibujar borde
+            // Se suscribe el evento para pintarle los bordes
             this.Paint += UserControlProyecto_Paint;
 
+            // Se le coloca el tamaño del panel default del form principal
             this.Size = new Size(768, 575);
         }
 
+        // Se pintan los bordes.
         private void UserControlProyecto_Paint(object sender, PaintEventArgs e)
         {
             Color bordeColor = ColorTranslator.FromHtml("#C0C0C0");

@@ -6,20 +6,24 @@ using System.Threading.Tasks;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
+    // Clase creada para hacer que los paneles dentro de los usercontrol, tal que estos contienen datos
+    // sean uniformes entre si
     public class PanelBordes : Panel
     {
+        // Cuando se crea este tipo de panel:
         public PanelBordes()
         {
-            // Color de fondo por defecto
+            // Colocamos un color de fondo por defecto
             this.BackColor = Color.White;
 
-            // Activar doble buffer para evitar parpadeos al pintar
+            // Se activa la prop que evita que haya parpadeos al pintar los bordes.
             this.DoubleBuffered = true;
 
-            // Enganchar evento Paint para dibujar borde
+            // Se suscribe el evento de pintar los bordes.
             this.Paint += PanelBordes_Paint;
         }
 
+        // Se pinta los bordes.
         private void PanelBordes_Paint(object sender, PaintEventArgs e)
         {
             Color bordeColor = ColorTranslator.FromHtml("#C0C0C0");
