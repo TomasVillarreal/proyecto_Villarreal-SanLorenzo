@@ -179,7 +179,7 @@
             bPersonal.Image = Resource1.plus_square;
             bPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bPersonal.IsActive = false;
-            bPersonal.Location = new Point(18, 738);
+            bPersonal.Location = new Point(18, 699);
             bPersonal.Margin = new Padding(3, 4, 3, 4);
             bPersonal.Name = "bPersonal";
             bPersonal.NormalColor = Color.White;
@@ -204,7 +204,7 @@
             botonSidebar1.Image = Resource1.file_earmark_arrow_down;
             botonSidebar1.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar1.IsActive = false;
-            botonSidebar1.Location = new Point(18, 699);
+            botonSidebar1.Location = new Point(18, 738);
             botonSidebar1.Margin = new Padding(3, 4, 3, 4);
             botonSidebar1.Name = "botonSidebar1";
             botonSidebar1.NormalColor = Color.White;
@@ -736,6 +736,7 @@
             bRegistrarUsuario.TabIndex = 24;
             bRegistrarUsuario.Text = "Registrar usuario";
             bRegistrarUsuario.UseVisualStyleBackColor = false;
+            bRegistrarUsuario.Click += bRegistrarUsuario_Click;
             // 
             // flowLayoutPanel4
             // 

@@ -15,7 +15,6 @@ namespace proyecto_Villarreal_SanLorenzo
         public static string telefono_usuario { get; set; }
         public static List<string> Roles { get; set; } = new List<string>();
         public static List<string> Especialidades { get; set; } = new List<string>();
-
         public static string RolActivo { get; set; }
 
         public static void IniciarSesion(int idUsuario, string nombre, string apellido, string email, string telefono)

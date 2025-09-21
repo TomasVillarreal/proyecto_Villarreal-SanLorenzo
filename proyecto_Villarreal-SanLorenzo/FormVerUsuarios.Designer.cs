@@ -156,7 +156,7 @@
             bPersonal.Image = Resource1.plus_square;
             bPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bPersonal.IsActive = false;
-            bPersonal.Location = new Point(16, 667);
+            bPersonal.Location = new Point(22, 644);
             bPersonal.Margin = new Padding(3, 4, 3, 4);
             bPersonal.Name = "bPersonal";
             bPersonal.NormalColor = Color.White;
@@ -182,7 +182,7 @@
             botonSidebar1.Image = Resource1.file_earmark_arrow_down;
             botonSidebar1.ImageAlign = ContentAlignment.MiddleLeft;
             botonSidebar1.IsActive = false;
-            botonSidebar1.Location = new Point(16, 610);
+            botonSidebar1.Location = new Point(16, 683);
             botonSidebar1.Margin = new Padding(3, 4, 3, 4);
             botonSidebar1.Name = "botonSidebar1";
             botonSidebar1.NormalColor = Color.White;
@@ -405,12 +405,11 @@
             // dataGridViewUsuarios
             // 
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(284, 328);
+            dataGridViewUsuarios.Location = new Point(257, 328);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.RowHeadersWidth = 51;
-            dataGridViewUsuarios.Size = new Size(909, 433);
+            dataGridViewUsuarios.Size = new Size(935, 433);
             dataGridViewUsuarios.TabIndex = 9;
-            dataGridViewUsuarios.CellMouseClick += dataGridViewUsuarios_CellMouseClick;
             // 
             // lTelefonoUsuario
             // 

@@ -28,7 +28,6 @@ namespace proyecto_Villarreal_SanLorenzo
             lNombreUsuario.Text = nombre_completo;
             lRol.Text = SesionUsuario.RolActivo;
         }
-
         private int ObtenerIdEspecialidad(string nombre_especialidad)//Metodo con el cual se obtiene la especialidad del usuario nuevo
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
@@ -36,7 +35,7 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 connection.Open();
 
-                using (SqlCommand cmdBuscar = new SqlCommand("SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @nombreEspecialidad", connection))
+                using (SqlCommand cmdBuscar = new SqlCommand("SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @nombre_especialidad", connection))
                 {
                     cmdBuscar.Parameters.AddWithValue("@nombre_especialidad", nombre_especialidad);
 
@@ -48,7 +47,6 @@ namespace proyecto_Villarreal_SanLorenzo
                     }
                     else//Es una nueva especialidad que se agrega a la tabla
                     {
-
                         using (SqlCommand cmdInsertar = new SqlCommand("INSERT INTO Especialidades (nombre_especialidad) OUTPUT INSERTED.id_especialidad VALUES(@nombre_especialidad)", connection))
                         {
                             cmdInsertar.Parameters.AddWithValue("@nombre_especialidad", nombre_especialidad);
@@ -89,26 +87,25 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
-
-
-        private void bRegistrarUsuario_Click(object sender, EventArgs e, CancelEventArgs c)
-        {
-            ValidarComboboxes();
+        public void bRegistrarUsuario_Click(object sender, EventArgs e)
+        { 
             int? especialidad = null;
 
-
-            if (!tbEmail.Text.Contains("@"))//Verifica si el usuario ingreso el carácter '@' en el email.
+            if (!ValidarComboboxes())
             {
-                MessageBox.Show("El correo electrónico debe contener un '@'.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                c.Cancel = true;
-
-                tbEmail.Clear();
+                return;
             }
 
             if (!string.IsNullOrWhiteSpace(comboBoxEsp.Text))//Verifica si se seleccionó una especialidad
             {
                 especialidad = ObtenerIdEspecialidad(comboBoxEsp.Text.Trim());
+            }
+
+            if (!tbEmail.Text.Contains("@"))
+            {
+                MessageBox.Show("El correo electrónico debe contener un '@'.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbEmail.Clear();
+                return;
             }
 
             int id_rol = ObtenerIdRol(comboBoxRoles.Text);
@@ -129,8 +126,10 @@ namespace proyecto_Villarreal_SanLorenzo
                     MessageBoxIcon.Warning);
                 return;
             }
-
             CrearUsuario(id_rol, especialidad, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
+            FormVerUsuarios formUsuario = new FormVerUsuarios();
+            formUsuario.Show();
+            this.Close();
         }
 
         //Creacion del usuario
@@ -348,7 +347,6 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
-
         private void bHome_Click(object sender, EventArgs e)
         {
             FormHome formHome = new FormHome();
@@ -370,7 +368,6 @@ namespace proyecto_Villarreal_SanLorenzo
             formLogin.Show();
             this.Close();
         }
-
         private void comboBoxRoles_SelectedIndexChanged(object sender, EventArgs e)//Si el rol es Médico o Enfermero se muestra el ComboBoxEspecialidades
         {
             string rolSeleccionado = comboBoxRoles.Text.Trim().ToLower();

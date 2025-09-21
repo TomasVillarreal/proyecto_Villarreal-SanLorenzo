@@ -110,7 +110,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(30, 756);
+            bBackup.Location = new Point(22, 795);
             bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
@@ -135,7 +135,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(30, 795);
+            bAgregarPersonal.Location = new Point(22, 756);
             bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;

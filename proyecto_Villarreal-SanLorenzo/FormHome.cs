@@ -60,6 +60,17 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 MessageBox.Show("No se encontró información de la sesión.");
             }
+
+            if (SesionUsuario.RolActivo != "Gerente")
+            {
+                bAgregarPersonal.Visible = false;
+                bUsuarios.Visible = false;
+            }
+            else
+            {
+                bAgregarPersonal.Visible = true;
+                bUsuarios.Visible = true;
+            }
         }
         private void panelSidebar_Paint(object sender, PaintEventArgs e)
         {

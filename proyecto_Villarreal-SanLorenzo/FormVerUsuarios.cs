@@ -44,7 +44,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                     u.email_usuario,
                                     u.telefono_usuario,
                                     STRING_AGG(r.nombre_rol, ', ') AS Roles,
-                                    STRING_AGG(e.nombre_especialidad, ', ') AS Especialidades
+                                   ISNULL(STRING_AGG(e.nombre_especialidad, ', '), 'Sin especialidad') AS Especialidades
                                 FROM Usuarios u
                                 LEFT JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
                                 LEFT JOIN Rol r ON ur.id_rol = r.id_rol
@@ -141,9 +141,9 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bEliminarUsuario_Click(object sender, EventArgs e)
         {
-            if (dataGridViewUsuarios.SelectedRows.Count > 0)
+            if (dataGridViewUsuarios.CurrentRow != null)
             {
-                int idUsuario = Convert.ToInt32(dataGridViewUsuarios.SelectedRows[0].Cells["id_usuario"].Value);
+                int idUsuario = Convert.ToInt32(dataGridViewUsuarios.CurrentRow.Cells["id_usuario"].Value);
 
                 DialogResult result = MessageBox.Show("¿Está seguro que desea eliminar este usuario?", "Confirmación",
                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -167,7 +167,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
                                 if (rowsAffected > 0)
                                 {
-                                    MessageBox.Show("Usuario eliminado correctamente (baja lógica).", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    MessageBox.Show("Usuario eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     ObtenerRegistro();
                                 }
                                 else
@@ -188,13 +188,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Debe seleccionar un usuario de la tabla.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-        }
-        private void dataGridViewUsuarios_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            tbNomUsuario.Text = dataGridViewUsuarios.CurrentRow.Cells[1].Value.ToString();
-            tbApellidoUsuario.Text = dataGridViewUsuarios.CurrentRow.Cells[2].Value.ToString();
-            tbTelefono.Text = dataGridViewUsuarios.CurrentRow.Cells[3].Value.ToString();
-            tbEmail.Text = dataGridViewUsuarios.CurrentRow.Cells[4].Value.ToString();
         }
 
         private void bHome_Click(object sender, EventArgs e)
