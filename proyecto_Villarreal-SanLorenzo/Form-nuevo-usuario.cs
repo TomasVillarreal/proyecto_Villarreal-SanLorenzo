@@ -185,6 +185,67 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
         }
+        private void CargarRoles() //Metodo que carga los roles al combobox
+        {
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM Rol", connecction))
+                {
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+                    DataTable dataTable = new DataTable();
+
+                    dataAdapter.Fill(dataTable);
+
+                    comboBoxRoles.DataSource = dataTable;
+                    comboBoxRoles.DisplayMember = "nombre_rol";
+                    comboBoxRoles.ValueMember = "id_rol";
+
+                }
+                try
+                {
+                    connecction.Open();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar los roles.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+        private void CargarEspecialidades()//Metodo que carga las especialidades al combobox
+        {
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades", connecction))
+                {
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+                    DataTable dataTable = new DataTable();
+
+                    dataAdapter.Fill(dataTable);
+
+                    comboBoxRoles.DataSource = dataTable;
+                    comboBoxRoles.DisplayMember = "nombre_especialidad";
+                    comboBoxRoles.ValueMember = "id_especialidad";
+
+                }
+                try
+                {
+                    connecction.Open();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar las especialidades.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
         private void botonSidebar3_Click(object sender, EventArgs e)
         {
@@ -247,67 +308,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 passVisible = false;
             }
         }//Metodo que oculta/muestra la contraseña
-        private void CargarRoles() //Metodo que carga los roles al combobox
-        {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-
-            using (SqlConnection connecction = new SqlConnection(connectionStirng))
-            {
-                using (SqlCommand cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM Rol", connecction))
-                {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-
-                    DataTable dataTable = new DataTable();
-
-                    dataAdapter.Fill(dataTable);
-
-                    comboBoxRoles.DataSource = dataTable;
-                    comboBoxRoles.DisplayMember = "nombre_rol";
-                    comboBoxRoles.ValueMember = "id_rol";
-
-                }
-                try
-                {
-                    connecction.Open();
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cargar los roles.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-        }
-        private void CargarEspecialidades()//Metodo que carga las especialidades al combobox
-        {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-
-            using (SqlConnection connecction = new SqlConnection(connectionStirng))
-            {
-                using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades", connecction))
-                {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-
-                    DataTable dataTable = new DataTable();
-
-                    dataAdapter.Fill(dataTable);
-
-                    comboBoxRoles.DataSource = dataTable;
-                    comboBoxRoles.DisplayMember = "nombre_especialidad";
-                    comboBoxRoles.ValueMember = "id_especialidad";
-
-                }
-                try
-                {
-                    connecction.Open();
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cargar las especialidades.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
         private bool ValidarComboboxes()//Metodo que comprueba que los comboBox esten completos
         {
             if (string.IsNullOrWhiteSpace(comboBoxRoles.Text))

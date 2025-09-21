@@ -26,7 +26,7 @@ namespace proyecto_Villarreal_SanLorenzo
         public static int VerifCredenciales(string email_usuario, string password)
         {
             //Cadena de conexión
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             // Consulta a la bd por el 'password' ingresado de acuerdo al 'email' ingresado
             string queryVerif = @"
@@ -37,9 +37,12 @@ namespace proyecto_Villarreal_SanLorenzo
                                        u.telefono AS telefono_usuario,
                                        u.email_usuario AS email_usuario,
                                        u.id_rol AS id_rol,
+                                       u.id_especialidad AS id_especialidad,
+                                       e.nombre_especialidad AS nombre_especialidad,
                                        r.nombre_rol AS nombre_rol
                                 FROM Usuarios AS u
                                 JOIN Rol AS r ON u.id_rol = r.id_rol
+                                JOIN Especialidad AS e ON u.id_especialidad = e.id_especialidad
                                 WHERE u.email_usuario = @email";
 
             //Crea la conexión con la base de datos
