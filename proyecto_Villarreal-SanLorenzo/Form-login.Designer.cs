@@ -101,7 +101,7 @@
             tbUsuario.BorderStyle = BorderStyle.FixedSingle;
             tbUsuario.Cursor = Cursors.Hand;
             tbUsuario.ForeColor = Color.Black;
-            tbUsuario.Location = new Point(358, 256);
+            tbUsuario.Location = new Point(358, 261);
             tbUsuario.Name = "tbUsuario";
             tbUsuario.Size = new Size(189, 27);
             tbUsuario.TabIndex = 7;
@@ -133,9 +133,9 @@
             labelUsuario.Font = new Font("Verdana", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelUsuario.Location = new Point(40, 4);
             labelUsuario.Name = "labelUsuario";
-            labelUsuario.Size = new Size(82, 20);
+            labelUsuario.Size = new Size(62, 20);
             labelUsuario.TabIndex = 0;
-            labelUsuario.Text = "Usuario";
+            labelUsuario.Text = "Email";
             labelUsuario.TextAlign = ContentAlignment.TopCenter;
             // 
             // flowLayoutPanel2
@@ -239,6 +239,7 @@
             AcceptButton = bIniciarSesion;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(800, 512);
             Controls.Add(button1);
             Controls.Add(bMostrarPass);

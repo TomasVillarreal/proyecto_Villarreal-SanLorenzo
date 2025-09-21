@@ -127,13 +127,6 @@
   <data name="calendar_event" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\calendar-event.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-<<<<<<< HEAD
-  <data name="circulo_plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\add_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="exclamation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\exclamation_25dp_000000_FILL0_wght400_GRAD0_opsz24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-=======
   <data name="cerrar-sesion (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\cerrar-sesion (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
 >>>>>>> 3824e0a449ccdfc3976b5bd4f06f3cbd88ca774e
@@ -185,7 +178,7 @@
   <data name="plus_square" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\plus-square.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="user_person" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\user_person_profile_avatar_icon_190943.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="user_interface" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\user_interface.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

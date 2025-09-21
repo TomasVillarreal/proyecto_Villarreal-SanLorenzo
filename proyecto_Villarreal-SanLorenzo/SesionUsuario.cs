@@ -8,39 +8,44 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public static class SesionUsuario
     {
-        //Información del usuario a almacenar durante su sesión
-        //Constructores
         public static int id_usuario { get; set; }
-        public static int id_rol { get; set; }
         public static string nombre_usuario { get; set; }
         public static string apellido_usuario { get; set; }
-        public static string nombre_rol { get; set; }
+        public static string email_usuario { get; set; }
+        public static string telefono_usuario { get; set; }
+        public static List<string> Roles { get; set; } = new List<string>();
+        public static List<string> Especialidades { get; set; } = new List<string>();
+        public static string RolActivo { get; set; }
 
-
-        //Metodo para iniciar la sesion
-        public static void IniciarSesion(int idUsuario,int idRol, string nombre, string apellido, string nombreRol)
+        public static void IniciarSesion(int idUsuario, string nombre, string apellido, string email, string telefono)
         {
-            SesionUsuario.id_usuario = idUsuario;
-            SesionUsuario.id_rol = idRol;
-            SesionUsuario.nombre_usuario = nombre;
-            SesionUsuario.apellido_usuario = apellido;
-            SesionUsuario.nombre_rol = nombreRol;
+            id_usuario = idUsuario;
+            nombre_usuario = nombre;
+            apellido_usuario = apellido;
+            email_usuario = email;
+            telefono_usuario = telefono;
+
+            Roles.Clear();
+            Especialidades.Clear();
+            RolActivo = null; //Se selecciona más adelante
         }
 
-        //Metodo para cerrar la sesion
         public static void CerrarSesion()
         {
-            SesionUsuario.id_usuario = 0;
-            SesionUsuario.id_rol = 0;
-            SesionUsuario.nombre_usuario = null;
-            SesionUsuario.apellido_usuario = null;
-            SesionUsuario.nombre_rol = null;
+            id_usuario = 0;
+            nombre_usuario = null;
+            apellido_usuario = null;
+            email_usuario = null;
+            telefono_usuario = null;
+
+            Roles.Clear();
+            Especialidades.Clear();
+            RolActivo = null;
         }
 
-        //Metodo para verificar si la sesion esta activa
         public static bool SesionActiva()
         {
-            return SesionUsuario.id_usuario > 0;
+            return id_usuario > 0;
         }
     }
 }

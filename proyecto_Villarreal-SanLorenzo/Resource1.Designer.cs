@@ -93,21 +93,6 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-<<<<<<< HEAD
-        internal static System.Drawing.Bitmap circulo_plus {
-            get {
-                object obj = ResourceManager.GetObject("circulo_plus", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap exclamation {
-            get {
-                object obj = ResourceManager.GetObject("exclamation", resourceCulture);
-=======
         internal static System.Drawing.Bitmap cerrar_sesion__1_ {
             get {
                 object obj = ResourceManager.GetObject("cerrar-sesion (1)", resourceCulture);
@@ -265,9 +250,9 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap user_person {
+        internal static System.Drawing.Bitmap user_interface {
             get {
-                object obj = ResourceManager.GetObject("user_person", resourceCulture);
+                object obj = ResourceManager.GetObject("user_interface", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

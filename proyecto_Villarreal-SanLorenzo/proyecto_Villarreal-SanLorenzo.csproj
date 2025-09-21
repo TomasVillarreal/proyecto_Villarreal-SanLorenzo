@@ -10,10 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
-=======
->>>>>>> 3824e0a449ccdfc3976b5bd4f06f3cbd88ca774e
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
