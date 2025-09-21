@@ -17,13 +17,13 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class Form_login : Form
     {
-        private bool passVisible = false; //Utilizado para el btn que muestra la oculta el password.
+        private bool passVisible = false; //Utilizado para el btn que muestra/ oculta el password.
 
         public Form_login()
         {
             InitializeComponent();
         }
-        public static int VerifCredenciales(string email_usuario, string password)
+        public static int VerifCredenciales(string email_usuario, string password)//Metodo que verifica las credenciales del usuario y carga sus datos
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
@@ -65,7 +65,6 @@ namespace proyecto_Villarreal_SanLorenzo
 
                             reader.Close();
 
-                            // cargar roles y especialidades
                             CargarRolesYEspecialidades(id_usuario, connection);
 
                             return id_usuario;
@@ -81,13 +80,13 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private static void CargarRolesYEspecialidades(int idUsuario, SqlConnection connection)
+        private static void CargarRolesYEspecialidades(int idUsuario, SqlConnection connection)//Metodo que carga los roles y especialidades (si es que tiene)
         {
             string query = @"
                             SELECT r.nombre_rol, e.nombre_especialidad
-                            FROM Usuario_Rol ur
+                            FROM Usuario_rol ur
                             JOIN Rol r ON ur.id_rol = r.id_rol
-                            LEFT JOIN Usuario_Especialidad ue ON ur.id_usuario = ue.id_usuario
+                            LEFT JOIN Usuario_especialidad ue ON ur.id_usuario = ue.id_usuario
                             LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
                             WHERE ur.id_usuario = @idUsuario";
 
@@ -100,9 +99,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 while (reader.Read())
                 {
                     string rol = reader["nombre_rol"].ToString();
-                    string especialidad = reader["nombre_especialidad"] != DBNull.Value
-                        ? reader["nombre_especialidad"].ToString()
-                        : null;
+                    string especialidad = reader["nombre_especialidad"] != DBNull.Value ? reader["nombre_especialidad"].ToString() : null;
 
                     SesionUsuario.Roles.Add(rol);
                     if (especialidad != null)
@@ -129,17 +126,15 @@ namespace proyecto_Villarreal_SanLorenzo
 
             int id_usuario = VerifCredenciales(usuario, password);
 
-            if (id_usuario > 0)
+            if (id_usuario > 0) //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
             {
-                //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
                 FormHome formHome = new FormHome();
                 formHome.Show();
 
                 this.Hide();
             }
-            else if (id_usuario == 0)
+            else if (id_usuario == 0)//El usuario no existe o contraseña incorrecta
             {
-                //El usuario no existe o contraseña incorrecta
                 MessageBox.Show("Credenciales incorrectas. Intente nuevamente",
                     "Error inicio de sesión", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -163,11 +158,11 @@ namespace proyecto_Villarreal_SanLorenzo
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
                 passVisible = false;
             }
-        }
+        }//Metodo que muestra/oculta la contraseña
 
         private void button1_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
+        }//Metodo que mediante un boton cierra la aplicacion
     }
 }

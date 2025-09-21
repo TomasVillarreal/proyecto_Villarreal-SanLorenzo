@@ -16,6 +16,8 @@ namespace proyecto_Villarreal_SanLorenzo
         public static List<string> Roles { get; set; } = new List<string>();
         public static List<string> Especialidades { get; set; } = new List<string>();
 
+        public static string RolActivo { get; set; }
+
         public static void IniciarSesion(int idUsuario, string nombre, string apellido, string email, string telefono)
         {
             id_usuario = idUsuario;
@@ -26,6 +28,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
             Roles.Clear();
             Especialidades.Clear();
+            RolActivo = null; //Se selecciona más adelante
         }
 
         public static void CerrarSesion()
@@ -38,6 +41,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
             Roles.Clear();
             Especialidades.Clear();
+            RolActivo = null;
         }
 
         public static bool SesionActiva()

@@ -111,7 +111,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 especialidad = ObtenerIdEspecialidad(comboBoxEsp.Text.Trim());
             }
 
-            int id_rol = ObtenerIdRol(comboBoxRoles.Text);//Llamo al metodo y asigno su valor de retorno a la variable
+            int id_rol = ObtenerIdRol(comboBoxRoles.Text);
             string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
             string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
             string emailUsuario = tbEmail.Text.Trim().ToLower();
@@ -147,9 +147,9 @@ namespace proyecto_Villarreal_SanLorenzo
                 {
                     //1) Insertar en Usuarios
                     string queryNuevoUsuario = @"
-                    INSERT INTO Usuarios (nombre_usuario, apellido_usuario, email_usuario, telefono_usuario, password_usuario)
-                    OUTPUT INSERTED.id_usuario
-                    VALUES (@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
+                                                INSERT INTO Usuarios (nombre_usuario, apellido_usuario, email_usuario, telefono_usuario, password_usuario)
+                                                OUTPUT INSERTED.id_usuario
+                                                VALUES (@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
 
                     int id_usuario;
                     using (SqlCommand cmd = new SqlCommand(queryNuevoUsuario, connecction, transaction))
@@ -172,7 +172,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         cmdRol.ExecuteNonQuery();
                     }
 
-                    // 3. Insertar en Usuario_especialidad (en caso de que el usuario tenga una)
+                    //3) Insertar en Usuario_especialidad (en caso de que el usuario tenga una)
                     if (especialidad.HasValue)
                     {
                         string queryUsuarioEsp = "INSERT INTO Usuario_especialidad (id_usuario, id_especialidad) VALUES (@id_usuario, @id_especialidad)";

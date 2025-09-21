@@ -25,18 +25,39 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void CargarDatosUsuario()
         {
-            //Verifica si existe sesion activa
             if (SesionUsuario.SesionActiva())
             {
-                string nombre_rol = SesionUsuario.nombre_rol;
                 string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
 
-                lRol.Text = nombre_rol;
+                if (string.IsNullOrEmpty(SesionUsuario.RolActivo))
+                {
+                    if (SesionUsuario.Roles.Count == 1)
+                    {
+                        SesionUsuario.RolActivo = SesionUsuario.Roles[0];
+                    }
+                    else if (SesionUsuario.Roles.Count > 1)
+                    {
+                        using (FormSeleccionRol formRol = new FormSeleccionRol(SesionUsuario.Roles))
+                        {
+                            if (formRol.ShowDialog() == DialogResult.OK)
+                            {
+                                SesionUsuario.RolActivo = formRol.RolSeleccionado;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Debes seleccionar un rol para continuar.");
+                                this.Close();
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                lRol.Text = SesionUsuario.RolActivo;
                 lNombreUsuario.Text = nombre_completo;
             }
             else
             {
-                // En caso en que la sesión no esté activa
                 MessageBox.Show("No se encontró información de la sesión.");
             }
         }
@@ -49,13 +70,11 @@ namespace proyecto_Villarreal_SanLorenzo
             Color.Transparent, 0, ButtonBorderStyle.None
             );
         }
-
         private void FormHome_Resize(object sender, EventArgs e)
         {
             panelSidebar.Invalidate();
             panelSidebar.Update();
         }
-
         private void bCerrarSesion_Click(object sender, EventArgs e)
         {
             //Llama al metodo el cual cierra la sesion.
@@ -66,7 +85,6 @@ namespace proyecto_Villarreal_SanLorenzo
             formLogin.Show();
             this.Close();
         }
-
         private void bAgregarPersonal_Click(object sender, EventArgs e)
         {
             Form_nuevo_usuario formularioUsuarios = new Form_nuevo_usuario();
