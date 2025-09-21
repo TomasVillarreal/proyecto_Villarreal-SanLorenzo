@@ -17,7 +17,7 @@ namespace proyecto_Villarreal_SanLorenzo
     public partial class RegistrarPacienteControl : UserControlProyecto
     {
         // Linea de conexion a la bd
-        string connectionString = "Server=localhost;Database=proyecto_Villarreal-SanLorenzo;Trusted_Connection=True;";
+        string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
         // Event handler utilizado para poder ir hacia la vista de Pacientes una vez ingresado un paciente
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
         // Atributo que permite determinar cual es el control que llama a esta vista, para poder volver hacia el control que lo llamo

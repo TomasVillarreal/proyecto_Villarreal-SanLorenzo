@@ -154,7 +154,7 @@
             // 
             bRegistrarPersonal.BackColor = SystemColors.Highlight;
             bRegistrarPersonal.ForeColor = Color.Transparent;
-            bRegistrarPersonal.Image = Resource1.circulo_plus;
+            bRegistrarPersonal.Image = Resource1.plus_icon;
             bRegistrarPersonal.Location = new Point(637, 42);
             bRegistrarPersonal.Name = "bRegistrarPersonal";
             bRegistrarPersonal.Size = new Size(96, 40);

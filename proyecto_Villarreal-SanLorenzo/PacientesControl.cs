@@ -23,7 +23,7 @@ namespace proyecto_Villarreal_SanLorenzo
          * El localhost sirve para determinar si el server de sql se encuentra en la pc. Tambien podria ser usado el nombre
          * exacto de la conexion, como por ejemplo DESKTOP-ASD/MSSQL. 
          */
-        string connectionString = "Server=localhost;Database=proyecto_Villarreal-SanLorenzo;Trusted_Connection=True;";
+        string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
 
 
         public PacientesControl()

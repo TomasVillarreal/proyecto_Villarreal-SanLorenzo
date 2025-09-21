@@ -224,7 +224,6 @@
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.ForeColor = Color.Black;
-            button1.Image = Resource1.cerrar_sesion__1_;
             button1.ImageAlign = ContentAlignment.MiddleLeft;
             button1.Location = new Point(386, 385);
             button1.Name = "button1";

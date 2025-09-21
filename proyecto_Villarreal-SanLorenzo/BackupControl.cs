@@ -15,7 +15,7 @@ namespace proyecto_Villarreal_SanLorenzo
     public partial class BackupControl : UserControlProyecto
     {
         // Atributo que nos permitira acceder al temporizador generado en el form principal
-        private Form1 FormPadre { get; set; }
+        private FormHome FormPadre { get; set; }
 
         public BackupControl()
         {
@@ -38,7 +38,7 @@ namespace proyecto_Villarreal_SanLorenzo
         }
 
         // Setter publico que nos permite cambiar el atributo form padre de este usercontrol
-        public void EstablecerFormPadre (Form1 form)
+        public void EstablecerFormPadre (FormHome form)
         {
             FormPadre = form;
         }
@@ -140,7 +140,6 @@ namespace proyecto_Villarreal_SanLorenzo
             MessageBox.Show("Se detuvo la creacion de backups!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             bPararIntevaloBackup.Visible=false;
         }
-
         
     }
 }

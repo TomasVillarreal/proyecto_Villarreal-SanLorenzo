@@ -2,7 +2,6 @@
 using System.Drawing.Printing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -34,10 +33,11 @@ namespace proyecto_Villarreal_SanLorenzo
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panelSidebar = new Panel();
+            bAgregarPersonal = new BotonSidebar();
             bUsuarios = new BotonSidebar();
             bBackup = new BotonSidebar();
-            bAgregarPersonal = new BotonSidebar();
             bCerrarSesion = new BotonSidebar();
             bPacientes = new BotonSidebar();
             bHistorial = new BotonSidebar();
@@ -45,19 +45,21 @@ namespace proyecto_Villarreal_SanLorenzo
             label1 = new Label();
             labelSH = new Label();
             labelClinicks = new Label();
-            flowLayoutPanel1 = new FlowLayoutPanel();
             lNombreUsuario = new Label();
             lRol = new Label();
+            panelDefault = new Panel();
+            timerBackup = new System.Windows.Forms.Timer(components);
+            flowLayoutPanelUsuario = new FlowLayoutPanel();
             panelSidebar.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanelUsuario.SuspendLayout();
             SuspendLayout();
             // 
             // panelSidebar
             // 
             panelSidebar.AutoScroll = true;
+            panelSidebar.Controls.Add(bAgregarPersonal);
             panelSidebar.Controls.Add(bUsuarios);
             panelSidebar.Controls.Add(bBackup);
-            panelSidebar.Controls.Add(bAgregarPersonal);
             panelSidebar.Controls.Add(bCerrarSesion);
             panelSidebar.Controls.Add(bPacientes);
             panelSidebar.Controls.Add(bHistorial);
@@ -68,9 +70,35 @@ namespace proyecto_Villarreal_SanLorenzo
             panelSidebar.Location = new Point(0, 0);
             panelSidebar.Margin = new Padding(3, 4, 3, 4);
             panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(244, 873);
+            panelSidebar.Size = new Size(229, 873);
             panelSidebar.TabIndex = 0;
             panelSidebar.Paint += panelSidebar_Paint;
+            // 
+            // bAgregarPersonal
+            // 
+            bAgregarPersonal.Anchor = AnchorStyles.Bottom;
+            bAgregarPersonal.BorderRadius = 10;
+            bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
+            bAgregarPersonal.FlatAppearance.BorderSize = 0;
+            bAgregarPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bAgregarPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bAgregarPersonal.FlatStyle = FlatStyle.Flat;
+            bAgregarPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bAgregarPersonal.HoverColor = Color.FromArgb(224, 224, 224);
+            bAgregarPersonal.Image = Resource1.plus_square;
+            bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
+            bAgregarPersonal.IsActive = false;
+            bAgregarPersonal.Location = new Point(14, 750);
+            bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
+            bAgregarPersonal.Name = "bAgregarPersonal";
+            bAgregarPersonal.NormalColor = Color.White;
+            bAgregarPersonal.Size = new Size(200, 31);
+            bAgregarPersonal.TabIndex = 18;
+            bAgregarPersonal.TabStop = false;
+            bAgregarPersonal.Text = "Agregar Personal";
+            bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bAgregarPersonal.UseVisualStyleBackColor = true;
+            bAgregarPersonal.Click += bAgregarPersonal_Click;
             // 
             // bUsuarios
             // 
@@ -81,16 +109,16 @@ namespace proyecto_Villarreal_SanLorenzo
             bUsuarios.FlatAppearance.MouseDownBackColor = Color.Transparent;
             bUsuarios.FlatAppearance.MouseOverBackColor = Color.Transparent;
             bUsuarios.FlatStyle = FlatStyle.Flat;
-            bUsuarios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bUsuarios.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
             bUsuarios.Image = Resource1.user_interface;
             bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
             bUsuarios.IsActive = false;
-            bUsuarios.Location = new Point(3, 324);
+            bUsuarios.Location = new Point(11, 324);
             bUsuarios.Margin = new Padding(3, 4, 3, 4);
             bUsuarios.Name = "bUsuarios";
             bUsuarios.NormalColor = Color.White;
-            bUsuarios.Size = new Size(230, 31);
+            bUsuarios.Size = new Size(211, 31);
             bUsuarios.TabIndex = 17;
             bUsuarios.TabStop = false;
             bUsuarios.Text = "Usuarios";
@@ -107,12 +135,12 @@ namespace proyecto_Villarreal_SanLorenzo
             bBackup.FlatAppearance.MouseDownBackColor = Color.Transparent;
             bBackup.FlatAppearance.MouseOverBackColor = Color.Transparent;
             bBackup.FlatStyle = FlatStyle.Flat;
-            bBackup.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bBackup.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bBackup.HoverColor = Color.FromArgb(224, 224, 224);
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(22, 795);
+            bBackup.Location = new Point(14, 789);
             bBackup.Margin = new Padding(3, 4, 3, 4);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
@@ -122,32 +150,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bBackup.Text = "Realizar Backup";
             bBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
             bBackup.UseVisualStyleBackColor = true;
-            // 
-            // bAgregarPersonal
-            // 
-            bAgregarPersonal.Anchor = AnchorStyles.Bottom;
-            bAgregarPersonal.BorderRadius = 10;
-            bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
-            bAgregarPersonal.FlatAppearance.BorderSize = 0;
-            bAgregarPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bAgregarPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bAgregarPersonal.FlatStyle = FlatStyle.Flat;
-            bAgregarPersonal.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bAgregarPersonal.HoverColor = Color.FromArgb(224, 224, 224);
-            bAgregarPersonal.Image = Resource1.plus_square;
-            bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
-            bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(22, 756);
-            bAgregarPersonal.Margin = new Padding(3, 4, 3, 4);
-            bAgregarPersonal.Name = "bAgregarPersonal";
-            bAgregarPersonal.NormalColor = Color.White;
-            bAgregarPersonal.Size = new Size(200, 31);
-            bAgregarPersonal.TabIndex = 11;
-            bAgregarPersonal.TabStop = false;
-            bAgregarPersonal.Text = "Agregar Personal";
-            bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bAgregarPersonal.UseVisualStyleBackColor = true;
-            bAgregarPersonal.Click += bAgregarPersonal_Click;
+            bBackup.Click += bBackup_Click;
             // 
             // bCerrarSesion
             // 
@@ -158,12 +161,12 @@ namespace proyecto_Villarreal_SanLorenzo
             bCerrarSesion.FlatAppearance.MouseDownBackColor = Color.Transparent;
             bCerrarSesion.FlatAppearance.MouseOverBackColor = Color.Transparent;
             bCerrarSesion.FlatStyle = FlatStyle.Flat;
-            bCerrarSesion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bCerrarSesion.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bCerrarSesion.HoverColor = Color.FromArgb(224, 224, 224);
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(22, 834);
+            bCerrarSesion.Location = new Point(14, 828);
             bCerrarSesion.Margin = new Padding(3, 4, 3, 4);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
@@ -183,7 +186,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bPacientes.FlatAppearance.MouseDownBackColor = Color.Transparent;
             bPacientes.FlatAppearance.MouseOverBackColor = Color.Transparent;
             bPacientes.FlatStyle = FlatStyle.Flat;
-            bPacientes.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bPacientes.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bPacientes.HoverColor = Color.FromArgb(224, 224, 224);
             bPacientes.Image = Resource1.people_fill;
             bPacientes.ImageAlign = ContentAlignment.MiddleLeft;
@@ -198,6 +201,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bPacientes.Text = "Pacientes";
             bPacientes.TextImageRelation = TextImageRelation.ImageBeforeText;
             bPacientes.UseVisualStyleBackColor = true;
+            bPacientes.Click += bPacientes_Click;
             // 
             // bHistorial
             // 
@@ -207,7 +211,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bHistorial.FlatAppearance.MouseDownBackColor = Color.Transparent;
             bHistorial.FlatAppearance.MouseOverBackColor = Color.Transparent;
             bHistorial.FlatStyle = FlatStyle.Flat;
-            bHistorial.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bHistorial.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bHistorial.HoverColor = Color.FromArgb(224, 224, 224);
             bHistorial.Image = Resource1.file_post;
             bHistorial.ImageAlign = ContentAlignment.MiddleLeft;
@@ -231,7 +235,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bHome.FlatAppearance.MouseDownBackColor = Color.Transparent;
             bHome.FlatAppearance.MouseOverBackColor = Color.Transparent;
             bHome.FlatStyle = FlatStyle.Flat;
-            bHome.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bHome.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bHome.HoverColor = Color.FromArgb(224, 224, 224);
             bHome.Image = Resource1.house_door1;
             bHome.ImageAlign = ContentAlignment.MiddleLeft;
@@ -246,12 +250,13 @@ namespace proyecto_Villarreal_SanLorenzo
             bHome.Text = "Home";
             bHome.TextImageRelation = TextImageRelation.ImageBeforeText;
             bHome.UseVisualStyleBackColor = true;
+            bHome.Click += bHome_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(12, 164);
+            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(12, 167);
             label1.Name = "label1";
             label1.Size = new Size(210, 23);
             label1.TabIndex = 3;
@@ -261,18 +266,18 @@ namespace proyecto_Villarreal_SanLorenzo
             // 
             labelSH.AccessibleRole = AccessibleRole.None;
             labelSH.AutoSize = true;
-            labelSH.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelSH.Location = new Point(54, 76);
+            labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelSH.Location = new Point(34, 77);
             labelSH.Name = "labelSH";
-            labelSH.Size = new Size(142, 25);
+            labelSH.Size = new Size(188, 25);
             labelSH.TabIndex = 2;
-            labelSH.Text = "Sistema Clínico";
+            labelSH.Text = "Sistema Hospitalario";
             labelSH.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // labelClinicks
             // 
             labelClinicks.AutoSize = true;
-            labelClinicks.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelClinicks.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelClinicks.Location = new Point(77, 44);
             labelClinicks.Name = "labelClinicks";
             labelClinicks.Size = new Size(95, 32);
@@ -280,43 +285,47 @@ namespace proyecto_Villarreal_SanLorenzo
             labelClinicks.Text = "Clinicks";
             labelClinicks.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(lNombreUsuario);
-            flowLayoutPanel1.Controls.Add(lRol);
-            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(989, 12);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(185, 56);
-            flowLayoutPanel1.TabIndex = 35;
-            // 
             // lNombreUsuario
             // 
             lNombreUsuario.AutoSize = true;
-            lNombreUsuario.BorderStyle = BorderStyle.FixedSingle;
-            lNombreUsuario.FlatStyle = FlatStyle.Flat;
-            lNombreUsuario.Font = new System.Drawing.Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNombreUsuario.ForeColor = Color.Black;
+            lNombreUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lNombreUsuario.Location = new Point(3, 0);
             lNombreUsuario.Name = "lNombreUsuario";
-            lNombreUsuario.Size = new Size(138, 22);
-            lNombreUsuario.TabIndex = 7;
-            lNombreUsuario.Text = "Emanuel Gonzalez";
-            lNombreUsuario.TextAlign = ContentAlignment.TopCenter;
+            lNombreUsuario.Size = new Size(155, 20);
+            lNombreUsuario.TabIndex = 1;
+            lNombreUsuario.Text = "Dr Emanuel Gonzalez";
             // 
             // lRol
             // 
             lRol.AutoSize = true;
-            lRol.BackColor = SystemColors.Highlight;
-            lRol.BorderStyle = BorderStyle.FixedSingle;
-            lRol.FlatStyle = FlatStyle.Flat;
+            lRol.BackColor = Color.DodgerBlue;
+            lRol.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lRol.ForeColor = Color.White;
-            lRol.Location = new Point(3, 22);
+            lRol.Location = new Point(3, 20);
             lRol.Name = "lRol";
-            lRol.Size = new Size(108, 22);
-            lRol.TabIndex = 8;
-            lRol.Text = "Administrativo";
-            lRol.TextAlign = ContentAlignment.TopCenter;
+            lRol.Size = new Size(60, 20);
+            lRol.TabIndex = 2;
+            lRol.Text = "Medico";
+            // 
+            // panelDefault
+            // 
+            panelDefault.BackColor = Color.FromArgb(245, 245, 245);
+            panelDefault.Location = new Point(274, 77);
+            panelDefault.Margin = new Padding(3, 4, 3, 4);
+            panelDefault.Name = "panelDefault";
+            panelDefault.Size = new Size(878, 767);
+            panelDefault.TabIndex = 3;
+            panelDefault.Paint += panelDefault_Paint;
+            // 
+            // flowLayoutPanelUsuario
+            // 
+            flowLayoutPanelUsuario.Controls.Add(lNombreUsuario);
+            flowLayoutPanelUsuario.Controls.Add(lRol);
+            flowLayoutPanelUsuario.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanelUsuario.Location = new Point(973, 22);
+            flowLayoutPanelUsuario.Name = "flowLayoutPanelUsuario";
+            flowLayoutPanelUsuario.Size = new Size(179, 48);
+            flowLayoutPanelUsuario.TabIndex = 4;
             // 
             // FormHome
             // 
@@ -324,16 +333,18 @@ namespace proyecto_Villarreal_SanLorenzo
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1186, 873);
-            Controls.Add(flowLayoutPanel1);
+            Controls.Add(flowLayoutPanelUsuario);
+            Controls.Add(panelDefault);
             Controls.Add(panelSidebar);
             Margin = new Padding(3, 4, 3, 4);
             Name = "FormHome";
             Text = "FormHome";
+            Load += FormHome_Load;
             Resize += FormHome_Resize;
             panelSidebar.ResumeLayout(false);
             panelSidebar.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
+            flowLayoutPanelUsuario.ResumeLayout(false);
+            flowLayoutPanelUsuario.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -347,11 +358,13 @@ namespace proyecto_Villarreal_SanLorenzo
         private BotonSidebar bPacientes;
         private BotonSidebar bHistorial;
         private BotonSidebar bBackup;
-        private BotonSidebar bAgregarPersonal;
         private BotonSidebar bCerrarSesion;
+        private Label lNombreUsuario;
+        private Label lRol;
+        private Panel panelDefault;
+        private System.Windows.Forms.Timer timerBackup;
+        private FlowLayoutPanel flowLayoutPanelUsuario;
         private BotonSidebar bUsuarios;
-        private FlowLayoutPanel flowLayoutPanel1;
-        public Label lNombreUsuario;
-        public Label lRol;
+        private BotonSidebar bAgregarPersonal;
     }
 }

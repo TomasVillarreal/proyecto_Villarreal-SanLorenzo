@@ -2,31 +2,24 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-using BCrypt.Net; //Usado para hashear el password
 
 namespace proyecto_Villarreal_SanLorenzo
 {
-    public partial class Form_nuevo_usuario : Form
+    public partial class NuevoUsuarioControl : UserControlProyecto
     {
         private bool passVisible = false; //Utilizado para el btn que muestra la oculta el password.
-        public Form_nuevo_usuario()
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
+        public NuevoUsuarioControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             CargarRoles();
             CargarEspecialidades();
-            CargarDatosUsuario();
-        }
-        private void CargarDatosUsuario()//Carga el nombre y el rol del usuario en sesion
-        {
-            string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
-            lNombreUsuario.Text = nombre_completo;
-            lRol.Text = SesionUsuario.RolActivo;
         }
         private int ObtenerIdEspecialidad(string nombre_especialidad)//Metodo con el cual se obtiene la especialidad del usuario nuevo
         {
@@ -88,7 +81,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
         public void bRegistrarUsuario_Click(object sender, EventArgs e)
-        { 
+        {
             int? especialidad = null;
 
             if (!ValidarComboboxes())
@@ -132,9 +125,10 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             CrearUsuario(id_rol, especialidad, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
-            FormVerUsuarios formUsuario = new FormVerUsuarios();
-            formUsuario.Show();
-            this.Close();
+            VerUsuarioControl verUsuario = new VerUsuarioControl();
+
+            verUsuario.AbrirOtroControl += this.AbrirOtroControl;
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
         }
 
         //Creacion del usuario
@@ -350,27 +344,6 @@ namespace proyecto_Villarreal_SanLorenzo
         private bool VerfiPassword(string password, string hashedPassword)//Metodo que verifica el password con el hash
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
-        }
-        private void bHome_Click(object sender, EventArgs e)
-        {
-            FormHome formHome = new FormHome();
-            formHome.Show();
-            this.Close();
-        }
-        private void bUsuarios_Click(object sender, EventArgs e)
-        {
-            FormVerUsuarios formUsuario = new FormVerUsuarios();
-            formUsuario.Show();
-            this.Close();
-        }
-        private void bSalir_Click(object sender, EventArgs e)
-        {
-            //Llama al metodo el cual cierra la sesion.
-            SesionUsuario.CerrarSesion();
-
-            Form_login formLogin = new Form_login();
-            formLogin.Show();
-            this.Close();
         }
         private void comboBoxRoles_SelectedIndexChanged(object sender, EventArgs e)//Si el rol es Médico o Enfermero se muestra el ComboBoxEspecialidades
         {

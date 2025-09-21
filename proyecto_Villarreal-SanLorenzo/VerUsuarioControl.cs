@@ -5,27 +5,21 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
-    public partial class FormVerUsuarios : Form
+    public partial class VerUsuarioControl : UserControlProyecto
     {
-        public FormVerUsuarios()
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
+        public VerUsuarioControl()
         {
             InitializeComponent();
             ObtenerRegistro();
-            CargarDatosUsuario();
         }
-        private void CargarDatosUsuario()
-        {
-            string nombre_completo = $"{SesionUsuario.nombre_usuario} {SesionUsuario.apellido_usuario}";
-            lNombreUsuario.Text = nombre_completo;
-            lRol.Text = SesionUsuario.RolActivo;
-        }
-
         private void ObtenerRegistro()
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
@@ -64,14 +58,6 @@ namespace proyecto_Villarreal_SanLorenzo
                     MessageBox.Show("Error al cargar usuarios: " + ex.Message);
                 }
             }
-        }
-
-        private void bAgregarUsuario_Click(object sender, EventArgs e)
-        {
-            Form_nuevo_usuario formNuevoUsuario = new Form_nuevo_usuario();
-            formNuevoUsuario.Show();
-
-            this.Hide();
         }
 
         private void bEditarUsuario_Click(object sender, EventArgs e)
@@ -204,28 +190,13 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void bHome_Click(object sender, EventArgs e)
+        private void bAgregarUsuario_Click(object sender, EventArgs e)
         {
-            FormHome formHome = new FormHome();
-            formHome.Show();
-            this.Close();
-        }
+            NuevoUsuarioControl nuevoUsuario = new NuevoUsuarioControl();
 
-        private void bPersonal_Click(object sender, EventArgs e)
-        {
-            Form_nuevo_usuario formularioUsuarios = new Form_nuevo_usuario();
-            formularioUsuarios.Show();
-            this.Close();
-        }
+            nuevoUsuario.AbrirOtroControl += this.AbrirOtroControl;
 
-        private void bSalir_Click(object sender, EventArgs e)
-        {
-            //Llama al metodo el cual cierra la sesion.
-            SesionUsuario.CerrarSesion();
-
-            Form_login formLogin = new Form_login();
-            formLogin.Show();
-            this.Close();
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, nuevoUsuario, true));
         }
     }
 }
