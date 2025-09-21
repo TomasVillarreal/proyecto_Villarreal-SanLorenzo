@@ -147,7 +147,7 @@
             // 
             bRegistrarPaciente.BackColor = SystemColors.Highlight;
             bRegistrarPaciente.ForeColor = Color.Transparent;
-            bRegistrarPaciente.Image = Resource1.circulo_plus;
+            bRegistrarPaciente.Image = Resource1.plus_icon;
             bRegistrarPaciente.Location = new Point(637, 42);
             bRegistrarPaciente.Name = "bRegistrarPaciente";
             bRegistrarPaciente.Size = new Size(96, 40);

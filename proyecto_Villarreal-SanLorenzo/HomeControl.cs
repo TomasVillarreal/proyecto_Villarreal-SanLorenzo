@@ -14,7 +14,7 @@ namespace proyecto_Villarreal_SanLorenzo
     public partial class HomeControl : UserControlProyecto
     {
 
-        string connectionString = "Server=localhost;Database=proyecto_Villarreal-SanLorenzo;Trusted_Connection=True;";
+        string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
 
         public HomeControl()
         {

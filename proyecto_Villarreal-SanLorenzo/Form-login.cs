@@ -17,71 +17,96 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class Form_login : Form
     {
-        private bool passVisible = false; //Utilizado para el btn que muestra la oculta el password.
+        private bool passVisible = false; //Utilizado para el btn que muestra/ oculta el password.
 
         public Form_login()
         {
             InitializeComponent();
         }
-        public static int VerifCredenciales(string nombreUsuario, string password)
+        public static int VerifCredenciales(string email_usuario, string password)//Metodo que verifica las credenciales del usuario y carga sus datos
         {
-            //Cadena de conexión
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            // Consulta a la bd por el 'password' ingresado de acuerdo al 'nombre' ingresado
-            string queryVerif = "SELECT u.id_usuario AS id_usuario, " +
-                                        "u.password AS password, " +
-                                        "u.nombre_usuario AS nombre_usuario, " +
-                                        "u.apellido_usuario AS apellido_usuario," +
-                                        "u.id_rol AS id_rol, " +
-                                        "r.nombre_rol AS nombre_rol " +
-                                "FROM Usuario AS u " +
-                                "JOIN Rol AS r " +
-                                "ON u.id_rol = r.id_rol " +
-                                "WHERE u.nombre_usuario = @nombreUsuario";
+            string queryUser = @"
+                                SELECT u.id_usuario,
+                                       u.password_usuario,
+                                       u.nombre_usuario,
+                                       u.apellido_usuario,
+                                       u.telefono_usuario,
+                                       u.email_usuario
+                                FROM Usuarios AS u
+                                WHERE u.email_usuario = @email AND u.activo = 1";
 
-            //Crea la conexión con la base de datos
-            using (SqlConnection connection = new SqlConnection(connectionStirng))
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(queryUser, connection))
             {
-                //Comando que asocia la consulta con la conexión
-                using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
+                cmd.Parameters.AddWithValue("@email", email_usuario);
+
+                try
                 {
-                    //Asocia el valor del parametro con el valor en la base de datos
-                    cmd.Parameters.AddWithValue("@nombreUsuario", nombreUsuario);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    try
+                    if (reader.Read())
                     {
-                        connection.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        string contraseñaAlmacenada = reader["password_usuario"].ToString();
 
-                        if (reader.Read())
+                        if (BCrypt.Net.BCrypt.Verify(password, contraseñaAlmacenada))
                         {
-                            string contraseñaAlmacenada = reader["password"].ToString();
+                            int id_usuario = Convert.ToInt32(reader["id_usuario"]);
 
-                            if (password == contraseñaAlmacenada)
-                            {
-                                //Se almacenan los datos del usuario
-                                SesionUsuario.IniciarSesion(
-                                    Convert.ToInt32(reader["id_usuario"]),
-                                    Convert.ToInt32(reader["id_rol"]),
-                                    reader["nombre_usuario"].ToString(),
-                                    reader["apellido_usuario"].ToString(),
-                                    reader["nombre_rol"].ToString()
-                                );
+                            SesionUsuario.IniciarSesion(
+                                id_usuario,
+                                reader["nombre_usuario"].ToString(),
+                                reader["apellido_usuario"].ToString(),
+                                reader["email_usuario"].ToString(),
+                                reader["telefono_usuario"].ToString()
+                            );
 
-                                return SesionUsuario.id_usuario;
-                            }
                             reader.Close();
 
+                            CargarRolesYEspecialidades(id_usuario, connection);
+
+                            return id_usuario;
                         }
-                        return 0; //El usuario no existe o contraseña incorrecta
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al verificar credenciales: " + ex.Message);
-                        return -1;
-                    }
+                    return 0;
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al verificar credenciales: " + ex.Message);
+                    return -1;
+                }
+            }
+        }
+
+        private static void CargarRolesYEspecialidades(int idUsuario, SqlConnection connection)//Metodo que carga los roles y especialidades (si es que tiene)
+        {
+            string query = @"
+                            SELECT r.nombre_rol, e.nombre_especialidad
+                            FROM Usuario_rol ur
+                            JOIN Rol r ON ur.id_rol = r.id_rol
+                            LEFT JOIN Usuario_especialidad ue ON ur.id_usuario = ue.id_usuario
+                            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
+                            WHERE ur.id_usuario = @idUsuario";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string rol = reader["nombre_rol"].ToString();
+                    string especialidad = reader["nombre_especialidad"] != DBNull.Value ? reader["nombre_especialidad"].ToString() : null;
+
+                    SesionUsuario.Roles.Add(rol);
+                    if (especialidad != null)
+                        SesionUsuario.Especialidades.Add(especialidad);
+                }
+
+                reader.Close();
             }
         }
 
@@ -101,17 +126,15 @@ namespace proyecto_Villarreal_SanLorenzo
 
             int id_usuario = VerifCredenciales(usuario, password);
 
-            if (id_usuario > 0)
+            if (id_usuario > 0) //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
             {
-                //Credenciales correctas, se obtuvo el id del usuario e ingresa a la app
                 FormHome formHome = new FormHome();
                 formHome.Show();
 
                 this.Hide();
             }
-            else if (id_usuario == 0)
+            else if (id_usuario == 0)//El usuario no existe o contraseña incorrecta
             {
-                //El usuario no existe o contraseña incorrecta
                 MessageBox.Show("Credenciales incorrectas. Intente nuevamente",
                     "Error inicio de sesión", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -135,11 +158,11 @@ namespace proyecto_Villarreal_SanLorenzo
                 bMostrarPass.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
                 passVisible = false;
             }
-        }
+        }//Metodo que muestra/oculta la contraseña
 
         private void button1_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
+        }//Metodo que mediante un boton cierra la aplicacion
     }
 }
