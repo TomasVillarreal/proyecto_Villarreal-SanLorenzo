@@ -76,6 +76,7 @@
             comboBoxEsp = new ComboBox();
             flowLayoutPanel7 = new FlowLayoutPanel();
             tbTelefono = new TextBox();
+            bUsuarios = new BotonSidebar();
             panelSidebar.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
             flowLayoutPanel6.SuspendLayout();
@@ -93,6 +94,7 @@
             // panelSidebar
             // 
             panelSidebar.AutoScroll = true;
+            panelSidebar.Controls.Add(bUsuarios);
             panelSidebar.Controls.Add(botonSidebar3);
             panelSidebar.Controls.Add(botonSidebar2);
             panelSidebar.Controls.Add(botonSidebar1);
@@ -763,6 +765,31 @@
             tbTelefono.TabIndex = 18;
             tbTelefono.KeyPress += tbTelefono_KeyPress;
             // 
+            // bUsuarios
+            // 
+            bUsuarios.Anchor = AnchorStyles.Bottom;
+            bUsuarios.BorderRadius = 10;
+            bUsuarios.ClickColor = Color.FromArgb(192, 192, 192);
+            bUsuarios.FlatAppearance.BorderSize = 0;
+            bUsuarios.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bUsuarios.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bUsuarios.FlatStyle = FlatStyle.Flat;
+            bUsuarios.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
+            bUsuarios.Image = Resource1.user_interface;
+            bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
+            bUsuarios.IsActive = false;
+            bUsuarios.Location = new Point(10, 324);
+            bUsuarios.Margin = new Padding(3, 4, 3, 4);
+            bUsuarios.Name = "bUsuarios";
+            bUsuarios.NormalColor = Color.White;
+            bUsuarios.Size = new Size(230, 31);
+            bUsuarios.TabIndex = 17;
+            bUsuarios.TabStop = false;
+            bUsuarios.Text = "Usuarios";
+            bUsuarios.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bUsuarios.UseVisualStyleBackColor = true;
+            // 
             // Form_nuevo_usuario
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -851,5 +878,6 @@
         private FlowLayoutPanel flowLayoutPanel10;
         private FlowLayoutPanel flowLayoutPanel7;
         private TextBox tbTelefono;
+        private BotonSidebar bUsuarios;
     }
 }

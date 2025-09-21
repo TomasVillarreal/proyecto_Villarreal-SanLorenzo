@@ -35,7 +35,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                        u.telefono_usuario,
                                        u.email_usuario
                                 FROM Usuarios AS u
-                                WHERE u.email_usuario = @email";
+                                WHERE u.email_usuario = @email AND u.activo = 1";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(queryUser, connection))

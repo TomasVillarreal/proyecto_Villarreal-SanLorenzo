@@ -113,16 +113,6 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap email_icon {
-            get {
-                object obj = ResourceManager.GetObject("email-icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap file_earmark_arrow_down {
             get {
                 object obj = ResourceManager.GetObject("file_earmark_arrow_down", resourceCulture);
@@ -166,16 +156,6 @@ namespace proyecto_Villarreal_SanLorenzo {
         internal static System.Drawing.Bitmap house_door1 {
             get {
                 object obj = ResourceManager.GetObject("house_door1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap medico {
-            get {
-                object obj = ResourceManager.GetObject("medico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -233,39 +213,9 @@ namespace proyecto_Villarreal_SanLorenzo {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap registrar_usuario {
+        internal static System.Drawing.Bitmap user_interface {
             get {
-                object obj = ResourceManager.GetObject("registrar-usuario", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap rol {
-            get {
-                object obj = ResourceManager.GetObject("rol", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap telefono {
-            get {
-                object obj = ResourceManager.GetObject("telefono", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap user_person {
-            get {
-                object obj = ResourceManager.GetObject("user_person", resourceCulture);
+                object obj = ResourceManager.GetObject("user_interface", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

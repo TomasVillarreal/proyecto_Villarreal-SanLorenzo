@@ -31,8 +31,8 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private int ObtenerIdEspecialidad(string nombre_especialidad)//Metodo con el cual se obtiene la especialidad del usuario nuevo
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-            using (SqlConnection connection = new SqlConnection(connectionStirng))
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
@@ -49,7 +49,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     else//Es una nueva especialidad que se agrega a la tabla
                     {
 
-                        using (SqlCommand cmdInsertar = new SqlCommand("INSERT INTO Especialidades (nombre_especialidad) UTPUT INSERTED.id_especialidad VALUES(@nombre_especialidad)", connection))
+                        using (SqlCommand cmdInsertar = new SqlCommand("INSERT INTO Especialidades (nombre_especialidad) OUTPUT INSERTED.id_especialidad VALUES(@nombre_especialidad)", connection))
                         {
                             cmdInsertar.Parameters.AddWithValue("@nombre_especialidad", nombre_especialidad);
 
@@ -61,8 +61,8 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         private int ObtenerIdRol(string nombre_rol)//Metodo con el cual se obtiene el rol del usuario nuevo
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-            using (SqlConnection connection = new SqlConnection(connectionStirng))
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
@@ -79,7 +79,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     else//Es un rol nuevo que se agrega a la tabla
                     {
 
-                        using (SqlCommand cmdInsertar = new SqlCommand("INSERT INTO Rol (nombre_rol) UTPUT INSERTED.id_rol VALUES(@nombreRol)", connection))
+                        using (SqlCommand cmdInsertar = new SqlCommand("INSERT INTO Rol (nombre_rol) OUTPUT INSERTED.id_rol VALUES(@nombreRol)", connection))
                         {
                             cmdInsertar.Parameters.AddWithValue("@nombreRol", nombre_rol);
 
@@ -136,9 +136,9 @@ namespace proyecto_Villarreal_SanLorenzo
         //Creacion del usuario
         public static void CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            using (SqlConnection connecction = new SqlConnection(connectionString))
             {
                 connecction.Open();
                 SqlTransaction transaction = connecction.BeginTransaction();
@@ -197,9 +197,9 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         private void CargarRoles() //Metodo que carga los roles al combobox
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            using (SqlConnection connecction = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT id_rol, nombre_rol FROM Rol", connecction))
                 {
@@ -228,9 +228,9 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         private void CargarEspecialidades()//Metodo que carga las especialidades al combobox
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            using (SqlConnection connecction = new SqlConnection(connectionStirng))
+            using (SqlConnection connecction = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades", connecction))
                 {
