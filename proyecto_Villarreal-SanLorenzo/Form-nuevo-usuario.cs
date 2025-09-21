@@ -31,7 +31,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private int ObtenerIdEspecialidad(string nombre_especialidad)//Metodo con el cual se obtiene la especialidad del usuario nuevo
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
                 connection.Open();
@@ -61,7 +61,7 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         private int ObtenerIdRol(string nombre_rol)//Metodo con el cual se obtiene el rol del usuario nuevo
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
             using (SqlConnection connection = new SqlConnection(connectionStirng))
             {
                 connection.Open();
@@ -136,58 +136,68 @@ namespace proyecto_Villarreal_SanLorenzo
         //Creacion del usuario
         public static void CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-
-            string queryNuevoUsuario = "INSERT INTO Usuarios (rol, nombre_usuario, apellido_usuario, email_usuario, telefono, password_usuario)" +
-                                        "VALUES (@id_rol,@id_especialidad,@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             using (SqlConnection connecction = new SqlConnection(connectionStirng))
             {
-                using (SqlCommand cmd = new SqlCommand(queryNuevoUsuario, connecction))
-                {
-                    cmd.Parameters.AddWithValue("@id_rol", rol);
-                    cmd.Parameters.AddWithValue("@nombre_usuario", nombre);
-                    cmd.Parameters.AddWithValue("@apellido_usuario", apellido);
-                    cmd.Parameters.AddWithValue("@email_usuario", email);
-                    cmd.Parameters.AddWithValue("@telefono", telefono);
-                    cmd.Parameters.AddWithValue("@password_usuario", password);
+                connecction.Open();
+                SqlTransaction transaction = connecction.BeginTransaction();
 
+                try
+                {
+                    //1) Insertar en Usuarios
+                    string queryNuevoUsuario = @"
+                    INSERT INTO Usuarios (nombre_usuario, apellido_usuario, email_usuario, telefono_usuario, password_usuario)
+                    OUTPUT INSERTED.id_usuario
+                    VALUES (@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
+
+                    int id_usuario;
+                    using (SqlCommand cmd = new SqlCommand(queryNuevoUsuario, connecction, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@nombre_usuario", nombre);
+                        cmd.Parameters.AddWithValue("@apellido_usuario", apellido);
+                        cmd.Parameters.AddWithValue("@email_usuario", email);
+                        cmd.Parameters.AddWithValue("@telefono", telefono);
+                        cmd.Parameters.AddWithValue("@password_usuario", password);
+
+                        id_usuario = (int)cmd.ExecuteScalar();
+                    }
+
+                    //2) Insertar en Usuario_rol
+                    string queryUsuarioRol = "INSERT INTO Usuario_rol (id_usuario, id_rol) VALUES (@id_usuario, @id_rol)";
+                    using (SqlCommand cmdRol = new SqlCommand(queryUsuarioRol, connecction, transaction))
+                    {
+                        cmdRol.Parameters.AddWithValue("@id_usuario", id_usuario);
+                        cmdRol.Parameters.AddWithValue("@id_rol", rol);
+                        cmdRol.ExecuteNonQuery();
+                    }
+
+                    // 3. Insertar en Usuario_especialidad (en caso de que el usuario tenga una)
                     if (especialidad.HasValue)
                     {
-                        cmd.Parameters.AddWithValue("@id_especialidad", especialidad.Value);
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue("@id_especialidad", DBNull.Value);
-                    }
-
-                    try
-                    {
-                        connecction.Open();
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
+                        string queryUsuarioEsp = "INSERT INTO Usuario_especialidad (id_usuario, id_especialidad) VALUES (@id_usuario, @id_especialidad)";
+                        using (SqlCommand cmdEsp = new SqlCommand(queryUsuarioEsp, connecction, transaction))
                         {
-                            MessageBox.Show("Usuario registrado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se pudo registrar al usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            cmdEsp.Parameters.AddWithValue("@id_usuario", id_usuario);
+                            cmdEsp.Parameters.AddWithValue("@id_especialidad", especialidad.Value);
+                            cmdEsp.ExecuteNonQuery();
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al conectar con la base de datos: {ex.Message}", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    }
+                    transaction.Commit();//Confirma la transacción
 
+                    MessageBox.Show("Usuario registrado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show("Error al registrar el usuario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
         }
         private void CargarRoles() //Metodo que carga los roles al combobox
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             using (SqlConnection connecction = new SqlConnection(connectionStirng))
             {
@@ -218,7 +228,7 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         private void CargarEspecialidades()//Metodo que carga las especialidades al combobox
         {
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal-SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             using (SqlConnection connecction = new SqlConnection(connectionStirng))
             {
@@ -230,9 +240,9 @@ namespace proyecto_Villarreal_SanLorenzo
 
                     dataAdapter.Fill(dataTable);
 
-                    comboBoxRoles.DataSource = dataTable;
-                    comboBoxRoles.DisplayMember = "nombre_especialidad";
-                    comboBoxRoles.ValueMember = "id_especialidad";
+                    comboBoxEsp.DataSource = dataTable;
+                    comboBoxEsp.DisplayMember = "nombre_especialidad";
+                    comboBoxEsp.ValueMember = "id_especialidad";
 
                 }
                 try
@@ -246,7 +256,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
-
         private void botonSidebar3_Click(object sender, EventArgs e)
         {
             //Llama al metodo el cual cierra la sesion.

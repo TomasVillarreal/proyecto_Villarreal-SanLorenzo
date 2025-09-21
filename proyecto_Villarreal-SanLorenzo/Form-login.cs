@@ -25,70 +25,91 @@ namespace proyecto_Villarreal_SanLorenzo
         }
         public static int VerifCredenciales(string email_usuario, string password)
         {
-            //Cadena de conexión
-            string connectionStirng = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
-            // Consulta a la bd por el 'password' ingresado de acuerdo al 'email' ingresado
-            string queryVerif = @"
-                                SELECT u.id_usuario AS id_usuario,
-                                       u.password_usuario AS password,
-                                       u.nombre_usuario AS nombre_usuario,
-                                       u.apellido_usuario AS apellido_usuario,
-                                       u.telefono AS telefono_usuario,
-                                       u.email_usuario AS email_usuario,
-                                       u.id_rol AS id_rol,
-                                       u.id_especialidad AS id_especialidad,
-                                       e.nombre_especialidad AS nombre_especialidad,
-                                       r.nombre_rol AS nombre_rol
+            string queryUser = @"
+                                SELECT u.id_usuario,
+                                       u.password_usuario,
+                                       u.nombre_usuario,
+                                       u.apellido_usuario,
+                                       u.telefono_usuario,
+                                       u.email_usuario
                                 FROM Usuarios AS u
-                                JOIN Rol AS r ON u.id_rol = r.id_rol
-                                JOIN Especialidad AS e ON u.id_especialidad = e.id_especialidad
                                 WHERE u.email_usuario = @email";
 
-            //Crea la conexión con la base de datos
-            using (SqlConnection connection = new SqlConnection(connectionStirng))
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(queryUser, connection))
             {
-                //Comando que asocia la consulta con la conexión
-                using (SqlCommand cmd = new SqlCommand(queryVerif, connection))
+                cmd.Parameters.AddWithValue("@email", email_usuario);
+
+                try
                 {
-                    //Asocia el valor del parametro con el valor en la base de datos
-                    cmd.Parameters.AddWithValue("@email", email_usuario);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    try
+                    if (reader.Read())
                     {
-                        connection.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        string contraseñaAlmacenada = reader["password_usuario"].ToString();
 
-                        if (reader.Read())
+                        if (BCrypt.Net.BCrypt.Verify(password, contraseñaAlmacenada))
                         {
-                            string contraseñaAlmacenada = reader["password"].ToString();
+                            int id_usuario = Convert.ToInt32(reader["id_usuario"]);
 
-                            if (password == contraseñaAlmacenada)
-                            {
-                                //Se almacenan los datos del usuario
-                                SesionUsuario.IniciarSesion(
-                                    Convert.ToInt32(reader["id_usuario"]),
-                                    Convert.ToInt32(reader["id_rol"]),
-                                    reader["nombre_usuario"].ToString(),
-                                    reader["apellido_usuario"].ToString(),
-                                    reader["nombre_rol"].ToString(),
-                                    Convert.ToInt64(reader["telefono_usuario"]),
-                                    reader["email_usuario"].ToString()
-                                );
+                            SesionUsuario.IniciarSesion(
+                                id_usuario,
+                                reader["nombre_usuario"].ToString(),
+                                reader["apellido_usuario"].ToString(),
+                                reader["email_usuario"].ToString(),
+                                reader["telefono_usuario"].ToString()
+                            );
 
-                                return SesionUsuario.id_usuario;
-                            }
                             reader.Close();
 
+                            // cargar roles y especialidades
+                            CargarRolesYEspecialidades(id_usuario, connection);
+
+                            return id_usuario;
                         }
-                        return 0; //El usuario no existe o contraseña incorrecta
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al verificar credenciales: " + ex.Message);
-                        return -1;
-                    }
+                    return 0;
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al verificar credenciales: " + ex.Message);
+                    return -1;
+                }
+            }
+        }
+
+        private static void CargarRolesYEspecialidades(int idUsuario, SqlConnection connection)
+        {
+            string query = @"
+                            SELECT r.nombre_rol, e.nombre_especialidad
+                            FROM Usuario_Rol ur
+                            JOIN Rol r ON ur.id_rol = r.id_rol
+                            LEFT JOIN Usuario_Especialidad ue ON ur.id_usuario = ue.id_usuario
+                            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
+                            WHERE ur.id_usuario = @idUsuario";
+
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string rol = reader["nombre_rol"].ToString();
+                    string especialidad = reader["nombre_especialidad"] != DBNull.Value
+                        ? reader["nombre_especialidad"].ToString()
+                        : null;
+
+                    SesionUsuario.Roles.Add(rol);
+                    if (especialidad != null)
+                        SesionUsuario.Especialidades.Add(especialidad);
+                }
+
+                reader.Close();
             }
         }
 
