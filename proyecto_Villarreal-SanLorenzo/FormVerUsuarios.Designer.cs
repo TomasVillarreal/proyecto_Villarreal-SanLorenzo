@@ -107,7 +107,7 @@
             bUsuarios.Image = Resource1.user_interface;
             bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
             bUsuarios.IsActive = false;
-            bUsuarios.Location = new Point(3, 345);
+            bUsuarios.Location = new Point(3, 324);
             bUsuarios.Margin = new Padding(3, 4, 3, 4);
             bUsuarios.Name = "bUsuarios";
             bUsuarios.NormalColor = Color.White;
