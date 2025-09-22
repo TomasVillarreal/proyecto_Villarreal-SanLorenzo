@@ -60,7 +60,7 @@
             bAgregarUsuario.FlatStyle = FlatStyle.Flat;
             bAgregarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bAgregarUsuario.ForeColor = Color.Black;
-            bAgregarUsuario.Location = new Point(33, 247);
+            bAgregarUsuario.Location = new Point(68, 251);
             bAgregarUsuario.Name = "bAgregarUsuario";
             bAgregarUsuario.Size = new Size(209, 29);
             bAgregarUsuario.TabIndex = 44;
@@ -77,7 +77,7 @@
             bEliminarUsuario.FlatStyle = FlatStyle.Flat;
             bEliminarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bEliminarUsuario.ForeColor = Color.Black;
-            bEliminarUsuario.Location = new Point(484, 247);
+            bEliminarUsuario.Location = new Point(519, 251);
             bEliminarUsuario.Name = "bEliminarUsuario";
             bEliminarUsuario.Size = new Size(146, 29);
             bEliminarUsuario.TabIndex = 43;
@@ -94,7 +94,7 @@
             bEditarUsuario.FlatStyle = FlatStyle.Flat;
             bEditarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bEditarUsuario.ForeColor = Color.Black;
-            bEditarUsuario.Location = new Point(293, 247);
+            bEditarUsuario.Location = new Point(328, 251);
             bEditarUsuario.Name = "bEditarUsuario";
             bEditarUsuario.Size = new Size(141, 29);
             bEditarUsuario.TabIndex = 42;
@@ -107,7 +107,7 @@
             lEmail.AccessibleRole = AccessibleRole.None;
             lEmail.AutoSize = true;
             lEmail.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lEmail.Location = new Point(387, 144);
+            lEmail.Location = new Point(422, 148);
             lEmail.Name = "lEmail";
             lEmail.Size = new Size(59, 25);
             lEmail.TabIndex = 40;
@@ -117,9 +117,9 @@
             // flowLayoutPanel6
             // 
             flowLayoutPanel6.Controls.Add(tbEmail);
-            flowLayoutPanel6.Location = new Point(387, 172);
+            flowLayoutPanel6.Location = new Point(422, 176);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
-            flowLayoutPanel6.Size = new Size(323, 37);
+            flowLayoutPanel6.Size = new Size(280, 37);
             flowLayoutPanel6.TabIndex = 41;
             // 
             // tbEmail
@@ -136,7 +136,7 @@
             lTelefonoUsuario.AccessibleRole = AccessibleRole.None;
             lTelefonoUsuario.AutoSize = true;
             lTelefonoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTelefonoUsuario.Location = new Point(382, 56);
+            lTelefonoUsuario.Location = new Point(417, 60);
             lTelefonoUsuario.Name = "lTelefonoUsuario";
             lTelefonoUsuario.Size = new Size(85, 25);
             lTelefonoUsuario.TabIndex = 34;
@@ -148,7 +148,7 @@
             lApellidoUsuario.AccessibleRole = AccessibleRole.None;
             lApellidoUsuario.AutoSize = true;
             lApellidoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lApellidoUsuario.Location = new Point(30, 144);
+            lApellidoUsuario.Location = new Point(65, 148);
             lApellidoUsuario.Name = "lApellidoUsuario";
             lApellidoUsuario.Size = new Size(83, 25);
             lApellidoUsuario.TabIndex = 35;
@@ -160,7 +160,7 @@
             lNomUsuario.AccessibleRole = AccessibleRole.None;
             lNomUsuario.AutoSize = true;
             lNomUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNomUsuario.Location = new Point(30, 53);
+            lNomUsuario.Location = new Point(65, 57);
             lNomUsuario.Name = "lNomUsuario";
             lNomUsuario.Size = new Size(83, 25);
             lNomUsuario.TabIndex = 36;
@@ -170,9 +170,9 @@
             // flowLayoutPanel4
             // 
             flowLayoutPanel4.Controls.Add(tbNomUsuario);
-            flowLayoutPanel4.Location = new Point(30, 83);
+            flowLayoutPanel4.Location = new Point(65, 87);
             flowLayoutPanel4.Name = "flowLayoutPanel4";
-            flowLayoutPanel4.Size = new Size(326, 37);
+            flowLayoutPanel4.Size = new Size(301, 37);
             flowLayoutPanel4.TabIndex = 37;
             // 
             // tbNomUsuario
@@ -187,9 +187,9 @@
             // flowLayoutPanel7
             // 
             flowLayoutPanel7.Controls.Add(tbTelefono);
-            flowLayoutPanel7.Location = new Point(384, 84);
+            flowLayoutPanel7.Location = new Point(419, 88);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
-            flowLayoutPanel7.Size = new Size(326, 37);
+            flowLayoutPanel7.Size = new Size(283, 37);
             flowLayoutPanel7.TabIndex = 39;
             // 
             // tbTelefono
@@ -204,9 +204,9 @@
             // flowLayoutPanel5
             // 
             flowLayoutPanel5.Controls.Add(tbApellidoUsuario);
-            flowLayoutPanel5.Location = new Point(30, 172);
+            flowLayoutPanel5.Location = new Point(65, 176);
             flowLayoutPanel5.Name = "flowLayoutPanel5";
-            flowLayoutPanel5.Size = new Size(326, 37);
+            flowLayoutPanel5.Size = new Size(301, 37);
             flowLayoutPanel5.TabIndex = 38;
             // 
             // tbApellidoUsuario
@@ -225,7 +225,7 @@
             dataGridViewUsuarios.Location = new Point(33, 302);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.RowHeadersWidth = 51;
-            dataGridViewUsuarios.Size = new Size(709, 256);
+            dataGridViewUsuarios.Size = new Size(732, 270);
             dataGridViewUsuarios.TabIndex = 45;
             dataGridViewUsuarios.CellClick += dataGridViewUsuarios_CellClick;
             // 

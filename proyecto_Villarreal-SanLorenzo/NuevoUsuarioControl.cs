@@ -13,7 +13,8 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class NuevoUsuarioControl : UserControlProyecto
     {
-        private bool passVisible = false; //Utilizado para el btn que muestra la oculta el password.
+        private bool passVisible1 = false;
+        private bool passVisible2 = false;
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
         public NuevoUsuarioControl()
         {
@@ -229,27 +230,21 @@ namespace proyecto_Villarreal_SanLorenzo
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades WHERE nombre_especialidad IS NOT NULL AND LTRIM(RTRIM(nombre_especialidad)) <> ''", connection))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT id_especialidad, nombre_especialidad FROM Especialidades WHERE nombre_especialidad IS NOT NULL AND LTRIM(RTRIM(nombre_especialidad)) <> ''", connection))
-                {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                dataAdapter.Fill(dataTable);
 
-                    DataTable dataTable = new DataTable();
+                // 👉 Insertamos una fila "nula" para usuarios sin especialidad
+                DataRow filaVacia = dataTable.NewRow();
+                filaVacia["id_especialidad"] = DBNull.Value;
+                filaVacia["nombre_especialidad"] = "-- Sin especialidad --";
+                dataTable.Rows.InsertAt(filaVacia, 0);
 
-                    dataAdapter.Fill(dataTable);
-
-                    comboBoxEsp.DataSource = dataTable;
-                    comboBoxEsp.DisplayMember = "nombre_especialidad";
-                    comboBoxEsp.ValueMember = "id_especialidad";
-                }
-                try
-                {
-                    connection.Open();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cargar las especialidades.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                comboBoxEsp.DataSource = dataTable;
+                comboBoxEsp.DisplayMember = "nombre_especialidad";
+                comboBoxEsp.ValueMember = "id_especialidad";
             }
         }
         private void tbNomUsuario_KeyPress(object sender, KeyPressEventArgs e)
@@ -273,36 +268,33 @@ namespace proyecto_Villarreal_SanLorenzo
                 e.Handled = true;
             }
         }//Metodo que controla los datos ingresados en el textbox
+
+        private void TogglePassword(TextBox textBox, Button button, ref bool visible)
+        {
+            if (visible)
+            {
+                textBox.PasswordChar = '*';
+                button.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
+                visible = false;
+            }
+            else
+            {
+                textBox.PasswordChar = '\0';
+                button.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
+                visible = true;
+            }
+        }
         private void bMostrarPass1_Click(object sender, EventArgs e)
         {
-            if (passVisible == false)
-            {
-                tbConfirmPass.PasswordChar = '\0';
-                bMostrarPass1.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
-                passVisible = true;
-            }
-            else
-            {
-                tbConfirmPass.PasswordChar = '*';
-                bMostrarPass1.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
-                passVisible = false;
-            }
-        }//Metodo que oculta/muestra la contraseña
+            TogglePassword(tbPassUsuario, bMostrarPass1, ref passVisible1);
+        }
+
         private void bMostrarConfPass2_Click(object sender, EventArgs e)
         {
-            if (passVisible == false)
-            {
-                tbConfirmPass.PasswordChar = '\0';
-                bMostrarConfPass2.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoCerrado;
-                passVisible = true;
-            }
-            else
-            {
-                tbConfirmPass.PasswordChar = '*';
-                bMostrarConfPass2.Image = proyecto_Villarreal_SanLorenzo.Resource1.ojoAbierto;
-                passVisible = false;
-            }
-        }//Metodo que oculta/muestra la contraseña
+            TogglePassword(tbConfirmPass, bMostrarConfPass2, ref passVisible2);
+        }
+
+        //Metodo que oculta/muestra la contraseña
         private bool ValidarComboboxes()//Metodo que comprueba que los comboBox esten completos
         {
             if (string.IsNullOrWhiteSpace(comboBoxRoles.Text))

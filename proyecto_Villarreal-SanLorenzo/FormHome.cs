@@ -67,12 +67,14 @@ namespace proyecto_Villarreal_SanLorenzo
             if (SesionUsuario.RolActivo != "Gerente")
             {
                 bAgregarPersonal.Visible = false;
-                bUsuarios.Visible = false;
+                bUsuarios.Visible = false;  
+                bBackup.Visible = false;
             }
             else
             {
                 bAgregarPersonal.Visible = true;
                 bUsuarios.Visible = true;
+                bBackup.Visible = true;
             }
         }
         private void panelSidebar_Paint(object sender, PaintEventArgs e)

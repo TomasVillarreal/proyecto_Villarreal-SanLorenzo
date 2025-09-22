@@ -267,7 +267,7 @@ namespace proyecto_Villarreal_SanLorenzo
             labelSH.AccessibleRole = AccessibleRole.None;
             labelSH.AutoSize = true;
             labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelSH.Location = new Point(34, 77);
+            labelSH.Location = new Point(22, 75);
             labelSH.Name = "labelSH";
             labelSH.Size = new Size(188, 25);
             labelSH.TabIndex = 2;
@@ -278,7 +278,7 @@ namespace proyecto_Villarreal_SanLorenzo
             // 
             labelClinicks.AutoSize = true;
             labelClinicks.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelClinicks.Location = new Point(77, 44);
+            labelClinicks.Location = new Point(65, 42);
             labelClinicks.Name = "labelClinicks";
             labelClinicks.Size = new Size(95, 32);
             labelClinicks.TabIndex = 1;
@@ -322,7 +322,7 @@ namespace proyecto_Villarreal_SanLorenzo
             flowLayoutPanelUsuario.Controls.Add(lNombreUsuario);
             flowLayoutPanelUsuario.Controls.Add(lRol);
             flowLayoutPanelUsuario.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanelUsuario.Location = new Point(973, 22);
+            flowLayoutPanelUsuario.Location = new Point(995, 22);
             flowLayoutPanelUsuario.Name = "flowLayoutPanelUsuario";
             flowLayoutPanelUsuario.Size = new Size(179, 48);
             flowLayoutPanelUsuario.TabIndex = 4;
