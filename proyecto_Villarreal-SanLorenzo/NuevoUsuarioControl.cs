@@ -88,6 +88,26 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             int? especialidad = null;//Se define una variable que puede ser nula (algunos usuarios no tendran especialidad)
 
+            //Se guardan los datos ingresados
+            int id_rol = ObtenerIdRol(comboBoxRoles.Text);
+            string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
+            string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
+            string emailUsuario = tbEmail.Text.Trim().ToLower();
+            string telefono_string = tbTelefono.Text.Trim();
+            string password_usuario = tbPassUsuario.Text;
+            string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
+
+            //Verificacion de campos vacios
+            if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
+               string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
+            {
+                MessageBox.Show("Debe completar todos los campos!",
+                    "Error inicio de sesión", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            long telefono_usuario = Convert.ToInt64(telefono_string);//Este se guarad en la bd
+
             if (!ValidarComboboxes())
             {
                 return;
@@ -107,26 +127,6 @@ namespace proyecto_Villarreal_SanLorenzo
 
             if (!CheckPassword())
             {
-                return;
-            }
-
-            //Se guardan los datos ingresados
-            int id_rol = ObtenerIdRol(comboBoxRoles.Text);
-            string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
-            string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
-            string emailUsuario = tbEmail.Text.Trim().ToLower();
-            string telefono_string = tbTelefono.Text.Trim();
-            long telefono_usuario = Convert.ToInt64(telefono_string);//Este se guarad en la bd
-            string password_usuario = tbPassUsuario.Text;
-            string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
-
-            //Verificacion de campos vacios
-            if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
-               string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
-            {
-                MessageBox.Show("Debe completar todos los campos!",
-                    "Error inicio de sesión", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -325,7 +325,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 comboBoxEsp.Focus();
                 return false;
             }
-            else if (!comboBoxEsp.Text.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+            else if (comboBoxEsp.Visible == true && !comboBoxEsp.Text.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
             {
                 MessageBox.Show("La especialidad solo puede contener letras y espacios.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 comboBoxEsp.Focus();

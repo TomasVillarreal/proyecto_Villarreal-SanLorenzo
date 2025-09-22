@@ -38,20 +38,23 @@ namespace proyecto_Villarreal_SanLorenzo
                                     u.email_usuario,
                                     u.telefono_usuario,
                                     STRING_AGG(r.nombre_rol, ', ') AS Roles,
-                                   ISNULL(STRING_AGG(e.nombre_especialidad, ', '), 'Sin especialidad') AS Especialidades
+                                    ISNULL(
+                                        NULLIF(STRING_AGG(e.nombre_especialidad, ', '), ''), 'Sin especialidad') AS Especialidades
                                 FROM Usuarios u
                                 LEFT JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
                                 LEFT JOIN Rol r ON ur.id_rol = r.id_rol
                                 LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
                                 LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
                                 WHERE u.activo = 1
-                                GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.email_usuario, u.telefono_usuario";
+                                GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.email_usuario, u.telefono_usuario;";
+
 
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
                     DataTable dataTableUsuario = new DataTable();
                     dataAdapter.Fill(dataTableUsuario);
 
                     dataGridViewUsuarios.DataSource = dataTableUsuario;
+
                 }
                 catch (Exception ex)
                 {
