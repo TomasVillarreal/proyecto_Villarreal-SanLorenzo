@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -51,6 +52,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
+       
         private int ObtenerIdRol(string nombre_rol)//Metodo con el cual se obtiene el rol del usuario nuevo
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
@@ -81,9 +83,10 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
+       
         public void bRegistrarUsuario_Click(object sender, EventArgs e)
         {
-            int? especialidad = null;
+            int? especialidad = null;//Se define una variable que puede ser nula (algunos usuarios no tendran especialidad)
 
             if (!ValidarComboboxes())
             {
@@ -107,6 +110,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
+            //Se guardan los datos ingresados
             int id_rol = ObtenerIdRol(comboBoxRoles.Text);
             string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
             string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
@@ -116,6 +120,7 @@ namespace proyecto_Villarreal_SanLorenzo
             string password_usuario = tbPassUsuario.Text;
             string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
 
+            //Verificacion de campos vacios
             if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
                string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
             {
@@ -125,14 +130,14 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
+            //Se cargan los datos al metodo
             CrearUsuario(id_rol, especialidad, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
-            VerUsuarioControl verUsuario = new VerUsuarioControl();
 
+            VerUsuarioControl verUsuario = new VerUsuarioControl();
             verUsuario.AbrirOtroControl += this.AbrirOtroControl;
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
         }
-
-        //Creacion del usuario
+       
         public static void CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
@@ -193,8 +198,43 @@ namespace proyecto_Villarreal_SanLorenzo
                     MessageBox.Show("Error al registrar el usuario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }//Creacion del usuario
+
+
+        //Metodos que controlan los datos ingresados en los textbox
+        private void tbNomUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')//Permite letras, la tecla de retroceso y espacio en caso de nombres compuestos
+            {
+                e.Handled = true;
+            }
         }
-        private void CargarRoles() //Metodo que carga los roles al combobox
+        private void tbApellidoUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+            {
+                e.Handled = true;
+            }
+        }
+        private void tbTelefono_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+
+            //permite solo dígitos y backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+                return;
+            }else if (e.KeyChar != (char)Keys.Back && tb.Text.Length >= 10)//si no es backspace y ya hay 10 caracteres bloquea
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+
+
+        //Metodos que manejan los combobox
+        private void CargarRoles() //Carga los roles al combobox
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
@@ -225,7 +265,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
         }
-        private void CargarEspecialidades()//Metodo que carga las especialidades al combobox
+        private void CargarEspecialidades()//Carga las especialidades al combobox
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
@@ -236,7 +276,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 DataTable dataTable = new DataTable();
                 dataAdapter.Fill(dataTable);
 
-                // 👉 Insertamos una fila "nula" para usuarios sin especialidad
+                //Fila nula para usuarios sin especialidad
                 DataRow filaVacia = dataTable.NewRow();
                 filaVacia["id_especialidad"] = DBNull.Value;
                 filaVacia["nombre_especialidad"] = "-- Sin especialidad --";
@@ -247,28 +287,56 @@ namespace proyecto_Villarreal_SanLorenzo
                 comboBoxEsp.ValueMember = "id_especialidad";
             }
         }
-        private void tbNomUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        private void comboBoxRoles_SelectedIndexChanged(object sender, EventArgs e)//Si el rol es Médico o Enfermero se muestra el ComboBoxEspecialidades
         {
-            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')//Permite letras, la tecla de retroceso y espacio en caso de nombres compuestos
-            {
-                e.Handled = true;
-            }
-        }//Metodo que controla los datos ingresados en el textbox
-        private void tbApellidoUsuario_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
-            {
-                e.Handled = true;
-            }
-        }//Metodo que controla los datos ingresados en el textbox
-        private void tbTelefono_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))//Permite que el usuario solo ingrese numeros (0-9) y la tecla de retroceso
-            {
-                e.Handled = true;
-            }
-        }//Metodo que controla los datos ingresados en el textbox
+            string rolSeleccionado = comboBoxRoles.Text.Trim().ToLower();
 
+            if (rolSeleccionado == "medico" || rolSeleccionado == "enfermero")
+            {
+                comboBoxEsp.Visible = true;
+                lEspecialidad.Visible = true;
+            }
+            else
+            {
+                comboBoxEsp.Visible = false;
+                lEspecialidad.Visible = false;
+            }
+        }
+        private bool ValidarComboboxes()
+        {
+            //Validar roles
+            if (string.IsNullOrWhiteSpace(comboBoxRoles.Text))
+            {
+                MessageBox.Show("Debe seleccionar o escribir un rol.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxRoles.Focus();
+                return false;
+            }
+            else if (!comboBoxRoles.Text.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+            {
+                MessageBox.Show("El rol solo puede contener letras y espacios.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxRoles.Focus();
+                return false;
+            }
+
+            //Validar especialidades
+            if (string.IsNullOrWhiteSpace(comboBoxEsp.Text))
+            {
+                MessageBox.Show("Debe seleccionar o escribir una especialidad.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxEsp.Focus();
+                return false;
+            }
+            else if (!comboBoxEsp.Text.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+            {
+                MessageBox.Show("La especialidad solo puede contener letras y espacios.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxEsp.Focus();
+                return false;
+            }
+
+            return true;
+        }//Valid que los combobox esten completos
+
+
+        //Metodos que ocultan/muestran la contraseña
         private void TogglePassword(TextBox textBox, Button button, ref bool visible)
         {
             if (visible)
@@ -288,32 +356,14 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             TogglePassword(tbPassUsuario, bMostrarPass1, ref passVisible1);
         }
-
         private void bMostrarConfPass2_Click(object sender, EventArgs e)
         {
             TogglePassword(tbConfirmPass, bMostrarConfPass2, ref passVisible2);
         }
 
-        //Metodo que oculta/muestra la contraseña
-        private bool ValidarComboboxes()//Metodo que comprueba que los comboBox esten completos
-        {
-            if (string.IsNullOrWhiteSpace(comboBoxRoles.Text))
-            {
-                MessageBox.Show("Debe seleccionar o escribir un rol.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBoxRoles.Focus();
-                return false;
-            }
 
-            if (string.IsNullOrWhiteSpace(comboBoxEsp.Text))
-            {
-                MessageBox.Show("Debe seleccionar o escribir una especialidad.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBoxEsp.Focus();
-                return false;
-            }
-
-            return true;
-        }
-        private bool CheckPassword()//Metodo que compara la contraseña y la confirmacion de contraseña
+        //Metodos para el manejo de la contraseña
+        private bool CheckPassword()//Compara la contraseña y la confirmacion de contraseña
         {
             string password = tbPassUsuario.Text;
             string confirmPassword = tbConfirmPass.Text;
@@ -329,28 +379,13 @@ namespace proyecto_Villarreal_SanLorenzo
 
             }
         }
-        private string HashPassword(string password)//Metodo que hashea el password
+        private string HashPassword(string password)//Hashea el password
         {
             return BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));//Hashea la contraseña con una salt de 12
         }
-        private bool VerfiPassword(string password, string hashedPassword)//Metodo que verifica el password con el hash
+        private bool VerfiPassword(string password, string hashedPassword)//Compara el password con su hash
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
-        }
-        private void comboBoxRoles_SelectedIndexChanged(object sender, EventArgs e)//Si el rol es Médico o Enfermero se muestra el ComboBoxEspecialidades
-        {
-            string rolSeleccionado = comboBoxRoles.Text.Trim().ToLower();
-
-            if (rolSeleccionado == "medico" || rolSeleccionado == "enfermero")
-            {
-                comboBoxEsp.Visible = true;
-                lEspecialidad.Visible = true;
-            }
-            else
-            {
-                comboBoxEsp.Visible = false;
-                lEspecialidad.Visible = false;
-            }
         }
     }
 }

@@ -226,6 +226,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bHistorial.Text = "Historial Medico";
             bHistorial.TextImageRelation = TextImageRelation.ImageBeforeText;
             bHistorial.UseVisualStyleBackColor = true;
+            bHistorial.Click += bHistorial_Click;
             // 
             // bHome
             // 

@@ -64,17 +64,37 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("No se encontró información de la sesión.");
             }
 
-            if (SesionUsuario.RolActivo != "Gerente")
+            switch (SesionUsuario.RolActivo)
             {
-                bAgregarPersonal.Visible = false;
-                bUsuarios.Visible = false;  
-                bBackup.Visible = false;
-            }
-            else
-            {
-                bAgregarPersonal.Visible = true;
-                bUsuarios.Visible = true;
-                bBackup.Visible = true;
+                case "Gerente":
+                    bHistorial.Visible = true;
+                    bPacientes.Visible = true;
+                    bUsuarios.Visible = true;
+                    bAgregarPersonal.Visible = true;
+                    bBackup.Visible = true;
+                    bCerrarSesion.Visible = true;
+                    break;
+                case "Administrativo":
+                    bHistorial.Visible = true;
+                    bPacientes.Visible = true;
+                    bUsuarios.Visible = false;
+                    bCerrarSesion.Visible = true;
+                    break;
+                case "Medico":
+                    bHistorial.Visible = true;
+                    bPacientes.Visible = true;
+                    bCerrarSesion.Visible = true;
+                    break;
+                case "Enfermero":
+                    bHistorial.Visible = true;
+                    bPacientes.Visible = true;
+                    bCerrarSesion.Visible = true;
+                    break;
+                default:
+                    bUsuarios.Visible = false;
+                    bAgregarPersonal.Visible = false;
+                    bBackup.Visible = false;
+                    break;
             }
         }
         private void panelSidebar_Paint(object sender, PaintEventArgs e)
@@ -177,6 +197,15 @@ namespace proyecto_Villarreal_SanLorenzo
             backupControl.EstablecerFormPadre(this);
             backupControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(backupControl);
+        }
+
+        private void bHistorial_Click(object sender, EventArgs e)
+        {
+            panelDefault.Controls.Clear();
+            HistorialClinicoControl historialControl = new HistorialClinicoControl();
+            historialControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
+            historialControl.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(historialControl);
         }
 
         private void bHome_Click(object sender, EventArgs e)

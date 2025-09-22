@@ -225,6 +225,7 @@
             tbNomUsuario.Name = "tbNomUsuario";
             tbNomUsuario.Size = new Size(286, 27);
             tbNomUsuario.TabIndex = 18;
+            tbNomUsuario.KeyPress += tbNomUsuario_KeyPress;
             // 
             // flowLayoutPanel10
             // 
@@ -330,6 +331,7 @@
             tbTelefono.Name = "tbTelefono";
             tbTelefono.Size = new Size(281, 27);
             tbTelefono.TabIndex = 18;
+            tbTelefono.KeyPress += tbTelefono_KeyPress;
             // 
             // flowLayoutPanel6
             // 
@@ -364,6 +366,7 @@
             tbApellidoUsuario.Name = "tbApellidoUsuario";
             tbApellidoUsuario.Size = new Size(286, 27);
             tbApellidoUsuario.TabIndex = 18;
+            tbApellidoUsuario.KeyPress += tbApellidoUsuario_KeyPress;
             // 
             // NuevoUsuarioControl
             // 

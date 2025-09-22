@@ -20,7 +20,7 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
             ObtenerRegistro();
         }
-        private void ObtenerRegistro()
+        private void ObtenerRegistro()//Metodo que carga los datos de los usuarios ya registrados
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
@@ -60,7 +60,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void bEditarUsuario_Click(object sender, EventArgs e)
+        private void bEditarUsuario_Click(object sender, EventArgs e)//Metodo que permite editar la informacion del usuario
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
@@ -127,7 +127,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void bEliminarUsuario_Click(object sender, EventArgs e)
+        private void bEliminarUsuario_Click(object sender, EventArgs e)//Metodo que permite eliminar (de forma logica [activo = 0]) a un usuario
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
@@ -177,7 +177,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
         }
-        private void dataGridViewUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)//Metodo que selecciona a un usuario y carga la informacion a los textbox
         {
             if (e.RowIndex >= 0)
             {
@@ -190,7 +190,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void bAgregarUsuario_Click(object sender, EventArgs e)
+        private void bAgregarUsuario_Click(object sender, EventArgs e)//Redirije al usuario a la vista para agregar usuarios
         {
             NuevoUsuarioControl nuevoUsuario = new NuevoUsuarioControl();
 
