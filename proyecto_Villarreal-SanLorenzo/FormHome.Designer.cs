@@ -50,6 +50,7 @@ namespace proyecto_Villarreal_SanLorenzo
             panelDefault = new Panel();
             timerBackup = new System.Windows.Forms.Timer(components);
             flowLayoutPanelUsuario = new FlowLayoutPanel();
+            bInforme = new BotonSidebar();
             panelSidebar.SuspendLayout();
             flowLayoutPanelUsuario.SuspendLayout();
             SuspendLayout();
@@ -57,6 +58,7 @@ namespace proyecto_Villarreal_SanLorenzo
             // panelSidebar
             // 
             panelSidebar.AutoScroll = true;
+            panelSidebar.Controls.Add(bInforme);
             panelSidebar.Controls.Add(bAgregarPersonal);
             panelSidebar.Controls.Add(bUsuarios);
             panelSidebar.Controls.Add(bBackup);
@@ -111,7 +113,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bUsuarios.FlatStyle = FlatStyle.Flat;
             bUsuarios.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             bUsuarios.HoverColor = Color.FromArgb(224, 224, 224);
-            bUsuarios.Image = Resource1.user_interface;
+            bUsuarios.Image = Resource1.personal;
             bUsuarios.ImageAlign = ContentAlignment.MiddleLeft;
             bUsuarios.IsActive = false;
             bUsuarios.Location = new Point(11, 324);
@@ -328,6 +330,32 @@ namespace proyecto_Villarreal_SanLorenzo
             flowLayoutPanelUsuario.Size = new Size(179, 48);
             flowLayoutPanelUsuario.TabIndex = 4;
             // 
+            // bInforme
+            // 
+            bInforme.Anchor = AnchorStyles.Bottom;
+            bInforme.BorderRadius = 10;
+            bInforme.ClickColor = Color.FromArgb(192, 192, 192);
+            bInforme.FlatAppearance.BorderSize = 0;
+            bInforme.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bInforme.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bInforme.FlatStyle = FlatStyle.Flat;
+            bInforme.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bInforme.HoverColor = Color.FromArgb(224, 224, 224);
+            bInforme.Image = Resource1.user_interface;
+            bInforme.ImageAlign = ContentAlignment.MiddleLeft;
+            bInforme.IsActive = false;
+            bInforme.Location = new Point(11, 363);
+            bInforme.Margin = new Padding(3, 4, 3, 4);
+            bInforme.Name = "bInforme";
+            bInforme.NormalColor = Color.White;
+            bInforme.Size = new Size(211, 31);
+            bInforme.TabIndex = 19;
+            bInforme.TabStop = false;
+            bInforme.Text = "Informe";
+            bInforme.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bInforme.UseVisualStyleBackColor = true;
+            bInforme.Click += bInforme_Click;
+            // 
             // FormHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -367,5 +395,6 @@ namespace proyecto_Villarreal_SanLorenzo
         private FlowLayoutPanel flowLayoutPanelUsuario;
         private BotonSidebar bUsuarios;
         private BotonSidebar bAgregarPersonal;
+        private BotonSidebar bInforme;
     }
 }

@@ -70,33 +70,43 @@ namespace proyecto_Villarreal_SanLorenzo
                     bHistorial.Visible = true;
                     bPacientes.Visible = true;
                     bUsuarios.Visible = true;
+                    bInforme.Visible = true;
                     bAgregarPersonal.Visible = true;
                     bBackup.Visible = true;
+                    bCerrarSesion.Visible = true;
+                    break;
+                case "Medico":
+                case "Enfermero":
+                    bHistorial.Visible = true;
+                    bPacientes.Visible = true;
+                    bUsuarios.Visible = false;
+                    bInforme.Visible = false;
+                    bAgregarPersonal.Visible = false;
+                    bBackup.Visible = false;
                     bCerrarSesion.Visible = true;
                     break;
                 case "Administrativo":
                     bHistorial.Visible = true;
                     bPacientes.Visible = true;
                     bUsuarios.Visible = false;
-                    bCerrarSesion.Visible = true;
-                    break;
-                case "Medico":
-                    bHistorial.Visible = true;
-                    bPacientes.Visible = true;
-                    bCerrarSesion.Visible = true;
-                    break;
-                case "Enfermero":
-                    bHistorial.Visible = true;
-                    bPacientes.Visible = true;
-                    bCerrarSesion.Visible = true;
-                    break;
-                default:
-                    bUsuarios.Visible = false;
+                    bInforme.Visible = false;
                     bAgregarPersonal.Visible = false;
                     bBackup.Visible = false;
+                    bCerrarSesion.Visible = true;
+                    break;
+
+                default:
+                    bHistorial.Visible = false;
+                    bPacientes.Visible = false;
+                    bUsuarios.Visible = false;
+                    bInforme.Visible = false;
+                    bAgregarPersonal.Visible = false;
+                    bBackup.Visible = false;
+                    bCerrarSesion.Visible = true;
                     break;
             }
         }
+
         private void panelSidebar_Paint(object sender, PaintEventArgs e)
         {
             ControlPaint.DrawBorder(e.Graphics, panelSidebar.ClientRectangle,
@@ -189,6 +199,14 @@ namespace proyecto_Villarreal_SanLorenzo
             // Relleno el panel default con este usercontrol.
             pacientesControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(pacientesControl);
+        }
+
+        private void bInforme_Click(object sender, EventArgs e)
+        {
+            panelDefault.Controls.Clear();
+            InformeControl informe = new InformeControl();
+            informe.Dock = DockStyle.Fill;
+            panelDefault.Controls.Add(informe);
         }
         private void bBackup_Click(object sender, EventArgs e)
         {

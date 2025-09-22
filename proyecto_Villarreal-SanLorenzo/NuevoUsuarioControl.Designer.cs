@@ -332,6 +332,7 @@
             tbTelefono.Size = new Size(281, 27);
             tbTelefono.TabIndex = 18;
             tbTelefono.KeyPress += tbTelefono_KeyPress;
+            tbTelefono.Validating += tbTelefono_Validating;
             // 
             // flowLayoutPanel6
             // 

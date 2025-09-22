@@ -52,7 +52,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
-       
+
         private int ObtenerIdRol(string nombre_rol)//Metodo con el cual se obtiene el rol del usuario nuevo
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
@@ -83,7 +83,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }
-       
+
         public void bRegistrarUsuario_Click(object sender, EventArgs e)
         {
             int? especialidad = null;//Se define una variable que puede ser nula (algunos usuarios no tendran especialidad)
@@ -113,9 +113,13 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(comboBoxEsp.Text))//Verifica si se seleccionó una especialidad
+            if (comboBoxEsp.SelectedValue != null && comboBoxEsp.SelectedValue != DBNull.Value)
             {
-                especialidad = ObtenerIdEspecialidad(comboBoxEsp.Text.Trim());
+                especialidad = Convert.ToInt32(comboBoxEsp.SelectedValue);
+            }
+            else
+            {
+                especialidad = null; // Sin especialidad
             }
 
             if (!tbEmail.Text.Contains("@"))
@@ -137,7 +141,7 @@ namespace proyecto_Villarreal_SanLorenzo
             verUsuario.AbrirOtroControl += this.AbrirOtroControl;
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
         }
-       
+
         public static void CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
@@ -149,11 +153,25 @@ namespace proyecto_Villarreal_SanLorenzo
 
                 try
                 {
+                    //Validar si el email ya esta registrado y muestra un mensaje
+                    using (SqlCommand cmdCheck = new SqlCommand("SELECT COUNT(1) FROM Usuarios WHERE email_usuario = @Email", connecction, transaction))
+                    {
+                        cmdCheck.Parameters.AddWithValue("@Email", email);
+
+                        int existe = (int)cmdCheck.ExecuteScalar();
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("El correo electrónico ya está registrado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            transaction.Rollback();
+                            return;
+                        }
+                    }
+
                     //1) Insertar en Usuarios
                     string queryNuevoUsuario = @"
-                                                INSERT INTO Usuarios (nombre_usuario, apellido_usuario, email_usuario, telefono_usuario, password_usuario)
-                                                OUTPUT INSERTED.id_usuario
-                                                VALUES (@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
+                                        INSERT INTO Usuarios (nombre_usuario, apellido_usuario, email_usuario, telefono_usuario, password_usuario)
+                                        OUTPUT INSERTED.id_usuario
+                                        VALUES (@nombre_usuario,@apellido_usuario,@email_usuario,@telefono,@password_usuario)";
 
                     int id_usuario;
                     using (SqlCommand cmd = new SqlCommand(queryNuevoUsuario, connecction, transaction))
@@ -225,10 +243,20 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 e.Handled = true;
                 return;
-            }else if (e.KeyChar != (char)Keys.Back && tb.Text.Length >= 10)//si no es backspace y ya hay 10 caracteres bloquea
+            }
+            else if (e.KeyChar != (char)Keys.Back && tb.Text.Length >= 10)//si no es backspace y ya hay 10 caracteres bloquea
             {
                 e.Handled = true;
                 return;
+            }
+        }
+        private void tbTelefono_Validating(object sender, CancelEventArgs e)
+        {
+            if (tbTelefono.Text.Length != 10)
+            {
+                MessageBox.Show("El teléfono debe tener exactamente 10 dígitos.",
+                    "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // evita que el control pierda el foco
             }
         }
 
