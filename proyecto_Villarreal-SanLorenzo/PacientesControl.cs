@@ -1,12 +1,13 @@
 ﻿//Es importante tener esto
-using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -84,10 +85,11 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        
+
                     }
                 }
-            } else if (columnaClickeada.Name == "cEditarPaciente")
+            }
+            else if (columnaClickeada.Name == "cEditarPaciente")
             {
                 object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
 
@@ -102,6 +104,43 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
 
+        }
+
+        /* Funcion que tiene como objetivo cambiarle el headertext a las columnas agregadas
+         * por el datatable al datagrid, y que tiene como objetivo tambien agregarle manualmente
+         * unos botones y colocarlos al final del datatable, para poder realizar el CRUD.
+         */
+        public void ArreglarDataGrid()
+        {
+            // Cambio los nombres de las columnas
+            dgPaciente.Columns["cDniPaciente"].HeaderText = "DNI";
+            dgPaciente.Columns["cNombrePaciente"].HeaderText = "Nombre";
+            dgPaciente.Columns["cTelefonoPaciente"].HeaderText = "Teléfono";
+
+            // Agrego los botones a datagrid.
+            DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn();
+            btnHistorial.Name = "cHistorial";
+            btnHistorial.HeaderText = "Ver Historial";
+            btnHistorial.Text = "Ver";
+            btnHistorial.UseColumnTextForButtonValue = true;
+            btnHistorial.DisplayIndex = dgPaciente.Columns.Count;
+            dgPaciente.Columns.Add(btnHistorial);
+
+            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
+            btnEditar.Name = "cEditarPaciente";
+            btnEditar.HeaderText = "Editar";
+            btnEditar.Text = "Editar";
+            btnEditar.UseColumnTextForButtonValue = true;
+            btnEditar.DisplayIndex = dgPaciente.Columns.Count;
+            dgPaciente.Columns.Add(btnEditar);
+
+            DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn();
+            btnEliminar.Name = "cEliminarPaciente";
+            btnEliminar.HeaderText = "Eliminar";
+            btnEliminar.Text = "X";
+            btnEliminar.UseColumnTextForButtonValue = true;
+            btnEliminar.DisplayIndex = dgPaciente.Columns.Count;
+            dgPaciente.Columns.Add(btnEliminar);
         }
 
         public void CargarDatos()
@@ -119,20 +158,30 @@ namespace proyecto_Villarreal_SanLorenzo
                         //Solo sirve para lectura, no para la ejecucion de queries que modifican algun valor.
                         SqlDataReader reader = cmd.ExecuteReader();
 
-                        dgPaciente.Rows.Clear();
+                        // Creo un datatable y agrego los unicos campos que me interesan mostrar en el datagrid
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("cDniPaciente");
+                        dt.Columns.Add("cNombrePaciente");
+                        dt.Columns.Add("cTelefonoPaciente");
 
                         //Read es una funcion que nos permite leer la siguiente fila de una tabla, 
                         // tal que devuelve true si hay filas, o false en caso de que no haya.
                         while (reader.Read())
                         {
-                            dgPaciente.Rows.Add(
-                                //De esta forma se accede al valor de la columna "dni_paciente" de la fila en la cual el reader se encuentra en ese momento.
+                            // Agrego los valores que leyo el reader al datatable
+                            dt.Rows.Add(
                                 reader["dni_paciente"],
                                 reader["nombre_completo"],
                                 reader["telefono_paciente"]
                             );
                         }
                         db.Close();
+
+                        // Agrego el datatable como el datasource de mi datagrid
+                        dgPaciente.DataSource = dt;
+
+                        // Arreglo algunas cosas del datagrid para que quede bien y se puedan usar los botones.
+                        ArreglarDataGrid();
                     }
                 }
             }
@@ -140,7 +189,7 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
 
         private void bRegistrarPaciente_Click(object sender, EventArgs e)
@@ -156,6 +205,75 @@ namespace proyecto_Villarreal_SanLorenzo
         private void PacientesControl_Load(object sender, EventArgs e)
         {
             CargarDatos();
+            PlaceholderBusqueda(tBusquedaPacientes, "Buscar por DNI...");
+        }
+
+        // Funcion para denegar el ingreso de caracteres no numericos en la busqueda de pacientes por su dni
+        private void tBusquedaPacientes_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Regex.IsMatch(e.KeyChar.ToString(), @"^\d$") && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+        }
+
+        /* 
+         * Funcion para colocar un placeholder (texto fantasma) que aparecera siempre que el textbox
+         * de busqueda de pacientes por dni este vacio y no tenga un focus encima, y desaparecera
+         * en caso contrario
+         */
+        private void PlaceholderBusqueda(TextBox txt, string placeholder)
+        {
+            // Coloco el texto pasado como argumento al textbos pasado como argumento
+            txt.Text = placeholder;
+            txt.ForeColor = Color.Gray;
+            
+            // Funcion lambda que se activa cuando el usuario hace click en el textbox
+            txt.GotFocus += (s, e) =>
+            {
+                if (txt.Text == placeholder)
+                {
+                    // Basicamente borra el texto y le cambia el color
+                    txt.Text = "";
+                    txt.ForeColor = Color.Black;
+                }
+            };
+
+            // Funcion lambda que se activa siempre y cuando el usuario no haga click en el textbox
+            txt.LostFocus += (s, e) =>
+            {
+                // Verifica si este esta vacio, y si es asi, le coloca el placeholder.
+                if (string.IsNullOrWhiteSpace(txt.Text))
+                {
+                    txt.Text = placeholder;
+                    txt.ForeColor = Color.Gray;
+                }
+            };
+        }
+
+        // Funcion para realizar la busqueda del DNI del paciente, cuando este apriete enter
+        private void tBusquedaPacientes_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {   
+                // Si lo que el usuario aprieta es un numero, entonces muestro el paciente con ese dni
+                if (int.TryParse(tBusquedaPacientes.Text, out int dni_busqueda))
+                {
+                    (dgPaciente.DataSource as DataTable).DefaultView.RowFilter =
+                     $"cDniPaciente LIKE '%{dni_busqueda}%'";
+                }
+                // Si el textbox esta vacio y aprieta enter, entonces muestro todo
+                else if (string.IsNullOrWhiteSpace(tBusquedaPacientes.Text))
+                {
+                      
+                      (dgPaciente.DataSource as DataTable).DefaultView.RowFilter = "";
+                }
+                // Si no escribio un numero, muestro mensaje de error
+                else
+                {
+                    MessageBox.Show("El DNI ingresado es invalido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
