@@ -168,6 +168,7 @@
             tRutaBackup.ReadOnly = true;
             tRutaBackup.Size = new Size(582, 23);
             tRutaBackup.TabIndex = 4;
+            tRutaBackup.Text = "C:\\Backups - Clinicks";
             // 
             // bRutaBackup
             // 

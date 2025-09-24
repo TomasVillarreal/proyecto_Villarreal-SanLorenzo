@@ -112,6 +112,13 @@ namespace proyecto_Villarreal_SanLorenzo
         // Funcion que activa al apretar el boton de realizar backup
         private void bRealizarBackup_Click(object sender, EventArgs e)
         {
+            // Si la carpeta por default no existe, se la crea
+            if (!Directory.Exists(tRutaBackup.Text))
+            {
+                Directory.CreateDirectory(tRutaBackup.Text);
+                Console.WriteLine("Carpeta creada correctamente.");
+            }
+
             // Si no se selecciono una decision en el combobox, mostramos mensaj de error
             if (cbDecisionBackup.SelectedItem == null)
             {

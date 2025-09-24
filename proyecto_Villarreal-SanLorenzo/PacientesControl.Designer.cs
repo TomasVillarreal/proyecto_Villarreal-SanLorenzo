@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panelBordes1 = new PanelBordes();
+            rbEliminados = new RadioButton();
+            rbVisibles = new RadioButton();
             dgPaciente = new DataGridView();
             tBusquedaPacientes = new TextBox();
             lListaPacientes = new Label();
@@ -42,6 +44,8 @@
             // panelBordes1
             // 
             panelBordes1.BackColor = Color.White;
+            panelBordes1.Controls.Add(rbEliminados);
+            panelBordes1.Controls.Add(rbVisibles);
             panelBordes1.Controls.Add(dgPaciente);
             panelBordes1.Controls.Add(tBusquedaPacientes);
             panelBordes1.Controls.Add(lListaPacientes);
@@ -49,6 +53,30 @@
             panelBordes1.Name = "panelBordes1";
             panelBordes1.Size = new Size(723, 417);
             panelBordes1.TabIndex = 0;
+            // 
+            // rbEliminados
+            // 
+            rbEliminados.AutoSize = true;
+            rbEliminados.Location = new Point(574, 40);
+            rbEliminados.Name = "rbEliminados";
+            rbEliminados.Size = new Size(136, 19);
+            rbEliminados.TabIndex = 6;
+            rbEliminados.Text = "Pacientes eliminados";
+            rbEliminados.UseVisualStyleBackColor = true;
+            rbEliminados.CheckedChanged += rbEliminados_CheckedChanged;
+            // 
+            // rbVisibles
+            // 
+            rbVisibles.AutoSize = true;
+            rbVisibles.Checked = true;
+            rbVisibles.Location = new Point(436, 40);
+            rbVisibles.Name = "rbVisibles";
+            rbVisibles.Size = new Size(116, 19);
+            rbVisibles.TabIndex = 5;
+            rbVisibles.TabStop = true;
+            rbVisibles.Text = "Pacientes visibles";
+            rbVisibles.UseVisualStyleBackColor = true;
+            rbVisibles.CheckedChanged += rbVisibles_CheckedChanged;
             // 
             // dgPaciente
             // 
@@ -145,5 +173,7 @@
         private TextBox tBusquedaPacientes;
         private Label lListaPacientes;
         private DataGridView dgPaciente;
+        private RadioButton rbEliminados;
+        private RadioButton rbVisibles;
     }
 }

@@ -110,7 +110,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         cmd.Parameters.AddWithValue("@direccion", diccionario["direccion"].ToString());
                         cmd.Parameters.AddWithValue("@telefono", Convert.ToInt64(diccionario["telefono"]));
                         cmd.Parameters.AddWithValue("@fecha_nacimiento", diccionario["fecha_nacimiento"]);
-                        cmd.Parameters.AddWithValue("@usuario_creacion", 1231231);
+                        cmd.Parameters.AddWithValue("@usuario_creacion", SesionUsuario.id_usuario);
 
                         // Ejecutamos la query
                         db.Open();
@@ -121,7 +121,23 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Este numero de excepcion indica que ha ocurrido una excepcion de PK duplicada
+                if (ex.Number == 2627)
+                {
+                    MessageBox.Show("Ya existe un paciente con ese DNI", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                // Este numero de excepcioon indica que ha ocurrido un duplicado en algun campo unico
+                else if (ex.Number == 2601)
+                {
+                    MessageBox.Show("Se esta intentando crear un registro con un valor unico repetido",
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Ha ocurrido un error en la base de datos: " + ex.Message, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -166,7 +182,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         cmd.Parameters.AddWithValue("@telefono", Convert.ToInt64(diccionario["telefono"]));
                         cmd.Parameters.AddWithValue("@fecha_nacimiento", diccionario["fecha_nacimiento"]);
                         cmd.Parameters.AddWithValue("@fechaHoy", DateTime.Today);
-                        cmd.Parameters.AddWithValue("@usuario_modif", 1231231);
+                        cmd.Parameters.AddWithValue("@usuario_modif", SesionUsuario.id_usuario);
 
 
                         db.Open();
@@ -177,7 +193,23 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Este numero de excepcion indica que ha ocurrido una excepcion de PK duplicada
+                if (ex.Number == 2627)
+                {
+                    MessageBox.Show("Ya existe un paciente con ese DNI", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                // Este numero de excepcioon indica que ha ocurrido un duplicado en algun campo unico
+                else if (ex.Number == 2601)
+                {
+                    MessageBox.Show("Se esta intentando crear un registro con un valor unico repetido",
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Ha ocurrido un error en la base de datos: " + ex.Message, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -298,7 +330,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     this.EditarPaciente();
                 }
                 // Una vez hecha la accion, volvemos al control que nos llamo.
-                ControlPadre?.CargarDatos();
+                ControlPadre?.CargarDatosPacientesVisibles();
                 AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.ControlPadre, false));
             }
         }

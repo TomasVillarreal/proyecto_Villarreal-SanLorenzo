@@ -103,6 +103,35 @@ namespace proyecto_Villarreal_SanLorenzo
                     AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(dni, registrarPaciente, true));
                 }
             }
+            else if (columnaClickeada.Name == "cReactivarPaciente")
+            {
+                object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
+                if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
+                {
+                    try
+                    {
+                        using (SqlConnection db = new SqlConnection(connectionString))
+                        {
+                            string queryEliminarLogico = "UPDATE Paciente SET visible = 1 WHERE dni_paciente = @dni";
+
+                            using (SqlCommand cmd = new SqlCommand(queryEliminarLogico, db))
+                            {
+                                cmd.Parameters.AddWithValue("@dni", dni);
+
+                                db.Open();
+                                cmd.ExecuteNonQuery();
+                                db.Close();
+                            }
+                        }
+                        dgPaciente.Rows.RemoveAt(e.RowIndex);
+                        MessageBox.Show("Se ha reactivado al paciente de DNI " + dni, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
 
         }
 
@@ -110,13 +139,8 @@ namespace proyecto_Villarreal_SanLorenzo
          * por el datatable al datagrid, y que tiene como objetivo tambien agregarle manualmente
          * unos botones y colocarlos al final del datatable, para poder realizar el CRUD.
          */
-        public void ArreglarDataGrid()
+        public void AgregarBotonesTabla()
         {
-            // Cambio los nombres de las columnas
-            dgPaciente.Columns["cDniPaciente"].HeaderText = "DNI";
-            dgPaciente.Columns["cNombrePaciente"].HeaderText = "Nombre";
-            dgPaciente.Columns["cTelefonoPaciente"].HeaderText = "Teléfono";
-
             // Agrego los botones a datagrid.
             DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn();
             btnHistorial.Name = "cHistorial";
@@ -134,16 +158,30 @@ namespace proyecto_Villarreal_SanLorenzo
             btnEditar.DisplayIndex = dgPaciente.Columns.Count;
             dgPaciente.Columns.Add(btnEditar);
 
-            DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn();
-            btnEliminar.Name = "cEliminarPaciente";
-            btnEliminar.HeaderText = "Eliminar";
-            btnEliminar.Text = "X";
-            btnEliminar.UseColumnTextForButtonValue = true;
-            btnEliminar.DisplayIndex = dgPaciente.Columns.Count;
-            dgPaciente.Columns.Add(btnEliminar);
+            if (rbVisibles.Checked)
+            {
+                DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn();
+                btnEliminar.Name = "cEliminarPaciente";
+                btnEliminar.HeaderText = "Eliminar";
+                btnEliminar.Text = "X";
+                btnEliminar.UseColumnTextForButtonValue = true;
+                btnEliminar.DisplayIndex = dgPaciente.Columns.Count;
+                dgPaciente.Columns.Add(btnEliminar);
+            }
+            else if (rbEliminados.Checked)
+            {
+                DataGridViewButtonColumn btnReactivar = new DataGridViewButtonColumn();
+                btnReactivar.Name = "cReactivarPaciente";
+                btnReactivar.HeaderText = "Reactivar";
+                btnReactivar.Text = "Reactivar";
+                btnReactivar.UseColumnTextForButtonValue = true;
+                btnReactivar.DisplayIndex = dgPaciente.Columns.Count;
+                dgPaciente.Columns.Add(btnReactivar);
+            }
+
         }
 
-        public void CargarDatos()
+        public void CargarDatosPacientesVisibles()
         {
             try
             {
@@ -177,11 +215,20 @@ namespace proyecto_Villarreal_SanLorenzo
                         }
                         db.Close();
 
+                        // Limpio el datasource que tenia previamente la tabla, y sus filas.
+                        dgPaciente.DataSource = null;
+                        dgPaciente.Columns.Clear();
+
                         // Agrego el datatable como el datasource de mi datagrid
                         dgPaciente.DataSource = dt;
 
+                        // Cambio los nombres de las columnas
+                        dgPaciente.Columns["cDniPaciente"].HeaderText = "DNI";
+                        dgPaciente.Columns["cNombrePaciente"].HeaderText = "Nombre";
+                        dgPaciente.Columns["cTelefonoPaciente"].HeaderText = "Teléfono";
+
                         // Arreglo algunas cosas del datagrid para que quede bien y se puedan usar los botones.
-                        ArreglarDataGrid();
+                        AgregarBotonesTabla();
                     }
                 }
             }
@@ -190,6 +237,63 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void CargarDatosPacientesEliminados()
+        {
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string query = "SELECT dni_paciente, nombre_paciente + ' ' + apellido_paciente AS nombre_completo, telefono_paciente FROM Paciente WHERE visible = 0";
+
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    {
+                        db.Open();
+                        //Creacion del elemento que nos permitira la lectura de datos de una tabla de una bd.
+                        //Solo sirve para lectura, no para la ejecucion de queries que modifican algun valor.
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        // Creo un datatable y agrego los unicos campos que me interesan mostrar en el datagrid
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("cDniPaciente");
+                        dt.Columns.Add("cNombrePaciente");
+                        dt.Columns.Add("cTelefonoPaciente");
+
+                        //Read es una funcion que nos permite leer la siguiente fila de una tabla, 
+                        // tal que devuelve true si hay filas, o false en caso de que no haya.
+                        while (reader.Read())
+                        {
+                            // Agrego los valores que leyo el reader al datatable
+                            dt.Rows.Add(
+                                reader["dni_paciente"],
+                                reader["nombre_completo"],
+                                reader["telefono_paciente"]
+                            );
+                        }
+                        db.Close();
+
+                        // Limpio el datasource que tenia previamente la tabla, y sus filas.
+                        dgPaciente.DataSource = null;
+                        dgPaciente.Columns.Clear();
+
+                        // Agrego el datatable como el datasource de mi datagrid
+                        dgPaciente.DataSource = dt;
+
+                        // Cambio los nombres de las columnas
+                        dgPaciente.Columns["cDniPaciente"].HeaderText = "DNI";
+                        dgPaciente.Columns["cNombrePaciente"].HeaderText = "Nombre";
+                        dgPaciente.Columns["cTelefonoPaciente"].HeaderText = "Teléfono";
+
+                        // Arreglo algunas cosas del datagrid para que quede bien y se puedan usar los botones.
+                        AgregarBotonesTabla();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void bRegistrarPaciente_Click(object sender, EventArgs e)
@@ -204,7 +308,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void PacientesControl_Load(object sender, EventArgs e)
         {
-            CargarDatos();
+            CargarDatosPacientesVisibles();
             PlaceholderBusqueda(tBusquedaPacientes, "Buscar por DNI...");
         }
 
@@ -227,7 +331,7 @@ namespace proyecto_Villarreal_SanLorenzo
             // Coloco el texto pasado como argumento al textbos pasado como argumento
             txt.Text = placeholder;
             txt.ForeColor = Color.Gray;
-            
+
             // Funcion lambda que se activa cuando el usuario hace click en el textbox
             txt.GotFocus += (s, e) =>
             {
@@ -254,8 +358,8 @@ namespace proyecto_Villarreal_SanLorenzo
         // Funcion para realizar la busqueda del DNI del paciente, cuando este apriete enter
         private void tBusquedaPacientes_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
-            {   
+            if (e.KeyCode == Keys.Enter)
+            {
                 // Si lo que el usuario aprieta es un numero, entonces muestro el paciente con ese dni
                 if (int.TryParse(tBusquedaPacientes.Text, out int dni_busqueda))
                 {
@@ -265,8 +369,8 @@ namespace proyecto_Villarreal_SanLorenzo
                 // Si el textbox esta vacio y aprieta enter, entonces muestro todo
                 else if (string.IsNullOrWhiteSpace(tBusquedaPacientes.Text))
                 {
-                      
-                      (dgPaciente.DataSource as DataTable).DefaultView.RowFilter = "";
+
+                    (dgPaciente.DataSource as DataTable).DefaultView.RowFilter = "";
                 }
                 // Si no escribio un numero, muestro mensaje de error
                 else
@@ -274,6 +378,16 @@ namespace proyecto_Villarreal_SanLorenzo
                     MessageBox.Show("El DNI ingresado es invalido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void rbVisibles_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarDatosPacientesVisibles();
+        }
+
+        private void rbEliminados_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarDatosPacientesEliminados();
         }
     }
 }
