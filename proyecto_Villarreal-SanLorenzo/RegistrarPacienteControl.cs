@@ -335,8 +335,8 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-       // Esta funcion lo que hace es que si un textbox tiene el foco, y se aprieta el enter, se apriete
-       // la misma funcion que se llama al apretar el boton de registro
+        // Esta funcion lo que hace es que si un textbox tiene el foco, y se aprieta el enter, se apriete
+        // la misma funcion que se llama al apretar el boton de registro
         private void textBoxControl_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -374,6 +374,13 @@ namespace proyecto_Villarreal_SanLorenzo
         private void RegistrarPacienteControl_Load(object sender, EventArgs e)
         {
             tFechaPacienteRegistro.MaxDate = DateTime.Today;
+        }
+
+        private void bAtras_Click(object sender, EventArgs e)
+        {
+            // Volvemos al control que nos llamo.
+            ControlPadre?.CargarDatosPacientesVisibles();
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.ControlPadre, false));
         }
     }
 }
