@@ -60,9 +60,10 @@
             bAgregarUsuario.FlatStyle = FlatStyle.Flat;
             bAgregarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bAgregarUsuario.ForeColor = Color.Black;
-            bAgregarUsuario.Location = new Point(68, 251);
+            bAgregarUsuario.Location = new Point(60, 188);
+            bAgregarUsuario.Margin = new Padding(3, 2, 3, 2);
             bAgregarUsuario.Name = "bAgregarUsuario";
-            bAgregarUsuario.Size = new Size(209, 29);
+            bAgregarUsuario.Size = new Size(183, 22);
             bAgregarUsuario.TabIndex = 44;
             bAgregarUsuario.Text = "Agregar nuevo usuario";
             bAgregarUsuario.UseVisualStyleBackColor = true;
@@ -77,9 +78,10 @@
             bEliminarUsuario.FlatStyle = FlatStyle.Flat;
             bEliminarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bEliminarUsuario.ForeColor = Color.Black;
-            bEliminarUsuario.Location = new Point(519, 251);
+            bEliminarUsuario.Location = new Point(454, 188);
+            bEliminarUsuario.Margin = new Padding(3, 2, 3, 2);
             bEliminarUsuario.Name = "bEliminarUsuario";
-            bEliminarUsuario.Size = new Size(146, 29);
+            bEliminarUsuario.Size = new Size(128, 22);
             bEliminarUsuario.TabIndex = 43;
             bEliminarUsuario.Text = "Eliminar usuario";
             bEliminarUsuario.UseVisualStyleBackColor = true;
@@ -94,9 +96,10 @@
             bEditarUsuario.FlatStyle = FlatStyle.Flat;
             bEditarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bEditarUsuario.ForeColor = Color.Black;
-            bEditarUsuario.Location = new Point(328, 251);
+            bEditarUsuario.Location = new Point(287, 188);
+            bEditarUsuario.Margin = new Padding(3, 2, 3, 2);
             bEditarUsuario.Name = "bEditarUsuario";
-            bEditarUsuario.Size = new Size(141, 29);
+            bEditarUsuario.Size = new Size(123, 22);
             bEditarUsuario.TabIndex = 42;
             bEditarUsuario.Text = "Editar usuario";
             bEditarUsuario.UseVisualStyleBackColor = true;
@@ -107,9 +110,9 @@
             lEmail.AccessibleRole = AccessibleRole.None;
             lEmail.AutoSize = true;
             lEmail.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lEmail.Location = new Point(422, 148);
+            lEmail.Location = new Point(369, 111);
             lEmail.Name = "lEmail";
-            lEmail.Size = new Size(59, 25);
+            lEmail.Size = new Size(46, 20);
             lEmail.TabIndex = 40;
             lEmail.Text = "Email";
             lEmail.TextAlign = ContentAlignment.MiddleCenter;
@@ -117,18 +120,20 @@
             // flowLayoutPanel6
             // 
             flowLayoutPanel6.Controls.Add(tbEmail);
-            flowLayoutPanel6.Location = new Point(422, 176);
+            flowLayoutPanel6.Location = new Point(369, 132);
+            flowLayoutPanel6.Margin = new Padding(3, 2, 3, 2);
             flowLayoutPanel6.Name = "flowLayoutPanel6";
-            flowLayoutPanel6.Size = new Size(280, 37);
+            flowLayoutPanel6.Size = new Size(245, 28);
             flowLayoutPanel6.TabIndex = 41;
             // 
             // tbEmail
             // 
             tbEmail.Cursor = Cursors.Hand;
             tbEmail.ForeColor = Color.Black;
-            tbEmail.Location = new Point(3, 3);
+            tbEmail.Location = new Point(3, 2);
+            tbEmail.Margin = new Padding(3, 2, 3, 2);
             tbEmail.Name = "tbEmail";
-            tbEmail.Size = new Size(266, 27);
+            tbEmail.Size = new Size(233, 23);
             tbEmail.TabIndex = 18;
             // 
             // lTelefonoUsuario
@@ -136,9 +141,9 @@
             lTelefonoUsuario.AccessibleRole = AccessibleRole.None;
             lTelefonoUsuario.AutoSize = true;
             lTelefonoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTelefonoUsuario.Location = new Point(417, 60);
+            lTelefonoUsuario.Location = new Point(365, 45);
             lTelefonoUsuario.Name = "lTelefonoUsuario";
-            lTelefonoUsuario.Size = new Size(85, 25);
+            lTelefonoUsuario.Size = new Size(68, 20);
             lTelefonoUsuario.TabIndex = 34;
             lTelefonoUsuario.Text = "Telefono";
             lTelefonoUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -148,9 +153,9 @@
             lApellidoUsuario.AccessibleRole = AccessibleRole.None;
             lApellidoUsuario.AutoSize = true;
             lApellidoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lApellidoUsuario.Location = new Point(65, 148);
+            lApellidoUsuario.Location = new Point(57, 111);
             lApellidoUsuario.Name = "lApellidoUsuario";
-            lApellidoUsuario.Size = new Size(83, 25);
+            lApellidoUsuario.Size = new Size(66, 20);
             lApellidoUsuario.TabIndex = 35;
             lApellidoUsuario.Text = "Apellido";
             lApellidoUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -160,9 +165,9 @@
             lNomUsuario.AccessibleRole = AccessibleRole.None;
             lNomUsuario.AutoSize = true;
             lNomUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNomUsuario.Location = new Point(65, 57);
+            lNomUsuario.Location = new Point(57, 43);
             lNomUsuario.Name = "lNomUsuario";
-            lNomUsuario.Size = new Size(83, 25);
+            lNomUsuario.Size = new Size(66, 20);
             lNomUsuario.TabIndex = 36;
             lNomUsuario.Text = "Nombre";
             lNomUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -170,68 +175,75 @@
             // flowLayoutPanel4
             // 
             flowLayoutPanel4.Controls.Add(tbNomUsuario);
-            flowLayoutPanel4.Location = new Point(65, 87);
+            flowLayoutPanel4.Location = new Point(57, 65);
+            flowLayoutPanel4.Margin = new Padding(3, 2, 3, 2);
             flowLayoutPanel4.Name = "flowLayoutPanel4";
-            flowLayoutPanel4.Size = new Size(301, 37);
+            flowLayoutPanel4.Size = new Size(263, 28);
             flowLayoutPanel4.TabIndex = 37;
             // 
             // tbNomUsuario
             // 
             tbNomUsuario.Cursor = Cursors.Hand;
             tbNomUsuario.ForeColor = Color.Black;
-            tbNomUsuario.Location = new Point(3, 3);
+            tbNomUsuario.Location = new Point(3, 2);
+            tbNomUsuario.Margin = new Padding(3, 2, 3, 2);
             tbNomUsuario.Name = "tbNomUsuario";
-            tbNomUsuario.Size = new Size(286, 27);
+            tbNomUsuario.Size = new Size(251, 23);
             tbNomUsuario.TabIndex = 18;
             // 
             // flowLayoutPanel7
             // 
             flowLayoutPanel7.Controls.Add(tbTelefono);
-            flowLayoutPanel7.Location = new Point(419, 88);
+            flowLayoutPanel7.Location = new Point(367, 66);
+            flowLayoutPanel7.Margin = new Padding(3, 2, 3, 2);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
-            flowLayoutPanel7.Size = new Size(283, 37);
+            flowLayoutPanel7.Size = new Size(248, 28);
             flowLayoutPanel7.TabIndex = 39;
             // 
             // tbTelefono
             // 
             tbTelefono.Cursor = Cursors.Hand;
             tbTelefono.ForeColor = Color.Black;
-            tbTelefono.Location = new Point(3, 3);
+            tbTelefono.Location = new Point(3, 2);
+            tbTelefono.Margin = new Padding(3, 2, 3, 2);
             tbTelefono.Name = "tbTelefono";
-            tbTelefono.Size = new Size(269, 27);
+            tbTelefono.Size = new Size(236, 23);
             tbTelefono.TabIndex = 18;
             // 
             // flowLayoutPanel5
             // 
             flowLayoutPanel5.Controls.Add(tbApellidoUsuario);
-            flowLayoutPanel5.Location = new Point(65, 176);
+            flowLayoutPanel5.Location = new Point(57, 132);
+            flowLayoutPanel5.Margin = new Padding(3, 2, 3, 2);
             flowLayoutPanel5.Name = "flowLayoutPanel5";
-            flowLayoutPanel5.Size = new Size(301, 37);
+            flowLayoutPanel5.Size = new Size(263, 28);
             flowLayoutPanel5.TabIndex = 38;
             // 
             // tbApellidoUsuario
             // 
             tbApellidoUsuario.Cursor = Cursors.Hand;
             tbApellidoUsuario.ForeColor = Color.Black;
-            tbApellidoUsuario.Location = new Point(3, 3);
+            tbApellidoUsuario.Location = new Point(3, 2);
+            tbApellidoUsuario.Margin = new Padding(3, 2, 3, 2);
             tbApellidoUsuario.Name = "tbApellidoUsuario";
-            tbApellidoUsuario.Size = new Size(286, 27);
+            tbApellidoUsuario.Size = new Size(251, 23);
             tbApellidoUsuario.TabIndex = 18;
             // 
             // dataGridViewUsuarios
             // 
             dataGridViewUsuarios.BackgroundColor = Color.White;
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(33, 302);
+            dataGridViewUsuarios.Location = new Point(29, 226);
+            dataGridViewUsuarios.Margin = new Padding(3, 2, 3, 2);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.RowHeadersWidth = 51;
-            dataGridViewUsuarios.Size = new Size(732, 270);
+            dataGridViewUsuarios.Size = new Size(640, 202);
             dataGridViewUsuarios.TabIndex = 45;
             dataGridViewUsuarios.CellClick += dataGridViewUsuarios_CellClick;
             // 
             // VerUsuarioControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(dataGridViewUsuarios);
             Controls.Add(bAgregarUsuario);
@@ -245,6 +257,7 @@
             Controls.Add(flowLayoutPanel4);
             Controls.Add(flowLayoutPanel7);
             Controls.Add(flowLayoutPanel5);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "VerUsuarioControl";
             flowLayoutPanel6.ResumeLayout(false);
             flowLayoutPanel6.PerformLayout();
