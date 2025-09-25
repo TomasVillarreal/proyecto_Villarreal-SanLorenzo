@@ -35,6 +35,8 @@ namespace proyecto_Villarreal_SanLorenzo
                 // de marcha timer del form padre
                 bPararIntevaloBackup.Visible = FormPadre?.MarchaTimer() ?? false;
             }
+            cbDecisionBackup.SelectedIndex = 1;
+            cbSeleccionTiempo.SelectedIndex = 0;
         }
 
         // Setter publico que nos permite cambiar el atributo form padre de este usercontrol

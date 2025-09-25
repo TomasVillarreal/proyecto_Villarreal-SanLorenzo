@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class FormHome : Form
     {
+
+        string connectionString = "Data Source=localhost;Initial Catalog=master;Integrated Security=True;";
+
         public FormHome()
         {
             InitializeComponent();
@@ -183,7 +187,33 @@ namespace proyecto_Villarreal_SanLorenzo
         // Funcion que "realiza" el backup.
         public void RealizarBackup(string ruta)
         {
-            MessageBox.Show("Se ha realizado un backup!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string nombreArchivo = $"Backup Clinicks - {DateTime.Now.ToString("yyyy-MM-dd HH-mm")}.bak";
+            string rutaCompleta = Path.Combine(ruta, nombreArchivo);
+
+            try
+            {
+                string query = $@"
+                    BACKUP DATABASE [proyecto_Villarreal_SanLorenzo]
+                    TO DISK = '{rutaCompleta}'
+                    WITH FORMAT, INIT,
+                         NAME = 'Backup Clinicks - {DateTime.Now.ToString("yyyy-MM-dd HH-mm")}',
+                         SKIP, NOREWIND, NOUNLOAD, STATS = 10;";
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                MessageBox.Show($"Backup realizado con éxito.",
+                        "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ha ocurrido un error en la base de datos: " + ex.Message, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // De aca en adelante la mayoria de funciones son las mismas, explicare una nomas.

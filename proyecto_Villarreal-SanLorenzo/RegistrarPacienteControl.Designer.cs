@@ -46,6 +46,7 @@
             lErrorDni = new Label();
             lErrorDireccion = new Label();
             lErrorTelefono = new Label();
+            bAtras = new Button();
             SuspendLayout();
             // 
             // tNombrePacienteRegistro
@@ -230,10 +231,23 @@
             lErrorTelefono.Text = "label5";
             lErrorTelefono.Visible = false;
             // 
+            // bAtras
+            // 
+            bAtras.BackColor = Color.Transparent;
+            bAtras.ForeColor = Color.Black;
+            bAtras.Image = Resource1.flecha_izq;
+            bAtras.Location = new Point(675, 30);
+            bAtras.Name = "bAtras";
+            bAtras.Size = new Size(36, 31);
+            bAtras.TabIndex = 19;
+            bAtras.UseVisualStyleBackColor = false;
+            bAtras.Click += bAtras_Click;
+            // 
             // RegistrarPacienteControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(bAtras);
             Controls.Add(lErrorTelefono);
             Controls.Add(lErrorDireccion);
             Controls.Add(lErrorDni);
@@ -278,5 +292,6 @@
         private Label lErrorDni;
         private Label lErrorDireccion;
         private Label lErrorTelefono;
+        private Button bAtras;
     }
 }
