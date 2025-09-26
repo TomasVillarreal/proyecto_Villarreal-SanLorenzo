@@ -64,7 +64,7 @@
             bAgregarUsuario.Margin = new Padding(3, 2, 3, 2);
             bAgregarUsuario.Name = "bAgregarUsuario";
             bAgregarUsuario.Size = new Size(183, 30);
-            bAgregarUsuario.TabIndex = 44;
+            bAgregarUsuario.TabIndex = 5;
             bAgregarUsuario.Text = "Agregar nuevo usuario";
             bAgregarUsuario.UseVisualStyleBackColor = true;
             bAgregarUsuario.Click += bAgregarUsuario_Click;
@@ -82,7 +82,7 @@
             bEliminarUsuario.Margin = new Padding(3, 2, 3, 2);
             bEliminarUsuario.Name = "bEliminarUsuario";
             bEliminarUsuario.Size = new Size(128, 30);
-            bEliminarUsuario.TabIndex = 43;
+            bEliminarUsuario.TabIndex = 6;
             bEliminarUsuario.Text = "Eliminar usuario";
             bEliminarUsuario.UseVisualStyleBackColor = true;
             bEliminarUsuario.Click += bEliminarUsuario_Click;
@@ -100,7 +100,7 @@
             bEditarUsuario.Margin = new Padding(3, 2, 3, 2);
             bEditarUsuario.Name = "bEditarUsuario";
             bEditarUsuario.Size = new Size(123, 30);
-            bEditarUsuario.TabIndex = 42;
+            bEditarUsuario.TabIndex = 4;
             bEditarUsuario.Text = "Editar usuario";
             bEditarUsuario.UseVisualStyleBackColor = true;
             bEditarUsuario.Click += bEditarUsuario_Click;
@@ -125,7 +125,7 @@
             tbEmail.Margin = new Padding(3, 2, 3, 2);
             tbEmail.Name = "tbEmail";
             tbEmail.Size = new Size(645, 23);
-            tbEmail.TabIndex = 18;
+            tbEmail.TabIndex = 2;
             // 
             // lTelefonoUsuario
             // 
@@ -171,7 +171,7 @@
             tbNomUsuario.Margin = new Padding(3, 2, 3, 2);
             tbNomUsuario.Name = "tbNomUsuario";
             tbNomUsuario.Size = new Size(288, 23);
-            tbNomUsuario.TabIndex = 18;
+            tbNomUsuario.TabIndex = 0;
             tbNomUsuario.KeyPress += tbTextoCaracteresPacienteRegistro_KeyPress;
             // 
             // tbTelefono
@@ -182,7 +182,7 @@
             tbTelefono.Margin = new Padding(3, 2, 3, 2);
             tbTelefono.Name = "tbTelefono";
             tbTelefono.Size = new Size(645, 23);
-            tbTelefono.TabIndex = 18;
+            tbTelefono.TabIndex = 3;
             tbTelefono.KeyPress += tbNumerico_KeyPress;
             // 
             // tbApellidoUsuario
@@ -193,7 +193,7 @@
             tbApellidoUsuario.Margin = new Padding(3, 2, 3, 2);
             tbApellidoUsuario.Name = "tbApellidoUsuario";
             tbApellidoUsuario.Size = new Size(288, 23);
-            tbApellidoUsuario.TabIndex = 18;
+            tbApellidoUsuario.TabIndex = 1;
             tbApellidoUsuario.KeyPress += tbTextoCaracteresPacienteRegistro_KeyPress;
             // 
             // dataGridViewUsuarios
