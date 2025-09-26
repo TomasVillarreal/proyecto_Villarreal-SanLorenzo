@@ -23,6 +23,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void HomeControl_Load(object sender, EventArgs e)
         {
+            CargarPacientesRecientes();
             // Coneccion a la base de datos para contar cuantas filas hay en la tabla de "Paciente"
             try
             {
@@ -40,6 +41,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         db.Close();
                     }
                 }
+                
             }
             catch (SqlException ex)
             {
@@ -47,6 +49,35 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-       
+        private void CargarPacientesRecientes()
+        {
+            FilasUltimaActividad filaPaciente;
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    // Se crea la query para contar las filas
+                    string queryNroPacientes = "SELECT dni_paciente FROM Paciente " +
+                        "WHERE fecha_crecion_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_crecion_registro <= GETDATE();";
+
+                    using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
+                    {
+                        db.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            filaPaciente = new FilasUltimaActividad(Convert.ToInt32(reader["dni_paciente"]), true);
+                            panelContenedorPacientes.Controls.Add(filaPaciente);
+                        }
+                        db.Close();
+                    }
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
