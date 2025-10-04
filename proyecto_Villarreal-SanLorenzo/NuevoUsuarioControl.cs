@@ -206,10 +206,26 @@ namespace proyecto_Villarreal_SanLorenzo
 
                     MessageBox.Show("Usuario registrado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
                     transaction.Rollback();
-                    MessageBox.Show("Error al registrar el usuario: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Este numero de excepcion indica que ha ocurrido una excepcion de PK duplicada
+                    if (ex.Number == 2627)
+                    {
+                        MessageBox.Show("Ya existe un usuario con ese ID", "Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    // Este numero de excepcioon indica que ha ocurrido un duplicado en algun campo unico
+                    else if (ex.Number == 2601)
+                    {
+                        MessageBox.Show("Se esta intentando crear un registro con un valor unico repetido",
+                                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ha ocurrido un error al intentar registrar el usuario: " + ex.Message, "Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }//Creacion del usuario
