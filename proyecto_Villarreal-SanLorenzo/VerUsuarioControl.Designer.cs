@@ -32,22 +32,22 @@
             bEliminarUsuario = new Button();
             bEditarUsuario = new Button();
             lEmail = new Label();
-            flowLayoutPanel6 = new FlowLayoutPanel();
             tbEmail = new TextBox();
             lTelefonoUsuario = new Label();
             lApellidoUsuario = new Label();
             lNomUsuario = new Label();
-            flowLayoutPanel4 = new FlowLayoutPanel();
             tbNomUsuario = new TextBox();
-            flowLayoutPanel7 = new FlowLayoutPanel();
             tbTelefono = new TextBox();
-            flowLayoutPanel5 = new FlowLayoutPanel();
             tbApellidoUsuario = new TextBox();
             dataGridViewUsuarios = new DataGridView();
-            flowLayoutPanel6.SuspendLayout();
-            flowLayoutPanel4.SuspendLayout();
-            flowLayoutPanel7.SuspendLayout();
-            flowLayoutPanel5.SuspendLayout();
+            lErrorNombre = new Label();
+            lErrorApellido = new Label();
+            lErrorEmail = new Label();
+            lErrorTelefono = new Label();
+            lSubtituloPacientes = new Label();
+            lTituloPacientes = new Label();
+            rbUsuariosVisibles = new RadioButton();
+            rbUsuariosEliminados = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).BeginInit();
             SuspendLayout();
             // 
@@ -60,11 +60,11 @@
             bAgregarUsuario.FlatStyle = FlatStyle.Flat;
             bAgregarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bAgregarUsuario.ForeColor = Color.Black;
-            bAgregarUsuario.Location = new Point(60, 188);
+            bAgregarUsuario.Location = new Point(57, 307);
             bAgregarUsuario.Margin = new Padding(3, 2, 3, 2);
             bAgregarUsuario.Name = "bAgregarUsuario";
-            bAgregarUsuario.Size = new Size(183, 22);
-            bAgregarUsuario.TabIndex = 44;
+            bAgregarUsuario.Size = new Size(183, 30);
+            bAgregarUsuario.TabIndex = 5;
             bAgregarUsuario.Text = "Agregar nuevo usuario";
             bAgregarUsuario.UseVisualStyleBackColor = true;
             bAgregarUsuario.Click += bAgregarUsuario_Click;
@@ -78,11 +78,11 @@
             bEliminarUsuario.FlatStyle = FlatStyle.Flat;
             bEliminarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bEliminarUsuario.ForeColor = Color.Black;
-            bEliminarUsuario.Location = new Point(454, 188);
+            bEliminarUsuario.Location = new Point(427, 307);
             bEliminarUsuario.Margin = new Padding(3, 2, 3, 2);
             bEliminarUsuario.Name = "bEliminarUsuario";
-            bEliminarUsuario.Size = new Size(128, 22);
-            bEliminarUsuario.TabIndex = 43;
+            bEliminarUsuario.Size = new Size(128, 30);
+            bEliminarUsuario.TabIndex = 6;
             bEliminarUsuario.Text = "Eliminar usuario";
             bEliminarUsuario.UseVisualStyleBackColor = true;
             bEliminarUsuario.Click += bEliminarUsuario_Click;
@@ -96,11 +96,11 @@
             bEditarUsuario.FlatStyle = FlatStyle.Flat;
             bEditarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bEditarUsuario.ForeColor = Color.Black;
-            bEditarUsuario.Location = new Point(287, 188);
+            bEditarUsuario.Location = new Point(270, 307);
             bEditarUsuario.Margin = new Padding(3, 2, 3, 2);
             bEditarUsuario.Name = "bEditarUsuario";
-            bEditarUsuario.Size = new Size(123, 22);
-            bEditarUsuario.TabIndex = 42;
+            bEditarUsuario.Size = new Size(123, 30);
+            bEditarUsuario.TabIndex = 4;
             bEditarUsuario.Text = "Editar usuario";
             bEditarUsuario.UseVisualStyleBackColor = true;
             bEditarUsuario.Click += bEditarUsuario_Click;
@@ -110,38 +110,29 @@
             lEmail.AccessibleRole = AccessibleRole.None;
             lEmail.AutoSize = true;
             lEmail.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lEmail.Location = new Point(369, 111);
+            lEmail.Location = new Point(60, 161);
             lEmail.Name = "lEmail";
             lEmail.Size = new Size(46, 20);
             lEmail.TabIndex = 40;
             lEmail.Text = "Email";
             lEmail.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel6
-            // 
-            flowLayoutPanel6.Controls.Add(tbEmail);
-            flowLayoutPanel6.Location = new Point(369, 132);
-            flowLayoutPanel6.Margin = new Padding(3, 2, 3, 2);
-            flowLayoutPanel6.Name = "flowLayoutPanel6";
-            flowLayoutPanel6.Size = new Size(245, 28);
-            flowLayoutPanel6.TabIndex = 41;
-            // 
             // tbEmail
             // 
             tbEmail.Cursor = Cursors.Hand;
             tbEmail.ForeColor = Color.Black;
-            tbEmail.Location = new Point(3, 2);
+            tbEmail.Location = new Point(60, 183);
             tbEmail.Margin = new Padding(3, 2, 3, 2);
             tbEmail.Name = "tbEmail";
-            tbEmail.Size = new Size(233, 23);
-            tbEmail.TabIndex = 18;
+            tbEmail.Size = new Size(645, 23);
+            tbEmail.TabIndex = 2;
             // 
             // lTelefonoUsuario
             // 
             lTelefonoUsuario.AccessibleRole = AccessibleRole.None;
             lTelefonoUsuario.AutoSize = true;
             lTelefonoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTelefonoUsuario.Location = new Point(365, 45);
+            lTelefonoUsuario.Location = new Point(60, 235);
             lTelefonoUsuario.Name = "lTelefonoUsuario";
             lTelefonoUsuario.Size = new Size(68, 20);
             lTelefonoUsuario.TabIndex = 34;
@@ -153,7 +144,7 @@
             lApellidoUsuario.AccessibleRole = AccessibleRole.None;
             lApellidoUsuario.AutoSize = true;
             lApellidoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lApellidoUsuario.Location = new Point(57, 111);
+            lApellidoUsuario.Location = new Point(417, 83);
             lApellidoUsuario.Name = "lApellidoUsuario";
             lApellidoUsuario.Size = new Size(66, 20);
             lApellidoUsuario.TabIndex = 35;
@@ -165,108 +156,173 @@
             lNomUsuario.AccessibleRole = AccessibleRole.None;
             lNomUsuario.AutoSize = true;
             lNomUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNomUsuario.Location = new Point(57, 43);
+            lNomUsuario.Location = new Point(57, 83);
             lNomUsuario.Name = "lNomUsuario";
             lNomUsuario.Size = new Size(66, 20);
             lNomUsuario.TabIndex = 36;
             lNomUsuario.Text = "Nombre";
             lNomUsuario.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // flowLayoutPanel4
-            // 
-            flowLayoutPanel4.Controls.Add(tbNomUsuario);
-            flowLayoutPanel4.Location = new Point(57, 65);
-            flowLayoutPanel4.Margin = new Padding(3, 2, 3, 2);
-            flowLayoutPanel4.Name = "flowLayoutPanel4";
-            flowLayoutPanel4.Size = new Size(263, 28);
-            flowLayoutPanel4.TabIndex = 37;
-            // 
             // tbNomUsuario
             // 
             tbNomUsuario.Cursor = Cursors.Hand;
             tbNomUsuario.ForeColor = Color.Black;
-            tbNomUsuario.Location = new Point(3, 2);
+            tbNomUsuario.Location = new Point(60, 105);
             tbNomUsuario.Margin = new Padding(3, 2, 3, 2);
             tbNomUsuario.Name = "tbNomUsuario";
-            tbNomUsuario.Size = new Size(251, 23);
-            tbNomUsuario.TabIndex = 18;
-            // 
-            // flowLayoutPanel7
-            // 
-            flowLayoutPanel7.Controls.Add(tbTelefono);
-            flowLayoutPanel7.Location = new Point(367, 66);
-            flowLayoutPanel7.Margin = new Padding(3, 2, 3, 2);
-            flowLayoutPanel7.Name = "flowLayoutPanel7";
-            flowLayoutPanel7.Size = new Size(248, 28);
-            flowLayoutPanel7.TabIndex = 39;
+            tbNomUsuario.Size = new Size(288, 23);
+            tbNomUsuario.TabIndex = 0;
+            tbNomUsuario.KeyPress += tbTextoCaracteresPacienteRegistro_KeyPress;
             // 
             // tbTelefono
             // 
             tbTelefono.Cursor = Cursors.Hand;
             tbTelefono.ForeColor = Color.Black;
-            tbTelefono.Location = new Point(3, 2);
+            tbTelefono.Location = new Point(60, 257);
             tbTelefono.Margin = new Padding(3, 2, 3, 2);
             tbTelefono.Name = "tbTelefono";
-            tbTelefono.Size = new Size(236, 23);
-            tbTelefono.TabIndex = 18;
-            // 
-            // flowLayoutPanel5
-            // 
-            flowLayoutPanel5.Controls.Add(tbApellidoUsuario);
-            flowLayoutPanel5.Location = new Point(57, 132);
-            flowLayoutPanel5.Margin = new Padding(3, 2, 3, 2);
-            flowLayoutPanel5.Name = "flowLayoutPanel5";
-            flowLayoutPanel5.Size = new Size(263, 28);
-            flowLayoutPanel5.TabIndex = 38;
+            tbTelefono.Size = new Size(645, 23);
+            tbTelefono.TabIndex = 3;
+            tbTelefono.KeyPress += tbNumerico_KeyPress;
             // 
             // tbApellidoUsuario
             // 
             tbApellidoUsuario.Cursor = Cursors.Hand;
             tbApellidoUsuario.ForeColor = Color.Black;
-            tbApellidoUsuario.Location = new Point(3, 2);
+            tbApellidoUsuario.Location = new Point(417, 105);
             tbApellidoUsuario.Margin = new Padding(3, 2, 3, 2);
             tbApellidoUsuario.Name = "tbApellidoUsuario";
-            tbApellidoUsuario.Size = new Size(251, 23);
-            tbApellidoUsuario.TabIndex = 18;
+            tbApellidoUsuario.Size = new Size(288, 23);
+            tbApellidoUsuario.TabIndex = 1;
+            tbApellidoUsuario.KeyPress += tbTextoCaracteresPacienteRegistro_KeyPress;
             // 
             // dataGridViewUsuarios
             // 
             dataGridViewUsuarios.BackgroundColor = Color.White;
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(29, 226);
+            dataGridViewUsuarios.Location = new Point(57, 352);
             dataGridViewUsuarios.Margin = new Padding(3, 2, 3, 2);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.RowHeadersWidth = 51;
-            dataGridViewUsuarios.Size = new Size(640, 202);
+            dataGridViewUsuarios.Size = new Size(648, 189);
             dataGridViewUsuarios.TabIndex = 45;
             dataGridViewUsuarios.CellClick += dataGridViewUsuarios_CellClick;
+            // 
+            // lErrorNombre
+            // 
+            lErrorNombre.AutoSize = true;
+            lErrorNombre.ForeColor = Color.Red;
+            lErrorNombre.Location = new Point(60, 130);
+            lErrorNombre.Name = "lErrorNombre";
+            lErrorNombre.Size = new Size(38, 15);
+            lErrorNombre.TabIndex = 46;
+            lErrorNombre.Text = "label1";
+            lErrorNombre.Visible = false;
+            // 
+            // lErrorApellido
+            // 
+            lErrorApellido.AutoSize = true;
+            lErrorApellido.ForeColor = Color.Red;
+            lErrorApellido.Location = new Point(417, 130);
+            lErrorApellido.Name = "lErrorApellido";
+            lErrorApellido.Size = new Size(38, 15);
+            lErrorApellido.TabIndex = 47;
+            lErrorApellido.Text = "label2";
+            lErrorApellido.Visible = false;
+            // 
+            // lErrorEmail
+            // 
+            lErrorEmail.AutoSize = true;
+            lErrorEmail.ForeColor = Color.Red;
+            lErrorEmail.Location = new Point(60, 208);
+            lErrorEmail.Name = "lErrorEmail";
+            lErrorEmail.Size = new Size(38, 15);
+            lErrorEmail.TabIndex = 48;
+            lErrorEmail.Text = "label3";
+            lErrorEmail.Visible = false;
+            // 
+            // lErrorTelefono
+            // 
+            lErrorTelefono.AutoSize = true;
+            lErrorTelefono.ForeColor = Color.Red;
+            lErrorTelefono.Location = new Point(60, 282);
+            lErrorTelefono.Name = "lErrorTelefono";
+            lErrorTelefono.Size = new Size(38, 15);
+            lErrorTelefono.TabIndex = 49;
+            lErrorTelefono.Text = "label4";
+            lErrorTelefono.Visible = false;
+            // 
+            // lSubtituloPacientes
+            // 
+            lSubtituloPacientes.AutoSize = true;
+            lSubtituloPacientes.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lSubtituloPacientes.ForeColor = SystemColors.ControlDark;
+            lSubtituloPacientes.Location = new Point(60, 49);
+            lSubtituloPacientes.Name = "lSubtituloPacientes";
+            lSubtituloPacientes.Size = new Size(169, 15);
+            lSubtituloPacientes.TabIndex = 51;
+            lSubtituloPacientes.Text = "Sistema de gestion de usuarios";
+            // 
+            // lTituloPacientes
+            // 
+            lTituloPacientes.AutoSize = true;
+            lTituloPacientes.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lTituloPacientes.Location = new Point(57, 24);
+            lTituloPacientes.Name = "lTituloPacientes";
+            lTituloPacientes.Size = new Size(189, 25);
+            lTituloPacientes.TabIndex = 50;
+            lTituloPacientes.Text = "Gestion de Usuarios";
+            // 
+            // rbUsuariosVisibles
+            // 
+            rbUsuariosVisibles.AutoSize = true;
+            rbUsuariosVisibles.Checked = true;
+            rbUsuariosVisibles.Location = new Point(582, 295);
+            rbUsuariosVisibles.Name = "rbUsuariosVisibles";
+            rbUsuariosVisibles.Size = new Size(112, 19);
+            rbUsuariosVisibles.TabIndex = 52;
+            rbUsuariosVisibles.TabStop = true;
+            rbUsuariosVisibles.Text = "Usuarios Visibles";
+            rbUsuariosVisibles.UseVisualStyleBackColor = true;
+            rbUsuariosVisibles.CheckedChanged += rbUsuariosVisibles_CheckedChanged;
+            // 
+            // rbUsuariosEliminados
+            // 
+            rbUsuariosEliminados.AutoSize = true;
+            rbUsuariosEliminados.Location = new Point(582, 318);
+            rbUsuariosEliminados.Name = "rbUsuariosEliminados";
+            rbUsuariosEliminados.Size = new Size(131, 19);
+            rbUsuariosEliminados.TabIndex = 53;
+            rbUsuariosEliminados.Text = "Usuarios Eliminados";
+            rbUsuariosEliminados.UseVisualStyleBackColor = true;
+            rbUsuariosEliminados.CheckedChanged += rbUsuariosEliminados_CheckedChanged;
             // 
             // VerUsuarioControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(rbUsuariosEliminados);
+            Controls.Add(rbUsuariosVisibles);
+            Controls.Add(lSubtituloPacientes);
+            Controls.Add(lTituloPacientes);
+            Controls.Add(lErrorTelefono);
+            Controls.Add(lErrorEmail);
+            Controls.Add(tbEmail);
+            Controls.Add(tbTelefono);
+            Controls.Add(lErrorApellido);
+            Controls.Add(lErrorNombre);
+            Controls.Add(tbApellidoUsuario);
+            Controls.Add(tbNomUsuario);
             Controls.Add(dataGridViewUsuarios);
             Controls.Add(bAgregarUsuario);
             Controls.Add(bEliminarUsuario);
             Controls.Add(bEditarUsuario);
             Controls.Add(lEmail);
-            Controls.Add(flowLayoutPanel6);
             Controls.Add(lTelefonoUsuario);
             Controls.Add(lApellidoUsuario);
             Controls.Add(lNomUsuario);
-            Controls.Add(flowLayoutPanel4);
-            Controls.Add(flowLayoutPanel7);
-            Controls.Add(flowLayoutPanel5);
             Margin = new Padding(3, 2, 3, 2);
             Name = "VerUsuarioControl";
-            flowLayoutPanel6.ResumeLayout(false);
-            flowLayoutPanel6.PerformLayout();
-            flowLayoutPanel4.ResumeLayout(false);
-            flowLayoutPanel4.PerformLayout();
-            flowLayoutPanel7.ResumeLayout(false);
-            flowLayoutPanel7.PerformLayout();
-            flowLayoutPanel5.ResumeLayout(false);
-            flowLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -278,17 +334,21 @@
         private Button bEliminarUsuario;
         private Button bEditarUsuario;
         private Label lEmail;
-        private FlowLayoutPanel flowLayoutPanel6;
         private TextBox tbEmail;
         private Label lTelefonoUsuario;
         private Label lApellidoUsuario;
         private Label lNomUsuario;
-        private FlowLayoutPanel flowLayoutPanel4;
         private TextBox tbNomUsuario;
-        private FlowLayoutPanel flowLayoutPanel7;
         private TextBox tbTelefono;
-        private FlowLayoutPanel flowLayoutPanel5;
         private TextBox tbApellidoUsuario;
         private DataGridView dataGridViewUsuarios;
+        private Label lErrorNombre;
+        private Label lErrorApellido;
+        private Label lErrorEmail;
+        private Label lErrorTelefono;
+        private Label lSubtituloPacientes;
+        private Label lTituloPacientes;
+        private RadioButton rbUsuariosVisibles;
+        private RadioButton rbUsuariosEliminados;
     }
 }

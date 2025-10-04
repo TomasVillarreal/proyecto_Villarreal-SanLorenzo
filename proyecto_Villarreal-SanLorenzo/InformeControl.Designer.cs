@@ -90,7 +90,7 @@
             lSubtituloDashboard.AutoSize = true;
             lSubtituloDashboard.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lSubtituloDashboard.ForeColor = SystemColors.ControlDark;
-            lSubtituloDashboard.Location = new Point(13, 68);
+            lSubtituloDashboard.Location = new Point(42, 58);
             lSubtituloDashboard.Name = "lSubtituloDashboard";
             lSubtituloDashboard.Size = new Size(187, 15);
             lSubtituloDashboard.TabIndex = 7;
@@ -100,7 +100,7 @@
             // 
             lTituloDashboard.AutoSize = true;
             lTituloDashboard.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTituloDashboard.Location = new Point(13, 26);
+            lTituloDashboard.Location = new Point(42, 33);
             lTituloDashboard.Name = "lTituloDashboard";
             lTituloDashboard.Size = new Size(92, 25);
             lTituloDashboard.TabIndex = 6;

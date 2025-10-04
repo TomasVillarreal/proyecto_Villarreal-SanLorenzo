@@ -7,8 +7,10 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -75,23 +77,67 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void bEditarUsuario_Click(object sender, EventArgs e)//Metodo que permite editar la informacion del usuario
+        private void CargarUsuariosEliminados() // Metodo que carga los usuarios eliminados del sistema
+        {
+            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = @"
+                                    SELECT 
+                                        u.id_usuario,
+                                        u.nombre_usuario,
+                                        u.apellido_usuario,
+                                        u.email_usuario,
+                                        u.telefono_usuario,
+                                        STRING_AGG(r.nombre_rol, ', ') AS Roles,
+                                        ISNULL(
+                                            NULLIF(CAST(STRING_AGG(e.nombre_especialidad, ', ') AS VARCHAR(MAX)), ''), 
+                                            'Sin especialidad'
+                                        ) AS Especialidades
+                                    FROM Usuarios u
+                                    LEFT JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
+                                    LEFT JOIN Rol r ON ur.id_rol = r.id_rol
+                                    LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
+                                    LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
+                                    WHERE u.activo = 0
+                                    GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.email_usuario, u.telefono_usuario;";
+
+
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
+                    DataTable dataTableUsuario = new DataTable();
+                    dataAdapter.Fill(dataTableUsuario);
+
+                    //Para manejar el error de la especialidad
+                    foreach (DataRow row in dataTableUsuario.Rows)
+                    {
+                        if (row["Especialidades"] == DBNull.Value || string.IsNullOrWhiteSpace(row["Especialidades"].ToString()))
+                        {
+                            row["Especialidades"] = "Sin especialidad";
+                        }
+                    }
+
+                    dataGridViewUsuarios.AutoGenerateColumns = true;
+                    dataGridViewUsuarios.DataSource = null;
+                    dataGridViewUsuarios.DataSource = dataTableUsuario;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar usuarios: " + ex.Message);
+                }
+            }
+        }
+
+        private void EditarUsuario()
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
                 int idUsuario = Convert.ToInt32(dataGridViewUsuarios.CurrentRow.Cells["id_usuario"].Value);
-
-                string nombre = tbNomUsuario.Text.Trim();
-                string apellido = tbApellidoUsuario.Text.Trim();
-                string telefono = tbTelefono.Text.Trim();
-                string email = tbEmail.Text.Trim();
-
-                if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) ||
-                    string.IsNullOrEmpty(telefono) || string.IsNullOrEmpty(email))
-                {
-                    MessageBox.Show("Debe completar todos los campos antes de editar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                Dictionary<string, object> diccionario = CrearDiccionario();
 
                 string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 
@@ -111,10 +157,10 @@ namespace proyecto_Villarreal_SanLorenzo
 
                         using (SqlCommand cmd = new SqlCommand(query, connection))
                         {
-                            cmd.Parameters.AddWithValue("@nombre", nombre);
-                            cmd.Parameters.AddWithValue("@apellido", apellido);
-                            cmd.Parameters.AddWithValue("@telefono", telefono);
-                            cmd.Parameters.AddWithValue("@correo", email);
+                            cmd.Parameters.AddWithValue("@nombre", diccionario["nombre"].ToString());
+                            cmd.Parameters.AddWithValue("@apellido", diccionario["apellido"].ToString());
+                            cmd.Parameters.AddWithValue("@telefono", Convert.ToInt64(diccionario["telefono"]));
+                            cmd.Parameters.AddWithValue("@correo", diccionario["email"].ToString());
                             cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
 
                             int rowsAffected = cmd.ExecuteNonQuery();
@@ -122,7 +168,13 @@ namespace proyecto_Villarreal_SanLorenzo
                             if (rowsAffected > 0)
                             {
                                 MessageBox.Show("Usuario actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ObtenerRegistro();
+                                if (rbUsuariosEliminados.Checked)
+                                {
+                                    CargarUsuariosEliminados();
+                                } else if (rbUsuariosVisibles.Checked)
+                                {
+                                    ObtenerRegistro();
+                                }
                             }
                             else
                             {
@@ -142,7 +194,16 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void bEliminarUsuario_Click(object sender, EventArgs e)//Metodo que permite eliminar (de forma logica [activo = 0]) a un usuario
+        private void bEditarUsuario_Click(object sender, EventArgs e)//Metodo que permite editar la informacion del usuario
+        {
+            Dictionary<string, object> diccionario = CrearDiccionario();
+            if (DetectarErrores(diccionario))
+            {
+                EditarUsuario();
+            }
+        }
+
+        private void EliminarUsuario()
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
@@ -190,7 +251,68 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 MessageBox.Show("Debe seleccionar un usuario de la tabla.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
 
+        private void ReactivarUsuario()
+        {
+            if (dataGridViewUsuarios.CurrentRow != null)
+            {
+                int idUsuario = Convert.ToInt32(dataGridViewUsuarios.CurrentRow.Cells["id_usuario"].Value);
+
+                DialogResult result = MessageBox.Show("¿Está seguro que desea reactivar a este usuario?", "Confirmación",
+                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
+
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        try
+                        {
+                            connection.Open();
+                            string query = "UPDATE Usuarios SET activo = 1 WHERE id_usuario = @idUsuario";
+
+                            using (SqlCommand cmd = new SqlCommand(query, connection))
+                            {
+                                cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+
+                                int rowsAffected = cmd.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    MessageBox.Show("Usuario reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    CargarUsuariosEliminados();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("No se pudo reactivar el usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error al reactivar usuario: " + ex.Message);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la tabla.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void bEliminarUsuario_Click(object sender, EventArgs e)//Metodo que permite eliminar (de forma logica [activo = 0]) a un usuario
+        {
+            if (rbUsuariosEliminados.Checked)
+            {
+                ReactivarUsuario();
+            }
+            else if (rbUsuariosVisibles.Checked)
+            {
+                EliminarUsuario();
+            }
         }
         private void dataGridViewUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)//Metodo que selecciona a un usuario y carga la informacion a los textbox
         {
@@ -213,5 +335,124 @@ namespace proyecto_Villarreal_SanLorenzo
 
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, nuevoUsuario, true));
         }
+
+        // Funcion que crea un diccionario tal que sus claves seran los nombres de los distintos tipos de datos que se colocaron 
+        // en el usercontrol, y cuyos valores son efectivamente estos datos
+        private Dictionary<string, object> CrearDiccionario()
+        {
+            // Creo el diccionario, asigno las claves con los valores y lo devuelvo
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+
+            dic.Add("nombre", tbNomUsuario.Text);
+            dic.Add("apellido", tbApellidoUsuario.Text);
+            dic.Add("email", tbEmail.Text);
+            dic.Add("telefono", tbTelefono.Text);
+
+            return dic;
+        }
+
+        /* Funcion que nos permite hacer dos cosas. La primera, devuelve un booleano basado en si hubo algun error
+         * en los datos ingresados en los textbox, dentro de las cosas permitidas. 
+         * La segunda, en base a si hubo estos errores, hace visible unos labels (anteriormente invisibles) y les 
+         * modifica el texto para poder mostrarle al usuario que cosas puso mal.
+        */
+        private bool DetectarErrores(Dictionary<string, object> dic)
+        {
+            // Booleano que luego se devolvera.
+            bool todoBien = true;
+
+            // Recorro uno a uno las claves del diccionario pasado como argumento
+            foreach (var clave in dic.Keys)
+            {
+                // Obtengo el valor que esta asociado en una clave del diccionario (en caso de que exista)
+                string valor = dic[clave]?.ToString() ?? "";
+                /* Creo un string que luego servira para poder acceder al label de error correspondiente
+                 * a dicho tipo de dato. Este string esta formado por la primera parte que corresponde al
+                 * formato del label "lError" y una segunda parte cuyo valor depende de la clave. Por ejemplo,
+                 * si la clave es 'nombre', lo que hago es capitalizar la primera letra, y le concateno esto
+                 * a la parte del formato, de tal forma que quede lErrorDni, tal que esto coincide con el 
+                 * nombre el cual se le puso al label invisible
+                 */
+                string lblErrorNombre = "lError" + char.ToUpper(clave[0]) + clave.Substring(1);
+
+                // Busco el label cuyo nombre coincide con el string creado arriba. El bool
+                // pasado como argumento sirve para ver si se quiere buscar sobre todos los controles hijo.
+                Control[] controles = this.Controls.Find(lblErrorNombre, true);
+                // Si el vector con controles esta vacio, o si no es un label, nos salteamos esta iteracion.
+                // En caso de que si sea un label, se le asigna el nombre de lblError.
+                if (controles.Length == 0 || !(controles[0] is Label lblError))
+                    continue;
+
+                /*
+                 * Colocamos la visibilidad del label error en falso, asi si se verifica mas de una vez
+                 * al registro este no queda visible por los intentos anteriores
+                 */
+                lblError.Visible = false;
+
+                // Si el valor esta vacio, mostramos mensaje de error en el label. Esto afecta a todos los tipos de dato.
+                if (string.IsNullOrWhiteSpace(valor))
+                {
+                    lblError.Visible = true;
+                    lblError.Text = "Por favor rellene este campo";
+                    todoBien = false;
+                }
+                else
+                {
+                    // Si el valor no esta vacio, verificamos que tipo de dato es y mostramos un dato diferente en cada caso
+                    switch (clave)
+                    {
+                        case "telefono":
+                            // Si el telefono es distinto de diez, o hay caracteres que no son digitos, mostramos msj de error.
+                            if (valor.Length != 10 || !valor.All(char.IsDigit))
+                            {
+                                lblError.Visible = true;
+                                lblError.Text = "Por favor inserte un numero de teléfono válido";
+                                todoBien = false;
+                            }
+                            break;
+                        case "email":
+                            // Si el email no tiene formato de email, muestro mensaje de error.
+                            if (!Regex.IsMatch(valor, @"^[a-zA-Z0-9.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+                            {
+                                lblError.Visible = true;
+                                lblError.Text = "Por favor inserte un email válido";
+                                todoBien = false;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            return todoBien;
+        }
+
+        private void rbUsuariosVisibles_CheckedChanged(object sender, EventArgs e)
+        {
+            ObtenerRegistro();
+            bEliminarUsuario.Text = "Eliminar usuario";
+        }
+
+        private void rbUsuariosEliminados_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarUsuariosEliminados();
+            bEliminarUsuario.Text = "Reactivar usuario";
+        }
+
+        private void tbTextoCaracteresPacienteRegistro_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Regex.IsMatch(e.KeyChar.ToString(), @"[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]") && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tbNumerico_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Regex.IsMatch(e.KeyChar.ToString(), @"^\d$") && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+        }
+
     }
 }

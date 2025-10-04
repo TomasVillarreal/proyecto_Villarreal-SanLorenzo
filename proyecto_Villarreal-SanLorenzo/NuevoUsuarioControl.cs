@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -84,28 +85,21 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        public void bRegistrarUsuario_Click(object sender, EventArgs e)
+        private void RegistrarUsuario()
         {
             int? especialidad = null;//Se define una variable que puede ser nula (algunos usuarios no tendran especialidad)
+            Dictionary<string, object> diccionario = CrearDiccionario();
 
             //Se guardan los datos ingresados
             int id_rol = ObtenerIdRol(comboBoxRoles.Text);
-            string nombreUsuario = tbNomUsuario.Text.Trim().ToLower();
-            string apellidoUsuario = tbApellidoUsuario.Text.Trim().ToLower();
-            string emailUsuario = tbEmail.Text.Trim().ToLower();
-            string telefono_string = tbTelefono.Text.Trim();
-            string password_usuario = tbPassUsuario.Text;
+            string nombreUsuario = diccionario["nombre"].ToString().ToLower().Trim();
+            string apellidoUsuario = diccionario["apellido"].ToString().ToLower().Trim();
+            string emailUsuario = diccionario["email"].ToString().ToLower().Trim();
+            string telefono_string = diccionario["telefono"].ToString().Trim();
+            string password_usuario = diccionario["pass"].ToString();
             string password_usuario_hash = HashPassword(password_usuario);//Este se guarad en la bd
 
             //Verificacion de campos vacios
-            if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(apellidoUsuario) || string.IsNullOrEmpty(emailUsuario) ||
-               string.IsNullOrEmpty(telefono_string) || string.IsNullOrEmpty(password_usuario))
-            {
-                MessageBox.Show("Debe completar todos los campos!",
-                    "Error inicio de sesión", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
             long telefono_usuario = Convert.ToInt64(telefono_string);//Este se guarad en la bd
 
             if (!ValidarComboboxes())
@@ -122,13 +116,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 especialidad = null; // Sin especialidad
             }
 
-            if (!tbEmail.Text.Contains("@"))
-            {
-                MessageBox.Show("El correo electrónico debe contener un '@'.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tbEmail.Clear();
-                return;
-            }
-
             if (!CheckPassword())
             {
                 return;
@@ -140,6 +127,15 @@ namespace proyecto_Villarreal_SanLorenzo
             VerUsuarioControl verUsuario = new VerUsuarioControl();
             verUsuario.AbrirOtroControl += this.AbrirOtroControl;
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
+        }
+
+        public void bRegistrarUsuario_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, object> diccionario = CrearDiccionario();
+            if (DetectarErrores(diccionario))
+            {
+                RegistrarUsuario();
+            }
         }
 
         public static void CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
@@ -248,15 +244,6 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 e.Handled = true;
                 return;
-            }
-        }
-        private void tbTelefono_Validating(object sender, CancelEventArgs e)
-        {
-            if (tbTelefono.Text.Length != 10)
-            {
-                MessageBox.Show("El teléfono debe tener exactamente 10 dígitos.",
-                    "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true; // evita que el control pierda el foco
             }
         }
 
@@ -393,8 +380,9 @@ namespace proyecto_Villarreal_SanLorenzo
         //Metodos para el manejo de la contraseña
         private bool CheckPassword()//Compara la contraseña y la confirmacion de contraseña
         {
-            string password = tbPassUsuario.Text;
-            string confirmPassword = tbConfirmPass.Text;
+            Dictionary<string, object> diccionario = CrearDiccionario();
+            string password = diccionario["pass"].ToString();
+            string confirmPassword = diccionario["confirmPass"].ToString();
 
             if (password == confirmPassword)
             {
@@ -414,6 +402,98 @@ namespace proyecto_Villarreal_SanLorenzo
         private bool VerfiPassword(string password, string hashedPassword)//Compara el password con su hash
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+        }
+
+        // Funcion que crea un diccionario tal que sus claves seran los nombres de los distintos tipos de datos que se colocaron 
+        // en el usercontrol, y cuyos valores son efectivamente estos datos
+        private Dictionary<string, object> CrearDiccionario()
+        {
+            // Creo el diccionario, asigno las claves con los valores y lo devuelvo
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+
+            dic.Add("nombre", tbNomUsuario.Text);
+            dic.Add("apellido", tbApellidoUsuario.Text);
+            dic.Add("email", tbEmail.Text);
+            dic.Add("telefono", tbTelefono.Text);
+            dic.Add("pass", tbPassUsuario.Text);
+            dic.Add("confirmPass", tbConfirmPass.Text);
+
+            return dic;
+        }
+
+        /* Funcion que nos permite hacer dos cosas. La primera, devuelve un booleano basado en si hubo algun error
+         * en los datos ingresados en los textbox, dentro de las cosas permitidas. 
+         * La segunda, en base a si hubo estos errores, hace visible unos labels (anteriormente invisibles) y les 
+         * modifica el texto para poder mostrarle al usuario que cosas puso mal.
+        */
+        private bool DetectarErrores(Dictionary<string, object> dic)
+        {
+            // Booleano que luego se devolvera.
+            bool todoBien = true;
+
+            // Recorro uno a uno las claves del diccionario pasado como argumento
+            foreach (var clave in dic.Keys)
+            {
+                // Obtengo el valor que esta asociado en una clave del diccionario (en caso de que exista)
+                string valor = dic[clave]?.ToString() ?? "";
+                /* Creo un string que luego servira para poder acceder al label de error correspondiente
+                 * a dicho tipo de dato. Este string esta formado por la primera parte que corresponde al
+                 * formato del label "lError" y una segunda parte cuyo valor depende de la clave. Por ejemplo,
+                 * si la clave es 'nombre', lo que hago es capitalizar la primera letra, y le concateno esto
+                 * a la parte del formato, de tal forma que quede lErrorDni, tal que esto coincide con el 
+                 * nombre el cual se le puso al label invisible
+                 */
+                string lblErrorNombre = "lError" + char.ToUpper(clave[0]) + clave.Substring(1);
+
+                // Busco el label cuyo nombre coincide con el string creado arriba. El bool
+                // pasado como argumento sirve para ver si se quiere buscar sobre todos los controles hijo.
+                Control[] controles = this.Controls.Find(lblErrorNombre, true);
+                // Si el vector con controles esta vacio, o si no es un label, nos salteamos esta iteracion.
+                // En caso de que si sea un label, se le asigna el nombre de lblError.
+                if (controles.Length == 0 || !(controles[0] is Label lblError))
+                    continue;
+
+                /*
+                 * Colocamos la visibilidad del label error en falso, asi si se verifica mas de una vez
+                 * al registro este no queda visible por los intentos anteriores
+                 */
+                lblError.Visible = false;
+
+                // Si el valor esta vacio, mostramos mensaje de error en el label. Esto afecta a todos los tipos de dato.
+                if (string.IsNullOrWhiteSpace(valor))
+                {
+                    lblError.Visible = true;
+                    lblError.Text = "Por favor rellene este campo";
+                    todoBien = false;
+                }
+                else
+                {
+                    // Si el valor no esta vacio, verificamos que tipo de dato es y mostramos un dato diferente en cada caso
+                    switch (clave)
+                    {
+                        case "telefono":
+                            // Si el telefono es distinto de diez, o hay caracteres que no son digitos, mostramos msj de error.
+                            if (valor.Length != 10 || !valor.All(char.IsDigit))
+                            {
+                                lblError.Visible = true;
+                                lblError.Text = "Por favor inserte un numero de teléfono válido";
+                                todoBien = false;
+                            }
+                            break;
+                        case "email":
+                            // Si el email no tiene formato de email, muestro mensaje de error.
+                            if (!Regex.IsMatch(valor, @"^[a-zA-Z0-9.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+                            {
+                                lblError.Visible = true;
+                                lblError.Text = "Por favor inserte un email válido";
+                                todoBien = false;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            return todoBien;
         }
     }
 }
