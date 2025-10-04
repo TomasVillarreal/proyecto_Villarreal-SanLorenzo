@@ -47,12 +47,13 @@
             lSubtitloPacientes = new Label();
             lTituloPacientes = new Label();
             panelContenedorPacientes = new FlowLayoutPanel();
+            panelBordes3 = new PanelBordes();
             pbActividadReciente.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panelBordes1.SuspendLayout();
             panelBordes2.SuspendLayout();
-            panelContenedorPacientes.SuspendLayout();
+            panelBordes3.SuspendLayout();
             SuspendLayout();
             // 
             // pbActividadReciente
@@ -233,7 +234,7 @@
             lSubtitloPacientes.AutoSize = true;
             lSubtitloPacientes.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lSubtitloPacientes.ForeColor = SystemColors.ControlDark;
-            lSubtitloPacientes.Location = new Point(40, 25);
+            lSubtitloPacientes.Location = new Point(16, 38);
             lSubtitloPacientes.Name = "lSubtitloPacientes";
             lSubtitloPacientes.Size = new Size(227, 15);
             lSubtitloPacientes.TabIndex = 1;
@@ -244,7 +245,7 @@
             lTituloPacientes.Anchor = AnchorStyles.None;
             lTituloPacientes.AutoSize = true;
             lTituloPacientes.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTituloPacientes.Location = new Point(3, 0);
+            lTituloPacientes.Location = new Point(15, 13);
             lTituloPacientes.Name = "lTituloPacientes";
             lTituloPacientes.Size = new Size(302, 25);
             lTituloPacientes.TabIndex = 0;
@@ -255,20 +256,29 @@
             panelContenedorPacientes.Anchor = AnchorStyles.None;
             panelContenedorPacientes.AutoScroll = true;
             panelContenedorPacientes.BackColor = Color.White;
-            panelContenedorPacientes.Controls.Add(lTituloPacientes);
-            panelContenedorPacientes.Controls.Add(lSubtitloPacientes);
             panelContenedorPacientes.FlowDirection = FlowDirection.TopDown;
-            panelContenedorPacientes.Location = new Point(393, 263);
+            panelContenedorPacientes.Location = new Point(15, 65);
             panelContenedorPacientes.Name = "panelContenedorPacientes";
-            panelContenedorPacientes.Size = new Size(355, 288);
+            panelContenedorPacientes.Size = new Size(327, 206);
             panelContenedorPacientes.TabIndex = 3;
             panelContenedorPacientes.WrapContents = false;
+            // 
+            // panelBordes3
+            // 
+            panelBordes3.BackColor = Color.White;
+            panelBordes3.Controls.Add(panelContenedorPacientes);
+            panelBordes3.Controls.Add(lTituloPacientes);
+            panelBordes3.Controls.Add(lSubtitloPacientes);
+            panelBordes3.Location = new Point(397, 263);
+            panelBordes3.Name = "panelBordes3";
+            panelBordes3.Size = new Size(355, 288);
+            panelBordes3.TabIndex = 5;
             // 
             // HomeControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panelContenedorPacientes);
+            Controls.Add(panelBordes3);
             Controls.Add(panelBordes2);
             Controls.Add(panelBordes1);
             Controls.Add(lSubtituloDashboard);
@@ -285,8 +295,8 @@
             panelBordes1.PerformLayout();
             panelBordes2.ResumeLayout(false);
             panelBordes2.PerformLayout();
-            panelContenedorPacientes.ResumeLayout(false);
-            panelContenedorPacientes.PerformLayout();
+            panelBordes3.ResumeLayout(false);
+            panelBordes3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -314,5 +324,6 @@
         private Label label7;
         private Label label8;
         private FlowLayoutPanel panelContenedorPacientes;
+        private PanelBordes panelBordes3;
     }
 }

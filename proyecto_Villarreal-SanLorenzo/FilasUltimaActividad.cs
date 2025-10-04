@@ -18,7 +18,7 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             this.BackColor = Color.White;
             this.dni = p_dni;
-            this.Size = new Size(323, 46);
+            this.Size = new Size(320, 46);
             this.nuevosPacientes = p_nuevosPacientes;
             InitializeComponents();
         }
@@ -45,7 +45,7 @@ namespace proyecto_Villarreal_SanLorenzo
             Label lFecha = new Label();
             lFecha.Font = new Font("Segoe UI", 9, FontStyle.Regular);
             lFecha.AutoSize = true;
-            lFecha.Location = new Point(this.Width - 63, 10);
+            lFecha.Location = new Point(this.Width - 67, 10);
             lFecha.Text = ObtenerFecha();
 
             pb.Image = nuevosPacientes ? Resource1.plus : Resource1.exclamation;
