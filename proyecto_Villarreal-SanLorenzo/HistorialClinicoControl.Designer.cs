@@ -309,11 +309,11 @@
             // 
             lFechaInt.AutoSize = true;
             lFechaInt.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lFechaInt.Location = new Point(470, 23);
+            lFechaInt.Location = new Point(496, 23);
             lFechaInt.Name = "lFechaInt";
-            lFechaInt.Size = new Size(185, 28);
+            lFechaInt.Size = new Size(144, 28);
             lFechaInt.TabIndex = 12;
-            lFechaInt.Text = "Fecha Intervencion";
+            lFechaInt.Text = "Fecha Registro";
             // 
             // lFecha
             // 
@@ -423,7 +423,6 @@
             Controls.Add(lSubtituloHC);
             Controls.Add(lTituloHC);
             Name = "HistorialClinicoControl";
-            Size = new Size(768, 575);
             panelFiltros.ResumeLayout(false);
             panelFiltros.PerformLayout();
             panelInfo.ResumeLayout(false);
