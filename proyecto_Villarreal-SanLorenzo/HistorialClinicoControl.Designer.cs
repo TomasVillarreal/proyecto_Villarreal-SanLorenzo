@@ -32,11 +32,9 @@
             lSubtituloHC = new Label();
             panelFiltros = new Panel();
             lIntervencion = new Label();
-            lNombrePaciente = new Label();
             lDniPaciente = new Label();
-            textBoxNombrePaciente = new TextBox();
             comboBoxCategoria = new ComboBox();
-            textBoxDNI = new TextBox();
+            tBusquedaDNI = new TextBox();
             labelSubtitulo = new Label();
             lFiltros = new Label();
             panelInfo = new Panel();
@@ -48,7 +46,6 @@
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
-            lMedicamento = new Label();
             lFechaInt = new Label();
             lFecha = new Label();
             bEditar = new Button();
@@ -58,7 +55,6 @@
             lNombreProfesional = new Label();
             lProfesional = new Label();
             lTagTipo = new Label();
-            lConsulta = new Label();
             panelFiltros.SuspendLayout();
             panelInfo.SuspendLayout();
             SuspendLayout();
@@ -88,37 +84,25 @@
             // 
             panelFiltros.BackColor = Color.White;
             panelFiltros.Controls.Add(lIntervencion);
-            panelFiltros.Controls.Add(lNombrePaciente);
             panelFiltros.Controls.Add(lDniPaciente);
-            panelFiltros.Controls.Add(textBoxNombrePaciente);
             panelFiltros.Controls.Add(comboBoxCategoria);
-            panelFiltros.Controls.Add(textBoxDNI);
+            panelFiltros.Controls.Add(tBusquedaDNI);
             panelFiltros.Controls.Add(labelSubtitulo);
             panelFiltros.Controls.Add(lFiltros);
             panelFiltros.Location = new Point(33, 67);
             panelFiltros.Name = "panelFiltros";
-            panelFiltros.Size = new Size(713, 155);
+            panelFiltros.Size = new Size(583, 233);
             panelFiltros.TabIndex = 4;
             // 
             // lIntervencion
             // 
             lIntervencion.AutoSize = true;
             lIntervencion.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lIntervencion.Location = new Point(496, 70);
+            lIntervencion.Location = new Point(15, 144);
             lIntervencion.Name = "lIntervencion";
             lIntervencion.Size = new Size(127, 28);
             lIntervencion.TabIndex = 11;
             lIntervencion.Text = "Intervención";
-            // 
-            // lNombrePaciente
-            // 
-            lNombrePaciente.AutoSize = true;
-            lNombrePaciente.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNombrePaciente.Location = new Point(257, 70);
-            lNombrePaciente.Name = "lNombrePaciente";
-            lNombrePaciente.Size = new Size(87, 28);
-            lNombrePaciente.TabIndex = 10;
-            lNombrePaciente.Text = "Nombre";
             // 
             // lDniPaciente
             // 
@@ -130,33 +114,27 @@
             lDniPaciente.TabIndex = 9;
             lDniPaciente.Text = "DNI";
             // 
-            // textBoxNombrePaciente
-            // 
-            textBoxNombrePaciente.ForeColor = Color.DarkGray;
-            textBoxNombrePaciente.Location = new Point(256, 101);
-            textBoxNombrePaciente.Name = "textBoxNombrePaciente";
-            textBoxNombrePaciente.Size = new Size(196, 27);
-            textBoxNombrePaciente.TabIndex = 8;
-            textBoxNombrePaciente.Text = "Nombre paciente";
-            // 
             // comboBoxCategoria
             // 
             comboBoxCategoria.ForeColor = Color.DarkGray;
             comboBoxCategoria.FormattingEnabled = true;
-            comboBoxCategoria.Location = new Point(496, 102);
+            comboBoxCategoria.Location = new Point(15, 175);
             comboBoxCategoria.Name = "comboBoxCategoria";
-            comboBoxCategoria.Size = new Size(196, 28);
+            comboBoxCategoria.Size = new Size(460, 28);
             comboBoxCategoria.TabIndex = 7;
-            comboBoxCategoria.Text = "Todos los tipos";
+            comboBoxCategoria.Text = "Buscar por intevención";
+            comboBoxCategoria.KeyDown += comboBoxCategoria_KeyDown;
             // 
-            // textBoxDNI
+            // tBusquedaDNI
             // 
-            textBoxDNI.ForeColor = Color.DarkGray;
-            textBoxDNI.Location = new Point(15, 102);
-            textBoxDNI.Name = "textBoxDNI";
-            textBoxDNI.Size = new Size(198, 27);
-            textBoxDNI.TabIndex = 6;
-            textBoxDNI.Text = "Busca por DNI";
+            tBusquedaDNI.ForeColor = Color.DarkGray;
+            tBusquedaDNI.Location = new Point(15, 102);
+            tBusquedaDNI.Name = "tBusquedaDNI";
+            tBusquedaDNI.Size = new Size(460, 27);
+            tBusquedaDNI.TabIndex = 6;
+            tBusquedaDNI.Text = "Busca por DNI";
+            tBusquedaDNI.KeyDown += tBusquedaDNI_KeyDown;
+            tBusquedaDNI.KeyPress += tBusquedaDNI_KeyPress;
             // 
             // labelSubtitulo
             // 
@@ -190,7 +168,6 @@
             panelInfo.Controls.Add(label3);
             panelInfo.Controls.Add(label4);
             panelInfo.Controls.Add(label5);
-            panelInfo.Controls.Add(lMedicamento);
             panelInfo.Controls.Add(lFechaInt);
             panelInfo.Controls.Add(lFecha);
             panelInfo.Controls.Add(bEditar);
@@ -200,10 +177,9 @@
             panelInfo.Controls.Add(lNombreProfesional);
             panelInfo.Controls.Add(lProfesional);
             panelInfo.Controls.Add(lTagTipo);
-            panelInfo.Controls.Add(lConsulta);
-            panelInfo.Location = new Point(33, 228);
+            panelInfo.Location = new Point(33, 306);
             panelInfo.Name = "panelInfo";
-            panelInfo.Size = new Size(713, 344);
+            panelInfo.Size = new Size(808, 438);
             panelInfo.TabIndex = 12;
             // 
             // label6
@@ -211,7 +187,7 @@
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label6.ForeColor = Color.DarkGray;
-            label6.Location = new Point(496, 232);
+            label6.Location = new Point(601, 305);
             label6.Name = "label6";
             label6.Size = new Size(137, 20);
             label6.TabIndex = 29;
@@ -221,7 +197,7 @@
             // 
             button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.ForeColor = SystemColors.ControlDark;
-            button1.Location = new Point(142, 311);
+            button1.Location = new Point(142, 384);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 28;
@@ -232,7 +208,7 @@
             // 
             button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button2.ForeColor = SystemColors.ButtonShadow;
-            button2.Location = new Point(15, 311);
+            button2.Location = new Point(15, 384);
             button2.Name = "button2";
             button2.Size = new Size(115, 29);
             button2.TabIndex = 27;
@@ -244,7 +220,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.Black;
-            label1.Location = new Point(129, 270);
+            label1.Location = new Point(129, 343);
             label1.Name = "label1";
             label1.Size = new Size(190, 20);
             label1.TabIndex = 26;
@@ -255,7 +231,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.Black;
-            label2.Location = new Point(15, 270);
+            label2.Location = new Point(15, 343);
             label2.Name = "label2";
             label2.Size = new Size(115, 20);
             label2.TabIndex = 25;
@@ -266,7 +242,7 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(112, 232);
+            label3.Location = new Point(112, 305);
             label3.Name = "label3";
             label3.Size = new Size(84, 20);
             label3.TabIndex = 24;
@@ -277,7 +253,7 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label4.ForeColor = Color.Black;
-            label4.Location = new Point(15, 232);
+            label4.Location = new Point(15, 305);
             label4.Name = "label4";
             label4.Size = new Size(92, 20);
             label4.TabIndex = 23;
@@ -288,28 +264,17 @@
             label5.AutoSize = true;
             label5.BackColor = Color.DarkGreen;
             label5.ForeColor = Color.White;
-            label5.Location = new Point(226, 196);
+            label5.Location = new Point(15, 276);
             label5.Name = "label5";
             label5.Size = new Size(101, 20);
             label5.TabIndex = 22;
             label5.Text = "Medicamento";
             // 
-            // lMedicamento
-            // 
-            lMedicamento.AutoSize = true;
-            lMedicamento.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lMedicamento.ForeColor = Color.Black;
-            lMedicamento.Location = new Point(15, 196);
-            lMedicamento.Name = "lMedicamento";
-            lMedicamento.Size = new Size(205, 20);
-            lMedicamento.TabIndex = 21;
-            lMedicamento.Text = "Administración medicamento";
-            // 
             // lFechaInt
             // 
             lFechaInt.AutoSize = true;
             lFechaInt.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lFechaInt.Location = new Point(496, 23);
+            lFechaInt.Location = new Point(594, 25);
             lFechaInt.Name = "lFechaInt";
             lFechaInt.Size = new Size(144, 28);
             lFechaInt.TabIndex = 12;
@@ -320,7 +285,7 @@
             lFecha.AutoSize = true;
             lFecha.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lFecha.ForeColor = Color.DarkGray;
-            lFecha.Location = new Point(496, 51);
+            lFecha.Location = new Point(594, 53);
             lFecha.Name = "lFecha";
             lFecha.Size = new Size(137, 20);
             lFecha.TabIndex = 20;
@@ -397,22 +362,11 @@
             lTagTipo.AutoSize = true;
             lTagTipo.BackColor = Color.Black;
             lTagTipo.ForeColor = Color.White;
-            lTagTipo.Location = new Point(142, 10);
+            lTagTipo.Location = new Point(15, 13);
             lTagTipo.Name = "lTagTipo";
             lTagTipo.Size = new Size(100, 20);
             lTagTipo.TabIndex = 13;
             lTagTipo.Text = "Control rutina";
-            // 
-            // lConsulta
-            // 
-            lConsulta.AutoSize = true;
-            lConsulta.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lConsulta.ForeColor = Color.Black;
-            lConsulta.Location = new Point(15, 10);
-            lConsulta.Name = "lConsulta";
-            lConsulta.Size = new Size(121, 20);
-            lConsulta.TabIndex = 12;
-            lConsulta.Text = "Control de rutina";
             // 
             // HistorialClinicoControl
             // 
@@ -423,6 +377,8 @@
             Controls.Add(lSubtituloHC);
             Controls.Add(lTituloHC);
             Name = "HistorialClinicoControl";
+            Size = new Size(878, 767);
+            Load += HistorialClinicoControl_Load;
             panelFiltros.ResumeLayout(false);
             panelFiltros.PerformLayout();
             panelInfo.ResumeLayout(false);
@@ -439,10 +395,7 @@
         private Label labelSubtitulo;
         private Label lFiltros;
         private ComboBox comboBoxCategoria;
-        private TextBox textBoxDNI;
-        private TextBox textBoxNombrePaciente;
         private Label lIntervencion;
-        private Label lNombrePaciente;
         private Label lDniPaciente;
         private Panel panelInfo;
         private Button bEditar;
@@ -452,7 +405,6 @@
         private Label lNombreProfesional;
         private Label lProfesional;
         private Label lTagTipo;
-        private Label lConsulta;
         private Button button1;
         private Button button2;
         private Label label1;
@@ -460,9 +412,10 @@
         private Label label3;
         private Label label4;
         private Label label5;
-        private Label lMedicamento;
         private Label lFechaInt;
         private Label lFecha;
         private Label label6;
+        private TextBox tBusquedaDNI;
+        private DataGridView dgPaciente;
     }
 }
