@@ -31,13 +31,14 @@
             lTituloHC = new Label();
             lSubtituloHC = new Label();
             panelFiltros = new Panel();
+            bRegistrarPaciente = new Button();
             lIntervencion = new Label();
             lDniPaciente = new Label();
             comboBoxCategoria = new ComboBox();
             tBusquedaDNI = new TextBox();
             labelSubtitulo = new Label();
             lFiltros = new Label();
-            panelInfo = new Panel();
+            panelRegistrosPacientes = new Panel();
             label6 = new Label();
             button1 = new Button();
             button2 = new Button();
@@ -56,7 +57,7 @@
             lProfesional = new Label();
             lTagTipo = new Label();
             panelFiltros.SuspendLayout();
-            panelInfo.SuspendLayout();
+            panelRegistrosPacientes.SuspendLayout();
             SuspendLayout();
             // 
             // lTituloHC
@@ -83,6 +84,7 @@
             // panelFiltros
             // 
             panelFiltros.BackColor = Color.White;
+            panelFiltros.Controls.Add(bRegistrarPaciente);
             panelFiltros.Controls.Add(lIntervencion);
             panelFiltros.Controls.Add(lDniPaciente);
             panelFiltros.Controls.Add(comboBoxCategoria);
@@ -91,14 +93,28 @@
             panelFiltros.Controls.Add(lFiltros);
             panelFiltros.Location = new Point(33, 67);
             panelFiltros.Name = "panelFiltros";
-            panelFiltros.Size = new Size(583, 233);
+            panelFiltros.Size = new Size(583, 254);
             panelFiltros.TabIndex = 4;
+            // 
+            // bRegistrarPaciente
+            // 
+            bRegistrarPaciente.BackColor = Color.Transparent;
+            bRegistrarPaciente.ForeColor = Color.Black;
+            bRegistrarPaciente.Image = Resource1.plus_icon;
+            bRegistrarPaciente.Location = new Point(453, 21);
+            bRegistrarPaciente.Margin = new Padding(3, 4, 3, 4);
+            bRegistrarPaciente.Name = "bRegistrarPaciente";
+            bRegistrarPaciente.Size = new Size(114, 53);
+            bRegistrarPaciente.TabIndex = 13;
+            bRegistrarPaciente.Text = "Agregar Registro";
+            bRegistrarPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bRegistrarPaciente.UseVisualStyleBackColor = false;
             // 
             // lIntervencion
             // 
             lIntervencion.AutoSize = true;
             lIntervencion.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lIntervencion.Location = new Point(15, 144);
+            lIntervencion.Location = new Point(15, 165);
             lIntervencion.Name = "lIntervencion";
             lIntervencion.Size = new Size(127, 28);
             lIntervencion.TabIndex = 11;
@@ -118,7 +134,7 @@
             // 
             comboBoxCategoria.ForeColor = Color.DarkGray;
             comboBoxCategoria.FormattingEnabled = true;
-            comboBoxCategoria.Location = new Point(15, 175);
+            comboBoxCategoria.Location = new Point(15, 196);
             comboBoxCategoria.Name = "comboBoxCategoria";
             comboBoxCategoria.Size = new Size(460, 28);
             comboBoxCategoria.TabIndex = 7;
@@ -157,30 +173,30 @@
             lFiltros.TabIndex = 5;
             lFiltros.Text = "Filtros de Búsqueda";
             // 
-            // panelInfo
+            // panelRegistrosPacientes
             // 
-            panelInfo.BackColor = Color.White;
-            panelInfo.Controls.Add(label6);
-            panelInfo.Controls.Add(button1);
-            panelInfo.Controls.Add(button2);
-            panelInfo.Controls.Add(label1);
-            panelInfo.Controls.Add(label2);
-            panelInfo.Controls.Add(label3);
-            panelInfo.Controls.Add(label4);
-            panelInfo.Controls.Add(label5);
-            panelInfo.Controls.Add(lFechaInt);
-            panelInfo.Controls.Add(lFecha);
-            panelInfo.Controls.Add(bEditar);
-            panelInfo.Controls.Add(bDetalles);
-            panelInfo.Controls.Add(lObservaciones2);
-            panelInfo.Controls.Add(lObservaciones);
-            panelInfo.Controls.Add(lNombreProfesional);
-            panelInfo.Controls.Add(lProfesional);
-            panelInfo.Controls.Add(lTagTipo);
-            panelInfo.Location = new Point(33, 306);
-            panelInfo.Name = "panelInfo";
-            panelInfo.Size = new Size(808, 438);
-            panelInfo.TabIndex = 12;
+            panelRegistrosPacientes.BackColor = Color.White;
+            panelRegistrosPacientes.Controls.Add(label6);
+            panelRegistrosPacientes.Controls.Add(button1);
+            panelRegistrosPacientes.Controls.Add(button2);
+            panelRegistrosPacientes.Controls.Add(label1);
+            panelRegistrosPacientes.Controls.Add(label2);
+            panelRegistrosPacientes.Controls.Add(label3);
+            panelRegistrosPacientes.Controls.Add(label4);
+            panelRegistrosPacientes.Controls.Add(label5);
+            panelRegistrosPacientes.Controls.Add(lFechaInt);
+            panelRegistrosPacientes.Controls.Add(lFecha);
+            panelRegistrosPacientes.Controls.Add(bEditar);
+            panelRegistrosPacientes.Controls.Add(bDetalles);
+            panelRegistrosPacientes.Controls.Add(lObservaciones2);
+            panelRegistrosPacientes.Controls.Add(lObservaciones);
+            panelRegistrosPacientes.Controls.Add(lNombreProfesional);
+            panelRegistrosPacientes.Controls.Add(lProfesional);
+            panelRegistrosPacientes.Controls.Add(lTagTipo);
+            panelRegistrosPacientes.Location = new Point(33, 327);
+            panelRegistrosPacientes.Name = "panelRegistrosPacientes";
+            panelRegistrosPacientes.Size = new Size(808, 417);
+            panelRegistrosPacientes.TabIndex = 12;
             // 
             // label6
             // 
@@ -372,7 +388,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panelInfo);
+            Controls.Add(panelRegistrosPacientes);
             Controls.Add(panelFiltros);
             Controls.Add(lSubtituloHC);
             Controls.Add(lTituloHC);
@@ -381,8 +397,8 @@
             Load += HistorialClinicoControl_Load;
             panelFiltros.ResumeLayout(false);
             panelFiltros.PerformLayout();
-            panelInfo.ResumeLayout(false);
-            panelInfo.PerformLayout();
+            panelRegistrosPacientes.ResumeLayout(false);
+            panelRegistrosPacientes.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -397,7 +413,7 @@
         private ComboBox comboBoxCategoria;
         private Label lIntervencion;
         private Label lDniPaciente;
-        private Panel panelInfo;
+        private Panel panelRegistrosPacientes;
         private Button bEditar;
         private Button bDetalles;
         private Label lObservaciones2;
@@ -417,5 +433,6 @@
         private Label label6;
         private TextBox tBusquedaDNI;
         private DataGridView dgPaciente;
+        private Button bRegistrarPaciente;
     }
 }

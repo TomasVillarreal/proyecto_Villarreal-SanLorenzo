@@ -14,6 +14,8 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public partial class HistorialClinicoControl : UserControlProyecto
     {
+        string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
+
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
         public HistorialClinicoControl()
         {
@@ -154,6 +156,18 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
         }//Funcion que carga al comboBox los tipos de registros
+
+        //Funcion que carga los registros del historial medico del paciente en caso de que tenga
+        // y siempre y cuando se busque al mismo por su DNI previamente
+        private void CargarHistorial()
+        {
+           
+        }
+
+        /**private Panel CrearPanelMensaje(string texto)
+        {
+            
+        }*/
 
 
     }
