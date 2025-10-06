@@ -132,7 +132,15 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         panelRegistrosPacientes.Controls.Add(CrearPanelMensaje("El paciente ingresado no posee registros"));
                     }
+
+                    //Se oculta la columna id_usuario
+                    if (dgvRegistrosPacientes.Columns.Contains("id_registro") && dgvRegistrosPacientes.Columns.Contains("id_historial"))
+                    {
+                        dgvRegistrosPacientes.Columns["id_registro"].Visible = false;
+                        dgvRegistrosPacientes.Columns["id_historial"].Visible = false;
+                    }
                 }
+                RenombrarHeaders(dgvRegistrosPacientes);
             }
             catch (SqlException ex)
             {
@@ -226,6 +234,22 @@ namespace proyecto_Villarreal_SanLorenzo
             };
         }
 
+        //Funcion que renombra los headers del datatable
+        public void RenombrarHeaders(DataGridView grid)//Funcion que renombra el nombre de los headers del datagridview
+        {
+            foreach (DataGridViewColumn col in grid.Columns)
+            {
+                //Reemplaza los guiones bajos por espacios
+                string header = col.HeaderText.Replace("_", " ");
+
+                //Convierte la primera letra a mayúscula y el resto a minúscula
+                if (header.Length > 0)
+                    header = char.ToUpper(header[0]) + header.Substring(1).ToLower();
+
+                col.HeaderText = header;
+            }
+
+        }
 
     }
 }

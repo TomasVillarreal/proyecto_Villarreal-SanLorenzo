@@ -33,31 +33,30 @@ namespace proyecto_Villarreal_SanLorenzo
                     connection.Open();
 
                     string query = @"
-                                    SELECT 
-                                        u.id_usuario,
-                                        u.nombre_usuario,
-                                        u.apellido_usuario,
-                                        u.email_usuario,
-                                        u.telefono_usuario,
-                                        STRING_AGG(r.nombre_rol, ', ') AS Roles,
-                                        ISNULL(
-                                            NULLIF(CAST(STRING_AGG(e.nombre_especialidad, ', ') AS VARCHAR(MAX)), ''), 
-                                            'Sin especialidad'
-                                        ) AS Especialidades
-                                    FROM Usuarios u
-                                    LEFT JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
-                                    LEFT JOIN Rol r ON ur.id_rol = r.id_rol
-                                    LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
-                                    LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
-                                    WHERE u.activo = 1
-                                    GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.email_usuario, u.telefono_usuario;";
-
+                            SELECT 
+                                u.id_usuario,
+                                u.nombre_usuario,
+                                u.apellido_usuario,
+                                u.email_usuario,
+                                u.telefono_usuario,
+                                STRING_AGG(r.nombre_rol, ', ') AS Roles,
+                                ISNULL(
+                                    NULLIF(CAST(STRING_AGG(e.nombre_especialidad, ', ') AS VARCHAR(MAX)), ''), 
+                                    'Sin especialidad'
+                                ) AS Especialidades
+                            FROM Usuarios u
+                            LEFT JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
+                            LEFT JOIN Rol r ON ur.id_rol = r.id_rol
+                            LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
+                            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
+                            WHERE u.activo = 1
+                            GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.email_usuario, u.telefono_usuario;";
 
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
                     DataTable dataTableUsuario = new DataTable();
                     dataAdapter.Fill(dataTableUsuario);
 
-                    //Para manejar el error de la especialidad
+                    // Para manejar el error de la especialidad
                     foreach (DataRow row in dataTableUsuario.Rows)
                     {
                         if (row["Especialidades"] == DBNull.Value || string.IsNullOrWhiteSpace(row["Especialidades"].ToString()))
@@ -69,6 +68,13 @@ namespace proyecto_Villarreal_SanLorenzo
                     dataGridViewUsuarios.AutoGenerateColumns = true;
                     dataGridViewUsuarios.DataSource = null;
                     dataGridViewUsuarios.DataSource = dataTableUsuario;
+
+                    //Se oculta la columna id_usuario
+                    if (dataGridViewUsuarios.Columns.Contains("id_usuario"))
+                    {
+                        dataGridViewUsuarios.Columns["id_usuario"].Visible = false;
+                    }
+
                     RenombrarHeaders(dataGridViewUsuarios);
                 }
                 catch (Exception ex)
@@ -142,6 +148,14 @@ namespace proyecto_Villarreal_SanLorenzo
                     dataGridViewUsuarios.AutoGenerateColumns = true;
                     dataGridViewUsuarios.DataSource = null;
                     dataGridViewUsuarios.DataSource = dataTableUsuario;
+
+                    //Se oculta la columna id_usuario
+                    if (dataGridViewUsuarios.Columns.Contains("id_usuario"))
+                    {
+                        dataGridViewUsuarios.Columns["id_usuario"].Visible = false;
+                    }
+
+                    RenombrarHeaders(dataGridViewUsuarios);
                 }
                 catch (Exception ex)
                 {

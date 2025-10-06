@@ -162,7 +162,7 @@
             panelRegistrosPacientes.BackColor = Color.White;
             panelRegistrosPacientes.Location = new Point(33, 327);
             panelRegistrosPacientes.Name = "panelRegistrosPacientes";
-            panelRegistrosPacientes.Size = new Size(808, 87);
+            panelRegistrosPacientes.Size = new Size(643, 87);
             panelRegistrosPacientes.TabIndex = 12;
             // 
             // dgvRegistrosPacientes
@@ -171,7 +171,7 @@
             dgvRegistrosPacientes.Location = new Point(33, 420);
             dgvRegistrosPacientes.Name = "dgvRegistrosPacientes";
             dgvRegistrosPacientes.RowHeadersWidth = 51;
-            dgvRegistrosPacientes.Size = new Size(808, 188);
+            dgvRegistrosPacientes.Size = new Size(643, 188);
             dgvRegistrosPacientes.TabIndex = 13;
             // 
             // HistorialClinicoControl
