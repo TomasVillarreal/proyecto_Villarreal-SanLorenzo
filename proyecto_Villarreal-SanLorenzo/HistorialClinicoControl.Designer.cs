@@ -39,25 +39,9 @@
             labelSubtitulo = new Label();
             lFiltros = new Label();
             panelRegistrosPacientes = new Panel();
-            label6 = new Label();
-            button1 = new Button();
-            button2 = new Button();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
-            lFechaInt = new Label();
-            lFecha = new Label();
-            bEditar = new Button();
-            bDetalles = new Button();
-            lObservaciones2 = new Label();
-            lObservaciones = new Label();
-            lNombreProfesional = new Label();
-            lProfesional = new Label();
-            lTagTipo = new Label();
+            dgvRegistrosPacientes = new DataGridView();
             panelFiltros.SuspendLayout();
-            panelRegistrosPacientes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvRegistrosPacientes).BeginInit();
             SuspendLayout();
             // 
             // lTituloHC
@@ -176,218 +160,25 @@
             // panelRegistrosPacientes
             // 
             panelRegistrosPacientes.BackColor = Color.White;
-            panelRegistrosPacientes.Controls.Add(label6);
-            panelRegistrosPacientes.Controls.Add(button1);
-            panelRegistrosPacientes.Controls.Add(button2);
-            panelRegistrosPacientes.Controls.Add(label1);
-            panelRegistrosPacientes.Controls.Add(label2);
-            panelRegistrosPacientes.Controls.Add(label3);
-            panelRegistrosPacientes.Controls.Add(label4);
-            panelRegistrosPacientes.Controls.Add(label5);
-            panelRegistrosPacientes.Controls.Add(lFechaInt);
-            panelRegistrosPacientes.Controls.Add(lFecha);
-            panelRegistrosPacientes.Controls.Add(bEditar);
-            panelRegistrosPacientes.Controls.Add(bDetalles);
-            panelRegistrosPacientes.Controls.Add(lObservaciones2);
-            panelRegistrosPacientes.Controls.Add(lObservaciones);
-            panelRegistrosPacientes.Controls.Add(lNombreProfesional);
-            panelRegistrosPacientes.Controls.Add(lProfesional);
-            panelRegistrosPacientes.Controls.Add(lTagTipo);
             panelRegistrosPacientes.Location = new Point(33, 327);
             panelRegistrosPacientes.Name = "panelRegistrosPacientes";
-            panelRegistrosPacientes.Size = new Size(808, 417);
+            panelRegistrosPacientes.Size = new Size(808, 87);
             panelRegistrosPacientes.TabIndex = 12;
             // 
-            // label6
+            // dgvRegistrosPacientes
             // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.ForeColor = Color.DarkGray;
-            label6.Location = new Point(601, 305);
-            label6.Name = "label6";
-            label6.Size = new Size(137, 20);
-            label6.TabIndex = 29;
-            label6.Text = "2025-10-11 11:15";
-            // 
-            // button1
-            // 
-            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = SystemColors.ControlDark;
-            button1.Location = new Point(142, 384);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 28;
-            button1.Text = "Editar";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button2.ForeColor = SystemColors.ButtonShadow;
-            button2.Location = new Point(15, 384);
-            button2.Name = "button2";
-            button2.Size = new Size(115, 29);
-            button2.TabIndex = 27;
-            button2.Text = "Ver detalles";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.Black;
-            label1.Location = new Point(129, 343);
-            label1.Name = "label1";
-            label1.Size = new Size(190, 20);
-            label1.TabIndex = 26;
-            label1.Text = "Amoxicilina 500mg via oral";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.Black;
-            label2.Location = new Point(15, 343);
-            label2.Name = "label2";
-            label2.Size = new Size(115, 20);
-            label2.TabIndex = 25;
-            label2.Text = "Observaciones:";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.Black;
-            label3.Location = new Point(112, 305);
-            label3.Name = "label3";
-            label3.Size = new Size(84, 20);
-            label3.TabIndex = 24;
-            label3.Text = "Jorge Perez";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = Color.Black;
-            label4.Location = new Point(15, 305);
-            label4.Name = "label4";
-            label4.Size = new Size(92, 20);
-            label4.TabIndex = 23;
-            label4.Text = "Profesional:";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.DarkGreen;
-            label5.ForeColor = Color.White;
-            label5.Location = new Point(15, 276);
-            label5.Name = "label5";
-            label5.Size = new Size(101, 20);
-            label5.TabIndex = 22;
-            label5.Text = "Medicamento";
-            // 
-            // lFechaInt
-            // 
-            lFechaInt.AutoSize = true;
-            lFechaInt.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lFechaInt.Location = new Point(594, 25);
-            lFechaInt.Name = "lFechaInt";
-            lFechaInt.Size = new Size(144, 28);
-            lFechaInt.TabIndex = 12;
-            lFechaInt.Text = "Fecha Registro";
-            // 
-            // lFecha
-            // 
-            lFecha.AutoSize = true;
-            lFecha.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lFecha.ForeColor = Color.DarkGray;
-            lFecha.Location = new Point(594, 53);
-            lFecha.Name = "lFecha";
-            lFecha.Size = new Size(137, 20);
-            lFecha.TabIndex = 20;
-            lFecha.Text = "2025-06-28 10:30";
-            // 
-            // bEditar
-            // 
-            bEditar.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bEditar.ForeColor = SystemColors.ControlDark;
-            bEditar.Location = new Point(142, 125);
-            bEditar.Name = "bEditar";
-            bEditar.Size = new Size(94, 29);
-            bEditar.TabIndex = 19;
-            bEditar.Text = "Editar";
-            bEditar.UseVisualStyleBackColor = true;
-            // 
-            // bDetalles
-            // 
-            bDetalles.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bDetalles.ForeColor = SystemColors.ButtonShadow;
-            bDetalles.Location = new Point(15, 125);
-            bDetalles.Name = "bDetalles";
-            bDetalles.Size = new Size(115, 29);
-            bDetalles.TabIndex = 18;
-            bDetalles.Text = "Ver detalles";
-            bDetalles.UseVisualStyleBackColor = true;
-            // 
-            // lObservaciones2
-            // 
-            lObservaciones2.AutoSize = true;
-            lObservaciones2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lObservaciones2.ForeColor = Color.Black;
-            lObservaciones2.Location = new Point(129, 84);
-            lObservaciones2.Name = "lObservaciones2";
-            lObservaciones2.Size = new Size(174, 20);
-            lObservaciones2.TabIndex = 17;
-            lObservaciones2.Text = "Paciente en  buen estado";
-            // 
-            // lObservaciones
-            // 
-            lObservaciones.AutoSize = true;
-            lObservaciones.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lObservaciones.ForeColor = Color.Black;
-            lObservaciones.Location = new Point(15, 84);
-            lObservaciones.Name = "lObservaciones";
-            lObservaciones.Size = new Size(115, 20);
-            lObservaciones.TabIndex = 16;
-            lObservaciones.Text = "Observaciones:";
-            // 
-            // lNombreProfesional
-            // 
-            lNombreProfesional.AutoSize = true;
-            lNombreProfesional.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lNombreProfesional.ForeColor = Color.Black;
-            lNombreProfesional.Location = new Point(112, 46);
-            lNombreProfesional.Name = "lNombreProfesional";
-            lNombreProfesional.Size = new Size(84, 20);
-            lNombreProfesional.TabIndex = 15;
-            lNombreProfesional.Text = "Jorge Perez";
-            // 
-            // lProfesional
-            // 
-            lProfesional.AutoSize = true;
-            lProfesional.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lProfesional.ForeColor = Color.Black;
-            lProfesional.Location = new Point(15, 46);
-            lProfesional.Name = "lProfesional";
-            lProfesional.Size = new Size(92, 20);
-            lProfesional.TabIndex = 14;
-            lProfesional.Text = "Profesional:";
-            // 
-            // lTagTipo
-            // 
-            lTagTipo.AutoSize = true;
-            lTagTipo.BackColor = Color.Black;
-            lTagTipo.ForeColor = Color.White;
-            lTagTipo.Location = new Point(15, 13);
-            lTagTipo.Name = "lTagTipo";
-            lTagTipo.Size = new Size(100, 20);
-            lTagTipo.TabIndex = 13;
-            lTagTipo.Text = "Control rutina";
+            dgvRegistrosPacientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvRegistrosPacientes.Location = new Point(33, 420);
+            dgvRegistrosPacientes.Name = "dgvRegistrosPacientes";
+            dgvRegistrosPacientes.RowHeadersWidth = 51;
+            dgvRegistrosPacientes.Size = new Size(808, 188);
+            dgvRegistrosPacientes.TabIndex = 13;
             // 
             // HistorialClinicoControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(dgvRegistrosPacientes);
             Controls.Add(panelRegistrosPacientes);
             Controls.Add(panelFiltros);
             Controls.Add(lSubtituloHC);
@@ -397,8 +188,7 @@
             Load += HistorialClinicoControl_Load;
             panelFiltros.ResumeLayout(false);
             panelFiltros.PerformLayout();
-            panelRegistrosPacientes.ResumeLayout(false);
-            panelRegistrosPacientes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvRegistrosPacientes).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -414,25 +204,9 @@
         private Label lIntervencion;
         private Label lDniPaciente;
         private Panel panelRegistrosPacientes;
-        private Button bEditar;
-        private Button bDetalles;
-        private Label lObservaciones2;
-        private Label lObservaciones;
-        private Label lNombreProfesional;
-        private Label lProfesional;
-        private Label lTagTipo;
-        private Button button1;
-        private Button button2;
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private Label label4;
-        private Label label5;
-        private Label lFechaInt;
-        private Label lFecha;
-        private Label label6;
         private TextBox tBusquedaDNI;
         private DataGridView dgPaciente;
         private Button bRegistrarPaciente;
+        private DataGridView dgvRegistrosPacientes;
     }
 }

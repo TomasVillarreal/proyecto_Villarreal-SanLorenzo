@@ -26,33 +26,32 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             PlaceholderBusqueda(tBusquedaDNI, "Buscar por DNI...");
             PlaceholderBusqueda(comboBoxCategoria, "Buscar por tipo de intervención...");
-            //cargarDatosPacientes();
-            CargarIntervenciones();
+            CargarTiposIntervencion();
+            dgvRegistrosPacientes.Visible = false; //No visible cuando se carga la vista.
+
+            //Se muestra el mensaje inicial
+            panelRegistrosPacientes.Controls.Clear();
+            panelRegistrosPacientes.Controls.Add(CrearPanelMensaje("Ingrese un DNI"));
+
+            //Se inicializa el DGV vacio
+            dgvRegistrosPacientes.DataSource = new DataTable();
         }
 
         private void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que busca al paciente por su DNI.
-        { 
-
+        {
             if (e.KeyCode == Keys.Enter)
             {
-                // Si lo que el usuario aprieta es un numero, entonces muestro el paciente con ese dni
-                if (int.TryParse(tBusquedaDNI.Text, out int dni_busqueda))
+                if (int.TryParse(tBusquedaDNI.Text.Trim(), out int dniBusqueda))
                 {
-                    (dgPaciente.DataSource as DataTable).DefaultView.RowFilter =
-                     $"cDniPaciente LIKE '%{dni_busqueda}%'";
+                    CargarHistorial(dniBusqueda.ToString());
                 }
-                // Si el textbox esta vacio y aprieta enter, entonces se muestra el paciente
-                else if (string.IsNullOrWhiteSpace(tBusquedaDNI.Text))
-                {
-
-                    (dgPaciente.DataSource as DataTable).DefaultView.RowFilter = "";
-                }
-                // Si no escribio un numero, muestro mensaje de error
                 else
                 {
-                    MessageBox.Show("El DNI ingresado es invalido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("El DNI ingresado es inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            panelRegistrosPacientes.Visible = false;//Se oculta el panel con el mensaje de ingreso de DNI.
+            dgvRegistrosPacientes.Visible = true;//Se muestra el dgv de los registros
         }
 
         private void tBusquedaDNI_KeyPress(object sender, KeyPressEventArgs e)//Funcion que no permite el ingreso de caracteres no numéricos
@@ -61,6 +60,112 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 e.Handled = true;
             }
+        }
+
+        private void comboBoxCategoria_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Agregar funcionalidad para buscar por tipo de intervencion
+        }
+
+        //Funcion que carga al comboBox los tipos de intervencion realizadas en la clinica
+        private void CargarTiposIntervencion()
+        {
+            using (SqlConnection connecction = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT nombre_registro, id_tipo_registro FROM Tipo_registro WHERE nombre_registro IS NOT NULL AND LTRIM(RTRIM(nombre_registro)) <> ''", connecction))
+                {
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+                    DataTable dataTable = new DataTable();
+
+                    dataAdapter.Fill(dataTable);
+
+                    comboBoxCategoria.DataSource = dataTable;
+                    comboBoxCategoria.DisplayMember = "nombre_registro";
+                    comboBoxCategoria.ValueMember = "id_tipo_registro";
+
+                }
+                try
+                {
+                    connecction.Open();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar los roles.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        //Funcion que carga los registros del historial medico del paciente en caso de que tenga
+        // y siempre y cuando se busque al mismo por su DNI previamente
+        private void CargarHistorial(string dni_buscado)
+        {
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string query = @"
+                SELECT 
+                    r.id_registro,
+                    r.dni_paciente,
+                    r.id_historial,
+                    r.fecha_registro,
+                    r.observaciones,
+                    u.nombre_usuario AS profesional
+                FROM Registro r
+                INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                WHERE r.dni_paciente = @dni_paciente;";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, db);
+                    adapter.SelectCommand.Parameters.AddWithValue("@dni_paciente", dni_buscado);
+
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    dgvRegistrosPacientes.AutoGenerateColumns = true;
+                    dgvRegistrosPacientes.DataSource = dt;
+
+                    //Si no hay resultados, se muestra un mensaje
+                    panelRegistrosPacientes.Controls.Clear();
+                    if (dt.Rows.Count == 0)
+                    {
+                        panelRegistrosPacientes.Controls.Add(CrearPanelMensaje("El paciente ingresado no posee registros"));
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error al cargar los historiales: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        //Metodo que crea un mensaje que se muestra en el panel del registro de los pacientes
+        // y se utiliza para que el usuario deba buscar un paciente por su dni para ver el historial
+        private Panel CrearPanelMensaje(string texto)
+        {
+            Panel panelMensaje = new Panel();
+            panelMensaje.Size = new Size(500, 80);
+
+            PictureBox pb = new PictureBox();
+            pb.Location = new Point(15, 20);
+            pb.Size = new Size(32, 32);
+            pb.SizeMode = PictureBoxSizeMode.Zoom;
+            pb.Image = Resource1.question;
+
+            Label lbl = new Label();
+            lbl.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            lbl.AutoSize = false;
+            lbl.Size = new Size(430, 40);
+            lbl.Location = new Point(pb.Right + 15, 20);
+            lbl.TextAlign = ContentAlignment.MiddleLeft;
+            lbl.Text = "No se han encontrado registros: " + texto + ".";
+
+            panelMensaje.Controls.Add(pb);
+            panelMensaje.Controls.Add(lbl);
+
+            return panelMensaje;
+
         }
 
         private void PlaceholderBusqueda(TextBox txt, string placeholder)//Funcion que coloca un texto fantasma en caso de estar vacio
@@ -120,54 +225,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             };
         }
-
-        private void comboBoxCategoria_KeyDown(object sender, KeyEventArgs e)
-        {
-            //Agregar funcionalidad para buscar por tipo de intervencion
-        }
-
-        private void CargarIntervenciones()
-        {
-            string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-
-            using (SqlConnection connecction = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand("SELECT nombre_registro, id_tipo_registro FROM Tipo_registro WHERE nombre_registro IS NOT NULL AND LTRIM(RTRIM(nombre_registro)) <> ''", connecction))
-                {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-
-                    DataTable dataTable = new DataTable();
-
-                    dataAdapter.Fill(dataTable);
-
-                    comboBoxCategoria.DataSource = dataTable;
-                    comboBoxCategoria.DisplayMember = "nombre_registro";
-                    comboBoxCategoria.ValueMember = "id_tipo_registro";
-
-                }
-                try
-                {
-                    connecction.Open();
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cargar los roles.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }//Funcion que carga al comboBox los tipos de registros
-
-        //Funcion que carga los registros del historial medico del paciente en caso de que tenga
-        // y siempre y cuando se busque al mismo por su DNI previamente
-        private void CargarHistorial()
-        {
-           
-        }
-
-        /**private Panel CrearPanelMensaje(string texto)
-        {
-            
-        }*/
 
 
     }
