@@ -47,7 +47,7 @@
             label2 = new Label();
             label1 = new Label();
             bActualizarGrafico = new Button();
-            panelBordes2 = new PanelBordes();
+            panelGrafico = new PanelBordes();
             rbFechas = new RadioButton();
             rbMedicos = new RadioButton();
             panelSeleccionIntervalo.SuspendLayout();
@@ -258,14 +258,15 @@
             bActualizarGrafico.TabIndex = 17;
             bActualizarGrafico.Text = "Actualizar";
             bActualizarGrafico.UseVisualStyleBackColor = false;
+            bActualizarGrafico.Click += bActualizarGrafico_Click;
             // 
-            // panelBordes2
+            // panelGrafico
             // 
-            panelBordes2.BackColor = Color.White;
-            panelBordes2.Location = new Point(42, 146);
-            panelBordes2.Name = "panelBordes2";
-            panelBordes2.Size = new Size(680, 241);
-            panelBordes2.TabIndex = 18;
+            panelGrafico.BackColor = Color.White;
+            panelGrafico.Location = new Point(42, 146);
+            panelGrafico.Name = "panelGrafico";
+            panelGrafico.Size = new Size(680, 241);
+            panelGrafico.TabIndex = 18;
             // 
             // rbFechas
             // 
@@ -295,7 +296,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(rbMedicos);
             Controls.Add(rbFechas);
-            Controls.Add(panelBordes2);
+            Controls.Add(panelGrafico);
             Controls.Add(bActualizarGrafico);
             Controls.Add(panelBordes1);
             Controls.Add(panelSeleccionIntervalo);
@@ -334,7 +335,7 @@
         private Label label2;
         private Label label1;
         private Button bActualizarGrafico;
-        private PanelBordes panelBordes2;
+        private PanelBordes panelGrafico;
         private RadioButton rbFechas;
         private RadioButton rbMedicos;
     }

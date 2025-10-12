@@ -1,8 +1,4 @@
-﻿using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.WinForms;
-using SkiaSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,8 +7,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -22,6 +20,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private DateTime fecha_inicio = new DateTime(1900, 01, 01);
         private DateTime fecha_fin = new DateTime(1900, 01, 01);
         private TimeSpan dif_fechas => fecha_fin - fecha_inicio;
+
         public InformeControl()
         {
             InitializeComponent();
@@ -41,34 +40,10 @@ namespace proyecto_Villarreal_SanLorenzo
             lFecha.Text = ObtenerFechaActividad();
             lTotalRegistros.Text = ObtenerTotalRegistros().ToString();
             lPromedioRegistros.Text = ObtenerPromedioRegistros().ToString("0.00");
+
+            GraficarSegunRadioButton();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbDecisionIntervalo.SelectedItem.ToString() == "Personalizado")
-            {
-                panelSeleccionIntervalo.Visible = true;
-            }
-            else if (cbDecisionIntervalo.SelectedItem.ToString() == "Ultima semana")
-            {
-                fecha_fin = DateTime.Now;
-                fecha_inicio = fecha_fin.AddDays(-7);
-            }
-            else if (cbDecisionIntervalo.SelectedItem.ToString() == "Ultimo mes")
-            {
-                fecha_fin = DateTime.Now;
-                fecha_inicio = fecha_fin.AddMonths(-1);
-            }
-            else if (cbDecisionIntervalo.SelectedItem.ToString() == "Ultimo año")
-            {
-                fecha_fin = DateTime.Now;
-                fecha_inicio = fecha_fin.AddYears(-1);
-            }
-            else if (cbDecisionIntervalo.SelectedItem.ToString() == "Todos los tiempos")
-            {
-                fecha_fin = DateTime.Now;
-            }
-        }
 
         private int ObtenerTotalRegistros()
         {
@@ -158,6 +133,36 @@ namespace proyecto_Villarreal_SanLorenzo
             return nombre;
         }
 
+        private DateTime ObtenerFechaMasAntigua()
+        {
+            DateTime fechaAntigua = new DateTime(1900, 01, 01);
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    // Se crea la query para contar las filas
+                    string queryNroPacientes = "SELECT TOP 1  fecha_registro FROM Registro " +
+                        "ORDER BY fecha_registro ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
+                    {
+                        db.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.Read()) // avanza al primer registro
+                        {
+                            fechaAntigua = Convert.ToDateTime(reader["fecha_registro"]);
+                        }
+                    }
+                    db.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return fechaAntigua;
+        }
+
         private double ObtenerPromedioRegistros()
         {
             double promedio = 0;
@@ -184,84 +189,266 @@ namespace proyecto_Villarreal_SanLorenzo
             return promedio;
         }
 
-        private string DeterminarEscalaTiempo()
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string escala = dif_fechas.TotalDays switch
+            string opcion = cbDecisionIntervalo.SelectedItem.ToString();
+            panelSeleccionIntervalo.Visible = opcion == "Personalizado";
+            DateTime hoy = DateTime.Now.Date; // solo fecha sin hora
+            switch (opcion)
             {
-                (< 0) => "error", // Invalido
-                (>= 0 and <= 7) => "nombre_dias", // Lunes, martes, miercoles, etc...
-                (>= 7 and < 14) => "fechas_nombres_dias", // Lunes 01/Enero, martes 02/Enero, ..., lunes 08/Enero...
-                (>= 14 and <= 31) => "semanas", // Semana 1, semana 2, semana  3, semana 4.
-                (> 31 and <= 90) => "semanas_meses", // Semana 1/Enero, semana 2/Enero, ... , semana 1 febrero, semana 2 febrero.
-                (> 90 and <= 365) => "meses", // Enero, febrero, marzo, ...
-                (> 365 and <= 730) => "meses_años", // Enero 2025, febrero 2025, marzo 2025, etc...
-                (> 730) => "años" // 2025, 2026, etc...
-            };
-            return escala;
+                case "Ultima semana":
+                    fecha_fin = hoy.AddDays(1).AddSeconds(-1);       // hasta hoy 23:59:59
+                    fecha_inicio = fecha_fin.AddDays(-7 + 1).Date;   // 7 días completos atrás
+                    break;
+                case "Ultimo mes":
+                    // CORREGIDO: Empieza exactamente 1 mes atrás al día actual (ej: hoy 12/10 -> 12/09)
+                    fecha_inicio = hoy.AddMonths(-1).Date;
+                    fecha_fin = hoy.AddDays(1).AddSeconds(-1);
+                    break;
+                case "Ultimo año":
+                    // MODIFICADO: Exacto 1 año atrás (sin +1 día extra)
+                    fecha_inicio = hoy.AddYears(-1).Date;
+                    fecha_fin = hoy.AddDays(1).AddSeconds(-1);
+                    break;
+                case "Todos los tiempos":
+                    fecha_inicio = ObtenerFechaMasAntigua().Date;
+                    fecha_fin = hoy.AddDays(1).AddSeconds(-1);
+                    break;
+                case "Personalizado":
+                    // Para personalizado, usar valores de los DateTimePickers (actualizados en Leave events)
+                    fecha_inicio = dtpFechaInicio.Value.Date;
+                    fecha_fin = dtpFechaFin.Value.Date.AddDays(1).AddSeconds(-1);
+                    break;
+            }
+            // CORREGIDO: Actualizar el gráfico automáticamente al cambiar la selección (excepto si es personalizado, que usa botón)
+            if (opcion != "Personalizado" && rbFechas.Checked)
+            {
+                GraficarSegunRadioButton();
+            }
         }
 
-        private List<string> GenerarEtiquetas(DateTime inicio, DateTime fin, string escala)
+        private string DeterminarEscalaTiempo()
+        {
+            double dias = dif_fechas.TotalDays;
+            int aniosDiff = fecha_fin.Year - fecha_inicio.Year;
+            if (dias < 0) return "error";
+            if (dias <= 7) return "nombre_dias";
+            if (dias <= 14) return "fechas_nombres_dias";
+            if (dias <= 31) return "semanas";
+            if (dias <= 90) return "semanas_meses";
+            if (dias <= 365) return "meses";
+            if (aniosDiff >= 1) return "meses_años"; // rango >1 año => mostrar meses con años
+            return "años";
+        }
+
+        private (List<string> Etiquetas, List<DateTime> Periodos) GenerarEtiquetasYPeriodos(DateTime inicio, DateTime fin, string escala)
         {
             var etiquetas = new List<string>();
-
+            var periodos = new List<DateTime>();  // Representante de cada período (ej: primer día)
+            var cultura = new CultureInfo("es-ES");
             switch (escala)
             {
                 case "nombre_dias":
-                    for (var dia = inicio; dia <= fin; dia = dia.AddDays(1))
-                        etiquetas.Add(dia.ToString("dddd", new CultureInfo("es-ES"))); // lunes, martes...
+                    for (var dia = inicio.Date; dia <= fin.Date; dia = dia.AddDays(1))
+                    {
+                        etiquetas.Add(dia.ToString("dddd", cultura));  // "lunes"
+                        periodos.Add(dia.Date);
+                    }
                     break;
-
                 case "fechas_nombres_dias":
-                    for (var dia = inicio; dia <= fin; dia = dia.AddDays(1))
-                        etiquetas.Add(dia.ToString("ddd dd/MM")); // Lun 01/10
+                    for (var dia = inicio.Date; dia <= fin.Date; dia = dia.AddDays(1))
+                    {
+                        etiquetas.Add(dia.ToString("ddd dd/MM", cultura));  // "Lun 01/10"
+                        periodos.Add(dia.Date);
+                    }
                     break;
-
                 case "semanas":
-                    int semana = 1;
-                    for (var dia = inicio; dia <= fin; dia = dia.AddDays(7))
-                    {
-                        etiquetas.Add($"Semana {semana}");
-                        semana++;
-                    }
-                    break;
-
                 case "semanas_meses":
-                    int semanaMes = 1;
-                    DateTime current = inicio;
-                    while (current <= fin)
+                    // CORREGIDO: Cálculo consistente para lunes de inicio de semana (coincide con SQL)
+                    int daysToSubtract = ((int)inicio.DayOfWeek - 1 + 7) % 7;
+                    var currentSemana = inicio.Date.AddDays(-daysToSubtract);  // Lunes de la semana que contiene 'inicio'
+                    int numSemana = 1;
+                    while (currentSemana <= fin.Date)
                     {
-                        etiquetas.Add($"Semana {semanaMes}/{current.ToString("MMM", new CultureInfo("es-ES"))}");
-                        current = current.AddDays(7);
-                        semanaMes++;
+                        var finSemana = currentSemana.AddDays(6);  // Domingo de fin
+                        if (finSemana > fin.Date) finSemana = fin.Date;  // Ajusta si excede
+                        if (escala == "semanas")
+                        {
+                            etiquetas.Add($"Semana {numSemana} ({currentSemana:dd/MM} - {finSemana:dd/MM})");
+                        }
+                        else
+                        {
+                            var mesInicio = currentSemana.ToString("MMM", cultura);
+                            etiquetas.Add($"Semana {numSemana}/{mesInicio} ({currentSemana:dd/MM} - {finSemana:dd/MM})");
+                        }
+                        periodos.Add(currentSemana.Date);  // Representante: lunes de inicio
+                        currentSemana = currentSemana.AddDays(7);
+                        numSemana++;
                     }
                     break;
-
                 case "meses":
-                    DateTime mes = new DateTime(inicio.Year, inicio.Month, 1);
+                    var mes = new DateTime(inicio.Year, inicio.Month, 1);
                     while (mes <= fin)
                     {
-                        etiquetas.Add(mes.ToString("MMMM", new CultureInfo("es-ES"))); // Enero, Febrero...
+                        var finMes = mes.AddMonths(1).AddDays(-1);  // Último día del mes
+                        if (finMes > fin) finMes = fin.Date;
+                        etiquetas.Add(mes.ToString("MMM", cultura));  // "Oct"
+                        periodos.Add(mes.Date);  // 1er día del mes
                         mes = mes.AddMonths(1);
                     }
                     break;
-
                 case "meses_años":
-                    DateTime mesAnio = new DateTime(inicio.Year, inicio.Month, 1);
+                    var mesAnio = new DateTime(inicio.Year, inicio.Month, 1);
                     while (mesAnio <= fin)
                     {
-                        etiquetas.Add(mesAnio.ToString("MMMM yyyy", new CultureInfo("es-ES"))); // Enero 2025
+                        var finMes = mesAnio.AddMonths(1).AddDays(-1);
+                        if (finMes > fin) finMes = fin.Date;
+                        etiquetas.Add(mesAnio.ToString("MMM yyyy", cultura));  // "Oct 2025"
+                        periodos.Add(mesAnio.Date);
                         mesAnio = mesAnio.AddMonths(1);
                     }
                     break;
-
                 case "años":
                     for (int año = inicio.Year; año <= fin.Year; año++)
+                    {
+                        var inicioAnio = new DateTime(año, 1, 1);
+                        var finAnio = new DateTime(año, 12, 31);
+                        if (inicioAnio < inicio) inicioAnio = inicio.Date;
+                        if (finAnio > fin) finAnio = fin.Date;
                         etiquetas.Add(año.ToString());
+                        periodos.Add(inicioAnio.Date);  // 1/1 del año (ajustado)
+                    }
                     break;
             }
-            return etiquetas;
+            return (etiquetas, periodos);
         }
 
+        private Dictionary<DateTime, int> ObtenerDatosPorPeriodos(DateTime inicio, DateTime fin, string escala)
+        {
+            var resultados = new Dictionary<DateTime, int>();
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string query = "";
+                    // CORREGIDO: Queries ajustadas, especialmente para semanas (coincide con C# para lunes)
+                    switch (escala)
+                    {
+                        case "nombre_dias":
+                        case "fechas_nombres_dias":
+                            // Agrupar por día exacto
+                            query = @"
+                                SELECT 
+                                    CAST(fecha_registro AS DATE) AS PeriodoRep,
+                                    COUNT(*) AS Cantidad
+                                FROM Registro
+                                WHERE fecha_registro BETWEEN @inicio AND @fin
+                                GROUP BY CAST(fecha_registro AS DATE)
+                                ORDER BY PeriodoRep";
+                            break;
+                        case "semanas":
+                        case "semanas_meses":
+                            // CORREGIDO: Calcular lunes de inicio de semana consistente (Sunday=1 en SQL Server default)
+                            query = @"
+                                SELECT 
+                                    DATEADD(DAY, -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), CAST(fecha_registro AS DATE)) AS PeriodoRep,
+                                    COUNT(*) AS Cantidad
+                                FROM Registro
+                                WHERE fecha_registro BETWEEN @inicio AND @fin
+                                GROUP BY DATEADD(DAY, -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), CAST(fecha_registro AS DATE))
+                                ORDER BY PeriodoRep";
+                            break;
+                        case "meses":
+                        case "meses_años":
+                            // Agrupar por 1er día del mes
+                            query = @"
+                                SELECT 
+                                    DATEFROMPARTS(YEAR(fecha_registro), MONTH(fecha_registro), 1) AS PeriodoRep,
+                                    COUNT(*) AS Cantidad
+                                FROM Registro
+                                WHERE fecha_registro BETWEEN @inicio AND @fin
+                                GROUP BY YEAR(fecha_registro), MONTH(fecha_registro)
+                                ORDER BY PeriodoRep";
+                            break;
+                        case "años":
+                            // Agrupar por 1/1 del año
+                            query = @"
+                                SELECT 
+                                    DATEFROMPARTS(YEAR(fecha_registro), 1, 1) AS PeriodoRep,
+                                    COUNT(*) AS Cantidad
+                                FROM Registro
+                                WHERE fecha_registro BETWEEN @inicio AND @fin
+                                GROUP BY YEAR(fecha_registro)
+                                ORDER BY PeriodoRep";
+                            break;
+                    }
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
+                        db.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            DateTime periodoRep = Convert.ToDateTime(reader["PeriodoRep"]);
+                            int cantidad = Convert.ToInt32(reader["Cantidad"]);
+                            resultados[periodoRep.Date] = cantidad;  // Key: fecha representativa
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error en la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return resultados;
+        }
+
+        private void GraficarTiempo(List<string> etiquetas, List<int> valores)
+        {
+            panelGrafico.Controls.Clear();
+            Chart chart = new Chart { Dock = DockStyle.Fill };
+            panelGrafico.Controls.Add(chart);
+            ChartArea chartArea = new ChartArea();
+            chart.ChartAreas.Add(chartArea);
+            chartArea.AxisX.Title = "Intervalo de tiempo";
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.LabelStyle.Angle = -45;
+            chartArea.AxisX.MajorGrid.Enabled = false;
+            chartArea.AxisY.Title = "Cantidad de registros";
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.Enabled = AxisEnabled.True;
+            int maxValor = valores.Count > 0 ? valores.Max() : 0;
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = maxValor == 0 ? 10 : maxValor * 1.2;
+            chartArea.AxisY.Interval = maxValor <= 10 ? 1 : Math.Ceiling(maxValor / 5.0);
+            Series series = new Series
+            {
+                Name = "Registros",
+                ChartType = SeriesChartType.Column,
+                IsValueShownAsLabel = true,
+                LabelFormat = "N0"
+            };
+            chart.Series.Add(series);
+            for (int i = 0; i < etiquetas.Count; i++)
+            {
+                DataPoint dp = new DataPoint
+                {
+                    YValues = new double[] { valores[i] },
+                    AxisLabel = etiquetas[i]
+                };
+                series.Points.Add(dp);
+            }
+            chart.Titles.Add("Registros clínicos por intervalo");
+            if (valores.All(v => v == 0))
+            {
+                chart.Titles[0].Text += " (No hay datos en este rango)";
+            }
+            chart.BackColor = Color.WhiteSmoke;
+            chartArea.BackColor = Color.White;
+        }
 
         private void dtpFechaInicio_Leave(object sender, EventArgs e)
         {
@@ -271,7 +458,42 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void dtpFechaFin_Leave(object sender, EventArgs e)
         {
-            fecha_fin = dtpFechaFin.Value;
+            fecha_fin = dtpFechaFin.Value.Date.AddDays(1).AddSeconds(-1);
         }
+
+        private void bActualizarGrafico_Click(object sender, EventArgs e)
+        {
+            GraficarSegunRadioButton();
+        }
+
+        private void GraficarSegunRadioButton()
+        {
+            if (rbFechas.Checked)
+            {
+                // NUEVO: Determinar escala
+                string escala = DeterminarEscalaTiempo();
+                if (escala == "error") return;  // Rango inválido
+                // NUEVO: Generar etiquetas y períodos en paralelo
+                var (etiquetas, periodos) = GenerarEtiquetasYPeriodos(fecha_inicio, fecha_fin, escala);
+                // NUEVO: Obtener datos por períodos
+                var datos = ObtenerDatosPorPeriodos(fecha_inicio, fecha_fin, escala);
+                // NUEVO: Alinear valores (simple: por índice, usando periodos como key)
+                var valores = new List<int>();
+                foreach (var periodo in periodos)
+                {
+                    if (datos.TryGetValue(periodo.Date, out int cantidad))
+                    {
+                        valores.Add(cantidad);
+                    }
+                    else
+                    {
+                        valores.Add(0);  // No hay datos en este período
+                    }
+                }
+                GraficarTiempo(etiquetas, valores);
+            }
+        }
+
     }
 }
+
