@@ -1,17 +1,18 @@
-﻿using System;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.WinForms;
+using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.WinForms;
-using SkiaSharp;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -20,6 +21,7 @@ namespace proyecto_Villarreal_SanLorenzo
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
         private DateTime fecha_inicio = new DateTime(1900, 01, 01);
         private DateTime fecha_fin = new DateTime(1900, 01, 01);
+        private TimeSpan dif_fechas => fecha_fin - fecha_inicio;
         public InformeControl()
         {
             InitializeComponent();
@@ -28,8 +30,12 @@ namespace proyecto_Villarreal_SanLorenzo
         private void InformeControl_Load(object sender, EventArgs e)
         {
             cbDecisionIntervalo.SelectedIndex = 0;
+
             dtpFechaInicio.Value = DateTime.Now;
             dtpFechaFin.Value = DateTime.Now;
+
+            dtpFechaFin.MaxDate = DateTime.Now;
+            dtpFechaInicio.MaxDate = DateTime.Now;
 
             lMedicoActivo.Text = ObtenerMedicoActivo();
             lFecha.Text = ObtenerFechaActividad();
@@ -177,6 +183,85 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             return promedio;
         }
+
+        private string DeterminarEscalaTiempo()
+        {
+            string escala = dif_fechas.TotalDays switch
+            {
+                (< 0) => "error", // Invalido
+                (>= 0 and <= 7) => "nombre_dias", // Lunes, martes, miercoles, etc...
+                (>= 7 and < 14) => "fechas_nombres_dias", // Lunes 01/Enero, martes 02/Enero, ..., lunes 08/Enero...
+                (>= 14 and <= 31) => "semanas", // Semana 1, semana 2, semana  3, semana 4.
+                (> 31 and <= 90) => "semanas_meses", // Semana 1/Enero, semana 2/Enero, ... , semana 1 febrero, semana 2 febrero.
+                (> 90 and <= 365) => "meses", // Enero, febrero, marzo, ...
+                (> 365 and <= 730) => "meses_años", // Enero 2025, febrero 2025, marzo 2025, etc...
+                (> 730) => "años" // 2025, 2026, etc...
+            };
+            return escala;
+        }
+
+        private List<string> GenerarEtiquetas(DateTime inicio, DateTime fin, string escala)
+        {
+            var etiquetas = new List<string>();
+
+            switch (escala)
+            {
+                case "nombre_dias":
+                    for (var dia = inicio; dia <= fin; dia = dia.AddDays(1))
+                        etiquetas.Add(dia.ToString("dddd", new CultureInfo("es-ES"))); // lunes, martes...
+                    break;
+
+                case "fechas_nombres_dias":
+                    for (var dia = inicio; dia <= fin; dia = dia.AddDays(1))
+                        etiquetas.Add(dia.ToString("ddd dd/MM")); // Lun 01/10
+                    break;
+
+                case "semanas":
+                    int semana = 1;
+                    for (var dia = inicio; dia <= fin; dia = dia.AddDays(7))
+                    {
+                        etiquetas.Add($"Semana {semana}");
+                        semana++;
+                    }
+                    break;
+
+                case "semanas_meses":
+                    int semanaMes = 1;
+                    DateTime current = inicio;
+                    while (current <= fin)
+                    {
+                        etiquetas.Add($"Semana {semanaMes}/{current.ToString("MMM", new CultureInfo("es-ES"))}");
+                        current = current.AddDays(7);
+                        semanaMes++;
+                    }
+                    break;
+
+                case "meses":
+                    DateTime mes = new DateTime(inicio.Year, inicio.Month, 1);
+                    while (mes <= fin)
+                    {
+                        etiquetas.Add(mes.ToString("MMMM", new CultureInfo("es-ES"))); // Enero, Febrero...
+                        mes = mes.AddMonths(1);
+                    }
+                    break;
+
+                case "meses_años":
+                    DateTime mesAnio = new DateTime(inicio.Year, inicio.Month, 1);
+                    while (mesAnio <= fin)
+                    {
+                        etiquetas.Add(mesAnio.ToString("MMMM yyyy", new CultureInfo("es-ES"))); // Enero 2025
+                        mesAnio = mesAnio.AddMonths(1);
+                    }
+                    break;
+
+                case "años":
+                    for (int año = inicio.Year; año <= fin.Year; año++)
+                        etiquetas.Add(año.ToString());
+                    break;
+            }
+            return etiquetas;
+        }
+
 
         private void dtpFechaInicio_Leave(object sender, EventArgs e)
         {
