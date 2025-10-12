@@ -29,11 +29,7 @@
         private void InitializeComponent()
         {
             pbActividadReciente = new PanelBordes();
-            panel1 = new Panel();
-            label3 = new Label();
-            label2 = new Label();
-            label1 = new Label();
-            pictureBox1 = new PictureBox();
+            panelContenedorRegistros = new FlowLayoutPanel();
             lSubtituloConsultas = new Label();
             lTituloConsultas = new Label();
             lTituloDashboard = new Label();
@@ -42,24 +38,22 @@
             lNumeroPacientesActivos = new Label();
             lPacientesActivos = new Label();
             panelBordes2 = new PanelBordes();
-            label8 = new Label();
-            label7 = new Label();
+            lNroPromedioRegistros = new Label();
+            lPromedioRegistros = new Label();
             lSubtitloPacientes = new Label();
             lTituloPacientes = new Label();
             panelContenedorPacientes = new FlowLayoutPanel();
-            panelBordes3 = new PanelBordes();
+            pbPacientesRecientes = new PanelBordes();
             pbActividadReciente.SuspendLayout();
-            panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panelBordes1.SuspendLayout();
             panelBordes2.SuspendLayout();
-            panelBordes3.SuspendLayout();
+            pbPacientesRecientes.SuspendLayout();
             SuspendLayout();
             // 
             // pbActividadReciente
             // 
             pbActividadReciente.BackColor = Color.White;
-            pbActividadReciente.Controls.Add(panel1);
+            pbActividadReciente.Controls.Add(panelContenedorRegistros);
             pbActividadReciente.Controls.Add(lSubtituloConsultas);
             pbActividadReciente.Controls.Add(lTituloConsultas);
             pbActividadReciente.Location = new Point(20, 263);
@@ -67,58 +61,17 @@
             pbActividadReciente.Size = new Size(355, 288);
             pbActividadReciente.TabIndex = 0;
             // 
-            // panel1
+            // panelContenedorRegistros
             // 
-            panel1.Controls.Add(label3);
-            panel1.Controls.Add(label2);
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(pictureBox1);
-            panel1.Location = new Point(16, 65);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(323, 46);
-            panel1.TabIndex = 2;
-            // 
-            // label3
-            // 
-            label3.Anchor = AnchorStyles.Left;
-            label3.AutoSize = true;
-            label3.Location = new Point(267, 10);
-            label3.Name = "label3";
-            label3.Size = new Size(53, 15);
-            label3.TabIndex = 8;
-            label3.Text = "20/09/25";
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Location = new Point(31, 25);
-            label2.Name = "label2";
-            label2.Size = new Size(96, 15);
-            label2.TabIndex = 7;
-            label2.Text = "Consulta medica";
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Left;
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(31, 10);
-            label1.Name = "label1";
-            label1.Size = new Size(92, 15);
-            label1.TabIndex = 6;
-            label1.Text = "Maria Gonzalez";
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Dock = DockStyle.Left;
-            pictureBox1.Image = Resource1.exclamation;
-            pictureBox1.Location = new Point(0, 0);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(25, 46);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 5;
-            pictureBox1.TabStop = false;
+            panelContenedorRegistros.Anchor = AnchorStyles.None;
+            panelContenedorRegistros.AutoScroll = true;
+            panelContenedorRegistros.BackColor = Color.White;
+            panelContenedorRegistros.FlowDirection = FlowDirection.TopDown;
+            panelContenedorRegistros.Location = new Point(16, 65);
+            panelContenedorRegistros.Name = "panelContenedorRegistros";
+            panelContenedorRegistros.Size = new Size(327, 206);
+            panelContenedorRegistros.TabIndex = 4;
+            panelContenedorRegistros.WrapContents = false;
             // 
             // lSubtituloConsultas
             // 
@@ -198,35 +151,35 @@
             // panelBordes2
             // 
             panelBordes2.BackColor = Color.White;
-            panelBordes2.Controls.Add(label8);
-            panelBordes2.Controls.Add(label7);
+            panelBordes2.Controls.Add(lNroPromedioRegistros);
+            panelBordes2.Controls.Add(lPromedioRegistros);
             panelBordes2.Location = new Point(436, 115);
             panelBordes2.Name = "panelBordes2";
             panelBordes2.Size = new Size(312, 118);
             panelBordes2.TabIndex = 4;
             // 
-            // label8
+            // lNroPromedioRegistros
             // 
-            label8.Anchor = AnchorStyles.None;
-            label8.AutoSize = true;
-            label8.BackColor = Color.White;
-            label8.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(163, 50);
-            label8.Name = "label8";
-            label8.Size = new Size(23, 25);
-            label8.TabIndex = 6;
-            label8.Text = "3";
-            label8.TextAlign = ContentAlignment.MiddleCenter;
+            lNroPromedioRegistros.Anchor = AnchorStyles.None;
+            lNroPromedioRegistros.AutoSize = true;
+            lNroPromedioRegistros.BackColor = Color.White;
+            lNroPromedioRegistros.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lNroPromedioRegistros.Location = new Point(140, 50);
+            lNroPromedioRegistros.Name = "lNroPromedioRegistros";
+            lNroPromedioRegistros.Size = new Size(23, 25);
+            lNroPromedioRegistros.TabIndex = 6;
+            lNroPromedioRegistros.Text = "0";
+            lNroPromedioRegistros.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label7
+            // lPromedioRegistros
             // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(7, 16);
-            label7.Name = "label7";
-            label7.Size = new Size(271, 21);
-            label7.TabIndex = 1;
-            label7.Text = "Promedio de registros por paciente";
+            lPromedioRegistros.AutoSize = true;
+            lPromedioRegistros.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lPromedioRegistros.Location = new Point(21, 16);
+            lPromedioRegistros.Name = "lPromedioRegistros";
+            lPromedioRegistros.Size = new Size(271, 21);
+            lPromedioRegistros.TabIndex = 1;
+            lPromedioRegistros.Text = "Promedio de registros por paciente";
             // 
             // lSubtitloPacientes
             // 
@@ -263,22 +216,22 @@
             panelContenedorPacientes.TabIndex = 3;
             panelContenedorPacientes.WrapContents = false;
             // 
-            // panelBordes3
+            // pbPacientesRecientes
             // 
-            panelBordes3.BackColor = Color.White;
-            panelBordes3.Controls.Add(panelContenedorPacientes);
-            panelBordes3.Controls.Add(lTituloPacientes);
-            panelBordes3.Controls.Add(lSubtitloPacientes);
-            panelBordes3.Location = new Point(397, 263);
-            panelBordes3.Name = "panelBordes3";
-            panelBordes3.Size = new Size(355, 288);
-            panelBordes3.TabIndex = 5;
+            pbPacientesRecientes.BackColor = Color.White;
+            pbPacientesRecientes.Controls.Add(panelContenedorPacientes);
+            pbPacientesRecientes.Controls.Add(lTituloPacientes);
+            pbPacientesRecientes.Controls.Add(lSubtitloPacientes);
+            pbPacientesRecientes.Location = new Point(397, 263);
+            pbPacientesRecientes.Name = "pbPacientesRecientes";
+            pbPacientesRecientes.Size = new Size(355, 288);
+            pbPacientesRecientes.TabIndex = 5;
             // 
             // HomeControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panelBordes3);
+            Controls.Add(pbPacientesRecientes);
             Controls.Add(panelBordes2);
             Controls.Add(panelBordes1);
             Controls.Add(lSubtituloDashboard);
@@ -288,15 +241,12 @@
             Load += HomeControl_Load;
             pbActividadReciente.ResumeLayout(false);
             pbActividadReciente.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panelBordes1.ResumeLayout(false);
             panelBordes1.PerformLayout();
             panelBordes2.ResumeLayout(false);
             panelBordes2.PerformLayout();
-            panelBordes3.ResumeLayout(false);
-            panelBordes3.PerformLayout();
+            pbPacientesRecientes.ResumeLayout(false);
+            pbPacientesRecientes.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -312,18 +262,14 @@
         private PanelBordes panelBordes2;
         private Label lNumeroPacientesActivos;
         private Label lPacientesActivos;
-        private Label label1;
         private Label lSubtituloConsultas;
         private Label lTituloConsultas;
-        private Panel panel1;
-        private PictureBox pictureBox1;
-        private Label label3;
-        private Label label2;
         private Label lSubtitloPacientes;
         private Label lTituloPacientes;
-        private Label label7;
-        private Label label8;
+        private Label lPromedioRegistros;
+        private Label lNroPromedioRegistros;
         private FlowLayoutPanel panelContenedorPacientes;
-        private PanelBordes panelBordes3;
+        private PanelBordes pbPacientesRecientes;
+        private FlowLayoutPanel panelContenedorRegistros;
     }
 }

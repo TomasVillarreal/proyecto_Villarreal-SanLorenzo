@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -24,7 +25,15 @@ namespace proyecto_Villarreal_SanLorenzo
         private void HomeControl_Load(object sender, EventArgs e)
         {
             CargarPacientesRecientes();
-            // Coneccion a la base de datos para contar cuantas filas hay en la tabla de "Paciente"
+            CrearRegistrosRecientes();
+            lNumeroPacientesActivos.Text = TotalPacientesActivos().ToString();
+            lNroPromedioRegistros.Text = PromedioRegistrosPaciente().ToString("0.00");
+        }
+
+        // Funcion que devuelve el total de pacientes registrados en el hospital
+        private int TotalPacientesActivos()
+        {
+            int total_pacientes = 0;
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
@@ -36,17 +45,42 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         db.Open();
                         // Guardo el total y lo pongo en el texto del label correspondiente
-                        int total_pacientes = (int)cmd.ExecuteScalar();
-                        lNumeroPacientesActivos.Text = total_pacientes.ToString();
+                        total_pacientes = (int)cmd.ExecuteScalar();
                         db.Close();
                     }
                 }
-                
             }
             catch (SqlException ex)
             {
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return total_pacientes;
+        }
+
+        private double PromedioRegistrosPaciente()
+        {
+            double promedio = 0;
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    // Se crea la query para contar las filas
+                    string queryNroPacientes = "SELECT CAST(COUNT(*) AS FLOAT) / COUNT(DISTINCT dni_paciente) AS PromedioRegistrosPorPaciente FROM Registro;";
+
+                    using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
+                    {
+                        db.Open();
+                        // Guardo el total y lo pongo en el texto del label correspondiente
+                        promedio = Convert.ToDouble(cmd.ExecuteScalar());
+                        db.Close();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return promedio;
         }
 
         // Funcion para crear un panel vacio para avisarle al usuario que no se han creado ninguna fila esta semana
@@ -96,7 +130,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             while (reader.Read())
                             {
-                                filaPaciente = new FilasUltimaActividad(Convert.ToInt32(reader["dni_paciente"]), true);
+                                filaPaciente = new FilasUltimaActividad(Convert.ToInt32(reader["dni_paciente"]), 0, 0, true);
                                 panelContenedorPacientes.Controls.Add(filaPaciente);
                             }
                         }
@@ -106,6 +140,50 @@ namespace proyecto_Villarreal_SanLorenzo
 
                         }
                             db.Close();
+                    }
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CrearRegistrosRecientes()
+        {
+            FilasUltimaActividad filaPaciente;
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    // Se crea la query para contar las filas
+                    string queryNroPacientes = "SELECT dni_paciente, id_registro, id_historial FROM Registro " +
+                        "WHERE fecha_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_registro <= GETDATE();";
+
+                    using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
+                    {
+                        db.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                filaPaciente = new FilasUltimaActividad
+                                    (Convert.ToInt32(reader["dni_paciente"]), 
+                                        Convert.ToInt32(reader["id_registro"]), 
+                                        Convert.ToInt32(reader["id_historial"]), 
+                                        false
+                                     );
+                                panelContenedorRegistros.Controls.Add(filaPaciente);
+                            }
+                        }
+                        else
+                        {
+                            panelContenedorRegistros.Controls.Add(crearPanelVacio(true));
+
+                        }
+                        db.Close();
                     }
                 }
 

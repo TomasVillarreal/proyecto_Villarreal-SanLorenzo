@@ -28,62 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            label2 = new Label();
-            panelBordes1 = new PanelBordes();
             lSubtituloDashboard = new Label();
             lTituloDashboard = new Label();
-            panelBordes2 = new PanelBordes();
-            label3 = new Label();
+            lSeleccion = new Label();
+            cbDecisionIntervalo = new ComboBox();
+            dtpFechaFin = new DateTimePicker();
+            dtpFechaInicio = new DateTimePicker();
+            label12 = new Label();
+            label11 = new Label();
+            panelSeleccionIntervalo = new Panel();
+            panelBordes1 = new PanelBordes();
+            lFecha = new Label();
+            lMedicoActivo = new Label();
+            lPromedioRegistros = new Label();
+            lTotalRegistros = new Label();
             label4 = new Label();
-            panelBordes3 = new PanelBordes();
-            label7 = new Label();
-            label5 = new Label();
-            panelBordes4 = new PanelBordes();
-            label8 = new Label();
-            label6 = new Label();
-            panelBordes5 = new PanelBordes();
-            label10 = new Label();
-            label9 = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            label1 = new Label();
+            bActualizarGrafico = new Button();
+            panelBordes2 = new PanelBordes();
+            rbFechas = new RadioButton();
+            rbMedicos = new RadioButton();
+            panelSeleccionIntervalo.SuspendLayout();
             panelBordes1.SuspendLayout();
-            panelBordes2.SuspendLayout();
-            panelBordes3.SuspendLayout();
-            panelBordes4.SuspendLayout();
-            panelBordes5.SuspendLayout();
             SuspendLayout();
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.None;
-            label1.AutoSize = true;
-            label1.BackColor = Color.White;
-            label1.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(49, 33);
-            label1.Name = "label1";
-            label1.Size = new Size(188, 25);
-            label1.TabIndex = 5;
-            label1.Text = "Martin Alvarez - 11";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(14, 12);
-            label2.Name = "label2";
-            label2.Size = new Size(256, 21);
-            label2.TabIndex = 0;
-            label2.Text = "Medico con mas consultas hechas";
-            // 
-            // panelBordes1
-            // 
-            panelBordes1.BackColor = Color.White;
-            panelBordes1.Controls.Add(label1);
-            panelBordes1.Controls.Add(label2);
-            panelBordes1.Location = new Point(42, 107);
-            panelBordes1.Name = "panelBordes1";
-            panelBordes1.Size = new Size(312, 118);
-            panelBordes1.TabIndex = 6;
             // 
             // lSubtituloDashboard
             // 
@@ -106,180 +75,267 @@
             lTituloDashboard.TabIndex = 6;
             lTituloDashboard.Text = "Informes";
             // 
-            // panelBordes2
+            // lSeleccion
             // 
-            panelBordes2.BackColor = Color.White;
-            panelBordes2.Controls.Add(label3);
-            panelBordes2.Controls.Add(label4);
-            panelBordes2.Location = new Point(410, 107);
-            panelBordes2.Name = "panelBordes2";
-            panelBordes2.Size = new Size(312, 118);
-            panelBordes2.TabIndex = 7;
+            lSeleccion.AutoSize = true;
+            lSeleccion.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lSeleccion.ForeColor = SystemColors.ControlDark;
+            lSeleccion.Location = new Point(302, 41);
+            lSeleccion.Name = "lSeleccion";
+            lSeleccion.Size = new Size(181, 15);
+            lSeleccion.TabIndex = 9;
+            lSeleccion.Text = "Seleccione el intervalo de tiempo";
             // 
-            // label3
+            // cbDecisionIntervalo
             // 
-            label3.Anchor = AnchorStyles.None;
-            label3.AutoSize = true;
-            label3.BackColor = Color.White;
-            label3.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(112, 33);
-            label3.Name = "label3";
-            label3.Size = new Size(74, 25);
-            label3.TabIndex = 5;
-            label3.Text = "Clínica";
+            cbDecisionIntervalo.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbDecisionIntervalo.FormattingEnabled = true;
+            cbDecisionIntervalo.Items.AddRange(new object[] { "Todos los tiempos", "Ultima semana", "Ultimo mes", "Ultimo año", "Personalizado" });
+            cbDecisionIntervalo.Location = new Point(302, 59);
+            cbDecisionIntervalo.Name = "cbDecisionIntervalo";
+            cbDecisionIntervalo.Size = new Size(121, 23);
+            cbDecisionIntervalo.TabIndex = 10;
+            cbDecisionIntervalo.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // dtpFechaFin
+            // 
+            dtpFechaFin.Format = DateTimePickerFormat.Short;
+            dtpFechaFin.Location = new Point(107, 18);
+            dtpFechaFin.Name = "dtpFechaFin";
+            dtpFechaFin.Size = new Size(81, 23);
+            dtpFechaFin.TabIndex = 13;
+            dtpFechaFin.Value = new DateTime(1900, 1, 1, 0, 0, 0, 0);
+            dtpFechaFin.Leave += dtpFechaFin_Leave;
+            // 
+            // dtpFechaInicio
+            // 
+            dtpFechaInicio.Format = DateTimePickerFormat.Short;
+            dtpFechaInicio.Location = new Point(3, 18);
+            dtpFechaInicio.Name = "dtpFechaInicio";
+            dtpFechaInicio.Size = new Size(81, 23);
+            dtpFechaInicio.TabIndex = 12;
+            dtpFechaInicio.Value = new DateTime(1900, 1, 1, 0, 0, 0, 0);
+            dtpFechaInicio.Leave += dtpFechaInicio_Leave;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label12.ForeColor = SystemColors.ControlDark;
+            label12.Location = new Point(107, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(64, 15);
+            label12.TabIndex = 11;
+            label12.Text = "Fecha final";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label11.ForeColor = SystemColors.ControlDark;
+            label11.Location = new Point(3, 0);
+            label11.Name = "label11";
+            label11.Size = new Size(72, 15);
+            label11.TabIndex = 10;
+            label11.Text = "Fecha inicial";
+            // 
+            // panelSeleccionIntervalo
+            // 
+            panelSeleccionIntervalo.Controls.Add(label11);
+            panelSeleccionIntervalo.Controls.Add(dtpFechaFin);
+            panelSeleccionIntervalo.Controls.Add(label12);
+            panelSeleccionIntervalo.Controls.Add(dtpFechaInicio);
+            panelSeleccionIntervalo.Location = new Point(495, 41);
+            panelSeleccionIntervalo.Name = "panelSeleccionIntervalo";
+            panelSeleccionIntervalo.Size = new Size(227, 43);
+            panelSeleccionIntervalo.TabIndex = 14;
+            panelSeleccionIntervalo.Visible = false;
+            // 
+            // panelBordes1
+            // 
+            panelBordes1.BackColor = Color.White;
+            panelBordes1.Controls.Add(lFecha);
+            panelBordes1.Controls.Add(lMedicoActivo);
+            panelBordes1.Controls.Add(lPromedioRegistros);
+            panelBordes1.Controls.Add(lTotalRegistros);
+            panelBordes1.Controls.Add(label4);
+            panelBordes1.Controls.Add(label3);
+            panelBordes1.Controls.Add(label2);
+            panelBordes1.Controls.Add(label1);
+            panelBordes1.Location = new Point(42, 407);
+            panelBordes1.Name = "panelBordes1";
+            panelBordes1.Size = new Size(680, 130);
+            panelBordes1.TabIndex = 15;
+            // 
+            // lFecha
+            // 
+            lFecha.AutoSize = true;
+            lFecha.Font = new Font("Segoe UI Black", 9.75F, FontStyle.Bold);
+            lFecha.Location = new Point(533, 89);
+            lFecha.Name = "lFecha";
+            lFecha.Size = new Size(78, 17);
+            lFecha.TabIndex = 7;
+            lFecha.Text = "01/01/1900";
+            // 
+            // lMedicoActivo
+            // 
+            lMedicoActivo.AutoSize = true;
+            lMedicoActivo.Font = new Font("Segoe UI Black", 9.75F, FontStyle.Bold);
+            lMedicoActivo.Location = new Point(508, 41);
+            lMedicoActivo.Name = "lMedicoActivo";
+            lMedicoActivo.Size = new Size(46, 17);
+            lMedicoActivo.TabIndex = 6;
+            lMedicoActivo.Text = "label5";
+            // 
+            // lPromedioRegistros
+            // 
+            lPromedioRegistros.AutoSize = true;
+            lPromedioRegistros.Font = new Font("Segoe UI Black", 9.75F, FontStyle.Bold);
+            lPromedioRegistros.Location = new Point(70, 89);
+            lPromedioRegistros.Name = "lPromedioRegistros";
+            lPromedioRegistros.Size = new Size(46, 17);
+            lPromedioRegistros.TabIndex = 5;
+            lPromedioRegistros.Text = "label5";
+            // 
+            // lTotalRegistros
+            // 
+            lTotalRegistros.AutoSize = true;
+            lTotalRegistros.Font = new Font("Segoe UI Black", 9.75F, FontStyle.Bold);
+            lTotalRegistros.Location = new Point(79, 41);
+            lTotalRegistros.Name = "lTotalRegistros";
+            lTotalRegistros.Size = new Size(22, 17);
+            lTotalRegistros.TabIndex = 4;
+            lTotalRegistros.Text = "10";
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(44, 12);
+            label4.Location = new Point(22, 68);
             label4.Name = "label4";
-            label4.Size = new Size(216, 21);
-            label4.TabIndex = 0;
-            label4.Text = "Especialidad mas consultada";
+            label4.Size = new Size(230, 21);
+            label4.TabIndex = 3;
+            label4.Text = "Promedio de registros por dia";
             // 
-            // panelBordes3
+            // label3
             // 
-            panelBordes3.BackColor = Color.White;
-            panelBordes3.Controls.Add(label7);
-            panelBordes3.Controls.Add(label5);
-            panelBordes3.Location = new Point(42, 277);
-            panelBordes3.Name = "panelBordes3";
-            panelBordes3.Size = new Size(680, 64);
-            panelBordes3.TabIndex = 7;
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(488, 68);
+            label3.Name = "label3";
+            label3.Size = new Size(167, 21);
+            label3.TabIndex = 2;
+            label3.Text = "Día con más actividad";
             // 
-            // label7
+            // label2
             // 
-            label7.Anchor = AnchorStyles.None;
-            label7.AutoSize = true;
-            label7.BackColor = Color.White;
-            label7.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(23, 28);
-            label7.Name = "label7";
-            label7.Size = new Size(198, 25);
-            label7.TabIndex = 6;
-            label7.Text = "Paracetamol 400mg";
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(508, 20);
+            label2.Name = "label2";
+            label2.Size = new Size(147, 21);
+            label2.TabIndex = 1;
+            label2.Text = "Medico más activo";
             // 
-            // label5
+            // label1
             // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(3, 7);
-            label5.Name = "label5";
-            label5.Size = new Size(354, 21);
-            label5.TabIndex = 6;
-            label5.Text = "Medicamento suministrado con mas frecuencia";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(22, 20);
+            label1.Name = "label1";
+            label1.Size = new Size(137, 21);
+            label1.TabIndex = 0;
+            label1.Text = "Total de registros";
             // 
-            // panelBordes4
+            // bActualizarGrafico
             // 
-            panelBordes4.BackColor = Color.White;
-            panelBordes4.Controls.Add(label8);
-            panelBordes4.Controls.Add(label6);
-            panelBordes4.Location = new Point(42, 373);
-            panelBordes4.Name = "panelBordes4";
-            panelBordes4.Size = new Size(680, 67);
-            panelBordes4.TabIndex = 8;
+            bActualizarGrafico.BackColor = Color.Black;
+            bActualizarGrafico.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bActualizarGrafico.ForeColor = Color.White;
+            bActualizarGrafico.Location = new Point(302, 88);
+            bActualizarGrafico.Name = "bActualizarGrafico";
+            bActualizarGrafico.Size = new Size(78, 34);
+            bActualizarGrafico.TabIndex = 17;
+            bActualizarGrafico.Text = "Actualizar";
+            bActualizarGrafico.UseVisualStyleBackColor = false;
             // 
-            // label8
+            // panelBordes2
             // 
-            label8.Anchor = AnchorStyles.None;
-            label8.AutoSize = true;
-            label8.BackColor = Color.White;
-            label8.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(23, 28);
-            label8.Name = "label8";
-            label8.Size = new Size(137, 25);
-            label8.TabIndex = 7;
-            label8.Text = "Oftalmología";
+            panelBordes2.BackColor = Color.White;
+            panelBordes2.Location = new Point(42, 146);
+            panelBordes2.Name = "panelBordes2";
+            panelBordes2.Size = new Size(680, 241);
+            panelBordes2.TabIndex = 18;
             // 
-            // label6
+            // rbFechas
             // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(3, 8);
-            label6.Name = "label6";
-            label6.Size = new Size(288, 21);
-            label6.TabIndex = 7;
-            label6.Text = "Especialidad con más médicos a cargo";
+            rbFechas.AutoSize = true;
+            rbFechas.Checked = true;
+            rbFechas.Location = new Point(501, 121);
+            rbFechas.Name = "rbFechas";
+            rbFechas.Size = new Size(95, 19);
+            rbFechas.TabIndex = 19;
+            rbFechas.TabStop = true;
+            rbFechas.Text = "Segun fechas";
+            rbFechas.UseVisualStyleBackColor = true;
             // 
-            // panelBordes5
+            // rbMedicos
             // 
-            panelBordes5.BackColor = Color.White;
-            panelBordes5.Controls.Add(label10);
-            panelBordes5.Controls.Add(label9);
-            panelBordes5.Location = new Point(42, 472);
-            panelBordes5.Name = "panelBordes5";
-            panelBordes5.Size = new Size(680, 70);
-            panelBordes5.TabIndex = 8;
-            // 
-            // label10
-            // 
-            label10.Anchor = AnchorStyles.None;
-            label10.AutoSize = true;
-            label10.BackColor = Color.White;
-            label10.Font = new Font("Segoe UI Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.Location = new Point(23, 28);
-            label10.Name = "label10";
-            label10.Size = new Size(32, 25);
-            label10.TabIndex = 8;
-            label10.Text = "15";
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.Location = new Point(3, 8);
-            label9.Name = "label9";
-            label9.Size = new Size(160, 21);
-            label9.TabIndex = 8;
-            label9.Text = "Total personal activo";
+            rbMedicos.AutoSize = true;
+            rbMedicos.Location = new Point(616, 121);
+            rbMedicos.Name = "rbMedicos";
+            rbMedicos.Size = new Size(106, 19);
+            rbMedicos.TabIndex = 20;
+            rbMedicos.Text = "Segun medicos";
+            rbMedicos.UseVisualStyleBackColor = true;
             // 
             // InformeControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panelBordes5);
-            Controls.Add(panelBordes4);
-            Controls.Add(panelBordes3);
+            Controls.Add(rbMedicos);
+            Controls.Add(rbFechas);
             Controls.Add(panelBordes2);
-            Controls.Add(lSubtituloDashboard);
+            Controls.Add(bActualizarGrafico);
             Controls.Add(panelBordes1);
+            Controls.Add(panelSeleccionIntervalo);
+            Controls.Add(cbDecisionIntervalo);
+            Controls.Add(lSeleccion);
+            Controls.Add(lSubtituloDashboard);
             Controls.Add(lTituloDashboard);
             Margin = new Padding(3, 2, 3, 2);
             Name = "InformeControl";
             Load += InformeControl_Load;
+            panelSeleccionIntervalo.ResumeLayout(false);
+            panelSeleccionIntervalo.PerformLayout();
             panelBordes1.ResumeLayout(false);
             panelBordes1.PerformLayout();
-            panelBordes2.ResumeLayout(false);
-            panelBordes2.PerformLayout();
-            panelBordes3.ResumeLayout(false);
-            panelBordes3.PerformLayout();
-            panelBordes4.ResumeLayout(false);
-            panelBordes4.PerformLayout();
-            panelBordes5.ResumeLayout(false);
-            panelBordes5.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Label label1;
-        private Label label2;
-        private PanelBordes panelBordes1;
         private Label lSubtituloDashboard;
         private Label lTituloDashboard;
-        private PanelBordes panelBordes2;
-        private Label label3;
+        private Label lSeleccion;
+        private ComboBox cbDecisionIntervalo;
+        private Label label12;
+        private Label label11;
+        private DateTimePicker dtpFechaFin;
+        private DateTimePicker dtpFechaInicio;
+        private Panel panelSeleccionIntervalo;
+        private PanelBordes panelBordes1;
+        private Label lFecha;
+        private Label lMedicoActivo;
+        private Label lPromedioRegistros;
+        private Label lTotalRegistros;
         private Label label4;
-        private PanelBordes panelBordes3;
-        private PanelBordes panelBordes4;
-        private PanelBordes panelBordes5;
-        private Label label7;
-        private Label label5;
-        private Label label8;
-        private Label label6;
-        private Label label10;
-        private Label label9;
+        private Label label3;
+        private Label label2;
+        private Label label1;
+        private Button bActualizarGrafico;
+        private PanelBordes panelBordes2;
+        private RadioButton rbFechas;
+        private RadioButton rbMedicos;
     }
 }
