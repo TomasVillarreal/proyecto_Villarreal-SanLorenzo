@@ -279,6 +279,7 @@
             rbFechas.TabStop = true;
             rbFechas.Text = "Segun fechas";
             rbFechas.UseVisualStyleBackColor = true;
+            rbFechas.CheckedChanged += rbFechas_CheckedChanged;
             // 
             // rbMedicos
             // 
@@ -289,6 +290,7 @@
             rbMedicos.TabIndex = 20;
             rbMedicos.Text = "Segun medicos";
             rbMedicos.UseVisualStyleBackColor = true;
+            rbMedicos.CheckedChanged += rbMedicos_CheckedChanged;
             // 
             // InformeControl
             // 

@@ -404,7 +404,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return resultados;
         }
 
-        private void GraficarTiempo(List<string> etiquetas, List<int> valores)
+        private void RealizarGraficoTiempo(List<string> etiquetas, List<int> valores)
         {
             panelGrafico.Controls.Clear();
             Chart chart = new Chart { Dock = DockStyle.Fill };
@@ -466,34 +466,197 @@ namespace proyecto_Villarreal_SanLorenzo
             GraficarSegunRadioButton();
         }
 
+        private void GraficarSegunTiempo()
+        {
+            // NUEVO: Determinar escala
+            string escala = DeterminarEscalaTiempo();
+            if (escala == "error") return;  // Rango inválido
+                                            // NUEVO: Generar etiquetas y períodos en paralelo
+            var (etiquetas, periodos) = GenerarEtiquetasYPeriodos(fecha_inicio, fecha_fin, escala);
+            // NUEVO: Obtener datos por períodos
+            var datos = ObtenerDatosPorPeriodos(fecha_inicio, fecha_fin, escala);
+            // NUEVO: Alinear valores (simple: por índice, usando periodos como key)
+            var valores = new List<int>();
+            foreach (var periodo in periodos)
+            {
+                if (datos.TryGetValue(periodo.Date, out int cantidad))
+                {
+                    valores.Add(cantidad);
+                }
+                else
+                {
+                    valores.Add(0);  // No hay datos en este período
+                }
+            }
+            RealizarGraficoTiempo(etiquetas, valores);
+        }
+
+        private void GraficarSegunMedicos()
+        {
+            try
+            {
+                // 1️⃣ Obtener datos de médicos activos en el rango
+                var datosMedicos = ObtenerDatosPorMedico(fecha_inicio, fecha_fin);
+
+                // 2️⃣ Generar etiquetas (nombres) y valores (cantidad de registros)
+                var etiquetas = datosMedicos.Select(d => d.NombreMostrar).ToList();
+                var valores = datosMedicos.Select(d => d.CantidadRegistros).ToList();
+
+                // 3️⃣ Graficar reutilizando la misma función de visualización
+                RealizarGraficoMedicos(etiquetas, valores);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al graficar por médicos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<(string NombreMostrar, int CantidadRegistros)> ObtenerDatosPorMedico(DateTime inicio, DateTime fin)
+        {
+            var resultados = new List<(string, int)>();
+
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string query = @"
+                SELECT 
+                    u.id_usuario,
+                    u.nombre_usuario,
+                    u.apellido_usuario,
+                    COUNT(*) AS CantidadRegistros
+                FROM Registro r
+                INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                WHERE fecha_registro BETWEEN @inicio AND @fin
+                GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario
+                ORDER BY COUNT(*) DESC;";
+
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
+
+                        db.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        var listaTemporal = new List<(int Id, string Nombre, string Apellido, int Cantidad)>();
+
+                        while (reader.Read())
+                        {
+                            listaTemporal.Add((
+                                Convert.ToInt32(reader["id_usuario"]),
+                                reader["nombre_usuario"].ToString(),
+                                reader["apellido_usuario"].ToString(),
+                                Convert.ToInt32(reader["CantidadRegistros"])
+                            ));
+                        }
+
+                        // Resolver apellidos repetidos
+                        var gruposPorApellido = listaTemporal.GroupBy(x => x.Apellido);
+                        foreach (var grupo in gruposPorApellido)
+                        {
+                            if (grupo.Count() == 1)
+                            {
+                                var unico = grupo.First();
+                                resultados.Add(($"{unico.Apellido}", unico.Cantidad));
+                            }
+                            else
+                            {
+                                // Si hay repetidos, agregar iniciales del nombre
+                                foreach (var medico in grupo)
+                                {
+                                    string[] partesNombre = medico.Nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                                    string iniciales = "";
+                                    if (partesNombre.Length >= 1) iniciales += partesNombre[0][0];
+                                    if (partesNombre.Length >= 2) iniciales += partesNombre[1][0];
+                                    resultados.Add(($"{medico.Apellido} {iniciales.ToUpper()}", medico.Cantidad));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error al obtener datos de médicos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return resultados;
+        }
+
+        private void RealizarGraficoMedicos(List<string> etiquetas, List<int> valores)
+        {
+            panelGrafico.Controls.Clear();
+            Chart chart = new Chart { Dock = DockStyle.Fill };
+            panelGrafico.Controls.Add(chart);
+            ChartArea chartArea = new ChartArea();
+            chart.ChartAreas.Add(chartArea);
+
+            chartArea.AxisX.Title = "Médicos activos";
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.LabelStyle.Angle = -45;
+            chartArea.AxisX.MajorGrid.Enabled = false;
+
+            chartArea.AxisY.Title = "Cantidad de registros";
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.Enabled = AxisEnabled.True;
+
+            int maxValor = valores.Count > 0 ? valores.Max() : 0;
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = maxValor == 0 ? 10 : maxValor * 1.2;
+            chartArea.AxisY.Interval = maxValor <= 10 ? 1 : Math.Ceiling(maxValor / 5.0);
+
+            Series series = new Series
+            {
+                Name = "Registros por Médico",
+                ChartType = SeriesChartType.Column,
+                IsValueShownAsLabel = true,
+                LabelFormat = "N0"
+            };
+            chart.Series.Add(series);
+
+            for (int i = 0; i < etiquetas.Count; i++)
+            {
+                DataPoint dp = new DataPoint
+                {
+                    YValues = new double[] { valores[i] },
+                    AxisLabel = etiquetas[i]
+                };
+                series.Points.Add(dp);
+            }
+
+            chart.Titles.Add("Registros clínicos por médico activo");
+            if (valores.All(v => v == 0))
+            {
+                chart.Titles[0].Text += " (No hay datos en este rango)";
+            }
+
+            chart.BackColor = Color.WhiteSmoke;
+            chartArea.BackColor = Color.White;
+        }
+
         private void GraficarSegunRadioButton()
         {
             if (rbFechas.Checked)
             {
-                // NUEVO: Determinar escala
-                string escala = DeterminarEscalaTiempo();
-                if (escala == "error") return;  // Rango inválido
-                // NUEVO: Generar etiquetas y períodos en paralelo
-                var (etiquetas, periodos) = GenerarEtiquetasYPeriodos(fecha_inicio, fecha_fin, escala);
-                // NUEVO: Obtener datos por períodos
-                var datos = ObtenerDatosPorPeriodos(fecha_inicio, fecha_fin, escala);
-                // NUEVO: Alinear valores (simple: por índice, usando periodos como key)
-                var valores = new List<int>();
-                foreach (var periodo in periodos)
-                {
-                    if (datos.TryGetValue(periodo.Date, out int cantidad))
-                    {
-                        valores.Add(cantidad);
-                    }
-                    else
-                    {
-                        valores.Add(0);  // No hay datos en este período
-                    }
-                }
-                GraficarTiempo(etiquetas, valores);
+                GraficarSegunTiempo();
+            }
+            else if (rbMedicos.Checked)
+            {
+                GraficarSegunMedicos();
             }
         }
 
+        private void rbFechas_CheckedChanged(object sender, EventArgs e)
+        {
+            GraficarSegunRadioButton();
+        }
+
+        private void rbMedicos_CheckedChanged(object sender, EventArgs e)
+        {
+            GraficarSegunRadioButton();
+        }
     }
 }
 
