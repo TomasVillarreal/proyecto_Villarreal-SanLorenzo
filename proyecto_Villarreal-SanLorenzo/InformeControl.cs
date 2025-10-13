@@ -36,16 +36,20 @@ namespace proyecto_Villarreal_SanLorenzo
             dtpFechaFin.MaxDate = DateTime.Now;
             dtpFechaInicio.MaxDate = DateTime.Now;
 
-            lMedicoActivo.Text = ObtenerMedicoActivo();
-            lFecha.Text = ObtenerFechaActividad();
-            lTotalRegistros.Text = ObtenerTotalRegistros().ToString();
-            lPromedioRegistros.Text = ObtenerPromedioRegistros().ToString("0.00");
+            ActualizarStats();
 
             GraficarSegunRadioButton();
         }
 
+        private void ActualizarStats()
+        {
+            lMedicoActivo.Text = ObtenerMedicoActivo(fecha_inicio, fecha_fin);
+            lFecha.Text = ObtenerFechaActividad(fecha_inicio, fecha_fin);
+            lTotalRegistros.Text = ObtenerTotalRegistros(fecha_inicio, fecha_fin).ToString();
+            lPromedioRegistros.Text = ObtenerPromedioRegistros(fecha_inicio, fecha_fin).ToString("0.00");
+        }
 
-        private int ObtenerTotalRegistros()
+        private int ObtenerTotalRegistros(DateTime inicio, DateTime fin)
         {
             int total_registros = 0;
             try
@@ -53,10 +57,12 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     // Se crea la query para contar las filas
-                    string queryNroPacientes = "SELECT COUNT (*) FROM Registro";
+                    string queryNroPacientes = "SELECT COUNT (*) FROM Registro WHERE fecha_registro BETWEEN @inicio AND @fin";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
                         db.Open();
                         // Guardo el total y lo pongo en el texto del label correspondiente
                         total_registros = (int)cmd.ExecuteScalar();
@@ -71,7 +77,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return total_registros;
         }
 
-        private string ObtenerFechaActividad()
+        private string ObtenerFechaActividad(DateTime inicio, DateTime fin)
         {
             string fecha = "";
             try
@@ -79,11 +85,19 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     // Se crea la query para contar las filas
-                    string queryNroPacientes = "SELECT TOP 1  CAST(fecha_registro AS DATE) AS fecha_maxima, COUNT(*) AS CantidadRegistros FROM Registro " +
-                        "GROUP BY CAST(fecha_registro AS DATE) ORDER BY CantidadRegistros DESC";
+                    string query = @"
+                        SELECT TOP 1 
+                            CAST(fecha_registro AS DATE) AS fecha_maxima,
+                            COUNT(*) AS CantidadRegistros
+                        FROM Registro
+                        WHERE fecha_registro BETWEEN @inicio AND @fin
+                        GROUP BY CAST(fecha_registro AS DATE)
+                        ORDER BY CantidadRegistros DESC";
 
-                    using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
+                    using (SqlCommand cmd = new SqlCommand(query, db))
                     {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read()) // avanza al primer registro
@@ -106,7 +120,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return fecha;
         }
 
-        private string ObtenerMedicoActivo()
+        private string ObtenerMedicoActivo(DateTime inicio, DateTime fin)
         {
             string nombre = "";
             try
@@ -114,12 +128,20 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     // Se crea la query para contar las filas
-                    string queryNroPacientes = "SELECT TOP 1 u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo, " +
-                        "COUNT(*) AS CantidadRegistros FROM Registro r " +
-                        "INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario GROUP BY r.id_usuario, u.nombre_usuario, u.apellido_usuario ORDER BY CantidadRegistros DESC";
+                    string query = @"
+                        SELECT TOP 1 
+                            u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo,
+                            COUNT(*) AS CantidadRegistros
+                        FROM Registro r
+                        INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                        WHERE r.fecha_registro BETWEEN @inicio AND @fin
+                        GROUP BY r.id_usuario, u.nombre_usuario, u.apellido_usuario
+                        ORDER BY CantidadRegistros DESC";
 
-                    using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
+                    using (SqlCommand cmd = new SqlCommand(query, db))
                     {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read()) // avanza al primer registro
@@ -175,7 +197,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return fechaAntigua;
         }
 
-        private double ObtenerPromedioRegistros()
+        private double ObtenerPromedioRegistros(DateTime inicio, DateTime fin)
         {
             double promedio = 0;
             try
@@ -183,10 +205,14 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     // Se crea la query para contar las filas
-                    string queryNroPacientes = "SELECT CAST(COUNT(*) AS FLOAT) / COUNT(DISTINCT CAST(fecha_registro AS DATE)) AS PromedioRegistrosPorPaciente FROM Registro;";
+                    string queryNroPacientes = "SELECT CAST(COUNT(*) AS FLOAT) / COUNT(DISTINCT CAST(fecha_registro AS DATE)) " +
+                        "AS PromedioRegistrosPorPaciente FROM Registro WHERE fecha_registro BETWEEN @inicio AND @fin;";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
+
                         db.Open();
                         // Guardo el total y lo pongo en el texto del label correspondiente
                         promedio = Convert.ToDouble(cmd.ExecuteScalar());
@@ -244,6 +270,7 @@ namespace proyecto_Villarreal_SanLorenzo
             if (opcion != "Personalizado")
             {
                 GraficarSegunRadioButton();
+                ActualizarStats();
             }
         }
 
@@ -484,6 +511,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private void bActualizarGrafico_Click(object sender, EventArgs e)
         {
             GraficarSegunRadioButton();
+            ActualizarStats();
         }
 
         private void GraficarSegunTiempo()
