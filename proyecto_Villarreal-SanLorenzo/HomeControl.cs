@@ -85,7 +85,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 {
                     // Se crea la query para contar las filas
                     string queryNroPacientes = "SELECT dni_paciente FROM Paciente " +
-                        "WHERE fecha_crecion_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_crecion_registro <= GETDATE() " +
+                        "WHERE fecha_creacion_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_creacion_registro <= GETDATE() " +
                         "AND visible = 1;";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))

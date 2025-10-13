@@ -69,6 +69,7 @@
             // 
             panelFiltros.BackColor = Color.White;
             panelFiltros.Controls.Add(bRegistrarPaciente);
+            panelFiltros.Controls.Add(panelRegistrosPacientes);
             panelFiltros.Controls.Add(lIntervencion);
             panelFiltros.Controls.Add(lDniPaciente);
             panelFiltros.Controls.Add(comboBoxCategoria);
@@ -77,7 +78,7 @@
             panelFiltros.Controls.Add(lFiltros);
             panelFiltros.Location = new Point(33, 67);
             panelFiltros.Name = "panelFiltros";
-            panelFiltros.Size = new Size(583, 254);
+            panelFiltros.Size = new Size(643, 300);
             panelFiltros.TabIndex = 4;
             // 
             // bRegistrarPaciente
@@ -85,7 +86,7 @@
             bRegistrarPaciente.BackColor = Color.Transparent;
             bRegistrarPaciente.ForeColor = Color.Black;
             bRegistrarPaciente.Image = Resource1.plus_icon;
-            bRegistrarPaciente.Location = new Point(453, 21);
+            bRegistrarPaciente.Location = new Point(526, 9);
             bRegistrarPaciente.Margin = new Padding(3, 4, 3, 4);
             bRegistrarPaciente.Name = "bRegistrarPaciente";
             bRegistrarPaciente.Size = new Size(114, 53);
@@ -93,6 +94,7 @@
             bRegistrarPaciente.Text = "Agregar Registro";
             bRegistrarPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
             bRegistrarPaciente.UseVisualStyleBackColor = false;
+            bRegistrarPaciente.Click += bRegistrarPaciente_Click;
             // 
             // lIntervencion
             // 
@@ -160,18 +162,18 @@
             // panelRegistrosPacientes
             // 
             panelRegistrosPacientes.BackColor = Color.White;
-            panelRegistrosPacientes.Location = new Point(33, 327);
+            panelRegistrosPacientes.Location = new Point(3, 230);
             panelRegistrosPacientes.Name = "panelRegistrosPacientes";
-            panelRegistrosPacientes.Size = new Size(643, 87);
+            panelRegistrosPacientes.Size = new Size(637, 64);
             panelRegistrosPacientes.TabIndex = 12;
             // 
             // dgvRegistrosPacientes
             // 
             dgvRegistrosPacientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvRegistrosPacientes.Location = new Point(33, 420);
+            dgvRegistrosPacientes.Location = new Point(30, 373);
             dgvRegistrosPacientes.Name = "dgvRegistrosPacientes";
             dgvRegistrosPacientes.RowHeadersWidth = 51;
-            dgvRegistrosPacientes.Size = new Size(643, 188);
+            dgvRegistrosPacientes.Size = new Size(643, 202);
             dgvRegistrosPacientes.TabIndex = 13;
             // 
             // HistorialClinicoControl
@@ -179,7 +181,6 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(dgvRegistrosPacientes);
-            Controls.Add(panelRegistrosPacientes);
             Controls.Add(panelFiltros);
             Controls.Add(lSubtituloHC);
             Controls.Add(lTituloHC);

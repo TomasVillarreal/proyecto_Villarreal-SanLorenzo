@@ -83,7 +83,7 @@ namespace proyecto_Villarreal_SanLorenzo
             string fecha = "";
             using (SqlConnection db = new SqlConnection(connectionString))
             {
-                string query = "SELECT fecha_crecion_registro " +
+                string query = "SELECT fecha_creacion_registro " +
                     "FROM Paciente WHERE dni_paciente = @dni";
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {
@@ -92,7 +92,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read()) // avanza al primer registro
                     {
-                        DateTime fechaDT = (DateTime)reader["fecha_crecion_registro"];
+                        DateTime fechaDT = (DateTime)reader["fecha_creacion_registro"];
                         fecha = fechaDT.ToString("dd/MM/yyyy");
                     }
                 }
