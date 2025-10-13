@@ -171,7 +171,7 @@
             // 
             lFecha.AutoSize = true;
             lFecha.Font = new Font("Segoe UI Black", 9.75F, FontStyle.Bold);
-            lFecha.Location = new Point(533, 89);
+            lFecha.Location = new Point(527, 89);
             lFecha.Name = "lFecha";
             lFecha.Size = new Size(78, 17);
             lFecha.TabIndex = 7;

@@ -44,9 +44,28 @@ namespace proyecto_Villarreal_SanLorenzo
         private void ActualizarStats()
         {
             lMedicoActivo.Text = ObtenerMedicoActivo(fecha_inicio, fecha_fin);
+            AjustarLabelIzquierda(lMedicoActivo);
             lFecha.Text = ObtenerFechaActividad(fecha_inicio, fecha_fin);
+            AjustarLabelIzquierda(lFecha);
             lTotalRegistros.Text = ObtenerTotalRegistros(fecha_inicio, fecha_fin).ToString();
             lPromedioRegistros.Text = ObtenerPromedioRegistros(fecha_inicio, fecha_fin).ToString("0.00");
+        }
+
+        private void AjustarLabelIzquierda(Label label, int margenDerecho = 10)
+        {
+            using (Graphics g = label.CreateGraphics())
+            {
+                SizeF textoSize = g.MeasureString(label.Text, label.Font);
+
+                // Calcular posición para que no se corte
+                int nuevaX = label.Parent.Width - (int)textoSize.Width - margenDerecho;
+
+                // Evitar que se salga del panel (por si el texto es muy largo)
+                if (nuevaX < 0)
+                    nuevaX = 0;
+
+                label.Left = nuevaX;
+            }
         }
 
         private int ObtenerTotalRegistros(DateTime inicio, DateTime fin)
@@ -79,88 +98,117 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private string ObtenerFechaActividad(DateTime inicio, DateTime fin)
         {
-            string fecha = "";
+            string resultado = "";
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
-                    // Se crea la query para contar las filas
                     string query = @"
-                        SELECT TOP 1 
-                            CAST(fecha_registro AS DATE) AS fecha_maxima,
-                            COUNT(*) AS CantidadRegistros
-                        FROM Registro
-                        WHERE fecha_registro BETWEEN @inicio AND @fin
-                        GROUP BY CAST(fecha_registro AS DATE)
-                        ORDER BY CantidadRegistros DESC";
+                WITH Conteo AS (
+                    SELECT 
+                        CAST(fecha_registro AS DATE) AS fecha,
+                        COUNT(*) AS Cantidad
+                    FROM Registro
+                    WHERE fecha_registro BETWEEN @inicio AND @fin
+                    GROUP BY CAST(fecha_registro AS DATE)
+                )
+                SELECT fecha
+                FROM Conteo
+                WHERE Cantidad = (SELECT MAX(Cantidad) FROM Conteo)
+                ORDER BY fecha;";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
                         cmd.Parameters.AddWithValue("@inicio", inicio);
                         cmd.Parameters.AddWithValue("@fin", fin);
+
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
-                        if (reader.Read()) // avanza al primer registro
+                        List<string> fechas = new List<string>();
+
+                        while (reader.Read())
                         {
-                            DateTime fechaRegistro = Convert.ToDateTime(reader["fecha_maxima"]);
-                            fecha = fechaRegistro.ToString("dd/MM/yyyy");
+                            DateTime f = Convert.ToDateTime(reader["fecha"]);
+                            fechas.Add(f.ToString("dd/MM/yyyy"));
                         }
+
+                        if (fechas.Count == 0)
+                            resultado = "No hay registros en el rango";
+                        else if (fechas.Count == 1)
+                            resultado = fechas[0];
                         else
-                        {
-                            fecha = "No hay registros aun";
-                        }
+                            resultado = FormatearListaNatural(fechas);
                     }
-                    db.Close();
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error en la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return fecha;
+            return resultado;
+        }
+
+        private string FormatearListaNatural(List<string> items)
+        {
+            if (items == null || items.Count == 0)
+                return "No hay registros en el rango";
+
+            if (items.Count == 1)
+                return items[0];
+
+            if (items.Count == 2)
+                return $"{items[0]} y {items[1]}";
+
+            return string.Join(", ", items.Take(items.Count - 1)) + " y " + items.Last();
         }
 
         private string ObtenerMedicoActivo(DateTime inicio, DateTime fin)
         {
-            string nombre = "";
+            string resultado = "";
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
-                    // Se crea la query para contar las filas
                     string query = @"
-                        SELECT TOP 1 
-                            u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo,
-                            COUNT(*) AS CantidadRegistros
-                        FROM Registro r
-                        INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
-                        WHERE r.fecha_registro BETWEEN @inicio AND @fin
-                        GROUP BY r.id_usuario, u.nombre_usuario, u.apellido_usuario
-                        ORDER BY CantidadRegistros DESC";
+                WITH Conteo AS (
+                    SELECT 
+                        u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo,
+                        COUNT(*) AS Cantidad
+                    FROM Registro r
+                    INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                    WHERE r.fecha_registro BETWEEN @inicio AND @fin
+                    GROUP BY u.nombre_usuario, u.apellido_usuario
+                )
+                SELECT nombre_completo
+                FROM Conteo
+                WHERE Cantidad = (SELECT MAX(Cantidad) FROM Conteo);";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
                         cmd.Parameters.AddWithValue("@inicio", inicio);
                         cmd.Parameters.AddWithValue("@fin", fin);
+
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
-                        if (reader.Read()) // avanza al primer registro
-                        {
-                            nombre = reader["nombre_completo"].ToString();
-                        }
+                        List<string> medicos = new List<string>();
+
+                        while (reader.Read())
+                            medicos.Add(reader["nombre_completo"].ToString());
+
+                        if (medicos.Count == 0)
+                            resultado = "No hay registros en el rango";
+                        else if (medicos.Count == 1)
+                            resultado = medicos[0];
                         else
-                        {
-                            nombre = "No hay registros aun";
-                        }
+                            resultado = FormatearListaNatural(medicos);
                     }
-                    db.Close();
                 }
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error en la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return nombre;
+            return resultado;
         }
 
         private DateTime ObtenerFechaMasAntigua()
