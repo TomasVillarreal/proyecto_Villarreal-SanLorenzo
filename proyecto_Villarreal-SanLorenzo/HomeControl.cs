@@ -78,7 +78,14 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if(ex.Number == 8134)
+                {
+                    promedio = 0;
+                }
+                else
+                {
+                    MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }      
             }
             return promedio;
         }

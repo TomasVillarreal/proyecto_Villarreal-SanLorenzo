@@ -91,6 +91,10 @@ namespace proyecto_Villarreal_SanLorenzo
                             DateTime fechaRegistro = Convert.ToDateTime(reader["fecha_maxima"]);
                             fecha = fechaRegistro.ToString("dd/MM/yyyy");
                         }
+                        else
+                        {
+                            fecha = "No hay registros aun";
+                        }
                     }
                     db.Close();
                 }
@@ -122,6 +126,10 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             nombre = reader["nombre_completo"].ToString();
                         }
+                        else
+                        {
+                            nombre = "No hay registros aun";
+                        }
                     }
                     db.Close();
                 }
@@ -151,6 +159,10 @@ namespace proyecto_Villarreal_SanLorenzo
                         if (reader.Read()) // avanza al primer registro
                         {
                             fechaAntigua = Convert.ToDateTime(reader["fecha_registro"]);
+                        }
+                        else
+                        {
+                            fechaAntigua = new DateTime(1900, 01, 01);
                         }
                     }
                     db.Close();
@@ -184,7 +196,14 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Number == 8134)
+                {
+                    promedio = 0;
+                }
+                else
+                {
+                    MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             return promedio;
         }
@@ -193,6 +212,7 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             string opcion = cbDecisionIntervalo.SelectedItem.ToString();
             panelSeleccionIntervalo.Visible = opcion == "Personalizado";
+            bActualizarGrafico.Visible = opcion == "Personalizado";
             DateTime hoy = DateTime.Now.Date; // solo fecha sin hora
             switch (opcion)
             {
@@ -211,7 +231,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     fecha_fin = hoy.AddDays(1).AddSeconds(-1);
                     break;
                 case "Todos los tiempos":
-                    fecha_inicio = ObtenerFechaMasAntigua().Date;
+                    fecha_inicio = ObtenerFechaMasAntigua().Date == new DateTime(1900, 01, 01) ? new DateTime(2023, 01, 01) : ObtenerFechaMasAntigua().Date;
                     fecha_fin = hoy.AddDays(1).AddSeconds(-1);
                     break;
                 case "Personalizado":
@@ -221,7 +241,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     break;
             }
             // CORREGIDO: Actualizar el gráfico automáticamente al cambiar la selección (excepto si es personalizado, que usa botón)
-            if (opcion != "Personalizado" && rbFechas.Checked)
+            if (opcion != "Personalizado")
             {
                 GraficarSegunRadioButton();
             }
@@ -237,7 +257,7 @@ namespace proyecto_Villarreal_SanLorenzo
             if (dias <= 31) return "semanas";
             if (dias <= 90) return "semanas_meses";
             if (dias <= 365) return "meses";
-            if (aniosDiff >= 1) return "meses_años"; // rango >1 año => mostrar meses con años
+            if (dias <= 730) return "meses_años"; // rango >1 año => mostrar meses con años
             return "años";
         }
 
