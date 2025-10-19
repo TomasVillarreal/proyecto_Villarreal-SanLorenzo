@@ -273,6 +273,12 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bRegistrarPaciente_Click(object sender, EventArgs e) //Aregar Funcionalidad
         {
+            AgregarRegistroControl agregarRegistro = new AgregarRegistroControl(Convert.ToInt32(tBusquedaDNI.Text));
+
+            agregarRegistro.controlPadreRegistro = this;
+            agregarRegistro.AbrirOtroControl += this.AbrirOtroControl;
+
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, agregarRegistro, false));
 
         }
     }
