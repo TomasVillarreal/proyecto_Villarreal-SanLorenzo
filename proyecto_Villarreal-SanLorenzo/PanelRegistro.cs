@@ -8,9 +8,16 @@ namespace proyecto_Villarreal_SanLorenzo
 {
     public class PanelRegistro : Panel
     {
-        public  PanelRegistro()
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
+
+        public int Historial = 0;
+        public int Registro = 0;
+
+        public  PanelRegistro(int historial, int registro)
         {
             CargarComponentes();
+            Historial = historial;
+            Registro = registro;
         }
 
         public void CargarComponentes()
@@ -38,9 +45,6 @@ namespace proyecto_Villarreal_SanLorenzo
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, agregarRegistro, false));
 
         }
-
-        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
-
 
     }
 }

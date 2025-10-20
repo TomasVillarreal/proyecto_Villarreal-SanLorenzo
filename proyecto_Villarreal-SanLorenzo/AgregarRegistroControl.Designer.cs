@@ -260,7 +260,6 @@
             Controls.Add(tNombrePacienteRegistro);
             Name = "AgregarRegistroControl";
             Size = new Size(878, 767);
-            Load += AgregarRegistroControl_Load;
             ResumeLayout(false);
             PerformLayout();
         }

@@ -19,13 +19,20 @@ namespace proyecto_Villarreal_SanLorenzo
 
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
 
-        int dni = 0;
+        int dni, historial, registro = 0;
 
-        private void AgregarRegistroControl_Load(object sender, EventArgs e)
+        public AgregarRegistroControl(int p_dni, int p_historial, int p_registro)
         {
-            if (dni != 0)
+
+            InitializeComponent();
+            this.dni = p_dni;
+            this.historial = p_historial;
+            this.registro = p_registro;
+
+            if (dni != 0 && historial != 0 && registro != 0)
             {
-                CargarDatos(dni);
+                CargarDatosPaciente(dni);
+                CargarDatosRegistrosPacientes(dni, historial, registro);
                 tDniPacienteRegistro.ReadOnly = true;
                 tNombrePacienteRegistro.ReadOnly = true;
                 tApellidoPacienteRegistro.ReadOnly = true;
@@ -37,8 +44,16 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
             this.dni = p_dni;
 
+            if (dni != 0)
+            {
+                CargarDatosPaciente(dni);
+                tDniPacienteRegistro.ReadOnly = true;
+                tNombrePacienteRegistro.ReadOnly = true;
+                tApellidoPacienteRegistro.ReadOnly = true;
+            }
+
         }
-        private void CargarDatos(int p_dni)
+        private void CargarDatosPaciente(int p_dni)
         {
             try
             {
@@ -70,6 +85,10 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
+        private void CargarDatosRegistrosPacientes(int p_dni, int p_historial, int p_registro)
+        {
+
+        }
 
     }
 }
