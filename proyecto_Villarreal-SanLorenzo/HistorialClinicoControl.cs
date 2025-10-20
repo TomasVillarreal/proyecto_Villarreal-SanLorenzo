@@ -26,103 +26,110 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             PlaceholderBusqueda(tBusquedaDNI, "Buscar por DNI...");
             CargarTiposIntervencion();
-            dgvRegistrosPacientes.Visible = false; //No visible cuando se carga la vista.
 
             //Se muestra el mensaje inicial
-            panelRegistrosPacientes.Controls.Clear();
-            panelRegistrosPacientes.Controls.Add(CrearPanelMensaje("Ingrese un DNI"));
+            panelContenedorRegistros.Controls.Clear();
+            panelContenedorRegistros.Controls.Add(CrearPanelMensaje("Ingrese un DNI"));
 
-            //Se inicializa el DGV vacio
-            dgvRegistrosPacientes.DataSource = new DataTable();
         }
 
         private void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que busca al paciente por su DNI.
         {
             if (e.KeyCode != Keys.Enter) return;
 
-            // se valdia el dni
             string txt = tBusquedaDNI.Text.Trim();
             if (!int.TryParse(txt, out int dniBusqueda))
             {
                 MessageBox.Show("El DNI ingresado es inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            CargarHistorial(dniBusqueda);
+
+            // evita que Enter "salte" y dispare otros comportamientos
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+
+            CargarHistoriales(dniBusqueda);
 
         }
 
         //Funcion que carga los registros del historial medico del paciente en caso de que tenga
         // y siempre y cuando se busque al mismo por su DNI previamente
-        private void CargarHistorial(int dni_buscado)
+        private void CargarHistoriales(int p_dniPaciente)
         {
+            // Limpiamos siempre antes de agregar
+            panelContenedorRegistros.Controls.Clear();
+
             try
             {
-                DataTable dt = new DataTable();
-
                 using (SqlConnection db = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(@"
-                SELECT 
-                    r.id_registro,
-                    r.id_historial,
-                    r.dni_paciente,
-                    r.fecha_registro,
-                    r.observaciones,
-                    u.nombre_usuario AS profesional
-                FROM Registro r
-                INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
-                WHERE r.dni_paciente = @dni_paciente
-                ORDER BY r.fecha_registro DESC;", db))
                 {
-                    cmd.Parameters.Add("@dni_paciente", SqlDbType.Int).Value = dni_buscado;
+                    // buscar id_historial del paciente
+                    string queryHistorial = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
+                    int idHistorial = 0;
 
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    using (SqlCommand cmdHistorial = new SqlCommand(queryHistorial, db))
                     {
-                        adapter.Fill(dt);
+                        cmdHistorial.Parameters.AddWithValue("@dni", p_dniPaciente);
+                        db.Open();
+                        object result = cmdHistorial.ExecuteScalar();
+                        db.Close();
+
+                        if (result != null && result != DBNull.Value)
+                            idHistorial = Convert.ToInt32(result);
+                    }
+
+                    // si no hay historial asociado
+                    if (idHistorial == 0)
+                    {
+                        panelContenedorRegistros.Controls.Clear();
+                        panelContenedorRegistros.Controls.Add(CrearPanelMensaje("para este paciente"));
+                        return;
+                    }
+
+                    // obtener registros del historial
+                    string queryRegistros = @"
+                                            SELECT id_registro
+                                            FROM Registro
+                                            WHERE id_historial = @id_historial
+                                            ORDER BY fecha_registro DESC;";
+
+                    using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
+                    {
+                        cmdRegistros.Parameters.AddWithValue("@id_historial", idHistorial);
+                        db.Open();
+
+                        using (SqlDataReader reader = cmdRegistros.ExecuteReader())
+                        {
+                            if (!reader.HasRows)
+                            {
+                                panelContenedorRegistros.Controls.Clear();
+                                panelContenedorRegistros.Controls.Add(CrearPanelMensaje("para este paciente"));
+                            }
+                            else
+                            {
+                                while (reader.Read())
+                                {
+                                    int idRegistro = Convert.ToInt32(reader["id_registro"]);
+
+                                    PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                    panel.Dock = DockStyle.None;
+                                    panel.AutoSize = false;
+                                    panel.Height = 80;
+                                    panel.Margin = new Padding(4);
+
+                                    panelContenedorRegistros.Controls.Add(panel);
+                                    panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
+                                }
+                            }
+                        }
+
+                        db.Close();
                     }
                 }
-
-                // Se limpia el mensaje predeterminado
-                panelRegistrosPacientes.Controls.Clear();
-
-                if (dt.Rows.Count > 0)
-                {
-                    // Si hay registros: mostramos el dgv y lo llenamos
-                    dgvRegistrosPacientes.AutoGenerateColumns = true;
-                    dgvRegistrosPacientes.DataSource = dt;
-                    dgvRegistrosPacientes.Visible = true;
-
-                    // Se renombran los headers (solo si hay columnas)
-                    RenombrarHeaders(dgvRegistrosPacientes);
-
-                    //se ocultan las columnas con IDs
-                    if (dgvRegistrosPacientes.Columns.Contains("id_registro"))
-                        dgvRegistrosPacientes.Columns["id_registro"].Visible = false;
-                    if (dgvRegistrosPacientes.Columns.Contains("id_historial"))
-                        dgvRegistrosPacientes.Columns["id_historial"].Visible = false;
-
-                    panelRegistrosPacientes.Visible = false;
-                }
-                else
-                {
-                    // Si no hay registros: se oculta el dgv y se muestra un mensaje
-                    dgvRegistrosPacientes.DataSource = null;
-                    dgvRegistrosPacientes.Visible = false;
-
-                    var panel = CrearPanelMensaje("intente nuevamente");
-                    panel.Location = new Point(10, 10);
-                    panelRegistrosPacientes.Controls.Add(panel);
-                }
-
-                RenombrarHeaders(dgvRegistrosPacientes);
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar los historiales: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // para una interfaz consistente
-                dgvRegistrosPacientes.DataSource = null;
-                dgvRegistrosPacientes.Visible = false;
-                panelRegistrosPacientes.Controls.Clear();
-                panelRegistrosPacientes.Controls.Add(CrearPanelMensaje("Error de conexión"));
+                MessageBox.Show("Error al cargar historiales: " + ex.Message);
             }
         }
 
@@ -254,24 +261,9 @@ namespace proyecto_Villarreal_SanLorenzo
             };
         }
 
-        //Funcion que renombra los headers del datatable
-        public void RenombrarHeaders(DataGridView grid)//Funcion que renombra el nombre de los headers del datagridview
-        {
-            foreach (DataGridViewColumn col in grid.Columns)
-            {
-                //Reemplaza los guiones bajos por espacios
-                string header = col.HeaderText.Replace("_", " ");
 
-                //Convierte la primera letra a mayúscula y el resto a minúscula
-                if (header.Length > 0)
-                    header = char.ToUpper(header[0]) + header.Substring(1).ToLower();
 
-                col.HeaderText = header;
-            }
-
-        }
-
-        private void bRegistrarPaciente_Click(object sender, EventArgs e) //Aregar Funcionalidad
+        private void bRegistrarPaciente_Click(object sender, EventArgs e)
         {
             AgregarRegistroControl agregarRegistro = new AgregarRegistroControl(Convert.ToInt32(tBusquedaDNI.Text));
 
