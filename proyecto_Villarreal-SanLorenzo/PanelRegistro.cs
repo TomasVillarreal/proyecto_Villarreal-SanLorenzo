@@ -36,34 +36,42 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public void CargarComponentes()//Carga los componentes al panel
         {
-
-            // Ícono
-            PictureBox pb = new PictureBox();
-            pb.Size = new Size(32, 32);
-            pb.Location = new Point(10, 10);
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            pb.Image = nuevosPacientes ? Resource1.plus : Resource1.exclamation;
-
             // DNI
             Label lDniPaciente = new Label();
             lDniPaciente.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             lDniPaciente.Text = "DNI: " + dni.ToString();
-            lDniPaciente.Location = new Point(pb.Right + 10, 10);
             lDniPaciente.AutoSize = true;
+            lDniPaciente.Location = new Point(10, 10);
 
-            // Nombre del paciente
+            // Nombre del paciente (debajo del DNI, con mayúscula en iniciales)
+            string nombrePaciente = ObtenerNombrePaciente();
+            if (!string.IsNullOrWhiteSpace(nombrePaciente))
+                nombrePaciente = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombrePaciente.ToLower());
+
             Label lNombrePaciente = new Label();
             lNombrePaciente.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            lNombrePaciente.Text = ObtenerNombrePaciente();
-            lNombrePaciente.Location = new Point(lDniPaciente.Right + 20, 10);
+            lNombrePaciente.Text = nombrePaciente;
             lNombrePaciente.AutoSize = true;
+            lNombrePaciente.Location = new Point(10, lDniPaciente.Bottom + 2);
+
+            // Nombre del médico (antes del tipo de registro)
+            Label lMedico = new Label();
+            lMedico.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            lMedico.ForeColor = Color.Gray;
+            string nombreMedico = ObtenerNombreMedico();
+            if (!string.IsNullOrWhiteSpace(nombreMedico))
+                nombreMedico = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombreMedico.ToLower());
+            lMedico.Text = "Dr. " + nombreMedico;
+            lMedico.AutoSize = true;
+            lMedico.Location = new Point(lNombrePaciente.Right + 30, 10);
 
             // Tipo de registro
             Label lTipoRegistro = new Label();
             lTipoRegistro.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             lTipoRegistro.Text = ObtenerTipoRegistro();
             lTipoRegistro.AutoSize = true;
-            lTipoRegistro.Location = new Point(this.Width - 200, 10);
+            lTipoRegistro.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lTipoRegistro.Location = new Point(this.Width - 240, 10);
 
             // Fecha del registro
             Label lFecha = new Label();
@@ -71,31 +79,34 @@ namespace proyecto_Villarreal_SanLorenzo
             lFecha.ForeColor = Color.DimGray;
             lFecha.Text = ObtenerFecha();
             lFecha.AutoSize = true;
+            lFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lFecha.Location = new Point(this.Width - 100, 10);
 
-            // Observaciones
+            // observaciones
             Label lObservaciones = new Label();
             lObservaciones.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            lObservaciones.Text = "📝 Observaciones " + ObtenerObservaciones();
+            lObservaciones.Text = "📝 Observaciones: " + ObtenerObservaciones();
             lObservaciones.AutoSize = false;
-            lObservaciones.Size = new Size(this.Width - 60, 35);
-            lObservaciones.Location = new Point(pb.Right + 10, 35);
+            lObservaciones.Size = new Size(this.Width - 60, 45);
+            this.Height = 110;
+            lObservaciones.Location = new Point(10, 50);
+            lObservaciones.ForeColor = Color.Black;
 
-            // Borde, color, padding
+            // Estilos generales
             this.Padding = new Padding(8);
             this.BackColor = Color.White;
-            this.Height = 80;
-            this.Margin = new Padding(6);
             this.BorderStyle = BorderStyle.FixedSingle;
+            this.Height = 100;
+            this.Width = 650;
+            this.Margin = new Padding(6);
 
-            // Agregar al panel
-            this.Controls.Add(pb);
+            // Agregar controles al panel
             this.Controls.Add(lDniPaciente);
             this.Controls.Add(lNombrePaciente);
+            this.Controls.Add(lMedico);
             this.Controls.Add(lTipoRegistro);
             this.Controls.Add(lFecha);
             this.Controls.Add(lObservaciones);
-
 
         }
 

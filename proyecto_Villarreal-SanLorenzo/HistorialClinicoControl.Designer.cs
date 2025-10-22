@@ -122,7 +122,7 @@
             comboBoxCategoria.Size = new Size(460, 28);
             comboBoxCategoria.TabIndex = 7;
             comboBoxCategoria.Text = "Buscar por intevención";
-            comboBoxCategoria.KeyDown += comboBoxCategoria_KeyDown;
+            comboBoxCategoria.SelectedIndexChanged += comboBoxCategoria_SelectedIndexChanged;
             // 
             // tBusquedaDNI
             // 

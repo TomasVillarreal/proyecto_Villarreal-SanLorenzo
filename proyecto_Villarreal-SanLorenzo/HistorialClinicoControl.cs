@@ -113,9 +113,11 @@ namespace proyecto_Villarreal_SanLorenzo
 
                                     PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
                                     panel.Dock = DockStyle.None;
+                                    panel.Width = panelContenedorRegistros.ClientSize.Width - 20;
                                     panel.AutoSize = false;
                                     panel.Height = 80;
                                     panel.Margin = new Padding(4);
+
 
                                     panelContenedorRegistros.Controls.Add(panel);
                                     panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
@@ -142,9 +144,59 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void comboBoxCategoria_KeyDown(object sender, KeyEventArgs e) //Agregar funcionalidad para buscar por tipo de intervencion
+        private void MostrarRegistrosPorTipo(string tipoSeleccionado)
         {
+            panelContenedorRegistros.Controls.Clear();
 
+            using (SqlConnection db = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT r.id_historial, r.id_registro
+            FROM Registro r
+            INNER JOIN Tipo_registro tr ON r.id_tipo_registro = tr.id_tipo_registro
+            WHERE tr.nombre_registro = @tipo";
+
+                using (SqlCommand cmd = new SqlCommand(query, db))
+                {
+                    cmd.Parameters.AddWithValue("@tipo", tipoSeleccionado);
+                    db.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.HasRows)
+                        {
+                            panelContenedorRegistros.Controls.Add(CrearPanelMensaje("No se encontraron registros para este tipo de intervención."));
+                            return;
+                        }
+
+                        while (reader.Read())
+                        {
+                            int idHistorial = Convert.ToInt32(reader["id_historial"]);
+                            int idRegistro = Convert.ToInt32(reader["id_registro"]);
+
+                            // Crear el panel para ese registro
+                            PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                            panel.Dock = DockStyle.Top;
+                            panel.Margin = new Padding(4);
+
+                            // Agregar al contenedor
+                            panelContenedorRegistros.Controls.Add(panel);
+                            panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        private void comboBoxCategoria_SelectedIndexChanged(object sender, EventArgs e) //Funcion que permite buscar por tipo de intervencion
+        {
+            if (comboBoxCategoria.SelectedIndex <= 0) // Placeholder o nada seleccionado
+                return;
+
+            string tipoSeleccionado = comboBoxCategoria.Text; // o SelectedValue si preferís
+            MostrarRegistrosPorTipo(tipoSeleccionado);
         }
 
         //Funcion que carga al comboBox los tipos de intervencion realizadas en la clinica
@@ -260,8 +312,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             };
         }
-
-
 
         private void bRegistrarPaciente_Click(object sender, EventArgs e)
         {
