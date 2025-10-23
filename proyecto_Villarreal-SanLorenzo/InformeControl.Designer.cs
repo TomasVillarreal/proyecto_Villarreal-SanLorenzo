@@ -63,9 +63,9 @@
             lSubtituloDashboard.ForeColor = SystemColors.ControlDark;
             lSubtituloDashboard.Location = new Point(42, 58);
             lSubtituloDashboard.Name = "lSubtituloDashboard";
-            lSubtituloDashboard.Size = new Size(187, 15);
+            lSubtituloDashboard.Size = new Size(167, 15);
             lSubtituloDashboard.TabIndex = 7;
-            lSubtituloDashboard.Text = "Consulte el informe de un medico";
+            lSubtituloDashboard.Text = "Consulte el informe que desee";
             // 
             // lTituloDashboard
             // 

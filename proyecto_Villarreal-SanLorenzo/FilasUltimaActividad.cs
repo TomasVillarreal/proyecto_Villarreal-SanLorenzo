@@ -94,9 +94,9 @@ namespace proyecto_Villarreal_SanLorenzo
 
                 if (nuevosPacientes)
                 {
-                    query = "SELECT fecha_crecion_registro " +
+                    query = "SELECT fecha_creacion_registro " +
                         "FROM Paciente WHERE dni_paciente = @dni";
-                    nombre_columna = "fecha_crecion_registro";
+                    nombre_columna = "fecha_creacion_registro";
                 } else
                 {
                     query = "SELECT fecha_registro " +

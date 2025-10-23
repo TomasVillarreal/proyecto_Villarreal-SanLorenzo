@@ -84,7 +84,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     bHistorial.Visible = true;
                     bPacientes.Visible = true;
                     bUsuarios.Visible = false;
-                    bInforme.Visible = false;
+                    bInforme.Visible = true;
                     bAgregarPersonal.Visible = false;
                     bBackup.Visible = false;
                     bCerrarSesion.Visible = true;
@@ -234,9 +234,18 @@ namespace proyecto_Villarreal_SanLorenzo
         private void bInforme_Click(object sender, EventArgs e)
         {
             panelDefault.Controls.Clear();
-            InformeControl informe = new InformeControl();
-            informe.Dock = DockStyle.Fill;
-            panelDefault.Controls.Add(informe);
+            if(SesionUsuario.RolActivo.ToLower() == "medico" || SesionUsuario.RolActivo.ToLower() == "enfermero")
+            {
+                InformeMedicosEnfermeros informe = new InformeMedicosEnfermeros();
+                informe.Dock = DockStyle.Fill;
+                panelDefault.Controls.Add(informe);
+            } else if (SesionUsuario.RolActivo.ToLower() == "gerente")
+            {
+                InformeControl informe = new InformeControl();
+                informe.Dock = DockStyle.Fill;
+                panelDefault.Controls.Add(informe);
+            }
+            
         }
         private void bBackup_Click(object sender, EventArgs e)
         {
