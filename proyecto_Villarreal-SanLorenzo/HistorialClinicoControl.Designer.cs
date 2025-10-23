@@ -31,10 +31,10 @@
             lTituloHC = new Label();
             lSubtituloHC = new Label();
             panelFiltros = new Panel();
-            bRegistrarPaciente = new Button();
-            lIntervencion = new Label();
+            tBusquedaNyA = new TextBox();
+            bAgregarRegistroPaciente = new Button();
+            lNyAPaciente = new Label();
             lDniPaciente = new Label();
-            comboBoxCategoria = new ComboBox();
             tBusquedaDNI = new TextBox();
             labelSubtitulo = new Label();
             lFiltros = new Label();
@@ -66,10 +66,10 @@
             // panelFiltros
             // 
             panelFiltros.BackColor = Color.White;
-            panelFiltros.Controls.Add(bRegistrarPaciente);
-            panelFiltros.Controls.Add(lIntervencion);
+            panelFiltros.Controls.Add(tBusquedaNyA);
+            panelFiltros.Controls.Add(bAgregarRegistroPaciente);
+            panelFiltros.Controls.Add(lNyAPaciente);
             panelFiltros.Controls.Add(lDniPaciente);
-            panelFiltros.Controls.Add(comboBoxCategoria);
             panelFiltros.Controls.Add(tBusquedaDNI);
             panelFiltros.Controls.Add(labelSubtitulo);
             panelFiltros.Controls.Add(lFiltros);
@@ -78,30 +78,39 @@
             panelFiltros.Size = new Size(818, 256);
             panelFiltros.TabIndex = 4;
             // 
-            // bRegistrarPaciente
+            // tBusquedaNyA
             // 
-            bRegistrarPaciente.BackColor = Color.Transparent;
-            bRegistrarPaciente.ForeColor = Color.Black;
-            bRegistrarPaciente.Image = Resource1.plus_icon;
-            bRegistrarPaciente.Location = new Point(677, 9);
-            bRegistrarPaciente.Margin = new Padding(3, 4, 3, 4);
-            bRegistrarPaciente.Name = "bRegistrarPaciente";
-            bRegistrarPaciente.Size = new Size(138, 48);
-            bRegistrarPaciente.TabIndex = 13;
-            bRegistrarPaciente.Text = "Agregar Registro";
-            bRegistrarPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bRegistrarPaciente.UseVisualStyleBackColor = false;
-            bRegistrarPaciente.Click += bRegistrarPaciente_Click;
+            tBusquedaNyA.ForeColor = Color.DarkGray;
+            tBusquedaNyA.Location = new Point(15, 196);
+            tBusquedaNyA.Name = "tBusquedaNyA";
+            tBusquedaNyA.Size = new Size(460, 27);
+            tBusquedaNyA.TabIndex = 14;
+            tBusquedaNyA.Text = "Buscar por nombre y apellido";
             // 
-            // lIntervencion
+            // bAgregarRegistroPaciente
             // 
-            lIntervencion.AutoSize = true;
-            lIntervencion.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lIntervencion.Location = new Point(15, 165);
-            lIntervencion.Name = "lIntervencion";
-            lIntervencion.Size = new Size(127, 28);
-            lIntervencion.TabIndex = 11;
-            lIntervencion.Text = "Intervención";
+            bAgregarRegistroPaciente.BackColor = Color.Transparent;
+            bAgregarRegistroPaciente.ForeColor = Color.Black;
+            bAgregarRegistroPaciente.Image = Resource1.plus_icon;
+            bAgregarRegistroPaciente.Location = new Point(677, 9);
+            bAgregarRegistroPaciente.Margin = new Padding(3, 4, 3, 4);
+            bAgregarRegistroPaciente.Name = "bAgregarRegistroPaciente";
+            bAgregarRegistroPaciente.Size = new Size(138, 48);
+            bAgregarRegistroPaciente.TabIndex = 13;
+            bAgregarRegistroPaciente.Text = "Agregar Registro";
+            bAgregarRegistroPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bAgregarRegistroPaciente.UseVisualStyleBackColor = false;
+            bAgregarRegistroPaciente.Click += bAgregarRegistroPaciente_Click;
+            // 
+            // lNyAPaciente
+            // 
+            lNyAPaciente.AutoSize = true;
+            lNyAPaciente.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lNyAPaciente.Location = new Point(15, 165);
+            lNyAPaciente.Name = "lNyAPaciente";
+            lNyAPaciente.Size = new Size(184, 28);
+            lNyAPaciente.TabIndex = 11;
+            lNyAPaciente.Text = "Nombre y Apellido";
             // 
             // lDniPaciente
             // 
@@ -113,17 +122,6 @@
             lDniPaciente.TabIndex = 9;
             lDniPaciente.Text = "DNI";
             // 
-            // comboBoxCategoria
-            // 
-            comboBoxCategoria.ForeColor = Color.DarkGray;
-            comboBoxCategoria.FormattingEnabled = true;
-            comboBoxCategoria.Location = new Point(15, 196);
-            comboBoxCategoria.Name = "comboBoxCategoria";
-            comboBoxCategoria.Size = new Size(460, 28);
-            comboBoxCategoria.TabIndex = 7;
-            comboBoxCategoria.Text = "Buscar por intevención";
-            comboBoxCategoria.SelectedIndexChanged += comboBoxCategoria_SelectedIndexChanged;
-            // 
             // tBusquedaDNI
             // 
             tBusquedaDNI.ForeColor = Color.DarkGray;
@@ -131,7 +129,7 @@
             tBusquedaDNI.Name = "tBusquedaDNI";
             tBusquedaDNI.Size = new Size(460, 27);
             tBusquedaDNI.TabIndex = 6;
-            tBusquedaDNI.Text = "Busca por DNI";
+            tBusquedaDNI.Text = "Buscar por DNI";
             tBusquedaDNI.KeyDown += tBusquedaDNI_KeyDown;
             tBusquedaDNI.KeyPress += tBusquedaDNI_KeyPress;
             // 
@@ -193,12 +191,12 @@
         private Panel panelFiltros;
         private Label labelSubtitulo;
         private Label lFiltros;
-        private ComboBox comboBoxCategoria;
-        private Label lIntervencion;
+        private Label lNyAPaciente;
         private Label lDniPaciente;
         private TextBox tBusquedaDNI;
         private DataGridView dgPaciente;
-        private Button bRegistrarPaciente;
+        private Button bAgregarRegistroPaciente;
         private FlowLayoutPanel panelContenedorRegistros;
+        private TextBox tBusquedaNyA;
     }
 }

@@ -15,14 +15,19 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public int historial, registro, dni = 0;
         bool nuevosPacientes;
+        string nombrePaciente;
 
 
         public  PanelRegistro(int p_historial, int p_registro)//Constructor del PanelRegistro
         {
-            
+
             historial = p_historial;
             registro = p_registro;
-            dni = ObtenerDniPaciente(); //se obtiene el dni antes de cargar los datos
+
+            var datosPaciente = ObtenerDatosPaciente();
+            if (int.TryParse(datosPaciente.dni, out int dniPaciente))
+                dni = dniPaciente;
+            nombrePaciente = datosPaciente.nombre;
 
             // apariencia del panel
             this.Height = 70;
@@ -36,6 +41,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public void CargarComponentes()//Carga los componentes al panel
         {
+            var datosPaciente = ObtenerDatosPaciente();
             // DNI
             Label lDniPaciente = new Label();
             lDniPaciente.Font = new Font("Segoe UI", 9, FontStyle.Bold);
@@ -43,27 +49,35 @@ namespace proyecto_Villarreal_SanLorenzo
             lDniPaciente.AutoSize = true;
             lDniPaciente.Location = new Point(10, 10);
 
-            // Nombre del paciente (debajo del DNI, con mayúscula en iniciales)
-            string nombrePaciente = ObtenerNombrePaciente();
-            if (!string.IsNullOrWhiteSpace(nombrePaciente))
-                nombrePaciente = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombrePaciente.ToLower());
-
+            // Nombre
             Label lNombrePaciente = new Label();
             lNombrePaciente.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            lNombrePaciente.Text = nombrePaciente;
+            lNombrePaciente.Text = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombrePaciente.ToLower());
             lNombrePaciente.AutoSize = true;
             lNombrePaciente.Location = new Point(10, lDniPaciente.Bottom + 2);
 
-            // Nombre del médico (antes del tipo de registro)
-            Label lMedico = new Label();
-            lMedico.Font = new Font("Segoe UI", 9, FontStyle.Italic);
-            lMedico.ForeColor = Color.Gray;
-            string nombreMedico = ObtenerNombreMedico();
-            if (!string.IsNullOrWhiteSpace(nombreMedico))
-                nombreMedico = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombreMedico.ToLower());
-            lMedico.Text = "Dr. " + nombreMedico;
-            lMedico.AutoSize = true;
-            lMedico.Location = new Point(lNombrePaciente.Right + 30, 10);
+
+            // Profesional (Dr. / Enf.)
+            Label lProfesional = new Label();
+            lProfesional.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            lProfesional.ForeColor = Color.Gray;
+
+            var datos = ObtenerDatosProfesional();
+
+            string prefijo = "";
+            if (datos.rol.Equals("Médico", StringComparison.OrdinalIgnoreCase))
+                prefijo = "Dr. ";
+            else if (datos.rol.Equals("Enfermero", StringComparison.OrdinalIgnoreCase))
+                prefijo = "Enf. ";
+
+            string texto = $"{prefijo}{datos.nombreCompleto}";
+            if (!string.IsNullOrWhiteSpace(datos.especialidad))
+                texto += $" ({datos.especialidad})";
+
+            lProfesional.Text = texto;
+            lProfesional.AutoSize = true;
+            lProfesional.Location = new Point(lNombrePaciente.Right + 25, 10);
+
 
             // Tipo de registro
             Label lTipoRegistro = new Label();
@@ -72,6 +86,7 @@ namespace proyecto_Villarreal_SanLorenzo
             lTipoRegistro.AutoSize = true;
             lTipoRegistro.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lTipoRegistro.Location = new Point(this.Width - 240, 10);
+
 
             // Fecha del registro
             Label lFecha = new Label();
@@ -82,78 +97,102 @@ namespace proyecto_Villarreal_SanLorenzo
             lFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lFecha.Location = new Point(this.Width - 100, 10);
 
-            // observaciones
+
+            // Observaciones
             Label lObservaciones = new Label();
             lObservaciones.Font = new Font("Segoe UI", 9, FontStyle.Regular);
             lObservaciones.Text = "📝 Observaciones: " + ObtenerObservaciones();
-            lObservaciones.AutoSize = false;
-            lObservaciones.Size = new Size(this.Width - 60, 45);
-            this.Height = 110;
-            lObservaciones.Location = new Point(10, 50);
             lObservaciones.ForeColor = Color.Black;
+            lObservaciones.AutoSize = false;
+            lObservaciones.MaximumSize = new Size(this.Width - 40, 0);
+            lObservaciones.Location = new Point(10, 55);
+            lObservaciones.AutoEllipsis = false;
 
-            // Estilos generales
+            using (Graphics g = this.CreateGraphics())
+            {
+                SizeF size = g.MeasureString(lObservaciones.Text, lObservaciones.Font, lObservaciones.MaximumSize.Width);
+                lObservaciones.Size = new Size((int)size.Width, (int)size.Height + 5);
+            }
+            this.Height = lObservaciones.Bottom + 25;
+
+
+            // Medicación (opcional)
+            string medicacion = ObtenerMedicacion();
+            if (!string.IsNullOrWhiteSpace(medicacion))
+            {
+                Label lMedicacion = new Label();
+                lMedicacion.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+                lMedicacion.Text = "💊 Medicación: " + medicacion;
+                lMedicacion.AutoSize = false;
+                lMedicacion.Size = new Size(this.Width - 60, 35);
+                lMedicacion.Location = new Point(10, lObservaciones.Bottom + 5);
+                lMedicacion.ForeColor = Color.FromArgb(40, 40, 40);
+                this.Controls.Add(lMedicacion);
+
+                this.Height = 130;
+            }
+            else
+            {
+                this.Height = 110;
+            }
+
+            // Estilo general del panel
             this.Padding = new Padding(8);
             this.BackColor = Color.White;
             this.BorderStyle = BorderStyle.FixedSingle;
-            this.Height = 100;
             this.Width = 650;
             this.Margin = new Padding(6);
 
             // Agregar controles al panel
             this.Controls.Add(lDniPaciente);
             this.Controls.Add(lNombrePaciente);
-            this.Controls.Add(lMedico);
+            this.Controls.Add(lProfesional);
             this.Controls.Add(lTipoRegistro);
             this.Controls.Add(lFecha);
             this.Controls.Add(lObservaciones);
 
         }
 
-        private int ObtenerDniPaciente() //Obtiene el dni del paciente
+        private (string nombre, string dni) ObtenerDatosPaciente()//Obtiene el NYA del paciente junto con su DNI
         {
-            int dniPaciente = 0;
+            string nombre = "";
+            string dniPaciente = "";
 
-            using (SqlConnection db = new SqlConnection(connectionString))
+            try
             {
-                string query = "SELECT dni_paciente FROM Historial WHERE id_historial = @id_historial";
-
-                using (SqlCommand cmd = new SqlCommand(query, db))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@id_historial", this.historial);
-                    db.Open();
+                    string query = @"
+                                    SELECT p.nombre_paciente, p.dni_paciente
+                                    FROM Historial h
+                                    INNER JOIN Paciente p ON h.dni_paciente = p.dni_paciente
+                                    WHERE h.id_historial = @idHistorial;";
 
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        dniPaciente = Convert.ToInt32(reader["dni_paciente"]);
+                        command.Parameters.AddWithValue("@idHistorial", this.historial);
+
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                if (!reader.IsDBNull(reader.GetOrdinal("nombre_paciente")))
+                                    nombre = reader["nombre_paciente"].ToString();
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("dni_paciente")))
+                                    dniPaciente = reader["dni_paciente"].ToString();
+                            }
+                        }
                     }
                 }
             }
-
-            return dniPaciente;
-        }
-
-        private string ObtenerNombrePaciente() //Obtiene el nombre completo del paciente
-        {
-            string nombre_completo = "";
-            using (SqlConnection db = new SqlConnection(connectionString))
+            catch (Exception ex)
             {
-                string query = "SELECT nombre_paciente + ' ' + apellido_paciente AS nombre_completo " +
-                    "FROM Paciente WHERE dni_paciente = @dni";
-                using (SqlCommand cmd = new SqlCommand(query, db))
-                {
-                    cmd.Parameters.AddWithValue("@dni", this.dni);
-                    db.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read()) // avanza al primer registro
-                    {
-                        nombre_completo = reader["nombre_completo"].ToString();
-                    }
-                }
-                db.Close();
+                MessageBox.Show("Error al obtener los datos del paciente: " + ex.Message, "Error BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return nombre_completo;
+
+            return (nombre, dniPaciente);
         }
 
         private string ObtenerFecha()//Obtiene la fecha en la que se registró por 1era vez al paciente en el sistema
@@ -179,27 +218,42 @@ namespace proyecto_Villarreal_SanLorenzo
             return fecha;
         }
 
-        private string ObtenerNombreMedico()//Obtiene el nombre completo del medico que lo registro
+        private (string nombreCompleto, string rol, string especialidad) ObtenerDatosProfesional()//Obtiene el NYA y la especialidad tanto de medicos como de enfermeros
         {
-            string nombre_completo = "";
+            string nombreCompleto = "";
+            string rol = "";
+            string especialidad = "";
+
             using (SqlConnection db = new SqlConnection(connectionString))
             {
-                string query = "SELECT m.nombre_usuario + ' ' + m.apellido_usuario AS nombre_completo " +
-                    "FROM Paciente p INNER JOIN Usuarios m ON p.usuario_creacion_registro = m.id_usuario " +
-                    "WHERE p.dni_paciente = @dni";
+                string query = @"
+            SELECT 
+                u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo,
+                r.nombre_rol,
+                e.nombre_especialidad
+            FROM Registro reg
+            INNER JOIN Usuarios u ON reg.id_usuario = u.id_usuario
+            INNER JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
+            INNER JOIN Rol r ON ur.id_rol = r.id_rol
+            LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
+            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
+            WHERE reg.id_registro = @idRegistro";
+
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {
-                    cmd.Parameters.AddWithValue("@dni", this.dni);
+                    cmd.Parameters.AddWithValue("@idRegistro", this.registro);
                     db.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read()) // avanza al primer registro
+                    if (reader.Read())
                     {
-                        nombre_completo = reader["nombre_completo"].ToString();
+                        nombreCompleto = reader["nombre_completo"].ToString();
+                        rol = reader["nombre_rol"].ToString();
+                        especialidad = reader["nombre_especialidad"].ToString();
                     }
                 }
-                db.Close();
             }
-            return nombre_completo;
+
+            return (nombreCompleto, rol, especialidad);
         }
 
         private string ObtenerTipoRegistro()//Obtiene el nombre de los registros asociados al dni del paciente
@@ -231,7 +285,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         }
 
-        private string ObtenerObservaciones()
+        private string ObtenerObservaciones()//Obtiene las observaciones que haya realizado el médico/enfermero
         {
             string observaciones = "";
 
@@ -259,32 +313,40 @@ namespace proyecto_Villarreal_SanLorenzo
             return observaciones;
 
 
-        }//Obtiene las observaciones de los medicos al paciente
+        }
 
-
-        /* PRUEBA
-         * 
-         * 
-         *             /* crear el botón (PRUEBA)
-            Button boton = new Button();
-            boton.Text = "Registrar Paciente";
-            boton.Size = new Size(150, 40);
-            boton.Location = new Point(20, 20);
-
-            boton.Click += bboton_Click;
-
-            // agregar el botón al panel
-            // si PanelRegistro hereda de Panel o UserControl:
-            this.Controls.Add(boton);
-        private void bboton_Click(object sender, EventArgs e) //Aregar Funcionalidad
+        private string ObtenerMedicacion()//Obtiene la medicacion suministrada al paciente (en caso de que haya sido asi)
         {
-            AgregarRegistroControl agregarRegistro = new AgregarRegistroControl(12345678);
+            string medicacionInfo = "";
 
-            agregarRegistro.AbrirOtroControl += this.AbrirOtroControl;
+            using (SqlConnection db = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT m.nombre_medicacion, m.dosis_medicacion
+            FROM Registro_medicacion rm
+            INNER JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
+            WHERE rm.id_registro = @idRegistro";
 
-            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, agregarRegistro, false));
+                using (SqlCommand cmd = new SqlCommand(query, db))
+                {
+                    cmd.Parameters.AddWithValue("@idRegistro", this.registro);
+                    db.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string nombre = reader["nombre_medicacion"].ToString();
+                            string dosis = reader["dosis_medicacion"].ToString();
 
-        }*/
+                            if (!string.IsNullOrWhiteSpace(nombre))
+                                medicacionInfo = $"{nombre} ({dosis})";
+                        }
+                    }
+                }
+            }
+
+            return medicacionInfo;
+        }
 
     }
 
