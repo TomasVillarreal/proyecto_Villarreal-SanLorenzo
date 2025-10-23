@@ -37,7 +37,7 @@
             label12 = new Label();
             label11 = new Label();
             panelSeleccionIntervalo = new Panel();
-            panelBordes1 = new PanelBordes();
+            panelInfoGerente = new PanelBordes();
             lFecha = new Label();
             lMedicoActivo = new Label();
             lPromedioRegistros = new Label();
@@ -48,10 +48,12 @@
             label1 = new Label();
             bActualizarGrafico = new Button();
             panelGrafico = new PanelBordes();
-            rbFechas = new RadioButton();
-            rbMedicos = new RadioButton();
+            cbSeleccionGrafico = new ComboBox();
+            label5 = new Label();
+            panelSeleccionGrafico = new Panel();
             panelSeleccionIntervalo.SuspendLayout();
-            panelBordes1.SuspendLayout();
+            panelInfoGerente.SuspendLayout();
+            panelSeleccionGrafico.SuspendLayout();
             SuspendLayout();
             // 
             // lSubtituloDashboard
@@ -151,21 +153,21 @@
             panelSeleccionIntervalo.TabIndex = 14;
             panelSeleccionIntervalo.Visible = false;
             // 
-            // panelBordes1
+            // panelInfoGerente
             // 
-            panelBordes1.BackColor = Color.White;
-            panelBordes1.Controls.Add(lFecha);
-            panelBordes1.Controls.Add(lMedicoActivo);
-            panelBordes1.Controls.Add(lPromedioRegistros);
-            panelBordes1.Controls.Add(lTotalRegistros);
-            panelBordes1.Controls.Add(label4);
-            panelBordes1.Controls.Add(label3);
-            panelBordes1.Controls.Add(label2);
-            panelBordes1.Controls.Add(label1);
-            panelBordes1.Location = new Point(42, 407);
-            panelBordes1.Name = "panelBordes1";
-            panelBordes1.Size = new Size(680, 130);
-            panelBordes1.TabIndex = 15;
+            panelInfoGerente.BackColor = Color.White;
+            panelInfoGerente.Controls.Add(lFecha);
+            panelInfoGerente.Controls.Add(lMedicoActivo);
+            panelInfoGerente.Controls.Add(lPromedioRegistros);
+            panelInfoGerente.Controls.Add(lTotalRegistros);
+            panelInfoGerente.Controls.Add(label4);
+            panelInfoGerente.Controls.Add(label3);
+            panelInfoGerente.Controls.Add(label2);
+            panelInfoGerente.Controls.Add(label1);
+            panelInfoGerente.Location = new Point(42, 407);
+            panelInfoGerente.Name = "panelInfoGerente";
+            panelInfoGerente.Size = new Size(680, 130);
+            panelInfoGerente.TabIndex = 15;
             // 
             // lFecha
             // 
@@ -268,39 +270,45 @@
             panelGrafico.Size = new Size(680, 241);
             panelGrafico.TabIndex = 18;
             // 
-            // rbFechas
+            // cbSeleccionGrafico
             // 
-            rbFechas.AutoSize = true;
-            rbFechas.Checked = true;
-            rbFechas.Location = new Point(501, 121);
-            rbFechas.Name = "rbFechas";
-            rbFechas.Size = new Size(95, 19);
-            rbFechas.TabIndex = 19;
-            rbFechas.TabStop = true;
-            rbFechas.Text = "Segun fechas";
-            rbFechas.UseVisualStyleBackColor = true;
-            rbFechas.CheckedChanged += rbFechas_CheckedChanged;
+            cbSeleccionGrafico.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbSeleccionGrafico.FormattingEnabled = true;
+            cbSeleccionGrafico.Items.AddRange(new object[] { "Segun tiempos", "Segun medicos", "Segun consultas" });
+            cbSeleccionGrafico.Location = new Point(80, 34);
+            cbSeleccionGrafico.Name = "cbSeleccionGrafico";
+            cbSeleccionGrafico.Size = new Size(121, 23);
+            cbSeleccionGrafico.TabIndex = 21;
+            cbSeleccionGrafico.SelectedIndexChanged += cbSeleccionGrafico_SelectedIndexChanged;
             // 
-            // rbMedicos
+            // label5
             // 
-            rbMedicos.AutoSize = true;
-            rbMedicos.Location = new Point(616, 121);
-            rbMedicos.Name = "rbMedicos";
-            rbMedicos.Size = new Size(106, 19);
-            rbMedicos.TabIndex = 20;
-            rbMedicos.Text = "Segun medicos";
-            rbMedicos.UseVisualStyleBackColor = true;
-            rbMedicos.CheckedChanged += rbMedicos_CheckedChanged;
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.ForeColor = SystemColors.ControlDark;
+            label5.Location = new Point(47, 12);
+            label5.Name = "label5";
+            label5.Size = new Size(155, 15);
+            label5.TabIndex = 22;
+            label5.Text = "Seleccione el tipo de grafico";
+            // 
+            // panelSeleccionGrafico
+            // 
+            panelSeleccionGrafico.Controls.Add(label5);
+            panelSeleccionGrafico.Controls.Add(cbSeleccionGrafico);
+            panelSeleccionGrafico.Location = new Point(517, 88);
+            panelSeleccionGrafico.Name = "panelSeleccionGrafico";
+            panelSeleccionGrafico.Size = new Size(205, 60);
+            panelSeleccionGrafico.TabIndex = 23;
             // 
             // InformeControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(rbMedicos);
-            Controls.Add(rbFechas);
+            Controls.Add(panelSeleccionGrafico);
             Controls.Add(panelGrafico);
             Controls.Add(bActualizarGrafico);
-            Controls.Add(panelBordes1);
+            Controls.Add(panelInfoGerente);
             Controls.Add(panelSeleccionIntervalo);
             Controls.Add(cbDecisionIntervalo);
             Controls.Add(lSeleccion);
@@ -311,8 +319,10 @@
             Load += InformeControl_Load;
             panelSeleccionIntervalo.ResumeLayout(false);
             panelSeleccionIntervalo.PerformLayout();
-            panelBordes1.ResumeLayout(false);
-            panelBordes1.PerformLayout();
+            panelInfoGerente.ResumeLayout(false);
+            panelInfoGerente.PerformLayout();
+            panelSeleccionGrafico.ResumeLayout(false);
+            panelSeleccionGrafico.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -327,7 +337,7 @@
         private DateTimePicker dtpFechaFin;
         private DateTimePicker dtpFechaInicio;
         private Panel panelSeleccionIntervalo;
-        private PanelBordes panelBordes1;
+        private PanelBordes panelInfoGerente;
         private Label lFecha;
         private Label lMedicoActivo;
         private Label lPromedioRegistros;
@@ -338,7 +348,8 @@
         private Label label1;
         private Button bActualizarGrafico;
         private PanelBordes panelGrafico;
-        private RadioButton rbFechas;
-        private RadioButton rbMedicos;
+        private ComboBox cbSeleccionGrafico;
+        private Label label5;
+        private Panel panelSeleccionGrafico;
     }
 }

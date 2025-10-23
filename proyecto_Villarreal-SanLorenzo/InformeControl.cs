@@ -28,7 +28,8 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void InformeControl_Load(object sender, EventArgs e)
         {
-            cbDecisionIntervalo.SelectedIndex = 0;
+            cbDecisionIntervalo.SelectedIndex = 4;
+            cbSeleccionGrafico.SelectedIndex = 0;
 
             dtpFechaInicio.Value = DateTime.Now;
             dtpFechaFin.Value = DateTime.Now;
@@ -68,6 +69,20 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
+        private string FormatearListaNatural(List<string> items)
+        {
+            if (items == null || items.Count == 0)
+                return "No hay registros en el rango";
+
+            if (items.Count == 1)
+                return items[0];
+
+            if (items.Count == 2)
+                return $"{items[0]} y {items[1]}";
+
+            return string.Join(", ", items.Take(items.Count - 1)) + " y " + items.Last();
+        }
+
         private int ObtenerTotalRegistros(DateTime inicio, DateTime fin)
         {
             int total_registros = 0;
@@ -104,18 +119,18 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     string query = @"
-                WITH Conteo AS (
-                    SELECT 
-                        CAST(fecha_registro AS DATE) AS fecha,
-                        COUNT(*) AS Cantidad
-                    FROM Registro
-                    WHERE fecha_registro BETWEEN @inicio AND @fin
-                    GROUP BY CAST(fecha_registro AS DATE)
-                )
-                SELECT fecha
-                FROM Conteo
-                WHERE Cantidad = (SELECT MAX(Cantidad) FROM Conteo)
-                ORDER BY fecha;";
+                        WITH Conteo AS (
+                            SELECT 
+                                CAST(fecha_registro AS DATE) AS fecha,
+                                COUNT(*) AS Cantidad
+                            FROM Registro
+                            WHERE fecha_registro BETWEEN @inicio AND @fin
+                            GROUP BY CAST(fecha_registro AS DATE)
+                        )
+                        SELECT fecha
+                        FROM Conteo
+                        WHERE Cantidad = (SELECT MAX(Cantidad) FROM Conteo)
+                        ORDER BY fecha;";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
@@ -148,20 +163,6 @@ namespace proyecto_Villarreal_SanLorenzo
             return resultado;
         }
 
-        private string FormatearListaNatural(List<string> items)
-        {
-            if (items == null || items.Count == 0)
-                return "No hay registros en el rango";
-
-            if (items.Count == 1)
-                return items[0];
-
-            if (items.Count == 2)
-                return $"{items[0]} y {items[1]}";
-
-            return string.Join(", ", items.Take(items.Count - 1)) + " y " + items.Last();
-        }
-
         private string ObtenerMedicoActivo(DateTime inicio, DateTime fin)
         {
             string resultado = "";
@@ -170,18 +171,18 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     string query = @"
-                WITH Conteo AS (
-                    SELECT 
-                        u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo,
-                        COUNT(*) AS Cantidad
-                    FROM Registro r
-                    INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
-                    WHERE r.fecha_registro BETWEEN @inicio AND @fin
-                    GROUP BY u.nombre_usuario, u.apellido_usuario
-                )
-                SELECT nombre_completo
-                FROM Conteo
-                WHERE Cantidad = (SELECT MAX(Cantidad) FROM Conteo);";
+                        WITH Conteo AS (
+                            SELECT 
+                                u.nombre_usuario + ' ' + u.apellido_usuario AS nombre_completo,
+                                COUNT(*) AS Cantidad
+                            FROM Registro r
+                            INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                            WHERE r.fecha_registro BETWEEN @inicio AND @fin
+                            GROUP BY u.nombre_usuario, u.apellido_usuario
+                        )
+                        SELECT nombre_completo
+                        FROM Conteo
+                        WHERE Cantidad = (SELECT MAX(Cantidad) FROM Conteo);";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
@@ -545,23 +546,6 @@ namespace proyecto_Villarreal_SanLorenzo
             chartArea.BackColor = Color.White;
         }
 
-        private void dtpFechaInicio_Leave(object sender, EventArgs e)
-        {
-            dtpFechaFin.MinDate = dtpFechaInicio.Value;
-            fecha_inicio = dtpFechaInicio.Value;
-        }
-
-        private void dtpFechaFin_Leave(object sender, EventArgs e)
-        {
-            fecha_fin = dtpFechaFin.Value.Date.AddDays(1).AddSeconds(-1);
-        }
-
-        private void bActualizarGrafico_Click(object sender, EventArgs e)
-        {
-            GraficarSegunRadioButton();
-            ActualizarStats();
-        }
-
         private void GraficarSegunTiempo()
         {
             // NUEVO: Determinar escala
@@ -585,26 +569,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
             RealizarGraficoTiempo(etiquetas, valores);
-        }
-
-        private void GraficarSegunMedicos()
-        {
-            try
-            {
-                // 1️⃣ Obtener datos de médicos activos en el rango
-                var datosMedicos = ObtenerDatosPorMedico(fecha_inicio, fecha_fin);
-
-                // 2️⃣ Generar etiquetas (nombres) y valores (cantidad de registros)
-                var etiquetas = datosMedicos.Select(d => d.NombreMostrar).ToList();
-                var valores = datosMedicos.Select(d => d.CantidadRegistros).ToList();
-
-                // 3️⃣ Graficar reutilizando la misma función de visualización
-                RealizarGraficoMedicos(etiquetas, valores);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al graficar por médicos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private List<(string NombreMostrar, int CantidadRegistros)> ObtenerDatosPorMedico(DateTime inicio, DateTime fin)
@@ -679,6 +643,28 @@ namespace proyecto_Villarreal_SanLorenzo
             return resultados;
         }
 
+        private void GraficarSegunMedicos()
+        {
+            try
+            {
+                // 1️⃣ Obtener datos de médicos activos en el rango
+                var datosMedicos = ObtenerDatosPorMedico(fecha_inicio, fecha_fin);
+
+                // 2️⃣ Generar etiquetas (nombres) y valores (cantidad de registros)
+                var etiquetas = datosMedicos.Select(d => d.NombreMostrar).ToList();
+                var valores = datosMedicos.Select(d => d.CantidadRegistros).ToList();
+
+                // 3️⃣ Graficar reutilizando la misma función de visualización
+                RealizarGraficoMedicos(etiquetas, valores);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al graficar por médicos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
         private void RealizarGraficoMedicos(List<string> etiquetas, List<int> valores)
         {
             panelGrafico.Controls.Clear();
@@ -732,27 +718,162 @@ namespace proyecto_Villarreal_SanLorenzo
             chartArea.BackColor = Color.White;
         }
 
+        private void GraficarSegunTiposConsulta()
+        {
+            try
+            {
+                // 1️⃣ Obtener datos agrupados por tipo de consulta
+                var datosTipos = ObtenerDatosPorTipoConsulta(fecha_inicio, fecha_fin);
+
+                // 2️⃣ Generar etiquetas (tipos) y valores (cantidad de registros)
+                var etiquetas = datosTipos.Select(d => d.NombreMostrar).ToList();
+                var valores = datosTipos.Select(d => d.CantidadRegistros).ToList();
+
+                // 3️⃣ Reutilizar la función de graficado
+                RealizarGraficoTiposConsulta(etiquetas, valores);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al graficar por tipos de consulta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<(string NombreMostrar, int CantidadRegistros)> ObtenerDatosPorTipoConsulta(DateTime inicio, DateTime fin)
+        {
+            var resultados = new List<(string, int)>();
+
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string query = @"
+                SELECT 
+                    t.nombre_registro AS TipoConsulta,
+                    COUNT(*) AS CantidadRegistros
+                FROM Registro r
+                INNER JOIN Tipo_registro t ON r.id_tipo_registro = t.id_tipo_registro
+                WHERE r.fecha_registro BETWEEN @inicio AND @fin
+                GROUP BY t.nombre_registro
+                ORDER BY COUNT(*) DESC;";
+
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    {
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
+
+                        db.Open();
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            resultados.Add((
+                                reader["TipoConsulta"].ToString(),
+                                Convert.ToInt32(reader["CantidadRegistros"])
+                            ));
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error al obtener datos de tipos de consulta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return resultados;
+        }
+
+        private void RealizarGraficoTiposConsulta(List<string> etiquetas, List<int> valores)
+        {
+            panelGrafico.Controls.Clear();
+            Chart chart = new Chart { Dock = DockStyle.Fill };
+            panelGrafico.Controls.Add(chart);
+
+            ChartArea chartArea = new ChartArea();
+            chart.ChartAreas.Add(chartArea);
+
+            chartArea.AxisX.Title = "Tipos de consulta";
+            chartArea.AxisX.Interval = 1;
+            chartArea.AxisX.LabelStyle.Angle = -45;
+            chartArea.AxisX.MajorGrid.Enabled = false;
+
+            chartArea.AxisY.Title = "Cantidad de registros";
+            chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            chartArea.AxisY.LabelStyle.Format = "N0";
+            chartArea.AxisY.Enabled = AxisEnabled.True;
+
+            int maxValor = valores.Count > 0 ? valores.Max() : 0;
+            chartArea.AxisY.Minimum = 0;
+            chartArea.AxisY.Maximum = maxValor == 0 ? 10 : maxValor * 1.2;
+            chartArea.AxisY.Interval = maxValor <= 10 ? 1 : Math.Ceiling(maxValor / 5.0);
+
+            Series series = new Series
+            {
+                Name = "Registros por Tipo de Consulta",
+                ChartType = SeriesChartType.Column,
+                IsValueShownAsLabel = true,
+                LabelFormat = "N0"
+            };
+            chart.Series.Add(series);
+
+            for (int i = 0; i < etiquetas.Count; i++)
+            {
+                DataPoint dp = new DataPoint
+                {
+                    YValues = new double[] { valores[i] },
+                    AxisLabel = etiquetas[i]
+                };
+                series.Points.Add(dp);
+            }
+
+            chart.Titles.Add("Registros clínicos por tipo de consulta");
+            if (valores.All(v => v == 0))
+            {
+                chart.Titles[0].Text += " (No hay datos en este rango)";
+            }
+
+            chart.BackColor = Color.WhiteSmoke;
+            chartArea.BackColor = Color.White;
+        }
+
         private void GraficarSegunRadioButton()
         {
-            if (rbFechas.Checked)
+            if (cbSeleccionGrafico.SelectedItem.ToString() == "Segun tiempos")
             {
                 GraficarSegunTiempo();
             }
-            else if (rbMedicos.Checked)
+            else if (cbSeleccionGrafico.SelectedItem.ToString() == "Segun medicos")
             {
                 GraficarSegunMedicos();
             }
+            else if (cbSeleccionGrafico.SelectedItem.ToString() == "Segun consultas")
+            {
+                GraficarSegunTiposConsulta();
+            }
         }
 
-        private void rbFechas_CheckedChanged(object sender, EventArgs e)
+        private void cbSeleccionGrafico_SelectedIndexChanged(object sender, EventArgs e)
         {
             GraficarSegunRadioButton();
         }
 
-        private void rbMedicos_CheckedChanged(object sender, EventArgs e)
+        private void dtpFechaInicio_Leave(object sender, EventArgs e)
+        {
+            dtpFechaFin.MinDate = dtpFechaInicio.Value;
+            fecha_inicio = dtpFechaInicio.Value;
+        }
+
+        private void dtpFechaFin_Leave(object sender, EventArgs e)
+        {
+            fecha_fin = dtpFechaFin.Value.Date.AddDays(1).AddSeconds(-1);
+        }
+
+        private void bActualizarGrafico_Click(object sender, EventArgs e)
         {
             GraficarSegunRadioButton();
+            ActualizarStats();
         }
+
     }
 }
 
