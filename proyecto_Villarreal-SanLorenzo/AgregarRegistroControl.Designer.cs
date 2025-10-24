@@ -40,13 +40,14 @@
             lDniPacienteRegistro = new Label();
             lApellidoPacienteRegistro = new Label();
             lNombrePacienteRegistro = new Label();
-            tTelefonoPacienteRegistro = new TextBox();
+            tObservaciones = new TextBox();
             tDniPacienteRegistro = new TextBox();
             tApellidoPacienteRegistro = new TextBox();
             tNombrePacienteRegistro = new TextBox();
             comboBoxTipoRegistro = new ComboBox();
             comboBoxMedicacion = new ComboBox();
             label6 = new Label();
+            bGuardarRegistro = new Button();
             SuspendLayout();
             // 
             // bAtras
@@ -176,19 +177,20 @@
             lNombrePacienteRegistro.TabIndex = 26;
             lNombrePacienteRegistro.Text = "Nombre";
             // 
-            // tTelefonoPacienteRegistro
+            // tObservaciones
             // 
-            tTelefonoPacienteRegistro.Location = new Point(53, 460);
-            tTelefonoPacienteRegistro.Margin = new Padding(3, 4, 3, 4);
-            tTelefonoPacienteRegistro.Name = "tTelefonoPacienteRegistro";
-            tTelefonoPacienteRegistro.Size = new Size(756, 27);
-            tTelefonoPacienteRegistro.TabIndex = 24;
+            tObservaciones.Location = new Point(53, 460);
+            tObservaciones.Margin = new Padding(3, 4, 3, 4);
+            tObservaciones.Name = "tObservaciones";
+            tObservaciones.Size = new Size(756, 27);
+            tObservaciones.TabIndex = 24;
             // 
             // tDniPacienteRegistro
             // 
             tDniPacienteRegistro.Location = new Point(53, 232);
             tDniPacienteRegistro.Margin = new Padding(3, 4, 3, 4);
             tDniPacienteRegistro.Name = "tDniPacienteRegistro";
+            tDniPacienteRegistro.ReadOnly = true;
             tDniPacienteRegistro.Size = new Size(756, 27);
             tDniPacienteRegistro.TabIndex = 22;
             // 
@@ -197,6 +199,7 @@
             tApellidoPacienteRegistro.Location = new Point(499, 124);
             tApellidoPacienteRegistro.Margin = new Padding(3, 4, 3, 4);
             tApellidoPacienteRegistro.Name = "tApellidoPacienteRegistro";
+            tApellidoPacienteRegistro.ReadOnly = true;
             tApellidoPacienteRegistro.Size = new Size(310, 27);
             tApellidoPacienteRegistro.TabIndex = 21;
             // 
@@ -205,6 +208,7 @@
             tNombrePacienteRegistro.Location = new Point(53, 124);
             tNombrePacienteRegistro.Margin = new Padding(3, 4, 3, 4);
             tNombrePacienteRegistro.Name = "tNombrePacienteRegistro";
+            tNombrePacienteRegistro.ReadOnly = true;
             tNombrePacienteRegistro.Size = new Size(310, 27);
             tNombrePacienteRegistro.TabIndex = 20;
             // 
@@ -235,10 +239,25 @@
             label6.Text = "label6";
             label6.Visible = false;
             // 
+            // bGuardarRegistro
+            // 
+            bGuardarRegistro.BackColor = Color.Transparent;
+            bGuardarRegistro.ForeColor = Color.Black;
+            bGuardarRegistro.Location = new Point(323, 693);
+            bGuardarRegistro.Margin = new Padding(3, 4, 3, 4);
+            bGuardarRegistro.Name = "bGuardarRegistro";
+            bGuardarRegistro.Size = new Size(138, 48);
+            bGuardarRegistro.TabIndex = 42;
+            bGuardarRegistro.Text = "Guardar registro";
+            bGuardarRegistro.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bGuardarRegistro.UseVisualStyleBackColor = false;
+            bGuardarRegistro.Click += bGuardarRegistro_Click;
+            // 
             // AgregarRegistroControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(bGuardarRegistro);
             Controls.Add(label6);
             Controls.Add(comboBoxMedicacion);
             Controls.Add(comboBoxTipoRegistro);
@@ -254,7 +273,7 @@
             Controls.Add(lDniPacienteRegistro);
             Controls.Add(lApellidoPacienteRegistro);
             Controls.Add(lNombrePacienteRegistro);
-            Controls.Add(tTelefonoPacienteRegistro);
+            Controls.Add(tObservaciones);
             Controls.Add(tDniPacienteRegistro);
             Controls.Add(tApellidoPacienteRegistro);
             Controls.Add(tNombrePacienteRegistro);
@@ -278,12 +297,13 @@
         private Label lDniPacienteRegistro;
         private Label lApellidoPacienteRegistro;
         private Label lNombrePacienteRegistro;
-        private TextBox tTelefonoPacienteRegistro;
+        private TextBox tObservaciones;
         private TextBox tDniPacienteRegistro;
         private TextBox tApellidoPacienteRegistro;
         private TextBox tNombrePacienteRegistro;
         private ComboBox comboBoxTipoRegistro;
         private ComboBox comboBoxMedicacion;
         private Label label6;
+        private Button bGuardarRegistro;
     }
 }

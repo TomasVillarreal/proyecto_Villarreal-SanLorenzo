@@ -42,33 +42,30 @@ namespace proyecto_Villarreal_SanLorenzo
         public void CargarComponentes()//Carga los componentes al panel
         {
             var datosPaciente = ObtenerDatosPaciente();
-            // DNI
+
+            // === DNI ===
             Label lDniPaciente = new Label();
             lDniPaciente.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            lDniPaciente.Text = "DNI: " + dni.ToString();
+            lDniPaciente.Text = "DNI: " + datosPaciente.dni;
             lDniPaciente.AutoSize = true;
             lDniPaciente.Location = new Point(10, 10);
 
-            // Nombre
+            // === Nombre ===
             Label lNombrePaciente = new Label();
             lNombrePaciente.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            lNombrePaciente.Text = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombrePaciente.ToLower());
+            lNombrePaciente.Text = System.Globalization.CultureInfo.CurrentCulture.TextInfo
+                                     .ToTitleCase(datosPaciente.nombre.ToLower());
             lNombrePaciente.AutoSize = true;
             lNombrePaciente.Location = new Point(10, lDniPaciente.Bottom + 2);
 
-
-            // Profesional (Dr. / Enf.)
+            // === Profesional (Dr./Enf.) ===
             Label lProfesional = new Label();
             lProfesional.Font = new Font("Segoe UI", 9, FontStyle.Italic);
             lProfesional.ForeColor = Color.Gray;
 
             var datos = ObtenerDatosProfesional();
-
-            string prefijo = "";
-            if (datos.rol.Equals("Médico", StringComparison.OrdinalIgnoreCase))
-                prefijo = "Dr. ";
-            else if (datos.rol.Equals("Enfermero", StringComparison.OrdinalIgnoreCase))
-                prefijo = "Enf. ";
+            string prefijo = datos.rol.Equals("Médico", StringComparison.OrdinalIgnoreCase) ? "Dr. " :
+                             datos.rol.Equals("Enfermero", StringComparison.OrdinalIgnoreCase) ? "Enf. " : "";
 
             string texto = $"{prefijo}{datos.nombreCompleto}";
             if (!string.IsNullOrWhiteSpace(datos.especialidad))
@@ -78,8 +75,7 @@ namespace proyecto_Villarreal_SanLorenzo
             lProfesional.AutoSize = true;
             lProfesional.Location = new Point(lNombrePaciente.Right + 25, 10);
 
-
-            // Tipo de registro
+            // === Tipo de registro ===
             Label lTipoRegistro = new Label();
             lTipoRegistro.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             lTipoRegistro.Text = ObtenerTipoRegistro();
@@ -87,8 +83,7 @@ namespace proyecto_Villarreal_SanLorenzo
             lTipoRegistro.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lTipoRegistro.Location = new Point(this.Width - 240, 10);
 
-
-            // Fecha del registro
+            // === Fecha del registro ===
             Label lFecha = new Label();
             lFecha.Font = new Font("Segoe UI", 9, FontStyle.Italic);
             lFecha.ForeColor = Color.DimGray;
@@ -97,26 +92,27 @@ namespace proyecto_Villarreal_SanLorenzo
             lFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lFecha.Location = new Point(this.Width - 100, 10);
 
-
-            // Observaciones
+            // === Observaciones ===
             Label lObservaciones = new Label();
             lObservaciones.Font = new Font("Segoe UI", 9, FontStyle.Regular);
-            lObservaciones.Text = "📝 Observaciones: " + ObtenerObservaciones();
+            string textoObs = ObtenerObservaciones();
+            lObservaciones.Text = "📝 Observaciones: " + (string.IsNullOrWhiteSpace(textoObs) ? "—" : textoObs);
             lObservaciones.ForeColor = Color.Black;
             lObservaciones.AutoSize = false;
             lObservaciones.MaximumSize = new Size(this.Width - 40, 0);
-            lObservaciones.Location = new Point(10, 55);
+            lObservaciones.Location = new Point(10, lNombrePaciente.Bottom + 20);
             lObservaciones.AutoEllipsis = false;
 
+            // Calcula altura exacta del texto
             using (Graphics g = this.CreateGraphics())
             {
                 SizeF size = g.MeasureString(lObservaciones.Text, lObservaciones.Font, lObservaciones.MaximumSize.Width);
                 lObservaciones.Size = new Size((int)size.Width, (int)size.Height + 5);
             }
-            this.Height = lObservaciones.Bottom + 25;
 
+            int alturaTotal = lObservaciones.Bottom + 15;
 
-            // Medicación (opcional)
+            // === Medicación (si existe) ===
             string medicacion = ObtenerMedicacion();
             if (!string.IsNullOrWhiteSpace(medicacion))
             {
@@ -124,38 +120,40 @@ namespace proyecto_Villarreal_SanLorenzo
                 lMedicacion.Font = new Font("Segoe UI", 9, FontStyle.Regular);
                 lMedicacion.Text = "💊 Medicación: " + medicacion;
                 lMedicacion.AutoSize = false;
-                lMedicacion.Size = new Size(this.Width - 60, 35);
-                lMedicacion.Location = new Point(10, lObservaciones.Bottom + 5);
+                lMedicacion.MaximumSize = new Size(this.Width - 40, 0);
+                lMedicacion.Location = new Point(10, lObservaciones.Bottom + 8);
                 lMedicacion.ForeColor = Color.FromArgb(40, 40, 40);
+
+                using (Graphics g = this.CreateGraphics())
+                {
+                    SizeF size = g.MeasureString(lMedicacion.Text, lMedicacion.Font, lMedicacion.MaximumSize.Width);
+                    lMedicacion.Size = new Size((int)size.Width, (int)size.Height + 5);
+                }
+
                 this.Controls.Add(lMedicacion);
-
-                this.Height = 130;
-            }
-            else
-            {
-                this.Height = 110;
+                alturaTotal = lMedicacion.Bottom + 15;
             }
 
-            // Estilo general del panel
+            // === Ajustes del panel ===
+            this.Height = Math.Max(alturaTotal, 110);
             this.Padding = new Padding(8);
             this.BackColor = Color.White;
             this.BorderStyle = BorderStyle.FixedSingle;
             this.Width = 650;
             this.Margin = new Padding(6);
 
-            // Agregar controles al panel
+            // === Agregar controles ===
             this.Controls.Add(lDniPaciente);
             this.Controls.Add(lNombrePaciente);
             this.Controls.Add(lProfesional);
             this.Controls.Add(lTipoRegistro);
             this.Controls.Add(lFecha);
             this.Controls.Add(lObservaciones);
-
         }
 
         private (string nombre, string dni) ObtenerDatosPaciente()//Obtiene el NYA del paciente junto con su DNI
         {
-            string nombre = "";
+            string nombreCompleto = "";
             string dniPaciente = "";
 
             try
@@ -163,10 +161,10 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     string query = @"
-                                    SELECT p.nombre_paciente, p.dni_paciente
-                                    FROM Historial h
-                                    INNER JOIN Paciente p ON h.dni_paciente = p.dni_paciente
-                                    WHERE h.id_historial = @idHistorial;";
+                            SELECT p.nombre_paciente, p.apellido_paciente, p.dni_paciente
+                            FROM Historial h
+                            INNER JOIN Paciente p ON h.dni_paciente = p.dni_paciente
+                            WHERE h.id_historial = @idHistorial;";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -177,10 +175,17 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             if (reader.Read())
                             {
-                                if (!reader.IsDBNull(reader.GetOrdinal("nombre_paciente")))
-                                    nombre = reader["nombre_paciente"].ToString();
+                                string nombre = reader["nombre_paciente"] != DBNull.Value
+                                    ? reader["nombre_paciente"].ToString()
+                                    : "";
 
-                                if (!reader.IsDBNull(reader.GetOrdinal("dni_paciente")))
+                                string apellido = reader["apellido_paciente"] != DBNull.Value
+                                    ? reader["apellido_paciente"].ToString()
+                                    : "";
+
+                                nombreCompleto = $"{nombre} {apellido}".Trim();
+
+                                if (reader["dni_paciente"] != DBNull.Value)
                                     dniPaciente = reader["dni_paciente"].ToString();
                             }
                         }
@@ -192,7 +197,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Error al obtener los datos del paciente: " + ex.Message, "Error BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            return (nombre, dniPaciente);
+            return (nombreCompleto, dniPaciente);
         }
 
         private string ObtenerFecha()//Obtiene la fecha en la que se registró por 1era vez al paciente en el sistema
@@ -292,9 +297,9 @@ namespace proyecto_Villarreal_SanLorenzo
             using (SqlConnection db = new SqlConnection(connectionString))
             {
                 string query = @"
-            SELECT observaciones
-            FROM Registro
-            WHERE id_registro = @id_registro";
+                            SELECT observaciones
+                            FROM Registro
+                            WHERE id_registro = @id_registro";
 
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {

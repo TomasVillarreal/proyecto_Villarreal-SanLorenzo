@@ -124,7 +124,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void CargarHistoriales(int p_dniPaciente)
+        public void CargarHistoriales(int p_dniPaciente)
         {
             panelContenedorRegistros.Controls.Clear();
 
@@ -243,8 +243,23 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bAgregarRegistroPaciente_Click(object sender, EventArgs e)//Boton que abre la vista para agregar registros al paciente seleccionado
         {
-            AgregarRegistroControl agregarRegistro = new AgregarRegistroControl(Convert.ToInt32(tBusquedaDNI.Text));
+            string txt = tBusquedaDNI.Text.Trim();
 
+            if (string.IsNullOrEmpty(txt))
+            {
+                MessageBox.Show("Debe ingresar el DNI del paciente antes de agregar un registro.",
+                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!int.TryParse(txt, out int dniBusqueda))
+            {
+                MessageBox.Show("El DNI ingresado no es válido.",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            AgregarRegistroControl agregarRegistro = new AgregarRegistroControl(dniBusqueda);
             agregarRegistro.controlPadreRegistro = this;
             agregarRegistro.AbrirOtroControl += this.AbrirOtroControl;
 

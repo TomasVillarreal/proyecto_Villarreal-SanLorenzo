@@ -19,20 +19,18 @@ namespace proyecto_Villarreal_SanLorenzo
 
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
 
-        int dni, historial, registro = 0;
+        int dni = 0;
 
         public AgregarRegistroControl(int p_dni, int p_historial, int p_registro)
         {
 
             InitializeComponent();
             this.dni = p_dni;
-            this.historial = p_historial;
-            this.registro = p_registro;
 
-            if (dni != 0 && historial != 0 && registro != 0)
+            if (dni != 0)
             {
                 CargarDatosPaciente(dni);
-                CargarDatosRegistrosPacientes(dni, historial, registro);
+                CargarDatosPaciente(dni);
                 tDniPacienteRegistro.ReadOnly = true;
                 tNombrePacienteRegistro.ReadOnly = true;
                 tApellidoPacienteRegistro.ReadOnly = true;
@@ -84,11 +82,65 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void CargarDatosRegistrosPacientes(int p_dni, int p_historial, int p_registro)
+        private void bGuardarRegistro_Click(object sender, EventArgs e)
         {
+            string observaciones = tObservaciones.Text.Trim();
+            string medicacion = comboBoxMedicacion.Text.Trim();
+            string tipoRegistro = comboBoxTipoRegistro.SelectedItem?.ToString();
+            DateTime fecha = DateTime.Now;
 
+            if (string.IsNullOrWhiteSpace(observaciones))
+            {
+                MessageBox.Show("Debe completar las observaciones del registro.",
+                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    db.Open();
+
+                    string query = @"
+                                INSERT INTO Historial (dni_paciente, tipo_registro, observaciones, medicacion, fecha)
+                                VALUES (@dni, @tipo, @obs, @med, @fecha);";
+
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    {
+
+                        string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
+
+                        if (string.IsNullOrEmpty(medicacionSeleccionada))
+                        {
+                            // Si no hay medicación seleccionada, insertamos un valor por defecto en lugar de NULL o vacío
+                            medicacionSeleccionada = "Sin medicación";
+                        }
+                        cmd.Parameters.AddWithValue("@dni", this.dni);
+                        cmd.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
+                        cmd.Parameters.AddWithValue("@obs", observaciones);
+                        cmd.Parameters.AddWithValue("@medicacion", medicacionSeleccionada);
+                        cmd.Parameters.AddWithValue("@fecha", fecha);
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Registro agregado correctamente.",
+                                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Volver al historial
+                    if (controlPadreRegistro is HistorialClinicoControl historialControl)
+                    {
+                        historialControl.CargarHistoriales(this.dni);
+                    }
+                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, controlPadreRegistro, false));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar el registro: " + ex.Message,
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
     }
 }
