@@ -80,6 +80,7 @@ namespace proyecto_Villarreal_SanLorenzo
             flowLayoutPanel1.Controls.Add(bPacientes);
             flowLayoutPanel1.Controls.Add(bUsuarios);
             flowLayoutPanel1.Controls.Add(bInforme);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanel1.Location = new Point(9, 145);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(181, 158);
@@ -242,9 +243,10 @@ namespace proyecto_Villarreal_SanLorenzo
             // 
             // flowLayoutPanel2
             // 
-            flowLayoutPanel2.Controls.Add(bAgregarPersonal);
-            flowLayoutPanel2.Controls.Add(bBackup);
             flowLayoutPanel2.Controls.Add(bCerrarSesion);
+            flowLayoutPanel2.Controls.Add(bBackup);
+            flowLayoutPanel2.Controls.Add(bAgregarPersonal);
+            flowLayoutPanel2.FlowDirection = FlowDirection.BottomUp;
             flowLayoutPanel2.Location = new Point(12, 541);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
             flowLayoutPanel2.Size = new Size(178, 92);
@@ -264,7 +266,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bAgregarPersonal.Image = Resource1.plus_square;
             bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
             bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(3, 3);
+            bAgregarPersonal.Location = new Point(3, 8);
             bAgregarPersonal.Name = "bAgregarPersonal";
             bAgregarPersonal.NormalColor = Color.White;
             bAgregarPersonal.Size = new Size(175, 23);
@@ -289,7 +291,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bBackup.Image = Resource1.file_earmark_arrow_down;
             bBackup.ImageAlign = ContentAlignment.MiddleLeft;
             bBackup.IsActive = false;
-            bBackup.Location = new Point(3, 32);
+            bBackup.Location = new Point(3, 37);
             bBackup.Name = "bBackup";
             bBackup.NormalColor = Color.White;
             bBackup.Size = new Size(175, 23);
@@ -314,7 +316,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(3, 61);
+            bCerrarSesion.Location = new Point(3, 66);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
             bCerrarSesion.Size = new Size(175, 23);
@@ -376,6 +378,9 @@ namespace proyecto_Villarreal_SanLorenzo
             Controls.Add(flowLayoutPanelUsuario);
             Controls.Add(panelDefault);
             Controls.Add(panelSidebar);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FormHome";
             Text = "FormHome";
             Load += FormHome_Load;
