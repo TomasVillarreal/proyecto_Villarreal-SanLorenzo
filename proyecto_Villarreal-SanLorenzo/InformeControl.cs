@@ -38,7 +38,6 @@ namespace proyecto_Villarreal_SanLorenzo
             dtpFechaInicio.MaxDate = DateTime.Now;
 
             ActualizarStats();
-
             GraficarSegunRadioButton();
         }
 
