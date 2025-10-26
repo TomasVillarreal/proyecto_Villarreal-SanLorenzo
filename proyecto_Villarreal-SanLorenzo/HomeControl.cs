@@ -15,6 +15,7 @@ namespace proyecto_Villarreal_SanLorenzo
     {
 
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
+        // Eventhandler para poder ir a otros controles usando las filas creadas
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
         public HomeControl()
@@ -44,7 +45,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
                         db.Open();
-                        // Guardo el total y lo pongo en el texto del label correspondiente
+                        // Guardo el total
                         total_pacientes = (int)cmd.ExecuteScalar();
                         db.Close();
                     }
@@ -57,6 +58,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return total_pacientes;
         }
 
+        // Funcion que calcula el promedio de las consultas hechas por paciente
         private double PromedioRegistrosPaciente()
         {
             double promedio = 0;
@@ -64,13 +66,14 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
-                    // Se crea la query para contar las filas
+                    // Se crea la query para obtener el promedio al contar todas las filas
+                    // y dividirlas por la cuenta del nro de pacientes distintos que hay
                     string queryNroPacientes = "SELECT CAST(COUNT(*) AS FLOAT) / COUNT(DISTINCT dni_paciente) AS PromedioRegistrosPorPaciente FROM Registro;";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
                         db.Open();
-                        // Guardo el total y lo pongo en el texto del label correspondiente
+                        // Guardo el promedio y convierto a doble
                         promedio = Convert.ToDouble(cmd.ExecuteScalar());
                         db.Close();
                     }
@@ -78,10 +81,12 @@ namespace proyecto_Villarreal_SanLorenzo
             }
             catch (SqlException ex)
             {
+                // Si hay un error pq no hay registros, hago que el promedio sea 0
                 if(ex.Number == 8134)
                 {
                     promedio = 0;
                 }
+                // Si hay cualquier otro tipo de error, devuelvo mensaje de error general
                 else
                 {
                     MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -116,15 +121,16 @@ namespace proyecto_Villarreal_SanLorenzo
             return panelVacio;
         }
 
-
+        // Funcion para cargar los pacientes recientemente creados (en la ultima semana)
         private void CargarPacientesRecientes()
         {
+            // Creo una fila
             FilasUltimaActividad filaPaciente;
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
-                    // Se crea la query para contar las filas
+                    // Creo la query para que se me devuelva todos los pacientes creados en la ult semaan
                     string queryNroPacientes = "SELECT dni_paciente FROM Paciente " +
                         "WHERE fecha_creacion_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_creacion_registro <= GETDATE() " +
                         "AND visible = 1;";
@@ -133,18 +139,22 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
+                        // Si esta query tiene resultados:
                         if (reader.HasRows)
                         {
+                            // Entonces recorro todas las filas devueltas y:
                             while (reader.Read())
                             {
                                 int dni = Convert.ToInt32(reader["dni_paciente"]);
+                                // Creo una fila que tenga unicamente el dni del paciente como argumento
                                 filaPaciente = new FilasUltimaActividad(dni, 0, 0, true);
+                                // Y le asigno el eventhandler que tengo como atributo
+                                // al evento de ClickFila de la fila, para poder abrir el uc correspondiente.
                                 filaPaciente.ClickFila += (s, e) =>
                                 {
+                                    // Creo el uc de pacientes, le asigno el mismo eventhandler que este uc, y lo invoco
                                     PacientesControl verDatosPaciente = new PacientesControl(dni);
-
                                     verDatosPaciente.AbrirOtroControl += this.AbrirOtroControl;
-
                                     AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verDatosPaciente, false));
                                 };
 
@@ -153,6 +163,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         }
                         else
                         {
+                            // Si no tiene filas, creo el panel vacio y lo coloco
                             panelContenedorPacientes.Controls.Add(crearPanelVacio(false));
 
                         }
@@ -167,8 +178,11 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
+        // Funcion que cumple la misma tarea que la de pacientes, solo que esta carga
+        // los registros recientes (en la ultima semana)
         private void CrearRegistrosRecientes()
         {
+            // Es exactamente lo mismo que la funcion CargarPacientesRecientes.
             FilasUltimaActividad filaPaciente;
             try
             {
