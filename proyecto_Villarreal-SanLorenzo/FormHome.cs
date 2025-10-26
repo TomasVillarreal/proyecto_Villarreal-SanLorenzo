@@ -22,11 +22,13 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
             this.Load += FormHome_Load;
         }
+        // Evento que al apenas cargar el form, se coloca el home y se le asigna el evento para cambiar de control
         private void FormHome_Load(object sender, EventArgs e)
         {
             CargarDatosUsuario();
             panelDefault.Controls.Clear();
             HomeControl homeControl = new HomeControl();
+            homeControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
             homeControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(homeControl);
         }
@@ -184,14 +186,23 @@ namespace proyecto_Villarreal_SanLorenzo
             return timerBackup.Enabled;
         }
 
-        // Funcion que "realiza" el backup.
+        // Funcion que realiza el backup.
         public void RealizarBackup(string ruta)
         {
+            /* Creo el nombre del archivo backup que se va a crear, poniendo 
+             * el nombre de Backups Clinicks, junto con la fecha de hoy,
+             *  y la hora actual, formateando a esta fecha con simbolos permitidos
+             *  para colocarlos como nombre */
             string nombreArchivo = $"Backup Clinicks - {DateTime.Now.ToString("yyyy-MM-dd HH-mm")}.bak";
+            // Combino a este nombre con la ruta elegida por el usuario para tener la ruta que va a ser usada para hacer el backup
             string rutaCompleta = Path.Combine(ruta, nombreArchivo);
 
             try
             {
+                /* 
+                 * Creo la query para hacer el backup sobre la bd que usamos,
+                 * con la ruta completa hecha anteriormente, y la ejecuto
+                 */
                 string query = $@"
                     BACKUP DATABASE [proyecto_Villarreal_SanLorenzo]
                     TO DISK = '{rutaCompleta}'
@@ -231,14 +242,17 @@ namespace proyecto_Villarreal_SanLorenzo
             panelDefault.Controls.Add(pacientesControl);
         }
 
+        // Evento que ocurre al clickear en el boton para ver los informes
         private void bInforme_Click(object sender, EventArgs e)
         {
             panelDefault.Controls.Clear();
+            // Si el usuario actual tiene el rol de medico o enfermero cargo un informe particular
             if(SesionUsuario.RolActivo.ToLower() == "medico" || SesionUsuario.RolActivo.ToLower() == "enfermero")
             {
                 InformeMedicosEnfermeros informe = new InformeMedicosEnfermeros();
                 informe.Dock = DockStyle.Fill;
                 panelDefault.Controls.Add(informe);
+                // Si es gerente, cargo el otro tipo de informe.
             } else if (SesionUsuario.RolActivo.ToLower() == "gerente")
             {
                 InformeControl informe = new InformeControl();
@@ -269,6 +283,7 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             panelDefault.Controls.Clear();
             HomeControl homeControl = new HomeControl();
+            homeControl.AbrirOtroControl += UserControlProyecto_AbrirOtroControl;
             homeControl.Dock = DockStyle.Fill;
             panelDefault.Controls.Add(homeControl);
         }

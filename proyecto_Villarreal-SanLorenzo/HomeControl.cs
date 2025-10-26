@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -16,6 +15,7 @@ namespace proyecto_Villarreal_SanLorenzo
     {
 
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
         public HomeControl()
         {
@@ -137,7 +137,17 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             while (reader.Read())
                             {
-                                filaPaciente = new FilasUltimaActividad(Convert.ToInt32(reader["dni_paciente"]), 0, 0, true);
+                                int dni = Convert.ToInt32(reader["dni_paciente"]);
+                                filaPaciente = new FilasUltimaActividad(dni, 0, 0, true);
+                                filaPaciente.ClickFila += (s, e) =>
+                                {
+                                    PacientesControl verDatosPaciente = new PacientesControl(dni);
+
+                                    verDatosPaciente.AbrirOtroControl += this.AbrirOtroControl;
+
+                                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verDatosPaciente, false));
+                                };
+
                                 panelContenedorPacientes.Controls.Add(filaPaciente);
                             }
                         }

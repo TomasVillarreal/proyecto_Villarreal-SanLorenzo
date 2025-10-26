@@ -10,7 +10,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -25,29 +24,50 @@ namespace proyecto_Villarreal_SanLorenzo
          * exacto de la conexion, como por ejemplo DESKTOP-ASD/MSSQL. 
          */
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
+        // Atributo sencillo hecho para ver si se esta llamando al uc de pacientes mediante las filas del home
+        private bool esBusquedaDirecta = false;
 
+        // Constructor utilizado al llamar a este uc mediante las filas del home
+        public PacientesControl(int p_dni)
+        {
+            InitializeComponent();
+            // Se pone en true el atributo booleano para decirle al load mas tarde q no haga las siguientes cosas
+            esBusquedaDirecta = true;
+            // Se cargan los datos al datasource
+            CargarDatosPacientesVisibles();
+            // Se coloca el dni pasado como argumento al textbox y se realiza la busqueda del paciente
+            tBusquedaPacientes.Text = p_dni.ToString();
+            RealizarBusqueda();
+        }
 
         public PacientesControl()
         {
             InitializeComponent();
         }
 
+        // Evento para cuando se hace click en las celdas de la tabla
         private void dgPaciente_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            // Si se clickeo en las cabeceras, o si lo que clickeo no tiene dni, salgo
             if (e.RowIndex < 0) return;
             if (dgPaciente.Rows[e.RowIndex].Cells["cDniPaciente"].Value == null) return;
 
+            // Obtengo la columna y la fila clickeada
             DataGridViewColumn columnaClickeada = dgPaciente.Columns[e.ColumnIndex];
             DataGridViewRow pacienteClickeado = dgPaciente.Rows[e.RowIndex];
             int dni = 0;
 
+            // Si la columna clickeada es la de eliminar
             if (columnaClickeada.Name == "cEliminarPaciente")
             {
+                // Pregunto si se quiere eliminar realmente
                 DialogResult confirmacion = MessageBox.Show(
                 "¿Está seguro que desea eliminar este registro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
+                // Si se confirma:
                 if (confirmacion == DialogResult.Yes)
                 {
+                    // Obtengo el dni, verifico si este existe
                     object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
 
                     if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
@@ -89,12 +109,16 @@ namespace proyecto_Villarreal_SanLorenzo
                     }
                 }
             }
+
+            // Si es la columna de edicion:
             else if (columnaClickeada.Name == "cEditarPaciente")
             {
+                // Obtengo el dni y verifico si existe
                 object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
 
                 if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
                 {
+                    // Si existe creo el uc de registrar paciente
                     RegistrarPacienteControl registrarPaciente = new RegistrarPacienteControl(dni);
 
                     registrarPaciente.AbrirOtroControl += this.AbrirOtroControl;
@@ -103,11 +127,15 @@ namespace proyecto_Villarreal_SanLorenzo
                     AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(dni, registrarPaciente, true));
                 }
             }
+
+            // Si es la columna de reactivacion, para el caso de la tabla de usuarios eliminados
             else if (columnaClickeada.Name == "cReactivarPaciente")
             {
+                // Obtengo el dni, verifico si existe
                 object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
                 if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
                 {
+                    // Si existe cambio el booleano de visible a 1 para que sea visible
                     try
                     {
                         using (SqlConnection db = new SqlConnection(connectionString))
@@ -157,7 +185,7 @@ namespace proyecto_Villarreal_SanLorenzo
             btnEditar.UseColumnTextForButtonValue = true;
             btnEditar.DisplayIndex = dgPaciente.Columns.Count;
             dgPaciente.Columns.Add(btnEditar);
-
+            // Verifico si estamos en la tabla de usuarios visibles o elimnados, y agrego el otro boton segun corresponda
             if (rbVisibles.Checked)
             {
                 DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn();
@@ -181,6 +209,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         }
 
+        // Funcion para cargar aquellos pacientes que no estan eliminados
         public void CargarDatosPacientesVisibles()
         {
             try
@@ -306,10 +335,19 @@ namespace proyecto_Villarreal_SanLorenzo
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, registrarPaciente, false));
         }
 
+        // Evento que pasa cuando se carga.
         private void PacientesControl_Load(object sender, EventArgs e)
         {
-            CargarDatosPacientesVisibles();
-            PlaceholderBusqueda(tBusquedaPacientes, "Buscar por DNI...");
+            /* Si el atributo booleano es falso, significa que los datos
+            aun no se han cargado, entonces cargamos los datos al datasource
+            y de paso rellenamos al textbox de busqueda con el placeholder. 
+            Por el contrario si es true, a esto no lo hago pq estas cosas ya
+            fueron hechas en el constructor correspondiente */
+            if (!esBusquedaDirecta)
+            {
+                CargarDatosPacientesVisibles();
+                PlaceholderBusqueda(tBusquedaPacientes, "Buscar por DNI...");
+            }
         }
 
         // Funcion para denegar el ingreso de caracteres no numericos en la busqueda de pacientes por su dni
@@ -360,23 +398,28 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // Si lo que el usuario aprieta es un numero, entonces muestro el paciente con ese dni
-                if (int.TryParse(tBusquedaPacientes.Text, out int dni_busqueda))
-                {
-                    (dgPaciente.DataSource as DataTable).DefaultView.RowFilter =
-                     $"cDniPaciente LIKE '%{dni_busqueda}%'";
-                }
-                // Si el textbox esta vacio y aprieta enter, entonces muestro todo
-                else if (string.IsNullOrWhiteSpace(tBusquedaPacientes.Text))
-                {
+                RealizarBusqueda();
+            }
+        }
 
-                    (dgPaciente.DataSource as DataTable).DefaultView.RowFilter = "";
-                }
-                // Si no escribio un numero, muestro mensaje de error
-                else
-                {
-                    MessageBox.Show("El DNI ingresado es invalido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+        private void RealizarBusqueda()
+        {
+            // Si lo que el usuario aprieta es un numero, entonces muestro el paciente con ese dni
+            if (int.TryParse(tBusquedaPacientes.Text, out int dni_busqueda))
+            {
+                (dgPaciente.DataSource as DataTable).DefaultView.RowFilter =
+                 $"cDniPaciente LIKE '%{dni_busqueda}%'";
+            }
+            // Si el textbox esta vacio y aprieta enter, entonces muestro todo
+            else if (string.IsNullOrWhiteSpace(tBusquedaPacientes.Text))
+            {
+
+                (dgPaciente.DataSource as DataTable).DefaultView.RowFilter = "";
+            }
+            // Si no escribio un numero, muestro mensaje de error
+            else
+            {
+                MessageBox.Show("El DNI ingresado es invalido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

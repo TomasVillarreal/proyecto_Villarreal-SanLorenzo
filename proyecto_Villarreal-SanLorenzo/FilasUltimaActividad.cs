@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -18,6 +17,7 @@ namespace proyecto_Villarreal_SanLorenzo
         int nro_historial = 0;
         bool nuevosPacientes;
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
+        public event EventHandler ClickFila;
 
         public FilasUltimaActividad(int p_dni, int p_nro_registro, int p_nro_historial, bool p_nuevosPacientes)
         {
@@ -27,7 +27,17 @@ namespace proyecto_Villarreal_SanLorenzo
             if (p_nro_historial != 0) this.nro_historial = p_nro_historial;
             this.Size = new Size(300, 46);
             this.nuevosPacientes = p_nuevosPacientes;
+
+            this.MouseEnter += (s, e) => this.BackColor = Color.FromArgb(240, 240, 240);
+            this.MouseLeave += (s, e) => this.BackColor = Color.White;
+            this.Click += OnClickGeneral;
+
             InitializeComponents();
+        }
+
+        private void OnClickGeneral(object? sender, EventArgs e)
+        {
+            ClickFila?.Invoke(this, EventArgs.Empty);
         }
 
         private void InitializeComponents()
@@ -61,6 +71,13 @@ namespace proyecto_Villarreal_SanLorenzo
             this.Controls.Add(lNombrePaciente);
             this.Controls.Add(lDescripcion);
             this.Controls.Add(lFecha);
+
+            foreach (Control c in this.Controls)
+            {
+                c.MouseEnter += (s, e) => this.OnMouseEnter(e);
+                c.MouseLeave += (s, e) => this.OnMouseLeave(e);
+                c.Click += (s, e) => OnClickGeneral(this, e);
+            }
         }
 
         private string ObtenerNombrePaciente()
@@ -174,6 +191,18 @@ namespace proyecto_Villarreal_SanLorenzo
                 db.Close();
             }
             return nombre_registro;
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            base.OnMouseEnter(e);
+            this.BackColor = Color.FromArgb(240, 240, 240);
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            this.BackColor = Color.White;
         }
     }
 }
