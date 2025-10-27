@@ -21,6 +21,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bIniciarSesion_Click(object sender, EventArgs e)
         {
+
             if (comboBoxRoles.SelectedItem != null)
             {
                 RolSeleccionado = comboBoxRoles.SelectedItem.ToString();

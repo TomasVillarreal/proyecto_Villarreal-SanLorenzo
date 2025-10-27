@@ -45,14 +45,15 @@ namespace proyecto_Villarreal_SanLorenzo
             labelSH = new Label();
             labelClinicks = new Label();
             flowLayoutPanel2 = new FlowLayoutPanel();
-            bAgregarPersonal = new BotonSidebar();
-            bBackup = new BotonSidebar();
             bCerrarSesion = new BotonSidebar();
+            bBackup = new BotonSidebar();
+            bAgregarPersonal = new BotonSidebar();
             lNombreUsuario = new Label();
             lRol = new Label();
             panelDefault = new Panel();
             timerBackup = new System.Windows.Forms.Timer(components);
             flowLayoutPanelUsuario = new FlowLayoutPanel();
+            bCambiarRol = new BotonSidebar();
             panelSidebar.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -246,61 +247,12 @@ namespace proyecto_Villarreal_SanLorenzo
             flowLayoutPanel2.Controls.Add(bCerrarSesion);
             flowLayoutPanel2.Controls.Add(bBackup);
             flowLayoutPanel2.Controls.Add(bAgregarPersonal);
+            flowLayoutPanel2.Controls.Add(bCambiarRol);
             flowLayoutPanel2.FlowDirection = FlowDirection.BottomUp;
-            flowLayoutPanel2.Location = new Point(12, 541);
+            flowLayoutPanel2.Location = new Point(12, 515);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(178, 92);
+            flowLayoutPanel2.Size = new Size(178, 118);
             flowLayoutPanel2.TabIndex = 0;
-            // 
-            // bAgregarPersonal
-            // 
-            bAgregarPersonal.Anchor = AnchorStyles.Bottom;
-            bAgregarPersonal.BorderRadius = 10;
-            bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
-            bAgregarPersonal.FlatAppearance.BorderSize = 0;
-            bAgregarPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bAgregarPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bAgregarPersonal.FlatStyle = FlatStyle.Flat;
-            bAgregarPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bAgregarPersonal.HoverColor = Color.FromArgb(224, 224, 224);
-            bAgregarPersonal.Image = Resource1.plus_square;
-            bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
-            bAgregarPersonal.IsActive = false;
-            bAgregarPersonal.Location = new Point(3, 8);
-            bAgregarPersonal.Name = "bAgregarPersonal";
-            bAgregarPersonal.NormalColor = Color.White;
-            bAgregarPersonal.Size = new Size(175, 23);
-            bAgregarPersonal.TabIndex = 18;
-            bAgregarPersonal.TabStop = false;
-            bAgregarPersonal.Text = "Agregar Personal";
-            bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bAgregarPersonal.UseVisualStyleBackColor = true;
-            bAgregarPersonal.Click += bAgregarPersonal_Click;
-            // 
-            // bBackup
-            // 
-            bBackup.Anchor = AnchorStyles.Bottom;
-            bBackup.BorderRadius = 10;
-            bBackup.ClickColor = Color.FromArgb(192, 192, 192);
-            bBackup.FlatAppearance.BorderSize = 0;
-            bBackup.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            bBackup.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            bBackup.FlatStyle = FlatStyle.Flat;
-            bBackup.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            bBackup.HoverColor = Color.FromArgb(224, 224, 224);
-            bBackup.Image = Resource1.file_earmark_arrow_down;
-            bBackup.ImageAlign = ContentAlignment.MiddleLeft;
-            bBackup.IsActive = false;
-            bBackup.Location = new Point(3, 37);
-            bBackup.Name = "bBackup";
-            bBackup.NormalColor = Color.White;
-            bBackup.Size = new Size(175, 23);
-            bBackup.TabIndex = 12;
-            bBackup.TabStop = false;
-            bBackup.Text = "Realizar Backup";
-            bBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bBackup.UseVisualStyleBackColor = true;
-            bBackup.Click += bBackup_Click;
             // 
             // bCerrarSesion
             // 
@@ -316,7 +268,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bCerrarSesion.Image = Resource1.box_arrow_right;
             bCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
             bCerrarSesion.IsActive = false;
-            bCerrarSesion.Location = new Point(3, 66);
+            bCerrarSesion.Location = new Point(3, 92);
             bCerrarSesion.Name = "bCerrarSesion";
             bCerrarSesion.NormalColor = Color.White;
             bCerrarSesion.Size = new Size(175, 23);
@@ -326,6 +278,56 @@ namespace proyecto_Villarreal_SanLorenzo
             bCerrarSesion.TextImageRelation = TextImageRelation.ImageBeforeText;
             bCerrarSesion.UseVisualStyleBackColor = true;
             bCerrarSesion.Click += bCerrarSesion_Click;
+            // 
+            // bBackup
+            // 
+            bBackup.Anchor = AnchorStyles.Bottom;
+            bBackup.BorderRadius = 10;
+            bBackup.ClickColor = Color.FromArgb(192, 192, 192);
+            bBackup.FlatAppearance.BorderSize = 0;
+            bBackup.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bBackup.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bBackup.FlatStyle = FlatStyle.Flat;
+            bBackup.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bBackup.HoverColor = Color.FromArgb(224, 224, 224);
+            bBackup.Image = Resource1.file_earmark_arrow_down;
+            bBackup.ImageAlign = ContentAlignment.MiddleLeft;
+            bBackup.IsActive = false;
+            bBackup.Location = new Point(3, 63);
+            bBackup.Name = "bBackup";
+            bBackup.NormalColor = Color.White;
+            bBackup.Size = new Size(175, 23);
+            bBackup.TabIndex = 12;
+            bBackup.TabStop = false;
+            bBackup.Text = "Realizar Backup";
+            bBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bBackup.UseVisualStyleBackColor = true;
+            bBackup.Click += bBackup_Click;
+            // 
+            // bAgregarPersonal
+            // 
+            bAgregarPersonal.Anchor = AnchorStyles.Bottom;
+            bAgregarPersonal.BorderRadius = 10;
+            bAgregarPersonal.ClickColor = Color.FromArgb(192, 192, 192);
+            bAgregarPersonal.FlatAppearance.BorderSize = 0;
+            bAgregarPersonal.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bAgregarPersonal.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bAgregarPersonal.FlatStyle = FlatStyle.Flat;
+            bAgregarPersonal.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bAgregarPersonal.HoverColor = Color.FromArgb(224, 224, 224);
+            bAgregarPersonal.Image = Resource1.plus_square;
+            bAgregarPersonal.ImageAlign = ContentAlignment.MiddleLeft;
+            bAgregarPersonal.IsActive = false;
+            bAgregarPersonal.Location = new Point(3, 34);
+            bAgregarPersonal.Name = "bAgregarPersonal";
+            bAgregarPersonal.NormalColor = Color.White;
+            bAgregarPersonal.Size = new Size(175, 23);
+            bAgregarPersonal.TabIndex = 18;
+            bAgregarPersonal.TabStop = false;
+            bAgregarPersonal.Text = "Agregar Personal";
+            bAgregarPersonal.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bAgregarPersonal.UseVisualStyleBackColor = true;
+            bAgregarPersonal.Click += bAgregarPersonal_Click;
             // 
             // lNombreUsuario
             // 
@@ -368,6 +370,31 @@ namespace proyecto_Villarreal_SanLorenzo
             flowLayoutPanelUsuario.Name = "flowLayoutPanelUsuario";
             flowLayoutPanelUsuario.Size = new Size(157, 36);
             flowLayoutPanelUsuario.TabIndex = 4;
+            // 
+            // bCambiarRol
+            // 
+            bCambiarRol.Anchor = AnchorStyles.Bottom;
+            bCambiarRol.BorderRadius = 10;
+            bCambiarRol.ClickColor = Color.FromArgb(192, 192, 192);
+            bCambiarRol.FlatAppearance.BorderSize = 0;
+            bCambiarRol.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            bCambiarRol.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            bCambiarRol.FlatStyle = FlatStyle.Flat;
+            bCambiarRol.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            bCambiarRol.HoverColor = Color.FromArgb(224, 224, 224);
+            bCambiarRol.Image = Resource1.arrow_left_right;
+            bCambiarRol.ImageAlign = ContentAlignment.MiddleLeft;
+            bCambiarRol.IsActive = false;
+            bCambiarRol.Location = new Point(3, 5);
+            bCambiarRol.Name = "bCambiarRol";
+            bCambiarRol.NormalColor = Color.White;
+            bCambiarRol.Size = new Size(175, 23);
+            bCambiarRol.TabIndex = 19;
+            bCambiarRol.TabStop = false;
+            bCambiarRol.Text = "Cambiar de rol";
+            bCambiarRol.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bCambiarRol.UseVisualStyleBackColor = true;
+            bCambiarRol.Click += bCambiarRol_Click;
             // 
             // FormHome
             // 
@@ -415,5 +442,6 @@ namespace proyecto_Villarreal_SanLorenzo
         private BotonSidebar bInforme;
         private FlowLayoutPanel flowLayoutPanel1;
         private FlowLayoutPanel flowLayoutPanel2;
+        private BotonSidebar bCambiarRol;
     }
 }

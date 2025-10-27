@@ -70,6 +70,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("No se encontró información de la sesión.");
             }
 
+            bCambiarRol.Visible = SesionUsuario.Roles.Count > 1;
             switch (SesionUsuario.RolActivo)
             {
                 case "Gerente":
@@ -247,19 +248,20 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             panelDefault.Controls.Clear();
             // Si el usuario actual tiene el rol de medico o enfermero cargo un informe particular
-            if(SesionUsuario.RolActivo.ToLower() == "medico" || SesionUsuario.RolActivo.ToLower() == "enfermero")
+            if (SesionUsuario.RolActivo.ToLower() == "medico" || SesionUsuario.RolActivo.ToLower() == "enfermero")
             {
                 InformeMedicosEnfermeros informe = new InformeMedicosEnfermeros();
                 informe.Dock = DockStyle.Fill;
                 panelDefault.Controls.Add(informe);
                 // Si es gerente, cargo el otro tipo de informe.
-            } else if (SesionUsuario.RolActivo.ToLower() == "gerente")
+            }
+            else if (SesionUsuario.RolActivo.ToLower() == "gerente")
             {
                 InformeControl informe = new InformeControl();
                 informe.Dock = DockStyle.Fill;
                 panelDefault.Controls.Add(informe);
             }
-            
+
         }
         private void bBackup_Click(object sender, EventArgs e)
         {
@@ -315,6 +317,35 @@ namespace proyecto_Villarreal_SanLorenzo
                 bordeColor, grosor, ButtonBorderStyle.Solid,   // Right
                 bordeColor, grosor, ButtonBorderStyle.Solid    // Bottom
             );
+        }
+
+        // Metodo para cambiar de rol, en caso de q el usuario tenga mas de 2 roles
+        private void bCambiarRol_Click(object sender, EventArgs e)
+        {
+            // Primero oculto el form del home, por seguridad
+            this.Hide();
+            // Creo nuevamente el form para seleccionar el rol
+            using (FormSeleccionRol formRol = new FormSeleccionRol(SesionUsuario.Roles))
+            {
+                // Si el dialogo del form para cambiar de rol es presionado
+                if (formRol.ShowDialog() == DialogResult.OK)
+                {
+                    // Cambio el rol activo del usuario
+                    SesionUsuario.RolActivo = formRol.RolSeleccionado;
+                    // Y croe nuevamente este form home
+                    FormHome nuevoHome = new FormHome();
+                    nuevoHome.Show();
+                    // Y elimino el form home con el rol viejo
+                    this.Close();
+                }
+                // Sino le decimos al usuario que tiene q ingresar un rol
+                else
+                {
+                    MessageBox.Show("Debes seleccionar un rol para continuar.");
+                    this.Close();
+                    return;
+                }
+            }
         }
     }
 }
