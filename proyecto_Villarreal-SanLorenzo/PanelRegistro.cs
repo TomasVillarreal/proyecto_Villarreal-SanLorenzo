@@ -10,17 +10,11 @@ namespace proyecto_Villarreal_SanLorenzo
     public class PanelRegistro : Panel
     {
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
-
-        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
-
         public int historial, registro, dni = 0;
-        bool nuevosPacientes;
         string nombrePaciente;
 
-
-        public  PanelRegistro(int p_historial, int p_registro)//Constructor del PanelRegistro
+        public PanelRegistro(int p_historial, int p_registro)
         {
-
             historial = p_historial;
             registro = p_registro;
 
@@ -29,36 +23,37 @@ namespace proyecto_Villarreal_SanLorenzo
                 dni = dniPaciente;
             nombrePaciente = datosPaciente.nombre;
 
-            // apariencia del panel
-            this.Height = 70;
-            this.Width = 600;
+            this.AutoSize = true;
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            this.Padding = new Padding(10);
+            this.Width = 650;
+            this.BackColor = Color.White;
             this.BorderStyle = BorderStyle.FixedSingle;
             this.Margin = new Padding(6);
-            this.BackColor = Color.WhiteSmoke;
 
             CargarComponentes();
         }
 
-        public void CargarComponentes()//Carga los componentes al panel
+        public void CargarComponentes()
         {
             var datosPaciente = ObtenerDatosPaciente();
 
-            // === DNI ===
+            //Label del DNI del paciente
             Label lDniPaciente = new Label();
             lDniPaciente.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             lDniPaciente.Text = "DNI: " + datosPaciente.dni;
             lDniPaciente.AutoSize = true;
             lDniPaciente.Location = new Point(10, 10);
 
-            // === Nombre ===
+            //Label del nombre del paciente
             Label lNombrePaciente = new Label();
             lNombrePaciente.Font = new Font("Segoe UI", 9, FontStyle.Regular);
             lNombrePaciente.Text = System.Globalization.CultureInfo.CurrentCulture.TextInfo
-                                     .ToTitleCase(datosPaciente.nombre.ToLower());
+                                         .ToTitleCase(datosPaciente.nombre.ToLower());
             lNombrePaciente.AutoSize = true;
             lNombrePaciente.Location = new Point(10, lDniPaciente.Bottom + 2);
 
-            // === Profesional (Dr./Enf.) ===
+            //Label que muestra el nombre del profesional que realizó el registro
             Label lProfesional = new Label();
             lProfesional.Font = new Font("Segoe UI", 9, FontStyle.Italic);
             lProfesional.ForeColor = Color.Gray;
@@ -67,32 +62,30 @@ namespace proyecto_Villarreal_SanLorenzo
             string prefijo = datos.rol.Equals("Médico", StringComparison.OrdinalIgnoreCase) ? "Dr. " :
                              datos.rol.Equals("Enfermero", StringComparison.OrdinalIgnoreCase) ? "Enf. " : "";
 
-            string texto = $"{prefijo}{datos.nombreCompleto}";
+            string textoProf = $"{prefijo}{datos.nombreCompleto}";
             if (!string.IsNullOrWhiteSpace(datos.especialidad))
-                texto += $" ({datos.especialidad})";
+                textoProf += $" ({datos.especialidad})";
 
-            lProfesional.Text = texto;
+            lProfesional.Text = textoProf;
             lProfesional.AutoSize = true;
             lProfesional.Location = new Point(lNombrePaciente.Right + 25, 10);
 
-            // === Tipo de registro ===
+            //Label de tipo de registro
             Label lTipoRegistro = new Label();
             lTipoRegistro.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             lTipoRegistro.Text = ObtenerTipoRegistro();
             lTipoRegistro.AutoSize = true;
-            lTipoRegistro.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lTipoRegistro.Location = new Point(this.Width - 240, 10);
 
-            // === Fecha del registro ===
+            //Label de fecha de registro
             Label lFecha = new Label();
             lFecha.Font = new Font("Segoe UI", 9, FontStyle.Italic);
             lFecha.ForeColor = Color.DimGray;
             lFecha.Text = ObtenerFecha();
             lFecha.AutoSize = true;
-            lFecha.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lFecha.Location = new Point(this.Width - 100, 10);
 
-            // === Observaciones ===
+            //Label de Observaciones
             Label lObservaciones = new Label();
             lObservaciones.Font = new Font("Segoe UI", 9, FontStyle.Regular);
             string textoObs = ObtenerObservaciones();
@@ -103,52 +96,83 @@ namespace proyecto_Villarreal_SanLorenzo
             lObservaciones.Location = new Point(10, lNombrePaciente.Bottom + 20);
             lObservaciones.AutoEllipsis = false;
 
-            // Calcula altura exacta del texto
+            // calcular tamaño dinámico
             using (Graphics g = this.CreateGraphics())
             {
                 SizeF size = g.MeasureString(lObservaciones.Text, lObservaciones.Font, lObservaciones.MaximumSize.Width);
-                lObservaciones.Size = new Size((int)size.Width, (int)size.Height + 5);
+                lObservaciones.Size = new Size((int)lObservaciones.MaximumSize.Width, (int)size.Height + 10);
             }
 
-            int alturaTotal = lObservaciones.Bottom + 15;
+            int alturaActual = lObservaciones.Bottom + 10;
 
-            // === Medicación (si existe) ===
+            //Label de medicaciones
             string medicacion = ObtenerMedicacion();
+            Label lMedicacion = null;
             if (!string.IsNullOrWhiteSpace(medicacion))
             {
-                Label lMedicacion = new Label();
+                lMedicacion = new Label();
                 lMedicacion.Font = new Font("Segoe UI", 9, FontStyle.Regular);
                 lMedicacion.Text = "💊 Medicación: " + medicacion;
+                lMedicacion.ForeColor = Color.FromArgb(40, 40, 40);
                 lMedicacion.AutoSize = false;
                 lMedicacion.MaximumSize = new Size(this.Width - 40, 0);
-                lMedicacion.Location = new Point(10, lObservaciones.Bottom + 8);
-                lMedicacion.ForeColor = Color.FromArgb(40, 40, 40);
+                lMedicacion.Location = new Point(10, alturaActual + 5);
 
                 using (Graphics g = this.CreateGraphics())
                 {
                     SizeF size = g.MeasureString(lMedicacion.Text, lMedicacion.Font, lMedicacion.MaximumSize.Width);
-                    lMedicacion.Size = new Size((int)size.Width, (int)size.Height + 5);
+                    lMedicacion.Size = new Size((int)lMedicacion.MaximumSize.Width, (int)size.Height + 10);
                 }
 
-                this.Controls.Add(lMedicacion);
-                alturaTotal = lMedicacion.Bottom + 15;
+                alturaActual = lMedicacion.Bottom + 10;
             }
 
-            // === Ajustes del panel ===
-            this.Height = Math.Max(alturaTotal, 110);
+            //Ajustes finales del diseño
+            this.Height = alturaActual + 10;
             this.Padding = new Padding(8);
             this.BackColor = Color.White;
             this.BorderStyle = BorderStyle.FixedSingle;
             this.Width = 650;
             this.Margin = new Padding(6);
 
-            // === Agregar controles ===
+            //Se agregan los controles de los labels
             this.Controls.Add(lDniPaciente);
             this.Controls.Add(lNombrePaciente);
             this.Controls.Add(lProfesional);
             this.Controls.Add(lTipoRegistro);
             this.Controls.Add(lFecha);
             this.Controls.Add(lObservaciones);
+            if (lMedicacion != null)
+                this.Controls.Add(lMedicacion);
+
+            /*Para el boton de editar registros
+            int usuarioActual = SesionUsuario.id_usuario;
+            int idUsuarioRegistro = ObtenerIdUsuarioRegistro(); // ⚠️ Este método debe devolver el id del usuario que creó este registro.
+
+            if (usuarioActual == idUsuarioRegistro)
+            {
+                Button bEditar = new Button();
+                bEditar.Text = "Editar";
+                bEditar.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                bEditar.BackColor = Color.FromArgb(240, 240, 240);
+                bEditar.FlatStyle = FlatStyle.Flat;
+                bEditar.Size = new Size(70, 28);
+                bEditar.Location = new Point(this.Width - 90, this.Height - 40);
+
+                bEditar.Click += (s, e) =>
+                {
+                    AgregarRegistroControl editarRegistro = new AgregarRegistroControl(datosPaciente.dni);
+                    editarRegistro.controlPadreRegistro = this;
+                    editarRegistro.AbrirOtroControl += this.AbrirOtroControl;
+
+                    // enviamos los datos del registro actual para edición
+                    editarRegistro.CargarRegistroParaEdicion(this);
+
+                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, editarRegistro, false));
+                };
+
+                this.Controls.Add(bEditar);
+            }*/
         }
 
         private (string nombre, string dni) ObtenerDatosPaciente()//Obtiene el NYA del paciente junto con su DNI
@@ -293,31 +317,22 @@ namespace proyecto_Villarreal_SanLorenzo
         private string ObtenerObservaciones()//Obtiene las observaciones que haya realizado el médico/enfermero
         {
             string observaciones = "";
-
-            using (SqlConnection db = new SqlConnection(connectionString))
-            {
-                string query = @"
-                            SELECT observaciones
-                            FROM Registro
-                            WHERE id_registro = @id_registro";
-
-                using (SqlCommand cmd = new SqlCommand(query, db))
-                {
-                    cmd.Parameters.AddWithValue("@id_registro", this.registro);
-                    db.Open();
-
-                    SqlDataReader reader = cmd.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        observaciones = reader["observaciones"] != DBNull.Value ? reader["observaciones"].ToString() : "Sin observaciones.";
-                    }
-                }
+            
+            using (SqlConnection db = new SqlConnection(connectionString)) 
+            { 
+                string query = @" SELECT observaciones FROM Registro WHERE id_registro = @id_registro";
+                
+                using (SqlCommand cmd = new SqlCommand(query, db)) 
+                { 
+                    cmd.Parameters.AddWithValue("@id_registro", this.registro); db.Open(); 
+                    
+                    SqlDataReader reader = cmd.ExecuteReader(); if (reader.Read()) 
+                    { 
+                        observaciones = reader["observaciones"] != DBNull.Value ? reader["observaciones"].ToString() : "Sin observaciones."; 
+                    } 
+                } 
             }
-
             return observaciones;
-
-
         }
 
         private string ObtenerMedicacion()//Obtiene la medicacion suministrada al paciente (en caso de que haya sido asi)

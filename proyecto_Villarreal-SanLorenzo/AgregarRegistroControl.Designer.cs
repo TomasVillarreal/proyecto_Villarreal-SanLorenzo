@@ -29,11 +29,8 @@
         private void InitializeComponent()
         {
             bAtras = new Button();
-            lErrorTelefono = new Label();
-            lErrorDireccion = new Label();
-            lErrorDni = new Label();
-            lErrorApellido = new Label();
-            lErrorNombre = new Label();
+            lErrorObservaciones = new Label();
+            lErrorTipoRegistro = new Label();
             lMedicacion = new Label();
             lObservaciones = new Label();
             lTipoRegistro = new Label();
@@ -46,8 +43,11 @@
             tNombrePacienteRegistro = new TextBox();
             comboBoxTipoRegistro = new ComboBox();
             comboBoxMedicacion = new ComboBox();
-            label6 = new Label();
+            lErrorMedicacion = new Label();
             bGuardarRegistro = new Button();
+            lDosis = new Label();
+            tDosis = new TextBox();
+            label7 = new Label();
             SuspendLayout();
             // 
             // bAtras
@@ -63,66 +63,33 @@
             bAtras.UseVisualStyleBackColor = false;
             bAtras.Click += bAtras_Click;
             // 
-            // lErrorTelefono
+            // lErrorObservaciones
             // 
-            lErrorTelefono.AutoSize = true;
-            lErrorTelefono.ForeColor = Color.Red;
-            lErrorTelefono.Location = new Point(51, 495);
-            lErrorTelefono.Name = "lErrorTelefono";
-            lErrorTelefono.Size = new Size(50, 20);
-            lErrorTelefono.TabIndex = 36;
-            lErrorTelefono.Text = "label5";
-            lErrorTelefono.Visible = false;
+            lErrorObservaciones.AutoSize = true;
+            lErrorObservaciones.ForeColor = Color.Red;
+            lErrorObservaciones.Location = new Point(51, 448);
+            lErrorObservaciones.Name = "lErrorObservaciones";
+            lErrorObservaciones.Size = new Size(50, 20);
+            lErrorObservaciones.TabIndex = 36;
+            lErrorObservaciones.Text = "label2";
+            lErrorObservaciones.Visible = false;
             // 
-            // lErrorDireccion
+            // lErrorTipoRegistro
             // 
-            lErrorDireccion.AutoSize = true;
-            lErrorDireccion.ForeColor = Color.Red;
-            lErrorDireccion.Location = new Point(53, 383);
-            lErrorDireccion.Name = "lErrorDireccion";
-            lErrorDireccion.Size = new Size(50, 20);
-            lErrorDireccion.TabIndex = 35;
-            lErrorDireccion.Text = "label4";
-            lErrorDireccion.Visible = false;
-            // 
-            // lErrorDni
-            // 
-            lErrorDni.AutoSize = true;
-            lErrorDni.ForeColor = Color.Red;
-            lErrorDni.Location = new Point(53, 267);
-            lErrorDni.Name = "lErrorDni";
-            lErrorDni.Size = new Size(50, 20);
-            lErrorDni.TabIndex = 34;
-            lErrorDni.Text = "label3";
-            lErrorDni.Visible = false;
-            // 
-            // lErrorApellido
-            // 
-            lErrorApellido.AutoSize = true;
-            lErrorApellido.ForeColor = Color.Red;
-            lErrorApellido.Location = new Point(499, 159);
-            lErrorApellido.Name = "lErrorApellido";
-            lErrorApellido.Size = new Size(50, 20);
-            lErrorApellido.TabIndex = 33;
-            lErrorApellido.Text = "label2";
-            lErrorApellido.Visible = false;
-            // 
-            // lErrorNombre
-            // 
-            lErrorNombre.AutoSize = true;
-            lErrorNombre.ForeColor = Color.Red;
-            lErrorNombre.Location = new Point(53, 159);
-            lErrorNombre.Name = "lErrorNombre";
-            lErrorNombre.Size = new Size(50, 20);
-            lErrorNombre.TabIndex = 32;
-            lErrorNombre.Text = "label1";
-            lErrorNombre.Visible = false;
+            lErrorTipoRegistro.AutoSize = true;
+            lErrorTipoRegistro.ForeColor = Color.Red;
+            lErrorTipoRegistro.Location = new Point(53, 337);
+            lErrorTipoRegistro.Name = "lErrorTipoRegistro";
+            lErrorTipoRegistro.Size = new Size(50, 20);
+            lErrorTipoRegistro.TabIndex = 35;
+            lErrorTipoRegistro.Text = "label1";
+            lErrorTipoRegistro.Visible = false;
             // 
             // lMedicacion
             // 
             lMedicacion.AutoSize = true;
             lMedicacion.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lMedicacion.Location = new Point(53, 531);
+            lMedicacion.Location = new Point(53, 485);
             lMedicacion.Name = "lMedicacion";
             lMedicacion.Size = new Size(111, 25);
             lMedicacion.TabIndex = 31;
@@ -132,7 +99,7 @@
             // 
             lObservaciones.AutoSize = true;
             lObservaciones.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lObservaciones.Location = new Point(53, 418);
+            lObservaciones.Location = new Point(53, 371);
             lObservaciones.Name = "lObservaciones";
             lObservaciones.Size = new Size(137, 25);
             lObservaciones.TabIndex = 30;
@@ -142,7 +109,7 @@
             // 
             lTipoRegistro.AutoSize = true;
             lTipoRegistro.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTipoRegistro.Location = new Point(53, 303);
+            lTipoRegistro.Location = new Point(53, 257);
             lTipoRegistro.Name = "lTipoRegistro";
             lTipoRegistro.Size = new Size(146, 25);
             lTipoRegistro.TabIndex = 29;
@@ -152,7 +119,7 @@
             // 
             lDniPacienteRegistro.AutoSize = true;
             lDniPacienteRegistro.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lDniPacienteRegistro.Location = new Point(53, 187);
+            lDniPacienteRegistro.Location = new Point(51, 169);
             lDniPacienteRegistro.Name = "lDniPacienteRegistro";
             lDniPacienteRegistro.Size = new Size(47, 25);
             lDniPacienteRegistro.TabIndex = 28;
@@ -180,7 +147,7 @@
             // 
             // tObservaciones
             // 
-            tObservaciones.Location = new Point(53, 460);
+            tObservaciones.Location = new Point(53, 413);
             tObservaciones.Margin = new Padding(3, 4, 3, 4);
             tObservaciones.Name = "tObservaciones";
             tObservaciones.Size = new Size(756, 27);
@@ -188,7 +155,7 @@
             // 
             // tDniPacienteRegistro
             // 
-            tDniPacienteRegistro.Location = new Point(53, 232);
+            tDniPacienteRegistro.Location = new Point(51, 214);
             tDniPacienteRegistro.Margin = new Padding(3, 4, 3, 4);
             tDniPacienteRegistro.Name = "tDniPacienteRegistro";
             tDniPacienteRegistro.ReadOnly = true;
@@ -216,7 +183,7 @@
             // comboBoxTipoRegistro
             // 
             comboBoxTipoRegistro.FormattingEnabled = true;
-            comboBoxTipoRegistro.Location = new Point(53, 340);
+            comboBoxTipoRegistro.Location = new Point(53, 294);
             comboBoxTipoRegistro.Name = "comboBoxTipoRegistro";
             comboBoxTipoRegistro.Size = new Size(756, 28);
             comboBoxTipoRegistro.TabIndex = 39;
@@ -224,27 +191,27 @@
             // comboBoxMedicacion
             // 
             comboBoxMedicacion.FormattingEnabled = true;
-            comboBoxMedicacion.Location = new Point(53, 569);
+            comboBoxMedicacion.Location = new Point(53, 523);
             comboBoxMedicacion.Name = "comboBoxMedicacion";
             comboBoxMedicacion.Size = new Size(756, 28);
             comboBoxMedicacion.TabIndex = 40;
             // 
-            // label6
+            // lErrorMedicacion
             // 
-            label6.AutoSize = true;
-            label6.ForeColor = Color.Red;
-            label6.Location = new Point(53, 611);
-            label6.Name = "label6";
-            label6.Size = new Size(50, 20);
-            label6.TabIndex = 41;
-            label6.Text = "label6";
-            label6.Visible = false;
+            lErrorMedicacion.AutoSize = true;
+            lErrorMedicacion.ForeColor = Color.Red;
+            lErrorMedicacion.Location = new Point(51, 563);
+            lErrorMedicacion.Name = "lErrorMedicacion";
+            lErrorMedicacion.Size = new Size(50, 20);
+            lErrorMedicacion.TabIndex = 41;
+            lErrorMedicacion.Text = "label3";
+            lErrorMedicacion.Visible = false;
             // 
             // bGuardarRegistro
             // 
             bGuardarRegistro.BackColor = Color.Transparent;
             bGuardarRegistro.ForeColor = Color.Black;
-            bGuardarRegistro.Location = new Point(323, 693);
+            bGuardarRegistro.Location = new Point(314, 671);
             bGuardarRegistro.Margin = new Padding(3, 4, 3, 4);
             bGuardarRegistro.Name = "bGuardarRegistro";
             bGuardarRegistro.Size = new Size(138, 48);
@@ -254,20 +221,49 @@
             bGuardarRegistro.UseVisualStyleBackColor = false;
             bGuardarRegistro.Click += bGuardarRegistro_Click;
             // 
+            // lDosis
+            // 
+            lDosis.AutoSize = true;
+            lDosis.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lDosis.Location = new Point(51, 596);
+            lDosis.Name = "lDosis";
+            lDosis.Size = new Size(58, 25);
+            lDosis.TabIndex = 43;
+            lDosis.Text = "Dosis";
+            // 
+            // tDosis
+            // 
+            tDosis.Location = new Point(53, 625);
+            tDosis.Margin = new Padding(3, 4, 3, 4);
+            tDosis.Name = "tDosis";
+            tDosis.Size = new Size(756, 27);
+            tDosis.TabIndex = 44;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.ForeColor = Color.Red;
+            label7.Location = new Point(53, 656);
+            label7.Name = "label7";
+            label7.Size = new Size(50, 20);
+            label7.TabIndex = 45;
+            label7.Text = "label4";
+            label7.Visible = false;
+            // 
             // AgregarRegistroControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(label7);
+            Controls.Add(tDosis);
+            Controls.Add(lDosis);
             Controls.Add(bGuardarRegistro);
-            Controls.Add(label6);
+            Controls.Add(lErrorMedicacion);
             Controls.Add(comboBoxMedicacion);
             Controls.Add(comboBoxTipoRegistro);
             Controls.Add(bAtras);
-            Controls.Add(lErrorTelefono);
-            Controls.Add(lErrorDireccion);
-            Controls.Add(lErrorDni);
-            Controls.Add(lErrorApellido);
-            Controls.Add(lErrorNombre);
+            Controls.Add(lErrorObservaciones);
+            Controls.Add(lErrorTipoRegistro);
             Controls.Add(lMedicacion);
             Controls.Add(lObservaciones);
             Controls.Add(lTipoRegistro);
@@ -287,11 +283,8 @@
         #endregion
 
         private Button bAtras;
-        private Label lErrorTelefono;
-        private Label lErrorDireccion;
-        private Label lErrorDni;
-        private Label lErrorApellido;
-        private Label lErrorNombre;
+        private Label lErrorObservaciones;
+        private Label lErrorTipoRegistro;
         private Label lMedicacion;
         private Label lObservaciones;
         private Label lTipoRegistro;
@@ -304,7 +297,10 @@
         private TextBox tNombrePacienteRegistro;
         private ComboBox comboBoxTipoRegistro;
         private ComboBox comboBoxMedicacion;
-        private Label label6;
+        private Label lErrorMedicacion;
         private Button bGuardarRegistro;
+        private Label lDosis;
+        private TextBox tDosis;
+        private Label label7;
     }
 }

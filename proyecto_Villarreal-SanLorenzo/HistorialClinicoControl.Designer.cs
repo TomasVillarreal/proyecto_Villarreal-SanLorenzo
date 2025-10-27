@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistorialClinicoControl));
             lTituloHC = new Label();
             lSubtituloHC = new Label();
             panelFiltros = new Panel();
-            tBusquedaNyA = new TextBox();
             bAgregarRegistroPaciente = new Button();
-            lNyAPaciente = new Label();
             lDniPaciente = new Label();
             tBusquedaDNI = new TextBox();
             labelSubtitulo = new Label();
             lFiltros = new Label();
             panelContenedorRegistros = new FlowLayoutPanel();
+            bPdfRegistros = new Button();
             panelFiltros.SuspendLayout();
             SuspendLayout();
             // 
@@ -66,30 +66,21 @@
             // panelFiltros
             // 
             panelFiltros.BackColor = Color.White;
-            panelFiltros.Controls.Add(tBusquedaNyA);
+            panelFiltros.Controls.Add(bPdfRegistros);
             panelFiltros.Controls.Add(bAgregarRegistroPaciente);
-            panelFiltros.Controls.Add(lNyAPaciente);
             panelFiltros.Controls.Add(lDniPaciente);
             panelFiltros.Controls.Add(tBusquedaDNI);
             panelFiltros.Controls.Add(labelSubtitulo);
             panelFiltros.Controls.Add(lFiltros);
             panelFiltros.Location = new Point(33, 67);
             panelFiltros.Name = "panelFiltros";
-            panelFiltros.Size = new Size(818, 256);
+            panelFiltros.Size = new Size(818, 151);
             panelFiltros.TabIndex = 4;
-            // 
-            // tBusquedaNyA
-            // 
-            tBusquedaNyA.ForeColor = Color.DarkGray;
-            tBusquedaNyA.Location = new Point(15, 196);
-            tBusquedaNyA.Name = "tBusquedaNyA";
-            tBusquedaNyA.Size = new Size(460, 27);
-            tBusquedaNyA.TabIndex = 14;
-            tBusquedaNyA.Text = "Buscar por nombre y apellido";
             // 
             // bAgregarRegistroPaciente
             // 
             bAgregarRegistroPaciente.BackColor = Color.Transparent;
+            bAgregarRegistroPaciente.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bAgregarRegistroPaciente.ForeColor = Color.Black;
             bAgregarRegistroPaciente.Image = Resource1.plus_icon;
             bAgregarRegistroPaciente.Location = new Point(677, 9);
@@ -101,16 +92,6 @@
             bAgregarRegistroPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
             bAgregarRegistroPaciente.UseVisualStyleBackColor = false;
             bAgregarRegistroPaciente.Click += bAgregarRegistroPaciente_Click;
-            // 
-            // lNyAPaciente
-            // 
-            lNyAPaciente.AutoSize = true;
-            lNyAPaciente.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNyAPaciente.Location = new Point(15, 165);
-            lNyAPaciente.Name = "lNyAPaciente";
-            lNyAPaciente.Size = new Size(184, 28);
-            lNyAPaciente.TabIndex = 11;
-            lNyAPaciente.Text = "Nombre y Apellido";
             // 
             // lDniPaciente
             // 
@@ -140,9 +121,9 @@
             labelSubtitulo.ForeColor = Color.Black;
             labelSubtitulo.Location = new Point(15, 37);
             labelSubtitulo.Name = "labelSubtitulo";
-            labelSubtitulo.Size = new Size(298, 20);
+            labelSubtitulo.Size = new Size(453, 20);
             labelSubtitulo.TabIndex = 5;
-            labelSubtitulo.Text = "Seleccione un paciente  para ver su historial";
+            labelSubtitulo.Text = "Busque los registros de un paciente por su DNI y nombre completo";
             // 
             // lFiltros
             // 
@@ -160,12 +141,28 @@
             panelContenedorRegistros.AutoScroll = true;
             panelContenedorRegistros.BackColor = Color.White;
             panelContenedorRegistros.FlowDirection = FlowDirection.TopDown;
-            panelContenedorRegistros.Location = new Point(33, 330);
+            panelContenedorRegistros.Location = new Point(33, 225);
             panelContenedorRegistros.Margin = new Padding(3, 4, 3, 4);
             panelContenedorRegistros.Name = "panelContenedorRegistros";
-            panelContenedorRegistros.Size = new Size(818, 275);
+            panelContenedorRegistros.Size = new Size(818, 528);
             panelContenedorRegistros.TabIndex = 5;
             panelContenedorRegistros.WrapContents = false;
+            // 
+            // bPdfRegistros
+            // 
+            bPdfRegistros.BackColor = Color.Transparent;
+            bPdfRegistros.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bPdfRegistros.ForeColor = Color.Black;
+            bPdfRegistros.Image = (Image)resources.GetObject("bPdfRegistros.Image");
+            bPdfRegistros.Location = new Point(677, 64);
+            bPdfRegistros.Margin = new Padding(3, 4, 3, 4);
+            bPdfRegistros.Name = "bPdfRegistros";
+            bPdfRegistros.Size = new Size(138, 48);
+            bPdfRegistros.TabIndex = 15;
+            bPdfRegistros.Text = "Registros";
+            bPdfRegistros.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bPdfRegistros.UseVisualStyleBackColor = false;
+            //bPdfRegistros.Click += bPdfRegistros_Click;
             // 
             // HistorialClinicoControl
             // 
@@ -191,12 +188,11 @@
         private Panel panelFiltros;
         private Label labelSubtitulo;
         private Label lFiltros;
-        private Label lNyAPaciente;
         private Label lDniPaciente;
         private TextBox tBusquedaDNI;
         private DataGridView dgPaciente;
         private Button bAgregarRegistroPaciente;
         private FlowLayoutPanel panelContenedorRegistros;
-        private TextBox tBusquedaNyA;
+        private Button bPdfRegistros;
     }
 }

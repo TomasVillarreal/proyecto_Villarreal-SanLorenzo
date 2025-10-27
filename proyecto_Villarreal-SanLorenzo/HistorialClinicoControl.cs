@@ -1,14 +1,20 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -22,10 +28,87 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
         }
 
+        /*public HistorialClinicoControl(int p_dni)
+        {
+            InitializeComponent();
+
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    db.Open();
+
+                    // buscar id_historial del paciente
+                    string queryHistorial = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
+                    int idHistorial = 0;
+
+                    using (SqlCommand cmdHistorial = new SqlCommand(queryHistorial, db))
+                    {
+                        cmdHistorial.Parameters.AddWithValue("@dni", p_dni);
+                        object result = cmdHistorial.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                            idHistorial = Convert.ToInt32(result);
+                    }
+
+                    if (idHistorial == 0)
+                    {
+                        MostrarMensaje("no se encontró historial para este paciente");
+                        return;
+                    }
+
+                    // obtener todos los registros del historial
+                    string queryRegistros = @"
+                        SELECT id_registro
+                        FROM Registro
+                        WHERE id_historial = @id_historial
+                        ORDER BY fecha_registro DESC;";
+
+                    using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
+                    {
+                        cmdRegistros.Parameters.AddWithValue("@id_historial", idHistorial);
+
+                        using (SqlDataReader reader = cmdRegistros.ExecuteReader())
+                        {
+                            if (!reader.HasRows)
+                            {
+                                MostrarMensaje("no hay registros cargados para este paciente");
+                                return;
+                            }
+
+                            panelContenedorRegistros.Controls.Clear();
+                            int posY = 10;
+
+                            while (reader.Read())
+                            {
+                                int idRegistro = Convert.ToInt32(reader["id_registro"]);
+
+                                PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                panel.Dock = DockStyle.None;
+                                panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
+                                panel.AutoSize = true;
+                                panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                                panel.Margin = new Padding(6);
+                                panel.Location = new Point(10, posY);
+
+                                panelContenedorRegistros.Controls.Add(panel);
+                                panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
+
+                                posY += panel.Height + 10;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("error al cargar el historial clínico: " + ex.Message);
+            }
+        }*/
+
         private void HistorialClinicoControl_Load(object sender, EventArgs e)
         {
             PlaceholderBusqueda(tBusquedaDNI, "Buscar por DNI...");
-            PlaceholderBusqueda(tBusquedaNyA, "Buscar por nombre y apellido...");
 
             //Se muestra el mensaje inicial
             panelContenedorRegistros.Controls.Clear();
@@ -33,42 +116,26 @@ namespace proyecto_Villarreal_SanLorenzo
 
         }
 
-        private void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que busca al paciente por su DNI.
+        private void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que permite la busqueda de los registros de un paciente por su DNI
         {
             if (e.KeyCode != Keys.Enter) return;
 
-            string txt = tBusquedaDNI.Text.Trim();
-            if (!int.TryParse(txt, out int dniBusqueda))
-            {
-                MessageBox.Show("El DNI ingresado es inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // evita que Enter "salte" y dispare otros comportamientos
             e.Handled = true;
             e.SuppressKeyPress = true;
 
-            CargarHistoriales(dniBusqueda);
+            string textoDNI = tBusquedaDNI.Text.Trim();
 
-        }
-
-        private void tBusquedaNombre_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.Enter) return;
-
-            string textoBusqueda = tBusquedaNyA.Text.Trim();
-
-            if (string.IsNullOrEmpty(textoBusqueda))
+            if (string.IsNullOrEmpty(textoDNI))
             {
-                MessageBox.Show("Ingrese un nombre o apellido para realizar la búsqueda.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MostrarMensaje("debe ingresar el DNI del paciente");
                 return;
             }
 
-            // Evita que Enter genere sonido o cambie el foco
-            e.Handled = true;
-            e.SuppressKeyPress = true;
-
-            panelContenedorRegistros.Controls.Clear();
+            if (!int.TryParse(textoDNI, out int dniBusqueda))
+            {
+                MostrarMensaje("el DNI ingresado no es válido");
+                return;
+            }
 
             try
             {
@@ -79,21 +146,21 @@ namespace proyecto_Villarreal_SanLorenzo
                     string query = @"
                                     SELECT dni_paciente, nombre_paciente, apellido_paciente
                                     FROM Paciente
-                                    WHERE nombre_paciente LIKE @nombre OR apellido_paciente LIKE @apellido
-                                    ORDER BY apellido_paciente, nombre_paciente;";
+                                    WHERE dni_paciente = @dni;";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
-                        cmd.Parameters.AddWithValue("@nombre", "%" + textoBusqueda + "%");
-                        cmd.Parameters.AddWithValue("@apellido", "%" + textoBusqueda + "%");
+                        cmd.Parameters.AddWithValue("@dni", dniBusqueda);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (!reader.HasRows)
                             {
-                                panelContenedorRegistros.Controls.Add(CrearPanelMensaje("no se encontraron pacientes con ese nombre."));
+                                MostrarMensaje(". No se encontró ningún paciente con el DNI ingresado");
                                 return;
                             }
+
+                            panelContenedorRegistros.Controls.Clear();
 
                             while (reader.Read())
                             {
@@ -101,37 +168,37 @@ namespace proyecto_Villarreal_SanLorenzo
                                 string nombre = reader["nombre_paciente"].ToString();
                                 string apellido = reader["apellido_paciente"].ToString();
 
+                                // encabezado
                                 Label lblPaciente = new Label();
                                 lblPaciente.Text = $"{apellido}, {nombre} (DNI: {dniPaciente})";
-                                lblPaciente.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                                lblPaciente.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
                                 lblPaciente.AutoSize = true;
                                 lblPaciente.Margin = new Padding(6, 12, 6, 4);
-
                                 panelContenedorRegistros.Controls.Add(lblPaciente);
 
-                                // Cargar los historiales de este paciente debajo
+                                // cargar historiales
                                 CargarHistoriales(dniPaciente);
                             }
+
+                            panelContenedorRegistros.Refresh();
                         }
                     }
-
-                    db.Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al buscar pacientes: " + ex.Message);
+                MostrarMensaje("ocurrió un error al buscar el paciente: " + ex.Message);
             }
         }
 
-        public void CargarHistoriales(int p_dniPaciente)
+        public void CargarHistoriales(int p_dniPaciente)//Método que carga los registros del paciente
         {
-            panelContenedorRegistros.Controls.Clear();
-
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
+                    db.Open();
+
                     // buscar id_historial del paciente
                     string queryHistorial = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
                     int idHistorial = 0;
@@ -139,9 +206,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     using (SqlCommand cmdHistorial = new SqlCommand(queryHistorial, db))
                     {
                         cmdHistorial.Parameters.AddWithValue("@dni", p_dniPaciente);
-                        db.Open();
                         object result = cmdHistorial.ExecuteScalar();
-                        db.Close();
 
                         if (result != null && result != DBNull.Value)
                             idHistorial = Convert.ToInt32(result);
@@ -149,7 +214,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
                     if (idHistorial == 0)
                     {
-                        panelContenedorRegistros.Controls.Add(CrearPanelMensaje("para este paciente"));
+                        MostrarMensaje("no se encontró historial para este paciente");
                         return;
                     }
 
@@ -162,45 +227,42 @@ namespace proyecto_Villarreal_SanLorenzo
                     using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
                     {
                         cmdRegistros.Parameters.AddWithValue("@id_historial", idHistorial);
-                        db.Open();
 
                         using (SqlDataReader reader = cmdRegistros.ExecuteReader())
                         {
                             if (!reader.HasRows)
                             {
-                                panelContenedorRegistros.Controls.Add(CrearPanelMensaje("para este paciente"));
+                                MostrarMensaje("no hay registros cargados para este paciente");
+                                return;
                             }
-                            else
+
+                            panelContenedorRegistros.Controls.Clear();
+                            int posY = 10;
+
+                            while (reader.Read())
                             {
-                                int posY = 10; // para espaciar visualmente los paneles
+                                int idRegistro = Convert.ToInt32(reader["id_registro"]);
 
-                                while (reader.Read())
-                                {
-                                    int idRegistro = Convert.ToInt32(reader["id_registro"]);
+                                PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                panel.Dock = DockStyle.None;
+                                panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
+                                panel.AutoSize = true;
+                                panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                                panel.Margin = new Padding(6);
+                                panel.Location = new Point(10, posY);
 
-                                    PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
-                                    panel.Dock = DockStyle.None;
-                                    panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
-                                    panel.AutoSize = true;
-                                    panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                                    panel.Margin = new Padding(6);
-                                    panel.Location = new Point(10, posY);
+                                panelContenedorRegistros.Controls.Add(panel);
+                                panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
 
-                                    panelContenedorRegistros.Controls.Add(panel);
-                                    panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
-
-                                    posY += panel.Height + 10;
-                                }
+                                posY += panel.Height + 10;
                             }
                         }
-
-                        db.Close();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar historiales: " + ex.Message);
+                MostrarMensaje("error al cargar historiales: " + ex.Message);
             }
         } //Funcion que carga los registros del historial medico del paciente en caso de que tenga y siempre y cuando se busque al mismo por su DNI/NYA previamente
 
@@ -266,12 +328,20 @@ namespace proyecto_Villarreal_SanLorenzo
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, agregarRegistro, false));
         }
 
-        //Metodo que crea un mensaje que se muestra en el panel del registro de los pacientes
-        // y se utiliza para que el usuario deba buscar un paciente por su dni para ver el historial
-        private Panel CrearPanelMensaje(string texto)
+        private void MostrarMensaje(string texto)//Funcion que crea un panel donde se muesstran los mensajes
+        {
+            panelContenedorRegistros.Controls.Clear();
+            panelContenedorRegistros.Controls.Add(CrearPanelMensaje(texto));
+            panelContenedorRegistros.Refresh();
+        }
+
+        private Panel CrearPanelMensaje(string texto) //Metodo que crea un mensaje que se muestra en el panel del registro de los pacientes
         {
             Panel panelMensaje = new Panel();
-            panelMensaje.Size = new Size(500, 80);
+            panelMensaje.AutoSize = true;
+            panelMensaje.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelMensaje.Padding = new Padding(10);
+            panelMensaje.MaximumSize = new Size(panelContenedorRegistros.Width - 20, 0);
 
             PictureBox pb = new PictureBox();
             pb.Location = new Point(15, 20);
@@ -280,9 +350,9 @@ namespace proyecto_Villarreal_SanLorenzo
             pb.Image = Resource1.question;
 
             Label lbl = new Label();
-            lbl.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            lbl.AutoSize = false;
-            lbl.Size = new Size(430, 40);
+            lbl.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
+            lbl.AutoSize = true;
+            lbl.MaximumSize = new Size(panelContenedorRegistros.Width - 100, 0);
             lbl.Location = new Point(pb.Right + 15, 20);
             lbl.TextAlign = ContentAlignment.MiddleLeft;
             lbl.Text = "No se han encontrado registros " + texto + ".";
@@ -292,6 +362,167 @@ namespace proyecto_Villarreal_SanLorenzo
 
             return panelMensaje;
 
-        }//CORREGIR
+        }
+
+        private void CargarHistorialesSinLimpiar(int p_dniPaciente)//Funcion utilizada para no interferir con la búsqueda por DNI, que sí necesita limpiar antes de mostrar.
+        {
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string queryHistorial = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
+                    int idHistorial = 0;
+
+                    using (SqlCommand cmdHistorial = new SqlCommand(queryHistorial, db))
+                    {
+                        cmdHistorial.Parameters.AddWithValue("@dni", p_dniPaciente);
+                        db.Open();
+                        object result = cmdHistorial.ExecuteScalar();
+                        db.Close();
+
+                        if (result != null && result != DBNull.Value)
+                            idHistorial = Convert.ToInt32(result);
+                    }
+
+                    if (idHistorial == 0)
+                    {
+                        panelContenedorRegistros.Controls.Add(CrearPanelMensaje("sin historial registrado."));
+                        return;
+                    }
+
+                    string queryRegistros = @"
+                                            SELECT id_registro
+                                            FROM Registro
+                                            WHERE id_historial = @id_historial
+                                            ORDER BY fecha_registro DESC;";
+
+                    using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
+                    {
+                        cmdRegistros.Parameters.AddWithValue("@id_historial", idHistorial);
+                        db.Open();
+
+                        using (SqlDataReader reader = cmdRegistros.ExecuteReader())
+                        {
+                            if (!reader.HasRows)
+                            {
+                                panelContenedorRegistros.Controls.Add(CrearPanelMensaje("sin registros asociados."));
+                            }
+                            else
+                            {
+                                int posY = panelContenedorRegistros.Controls.Count * 60;
+
+                                while (reader.Read())
+                                {
+                                    int idRegistro = Convert.ToInt32(reader["id_registro"]);
+
+                                    PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                    panel.Dock = DockStyle.None;
+                                    panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
+                                    panel.AutoSize = true;
+                                    panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                                    panel.Margin = new Padding(6);
+                                    panel.Location = new Point(10, posY);
+
+                                    panelContenedorRegistros.Controls.Add(panel);
+                                    panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
+
+                                    posY += panel.Height + 10;
+                                }
+                            }
+                        }
+
+                        db.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar historiales: " + ex.Message);
+            }
+        }
+
+        /*private void bPdfRegistros_Click(object sender, EventArgs e)//Funcion que descarga los registros del paciente en formato PDF
+        {
+            string textoDNI = tBusquedaDNI.Text.Trim();
+
+            if (string.IsNullOrEmpty(textoDNI))
+            {
+                MessageBox.Show("Debe ingresar el DNI del paciente antes de descargar el PDF.",
+                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!int.TryParse(textoDNI, out int dniBusqueda))
+            {
+                MessageBox.Show("El DNI ingresado no es válido.",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Obtener los registros del paciente
+            List<Registro> registros = ObtenerRegistrosPaciente(dniBusqueda);
+
+            if (registros == null || registros.Count == 0)
+            {
+                MessageBox.Show("No hay registros para este paciente.",
+                                "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Elegir ubicación del archivo
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Archivos PDF (*.pdf)|*.pdf";
+            sfd.FileName = $"Historial_{dniBusqueda}.pdf";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                GenerarPDFPaciente(dniBusqueda, registros, sfd.FileName);
+                MessageBox.Show("El PDF se generó correctamente.",
+                                "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void GenerarPDFPaciente(int dni, List<Registro> registros, string rutaArchivo)//Funcion que genera un PDF con los registros del paciente
+        {
+            Document doc = new Document(PageSize.A4, 40, 40, 50, 40);
+
+            using (FileStream fs = new FileStream(rutaArchivo, FileMode.Create))
+            {
+                PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+                doc.Open();
+
+                // Encabezado
+                Paragraph titulo = new Paragraph($"Historial clínico del paciente (DNI: {dni})",
+                    new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD));
+                titulo.Alignment = Element.ALIGN_CENTER;
+                doc.Add(titulo);
+                doc.Add(new Paragraph("\n"));
+
+                // Iterar registros
+                foreach (var reg in registros)
+                {
+                    doc.Add(new Paragraph($"🩺 Tipo de registro: {reg.TipoRegistro}",
+                        new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+
+                    doc.Add(new Paragraph($"👨‍⚕️ Profesional: {reg.Profesional}"));
+                    doc.Add(new Paragraph($"📅 Fecha: {reg.Fecha.ToShortDateString()}"));
+                    doc.Add(new Paragraph($"💊 Medicación: {reg.Medicacion}"));
+                    doc.Add(new Paragraph($"📝 Observaciones: {reg.Observaciones}"));
+                    doc.Add(new Paragraph("--------------------------------------------------"));
+                }
+
+                doc.Close();
+            }
+        }
+
+        public class Registro
+        {
+            public string TipoRegistro { get; set; }
+            public DateTime Fecha { get; set; }
+            public string Observaciones { get; set; }
+            public string Medicacion { get; set; }
+            public string Profesional { get; set; }
+        }*/
+
     }
 }

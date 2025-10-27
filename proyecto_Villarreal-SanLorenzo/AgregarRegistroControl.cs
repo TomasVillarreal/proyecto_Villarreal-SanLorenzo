@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -146,6 +147,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }//Funcion que carga los datos del paciente
+
         private void bGuardarRegistro_Click(object sender, EventArgs e)
         {
             string observaciones = tObservaciones.Text.Trim();
@@ -213,5 +215,10 @@ namespace proyecto_Villarreal_SanLorenzo
             controlPadreRegistro?.CargarHistoriales(dni);
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
         }
+
+       /* public void CargarRegistroParaEdicion(Registro registro)
+        {
+
+        }*/
     }
 }
