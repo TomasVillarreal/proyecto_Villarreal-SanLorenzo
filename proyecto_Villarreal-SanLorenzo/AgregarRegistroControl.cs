@@ -15,7 +15,7 @@ namespace proyecto_Villarreal_SanLorenzo
     {
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
-        public UserControlProyecto controlPadreRegistro;
+        public HistorialClinicoControl controlPadreRegistro;
 
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
 
@@ -23,18 +23,17 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public AgregarRegistroControl(int p_dni, int p_historial, int p_registro)
         {
-
             InitializeComponent();
             this.dni = p_dni;
 
             if (dni != 0)
             {
                 CargarDatosPaciente(dni);
-                CargarDatosPaciente(dni);
                 tDniPacienteRegistro.ReadOnly = true;
                 tNombrePacienteRegistro.ReadOnly = true;
                 tApellidoPacienteRegistro.ReadOnly = true;
             }
+            
         }
         public AgregarRegistroControl(int p_dni)
         {
@@ -42,6 +41,9 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
             this.dni = p_dni;
 
+            CargarTiposRegistro();
+            CargarMedicaciones();
+
             if (dni != 0)
             {
                 CargarDatosPaciente(dni);
@@ -51,6 +53,68 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
         }
+        private void CargarTiposRegistro()//Funcion que carga los tipos de registros al combobox
+        {
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    db.Open();
+
+                    string query = "SELECT nombre_registro FROM Tipo_registro ORDER BY nombre_registro;";
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        comboBoxTipoRegistro.Items.Clear();
+
+                        while (reader.Read())
+                        {
+                            comboBoxTipoRegistro.Items.Add(reader["nombre_registro"].ToString());
+                        }
+                    }
+
+                    comboBoxTipoRegistro.SelectedIndex = 0; // valor inicial
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar los tipos de registro: " + ex.Message,
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CargarMedicaciones()//Funcion que carga las medicaciones al combobox
+        {
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    db.Open();
+
+                    string query = "SELECT nombre_medicacion FROM Medicacion ORDER BY nombre_medicacion;";
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        comboBoxMedicacion.Items.Clear();
+
+                        while (reader.Read())
+                        {
+                            comboBoxMedicacion.Items.Add(reader["nombre_medicacion"].ToString());
+                        }
+                    }
+
+                    // No es obligatorio seleccionar medicación
+                    comboBoxMedicacion.DropDownStyle = ComboBoxStyle.DropDownList;
+                    comboBoxMedicacion.SelectedIndex = -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar las medicaciones: " + ex.Message,
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void CargarDatosPaciente(int p_dni)
         {
             try
@@ -81,7 +145,7 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//Funcion que carga los datos del paciente
         private void bGuardarRegistro_Click(object sender, EventArgs e)
         {
             string observaciones = tObservaciones.Text.Trim();
@@ -141,6 +205,13 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Error al guardar el registro: " + ex.Message,
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }//Funcion que mediante un click en el boton, guarda el nuevo registro
+
+        private void bAtras_Click(object sender, EventArgs e)//Funcion que permite volver a la vista anterior
+        {
+            // Volvemos al control que nos llamo.
+            controlPadreRegistro?.CargarHistoriales(dni);
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
         }
     }
 }

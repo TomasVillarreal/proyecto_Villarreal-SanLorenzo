@@ -352,7 +352,5 @@ namespace proyecto_Villarreal_SanLorenzo
 
             return medicacionInfo;
         }
-
     }
-
 }

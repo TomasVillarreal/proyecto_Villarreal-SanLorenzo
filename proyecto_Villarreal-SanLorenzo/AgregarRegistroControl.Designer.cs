@@ -61,6 +61,7 @@
             bAtras.Size = new Size(41, 41);
             bAtras.TabIndex = 37;
             bAtras.UseVisualStyleBackColor = false;
+            bAtras.Click += bAtras_Click;
             // 
             // lErrorTelefono
             // 
