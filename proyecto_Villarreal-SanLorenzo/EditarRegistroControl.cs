@@ -1,18 +1,18 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
-    public partial class AgregarRegistroControl : UserControlProyecto
+    public partial class EditarRegistroControl : UserControlProyecto
     {
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
@@ -22,38 +22,12 @@ namespace proyecto_Villarreal_SanLorenzo
 
         int dni = 0;
 
-        public AgregarRegistroControl(int p_dni, int p_historial, int p_registro)
+
+        public EditarRegistroControl(int p_dni)
         {
             InitializeComponent();
-            this.dni = p_dni;
-
-            if (dni != 0)
-            {
-                CargarDatosPaciente(dni);
-                tDniPacienteRegistro.ReadOnly = true;
-                tNombrePacienteRegistro.ReadOnly = true;
-                tApellidoPacienteRegistro.ReadOnly = true;
-            }
-            
         }
-        public AgregarRegistroControl(int p_dni)
-        {
 
-            InitializeComponent();
-            this.dni = p_dni;
-
-            CargarTiposRegistro();
-            CargarMedicaciones();
-
-            if (dni != 0)
-            {
-                CargarDatosPaciente(dni);
-                tDniPacienteRegistro.ReadOnly = true;
-                tNombrePacienteRegistro.ReadOnly = true;
-                tApellidoPacienteRegistro.ReadOnly = true;
-            }
-
-        }
         private void CargarTiposRegistro()//Funcion que carga los tipos de registros al combobox
         {
             try
@@ -147,76 +121,13 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Ha ocurrido un error con la base de datos! " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }//Funcion que carga los datos del paciente
-
-        private void bGuardarRegistro_Click(object sender, EventArgs e)
-        {
-            string observaciones = tObservaciones.Text.Trim();
-            string medicacion = comboBoxMedicacion.Text.Trim();
-            string tipoRegistro = comboBoxTipoRegistro.SelectedItem?.ToString();
-            DateTime fecha = DateTime.Now;
-
-            if (string.IsNullOrWhiteSpace(observaciones))
-            {
-                MessageBox.Show("Debe completar las observaciones del registro.",
-                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection db = new SqlConnection(connectionString))
-                {
-                    db.Open();
-
-                    string query = @"
-                                INSERT INTO Historial (dni_paciente, tipo_registro, observaciones, medicacion, fecha)
-                                VALUES (@dni, @tipo, @obs, @med, @fecha);";
-
-                    using (SqlCommand cmd = new SqlCommand(query, db))
-                    {
-
-                        string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
-
-                        if (string.IsNullOrEmpty(medicacionSeleccionada))
-                        {
-                            // Si no hay medicación seleccionada, insertamos un valor por defecto en lugar de NULL o vacío
-                            medicacionSeleccionada = "Sin medicación";
-                        }
-                        cmd.Parameters.AddWithValue("@dni", this.dni);
-                        cmd.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
-                        cmd.Parameters.AddWithValue("@obs", observaciones);
-                        cmd.Parameters.AddWithValue("@medicacion", medicacionSeleccionada);
-                        cmd.Parameters.AddWithValue("@fecha", fecha);
-
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    MessageBox.Show("Registro agregado correctamente.",
-                                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Volver al historial
-                    if (controlPadreRegistro is HistorialClinicoControl historialControl)
-                    {
-                        historialControl.CargarHistoriales(this.dni);
-                    }
-                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, controlPadreRegistro, false));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar el registro: " + ex.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }//Funcion que mediante un click en el boton, guarda el nuevo registro
-
         private void bAtras_Click(object sender, EventArgs e)//Funcion que permite volver a la vista anterior
         {
             // Volvemos al control que nos llamo.
             controlPadreRegistro?.CargarHistoriales(dni);
             AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
         }
-
-        private void comboBoxMedicacion_SelectedIndexChanged(object sender, EventArgs e)//Funcion que permite mostrar el textbox de la dosis solo si se seleccionó un medicamento
+        private void comboBoxMedicacion_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxMedicacion.SelectedIndex != -1)
             {
@@ -228,6 +139,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 tDosis.Visible = false;
                 tDosis.Text = string.Empty;
             }
-        }
+        }//Funcion que permite mostrar el textbox de la dosis solo si se seleccionó un medicamento
+
     }
 }

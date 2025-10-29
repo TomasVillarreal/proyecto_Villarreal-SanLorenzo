@@ -12,6 +12,7 @@ namespace proyecto_Villarreal_SanLorenzo
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
         public int historial, registro, dni = 0;
         string nombrePaciente;
+        public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
         public PanelRegistro(int p_historial, int p_registro)
         {
@@ -145,34 +146,42 @@ namespace proyecto_Villarreal_SanLorenzo
             if (lMedicacion != null)
                 this.Controls.Add(lMedicacion);
 
-            /*Para el boton de editar registros
+            //Para el boton de editar registros
             int usuarioActual = SesionUsuario.id_usuario;
-            int idUsuarioRegistro = ObtenerIdUsuarioRegistro(); // ⚠️ Este método debe devolver el id del usuario que creó este registro.
+            int idUsuarioRegistro = ObtenerIdUsuarioRegistro(); // obtiene id_usuario del registro actual
 
-            if (usuarioActual == idUsuarioRegistro)
+            if (usuarioActual != 0 && usuarioActual == idUsuarioRegistro)
             {
                 Button bEditar = new Button();
-                bEditar.Text = "Editar";
-                bEditar.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-                bEditar.BackColor = Color.FromArgb(240, 240, 240);
+                bEditar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+                bEditar.Location = new Point(this.Width - bEditar.Width - 15, this.Height - bEditar.Height - 10);
+                bEditar.BackColor = Color.WhiteSmoke;
                 bEditar.FlatStyle = FlatStyle.Flat;
-                bEditar.Size = new Size(70, 28);
-                bEditar.Location = new Point(this.Width - 90, this.Height - 40);
+                bEditar.FlatAppearance.BorderColor = Color.LightGray;
+                bEditar.FlatAppearance.MouseOverBackColor = Color.FromArgb(230, 230, 230);
 
                 bEditar.Click += (s, e) =>
                 {
-                    AgregarRegistroControl editarRegistro = new AgregarRegistroControl(datosPaciente.dni);
-                    editarRegistro.controlPadreRegistro = this;
-                    editarRegistro.AbrirOtroControl += this.AbrirOtroControl;
+                    // obtener dniPaciente como int
+                    var datosPaciente = ObtenerDatosPaciente();
+                    if (!int.TryParse(datosPaciente.dni, out int dniPaciente))
+                    {
+                        MessageBox.Show("DNI inválido para abrir edición.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
-                    // enviamos los datos del registro actual para edición
-                    editarRegistro.CargarRegistroParaEdicion(this);
+                    // crear control de edición pasando el DNI (constructor que usabas antes acepta un int)
+                    EditarRegistroControl editarRegistro = new EditarRegistroControl(dniPaciente);
 
+                    // cargar por id de registro el formulario de edición (método que implementaremos en AgregarRegistroControl)
+                    //editarRegistro.CargarRegistroParaEdicion(this.registro);
+
+                    // lanzar evento para que el padre (HistorialClinicoControl) muestre el control de edición
                     AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, editarRegistro, false));
                 };
 
                 this.Controls.Add(bEditar);
-            }*/
+            }
         }
 
         private (string nombre, string dni) ObtenerDatosPaciente()//Obtiene el NYA del paciente junto con su DNI
@@ -366,6 +375,39 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             return medicacionInfo;
+        }
+
+        private int ObtenerIdUsuarioRegistro()//Funcion que obtiene el id del usuario que realizó un determinado registro
+        {
+            int idUsuario = 0;
+
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    string query = @"SELECT id_usuario 
+                             FROM Registro 
+                             WHERE id_registro = @id_registro";
+
+                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    {
+                        cmd.Parameters.AddWithValue("@id_registro", this.registro);
+                        db.Open();
+                        object result = cmd.ExecuteScalar();
+                        db.Close();
+
+                        if (result != null && result != DBNull.Value)
+                            idUsuario = Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // opcional: loguear o mostrar mensaje si querés
+                MessageBox.Show("Error al obtener el usuario del registro: " + ex.Message, "Error BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return idUsuario;
         }
     }
 }
