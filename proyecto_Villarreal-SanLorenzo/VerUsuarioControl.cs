@@ -226,7 +226,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 int idUsuario = Convert.ToInt32(dataGridViewUsuarios.CurrentRow.Cells["id_usuario"].Value);
 
                 DialogResult result = MessageBox.Show("¿Está seguro que desea eliminar este usuario?", "Confirmación",
-                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
                 if (result == DialogResult.Yes)
                 {
@@ -276,7 +276,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 int idUsuario = Convert.ToInt32(dataGridViewUsuarios.CurrentRow.Cells["id_usuario"].Value);
 
                 DialogResult result = MessageBox.Show("¿Está seguro que desea reactivar a este usuario?", "Confirmación",
-                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
                 if (result == DialogResult.Yes)
                 {

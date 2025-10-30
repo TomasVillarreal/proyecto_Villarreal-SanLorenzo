@@ -62,7 +62,11 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 // Pregunto si se quiere eliminar realmente
                 DialogResult confirmacion = MessageBox.Show(
-                "¿Está seguro que desea eliminar este registro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                "¿Está seguro que desea eliminar este registro?", "Confirmación", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Warning, 
+                    MessageBoxDefaultButton.Button2
+                );
 
                 // Si se confirma:
                 if (confirmacion == DialogResult.Yes)
@@ -161,6 +165,12 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
             }
 
+            else if (columnaClickeada.Name == "cHistorial")
+            {
+                // Obtengo el dni, verifico si existe
+                object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
+                
+            }
         }
 
         /* Funcion que tiene como objetivo cambiarle el headertext a las columnas agregadas
@@ -185,6 +195,7 @@ namespace proyecto_Villarreal_SanLorenzo
             btnEditar.UseColumnTextForButtonValue = true;
             btnEditar.DisplayIndex = dgPaciente.Columns.Count;
             dgPaciente.Columns.Add(btnEditar);
+
             // Verifico si estamos en la tabla de usuarios visibles o elimnados, y agrego el otro boton segun corresponda
             if (rbVisibles.Checked)
             {
