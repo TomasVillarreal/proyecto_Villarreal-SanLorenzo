@@ -122,11 +122,13 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             //Se cargan los datos al metodo
-            CrearUsuario(id_rol, especialidad, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
-
-            VerUsuarioControl verUsuario = new VerUsuarioControl();
-            verUsuario.AbrirOtroControl += this.AbrirOtroControl;
-            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
+            bool exito = CrearUsuario(id_rol, especialidad, nombreUsuario, apellidoUsuario, emailUsuario, telefono_usuario, password_usuario_hash);
+            if (exito)
+            {
+                VerUsuarioControl verUsuario = new VerUsuarioControl();
+                verUsuario.AbrirOtroControl += this.AbrirOtroControl;
+                AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
+            }
         }
 
         public void bRegistrarUsuario_Click(object sender, EventArgs e)
@@ -138,10 +140,11 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        public static void CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
+        public static bool CrearUsuario(int rol, int? especialidad, string nombre, string apellido, string email, long telefono, string password)
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
-
+            // Booleano que se devuelve para ver si el ingreso tuvo exito
+            bool exito = false;
             using (SqlConnection connecction = new SqlConnection(connectionString))
             {
                 connecction.Open();
@@ -159,7 +162,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             MessageBox.Show("El correo electrónico ya está registrado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             transaction.Rollback();
-                            return;
+                            return false;
                         }
                     }
 
@@ -205,6 +208,8 @@ namespace proyecto_Villarreal_SanLorenzo
                     transaction.Commit();//Confirma la transacción
 
                     MessageBox.Show("Usuario registrado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    exito = true;
                 }
                 catch (SqlException ex)
                 {
@@ -218,7 +223,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     // Este numero de excepcioon indica que ha ocurrido un duplicado en algun campo unico
                     else if (ex.Number == 2601)
                     {
-                        MessageBox.Show("Se esta intentando crear un registro con un valor unico repetido",
+                        MessageBox.Show("Se esta intentando crear un usuario con un email duplicado sdfsdfdsf",
                                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
@@ -226,8 +231,10 @@ namespace proyecto_Villarreal_SanLorenzo
                         MessageBox.Show("Ha ocurrido un error al intentar registrar el usuario: " + ex.Message, "Error",
                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    exito = false;
                 }
             }
+            return exito;
         }//Creacion del usuario
 
 
