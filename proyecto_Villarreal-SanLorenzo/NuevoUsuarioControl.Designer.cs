@@ -36,7 +36,6 @@
             lEmail = new Label();
             lApellidoUsuario = new Label();
             lNomUsuario = new Label();
-            bRegistrarUsuario = new Button();
             lTitulo1 = new Label();
             tbNomUsuario = new TextBox();
             comboBoxEsp = new ComboBox();
@@ -56,6 +55,7 @@
             lErrorTelefono = new Label();
             lErrorConfirmPass = new Label();
             lErrorPass = new Label();
+            bRegistrarUsuario = new Button();
             flowLayoutPanel8.SuspendLayout();
             flowLayoutPanel9.SuspendLayout();
             SuspendLayout();
@@ -155,26 +155,6 @@
             lNomUsuario.TabIndex = 32;
             lNomUsuario.Text = "Nombre";
             lNomUsuario.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // bRegistrarUsuario
-            // 
-            bRegistrarUsuario.BackColor = Color.White;
-            bRegistrarUsuario.Cursor = Cursors.Hand;
-            bRegistrarUsuario.FlatAppearance.BorderColor = Color.Silver;
-            bRegistrarUsuario.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            bRegistrarUsuario.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            bRegistrarUsuario.FlatStyle = FlatStyle.Flat;
-            bRegistrarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bRegistrarUsuario.ForeColor = Color.Black;
-            bRegistrarUsuario.ImageAlign = ContentAlignment.MiddleLeft;
-            bRegistrarUsuario.Location = new Point(263, 477);
-            bRegistrarUsuario.Margin = new Padding(3, 2, 3, 2);
-            bRegistrarUsuario.Name = "bRegistrarUsuario";
-            bRegistrarUsuario.Size = new Size(207, 35);
-            bRegistrarUsuario.TabIndex = 8;
-            bRegistrarUsuario.Text = "Registrar usuario";
-            bRegistrarUsuario.UseVisualStyleBackColor = false;
-            bRegistrarUsuario.Click += bRegistrarUsuario_Click;
             // 
             // lTitulo1
             // 
@@ -393,10 +373,23 @@
             lErrorPass.Text = "label5";
             lErrorPass.Visible = false;
             // 
+            // bRegistrarUsuario
+            // 
+            bRegistrarUsuario.BackColor = Color.Black;
+            bRegistrarUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bRegistrarUsuario.ForeColor = Color.White;
+            bRegistrarUsuario.Location = new Point(263, 474);
+            bRegistrarUsuario.Name = "bRegistrarUsuario";
+            bRegistrarUsuario.Size = new Size(207, 34);
+            bRegistrarUsuario.TabIndex = 50;
+            bRegistrarUsuario.Text = "Registrar usuario";
+            bRegistrarUsuario.UseVisualStyleBackColor = false;
+            // 
             // NuevoUsuarioControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(bRegistrarUsuario);
             Controls.Add(lErrorConfirmPass);
             Controls.Add(lErrorPass);
             Controls.Add(lErrorTelefono);
@@ -418,7 +411,6 @@
             Controls.Add(lEmail);
             Controls.Add(lApellidoUsuario);
             Controls.Add(lNomUsuario);
-            Controls.Add(bRegistrarUsuario);
             Controls.Add(flowLayoutPanel8);
             Controls.Add(flowLayoutPanel9);
             Margin = new Padding(3, 2, 3, 2);
@@ -441,7 +433,6 @@
         private Label lEmail;
         private Label lApellidoUsuario;
         private Label lNomUsuario;
-        private Button bRegistrarUsuario;
         private Label lTitulo1;
         private TextBox tbNomUsuario;
         private ComboBox comboBoxEsp;
@@ -461,5 +452,6 @@
         private Label lErrorTelefono;
         private Label lErrorConfirmPass;
         private Label lErrorPass;
+        private Button bRegistrarUsuario;
     }
 }

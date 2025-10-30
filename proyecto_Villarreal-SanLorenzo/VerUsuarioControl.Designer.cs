@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            bAgregarUsuario = new Button();
             bEliminarUsuario = new Button();
-            bEditarUsuario = new Button();
             lEmail = new Label();
             tbEmail = new TextBox();
             lTelefonoUsuario = new Label();
@@ -48,26 +46,10 @@
             lTituloPacientes = new Label();
             rbUsuariosVisibles = new RadioButton();
             rbUsuariosEliminados = new RadioButton();
+            bEditarUsuario = new Button();
+            bAgregarUsuario = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).BeginInit();
             SuspendLayout();
-            // 
-            // bAgregarUsuario
-            // 
-            bAgregarUsuario.Cursor = Cursors.Hand;
-            bAgregarUsuario.FlatAppearance.BorderColor = Color.Silver;
-            bAgregarUsuario.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            bAgregarUsuario.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            bAgregarUsuario.FlatStyle = FlatStyle.Flat;
-            bAgregarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bAgregarUsuario.ForeColor = Color.Black;
-            bAgregarUsuario.Location = new Point(57, 307);
-            bAgregarUsuario.Margin = new Padding(3, 2, 3, 2);
-            bAgregarUsuario.Name = "bAgregarUsuario";
-            bAgregarUsuario.Size = new Size(183, 30);
-            bAgregarUsuario.TabIndex = 5;
-            bAgregarUsuario.Text = "Agregar nuevo usuario";
-            bAgregarUsuario.UseVisualStyleBackColor = true;
-            bAgregarUsuario.Click += bAgregarUsuario_Click;
             // 
             // bEliminarUsuario
             // 
@@ -86,24 +68,6 @@
             bEliminarUsuario.Text = "Eliminar usuario";
             bEliminarUsuario.UseVisualStyleBackColor = true;
             bEliminarUsuario.Click += bEliminarUsuario_Click;
-            // 
-            // bEditarUsuario
-            // 
-            bEditarUsuario.Cursor = Cursors.Hand;
-            bEditarUsuario.FlatAppearance.BorderColor = Color.Silver;
-            bEditarUsuario.FlatAppearance.MouseDownBackColor = Color.LightGray;
-            bEditarUsuario.FlatAppearance.MouseOverBackColor = Color.DarkGray;
-            bEditarUsuario.FlatStyle = FlatStyle.Flat;
-            bEditarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bEditarUsuario.ForeColor = Color.Black;
-            bEditarUsuario.Location = new Point(270, 307);
-            bEditarUsuario.Margin = new Padding(3, 2, 3, 2);
-            bEditarUsuario.Name = "bEditarUsuario";
-            bEditarUsuario.Size = new Size(123, 30);
-            bEditarUsuario.TabIndex = 4;
-            bEditarUsuario.Text = "Editar usuario";
-            bEditarUsuario.UseVisualStyleBackColor = true;
-            bEditarUsuario.Click += bEditarUsuario_Click;
             // 
             // lEmail
             // 
@@ -297,6 +261,42 @@
             rbUsuariosEliminados.UseVisualStyleBackColor = true;
             rbUsuariosEliminados.CheckedChanged += rbUsuariosEliminados_CheckedChanged;
             // 
+            // bEditarUsuario
+            // 
+            bEditarUsuario.Cursor = Cursors.Hand;
+            bEditarUsuario.FlatAppearance.BorderColor = Color.Silver;
+            bEditarUsuario.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            bEditarUsuario.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            bEditarUsuario.FlatStyle = FlatStyle.Flat;
+            bEditarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bEditarUsuario.ForeColor = Color.Black;
+            bEditarUsuario.Location = new Point(270, 307);
+            bEditarUsuario.Margin = new Padding(3, 2, 3, 2);
+            bEditarUsuario.Name = "bEditarUsuario";
+            bEditarUsuario.Size = new Size(123, 30);
+            bEditarUsuario.TabIndex = 4;
+            bEditarUsuario.Text = "Editar usuario";
+            bEditarUsuario.UseVisualStyleBackColor = true;
+            bEditarUsuario.Click += bEditarUsuario_Click;
+            // 
+            // bAgregarUsuario
+            // 
+            bAgregarUsuario.Cursor = Cursors.Hand;
+            bAgregarUsuario.FlatAppearance.BorderColor = Color.Silver;
+            bAgregarUsuario.FlatAppearance.MouseDownBackColor = Color.LightGray;
+            bAgregarUsuario.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+            bAgregarUsuario.FlatStyle = FlatStyle.Flat;
+            bAgregarUsuario.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bAgregarUsuario.ForeColor = Color.Black;
+            bAgregarUsuario.Location = new Point(57, 307);
+            bAgregarUsuario.Margin = new Padding(3, 2, 3, 2);
+            bAgregarUsuario.Name = "bAgregarUsuario";
+            bAgregarUsuario.Size = new Size(183, 30);
+            bAgregarUsuario.TabIndex = 5;
+            bAgregarUsuario.Text = "Agregar nuevo usuario";
+            bAgregarUsuario.UseVisualStyleBackColor = true;
+            bAgregarUsuario.Click += bAgregarUsuario_Click;
+            // 
             // VerUsuarioControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -330,9 +330,9 @@
 
         #endregion
 
-        private Button bAgregarUsuario;
+        private Button bAgregarUsuario1;
         private Button bEliminarUsuario;
-        private Button bEditarUsuario;
+        private Button bEditarUsuario1;
         private Label lEmail;
         private TextBox tbEmail;
         private Label lTelefonoUsuario;
@@ -350,5 +350,7 @@
         private Label lTituloPacientes;
         private RadioButton rbUsuariosVisibles;
         private RadioButton rbUsuariosEliminados;
+        private Button bEditarUsuario;
+        private Button bAgregarUsuario;
     }
 }
