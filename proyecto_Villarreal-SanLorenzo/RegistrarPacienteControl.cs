@@ -88,7 +88,7 @@ namespace proyecto_Villarreal_SanLorenzo
         }
 
         // Funcion que nos permitira el registro de un paciente
-        private void RegistrarPaciente()
+        private bool RegistrarPaciente()
         {
             Dictionary<string, object> diccionario = CrearDiccionario();
 
@@ -118,6 +118,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         db.Close();
                     }
                 }
+                return true;
             }
             catch (SqlException ex)
             {
@@ -138,6 +139,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     MessageBox.Show("Ha ocurrido un error en la base de datos: " + ex.Message, "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                return false;
             }
         }
 
@@ -159,7 +161,7 @@ namespace proyecto_Villarreal_SanLorenzo
         }
 
         // Funcion  para editar un paciente, tal que los datos de este fueron cargados en la funcion de CargarDatos
-        private void EditarPaciente()
+        private bool EditarPaciente()
         {
             Dictionary<string, object> diccionario = CrearDiccionario();
             try
@@ -190,6 +192,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         db.Close();
                     }
                 }
+                return true;
             }
             catch (SqlException ex)
             {
@@ -210,6 +213,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     MessageBox.Show("Ha ocurrido un error en la base de datos: " + ex.Message, "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                return false;
             }
         }
 
@@ -319,19 +323,28 @@ namespace proyecto_Villarreal_SanLorenzo
             // Si no hay errores detectados, entonces:
             if (DetectarErrores(diccionario))
             {
+                // Bool para ver si la operacion fue exitosa o no:
+                bool exito = false;
+
                 // Si no hay un DNI colocado como atributo, entonces es un registro
                 if (this.dni == 0)
                 {
-                    this.RegistrarPaciente();
+                    exito = this.RegistrarPaciente();
                 }
                 // Si hay un DNI colocado, entonces es una edicion.
                 else
                 {
-                    this.EditarPaciente();
+                    exito = this.EditarPaciente();
                 }
-                // Una vez hecha la accion, volvemos al control que nos llamo.
-                ControlPadre?.CargarDatosPacientesVisibles();
-                AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.ControlPadre, false));
+
+                // Si la operacion fue exitosa, volvemos al control de pacientes
+                if (exito)
+                {
+                    PacientesControl ControlPacientes = new PacientesControl(Convert.ToInt32(tDniPacienteRegistro.Text));
+                    ControlPacientes.AbrirOtroControl += this.AbrirOtroControl;
+                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, ControlPacientes, false));
+                }
+
             }
         }
 

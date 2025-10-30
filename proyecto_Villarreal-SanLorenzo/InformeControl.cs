@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -436,7 +437,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return "años";
         }
 
-        // Funcion que devuelve una matriz de etiquetas y el conjunto de periodo a los cuales estas estiquetas hacen referencia
+        // Funcion que devuelve una tupla de etiquetas, y el conjunto de periodo a los cuales estas estiquetas hacen referencia
         private (List<string> Etiquetas, List<DateTime> Periodos) GenerarEtiquetasYPeriodos(DateTime inicio, DateTime fin, string escala)
         {
             // Conjunto de etiquetas que se utilizaran en el eje X.
@@ -584,20 +585,24 @@ namespace proyecto_Villarreal_SanLorenzo
             return (etiquetas, periodos);
         }
 
+        // funcion que devuelve un diccionario de un datetime y la cantidad de registros asociados a esa fecha
         private Dictionary<DateTime, int> ObtenerDatosPorPeriodos(DateTime inicio, DateTime fin, string escala)
         {
+            // Creacion del diccionario que se devolvera
             var resultados = new Dictionary<DateTime, int>();
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     string query = "";
-                    // CORREGIDO: Queries ajustadas, especialmente para semanas (coincide con C# para lunes)
+                    /* En este caso se van a crear las queries respecto de la escala, pasada como
+                     * parametro, que tiene el intervalo de tiempo elegido.*/
                     switch (escala)
                     {
+                        // Para el caso de los dias individuales (lun, martes, etc):
                         case "nombre_dias":
                         case "fechas_nombres_dias":
-                            // Agrupar por día exacto
+                            // Creamos la query para obtener los registros dentro del periodo de inicio y fin 
                             query = @"
                                 SELECT 
                                     CAST(fecha_registro AS DATE) AS PeriodoRep,
@@ -607,21 +612,45 @@ namespace proyecto_Villarreal_SanLorenzo
                                 GROUP BY CAST(fecha_registro AS DATE)
                                 ORDER BY PeriodoRep";
                             break;
+
+                        // Para el caso de las seamanas (semana 1, semana 2, semana 3, semana 4)
                         case "semanas":
                         case "semanas_meses":
-                            // CORREGIDO: Calcular lunes de inicio de semana consistente (Sunday=1 en SQL Server default)
+                            /* 
+                             * La parte del dateadd hace lo siguiente: 
+                             * 1. El -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7):
+                             *      El datepart devuelve el dia que representa la fecha registro.
+                             *      A este datepart le sumamos 5 debido a que los dias lunes representan el 2 y que al hacer % 7 devuelva 0
+                             *      en la bd. Si por ejemplo tenemos martes, esto devolveria 3, si le sumamos 5
+                             *      quedaria 8, y al hacer % 7 tenemos el numero exacto de dias que hay que restar
+                             *      para poder arrancar los lunes.
+                             * 2. Basicamente le resta, en dias, el resultado del datepart explicado arriba a
+                             *    la fecha actual, para arrancar los lunes de esa semana.
+                             *    
+                             * En su totalidad esto lo que hace es basicamente devolver todos aquellos registros
+                             * que se encuentran dentro de la semana que representa la fecha para cada registro.
+                             * 
+                             */
                             query = @"
                                 SELECT 
-                                    DATEADD(DAY, -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), CAST(fecha_registro AS DATE)) AS PeriodoRep,
+                                    DATEADD(DAY, 
+                                            -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), 
+                                            CAST(fecha_registro AS DATE)) AS PeriodoRep,
                                     COUNT(*) AS Cantidad
                                 FROM Registro
                                 WHERE fecha_registro BETWEEN @inicio AND @fin
                                 GROUP BY DATEADD(DAY, -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), CAST(fecha_registro AS DATE))
                                 ORDER BY PeriodoRep";
                             break;
+
+                        // Para el caso de los meses
                         case "meses":
                         case "meses_años":
-                            // Agrupar por 1er día del mes
+                            /*
+                             *  Basicamente crea una fecha que arranca desde el mes y año de casa registro
+                             *  que se encuentra en el periodo de inicio y fin, y los va filtrando
+                             *  segun el mes y el año de cada registro.
+                             */
                             query = @"
                                 SELECT 
                                     DATEFROMPARTS(YEAR(fecha_registro), MONTH(fecha_registro), 1) AS PeriodoRep,
@@ -631,8 +660,14 @@ namespace proyecto_Villarreal_SanLorenzo
                                 GROUP BY YEAR(fecha_registro), MONTH(fecha_registro)
                                 ORDER BY PeriodoRep";
                             break;
+
+                        // Para el caso de años
                         case "años":
-                            // Agrupar por 1/1 del año
+                            /*
+                             *  Para el caso del año, es casi que lo mismo que el mes
+                             *  nada mas que este crea un fecha con el primer dia de cada año
+                             *  y termina agrupando los registros segun el año.
+                             */
                             query = @"
                                 SELECT 
                                     DATEFROMPARTS(YEAR(fecha_registro), 1, 1) AS PeriodoRep,
@@ -643,6 +678,8 @@ namespace proyecto_Villarreal_SanLorenzo
                                 ORDER BY PeriodoRep";
                             break;
                     }
+
+                    // Se ejecuta la query y se obtiene la cantidad y el periodo al cual representan
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
                         cmd.Parameters.AddWithValue("@inicio", inicio);
@@ -653,7 +690,8 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             DateTime periodoRep = Convert.ToDateTime(reader["PeriodoRep"]);
                             int cantidad = Convert.ToInt32(reader["Cantidad"]);
-                            resultados[periodoRep.Date] = cantidad;  // Key: fecha representativa
+                            // Voy guardando en el diccionario, para la clave periodoRep, el valor cantidad.
+                            resultados[periodoRep.Date] = cantidad;
                         }
                     }
                 }
@@ -665,26 +703,46 @@ namespace proyecto_Villarreal_SanLorenzo
             return resultados;
         }
 
+        // Crea el grafico, a partir de un conjunto de etiquetas y valores.
         private void RealizarGraficoTiempo(List<string> etiquetas, List<int> valores)
         {
+            // Limpia cualquier grafico que podria haber estado previamente
             panelGrafico.Controls.Clear();
+            // Creamos un chart, y hacemos que su estilo rellene a todo el panel.
             Chart chart = new Chart { Dock = DockStyle.Fill };
+            // Añadimos el chart creado al panel.
             panelGrafico.Controls.Add(chart);
+            // Creamos un area de grafico, donde haremos el grafico como tal
             ChartArea chartArea = new ChartArea();
+            // Añadimos el area al control chart previamente creado
             chart.ChartAreas.Add(chartArea);
+            // Ponemos el titulo al eje X
             chartArea.AxisX.Title = "Intervalo de tiempo";
+            // Ponemos etiquetas a cada punto
             chartArea.AxisX.Interval = 1;
+            // Le ponemos angulos a las etiquetas
             chartArea.AxisX.LabelStyle.Angle = -45;
+
             chartArea.AxisX.MajorGrid.Enabled = false;
+
+            // Ponemos el titulo al eje Y
             chartArea.AxisY.Title = "Cantidad de registros";
             chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
             chartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            // Formato sin decimales
             chartArea.AxisY.LabelStyle.Format = "N0";
+            // Para asegurarse que el eje Y sea visible
             chartArea.AxisY.Enabled = AxisEnabled.True;
+            // Calcularemos el valor maximo del vector pasado como arg, si es q tiene datos
             int maxValor = valores.Count > 0 ? valores.Max() : 0;
+            // Ponemos como minimo al 0.
             chartArea.AxisY.Minimum = 0;
+            // Establece el máximo del eje Y a un 120 % del valor maximo, si es q existe, o 10 si el máximo es 0.
             chartArea.AxisY.Maximum = maxValor == 0 ? 10 : maxValor * 1.2;
+            // Establece los intervalos del eje Y a 1 si el máximo es hasta 10, o el techo de (maxValor / 5) para intervalos mayores.
             chartArea.AxisY.Interval = maxValor <= 10 ? 1 : Math.Ceiling(maxValor / 5.0);
+
+            // Creamos el conjunto de datos a dibujar
             Series series = new Series
             {
                 Name = "Registros",
@@ -692,17 +750,24 @@ namespace proyecto_Villarreal_SanLorenzo
                 IsValueShownAsLabel = true,
                 LabelFormat = "N0"
             };
+            // Añado dicho conjunto de puntos al chart creado
             chart.Series.Add(series);
+            // Recorro uno a uno el vector con las etiquetas y las voy colocando al conjunto de puntos
             for (int i = 0; i < etiquetas.Count; i++)
             {
+                // Tal que al crear el punto, dada cierta etiqueta, le ponemos el valor asociado a esa etiqueta
                 DataPoint dp = new DataPoint
                 {
                     YValues = new double[] { valores[i] },
                     AxisLabel = etiquetas[i]
                 };
+                // Añado dicho punto a la serie
                 series.Points.Add(dp);
             }
+
+            // Le ponemos un titulo al chart
             chart.Titles.Add("Registros clínicos por intervalo");
+            // Si el vector de los valores esta vacio, le ponemos el titlo de q no hay datos
             if (valores.All(v => v == 0))
             {
                 chart.Titles[0].Text += " (No hay datos en este rango)";
@@ -713,48 +778,61 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void GraficarSegunTiempo()
         {
-            // NUEVO: Determinar escala
+            // Determinamos la escala
             string escala = DeterminarEscalaTiempo();
-            if (escala == "error") return;  // Rango inválido
-                                            // NUEVO: Generar etiquetas y períodos en paralelo
+            // Si la escala devuelta da error, vuelvo
+            if (escala == "error") return;
+            // Sino, genero las etiquetas y los periodos
             var (etiquetas, periodos) = GenerarEtiquetasYPeriodos(fecha_inicio, fecha_fin, escala);
-            // NUEVO: Obtener datos por períodos
+            // Obtengo los datos por períodos
             var datos = ObtenerDatosPorPeriodos(fecha_inicio, fecha_fin, escala);
-            // NUEVO: Alinear valores (simple: por índice, usando periodos como key)
+            // Creo una lista para poder alinear los valores segun las etiquetas de tiempo
             var valores = new List<int>();
+            // Recorro las etiquetas
             foreach (var periodo in periodos)
-            {
+            {   
+                /* Intento obtener el dato que se coincide con la clave en la etiqueta 
+                 * en la cual nos encontramos en el recorrido */
                 if (datos.TryGetValue(periodo.Date, out int cantidad))
                 {
+                    // Si lo obtengo, lo añado
                     valores.Add(cantidad);
                 }
                 else
                 {
+                    // Sino, añado 0
                     valores.Add(0);  // No hay datos en este período
                 }
             }
+            // Y finalmente grafico
             RealizarGraficoTiempo(etiquetas, valores);
         }
 
+        // funcion que devuelve una tupla, tal que para cada nombre de un medico devuelve una cantida de registros
         private List<(string NombreMostrar, int CantidadRegistros)> ObtenerDatosPorMedico(DateTime inicio, DateTime fin)
         {
+            // Lista para acumular las tuplas
             var resultados = new List<(string, int)>();
 
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
+                    /* Query para seleccionar los datos pertinentes del usuario
+                     * que necesitamos agarrar de los registros, tal que agrupamos
+                     * a todos los registros dentro de un periodo de tiempo particular
+                     * segun los medicos */
                     string query = @"
-                SELECT 
-                    u.id_usuario,
-                    u.nombre_usuario,
-                    u.apellido_usuario,
-                    COUNT(*) AS CantidadRegistros
-                FROM Registro r
-                INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
-                WHERE fecha_registro BETWEEN @inicio AND @fin
-                GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario
-                ORDER BY COUNT(*) DESC;";
+                                SELECT 
+                                    u.id_usuario,
+                                    u.nombre_usuario,
+                                    u.apellido_usuario,
+                                    COUNT(*) AS CantidadRegistros
+                                FROM Registro r
+                                INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                                WHERE fecha_registro BETWEEN @inicio AND @fin
+                                GROUP BY u.id_usuario, u.nombre_usuario, u.apellido_usuario
+                                ORDER BY COUNT(*) DESC;";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
@@ -763,10 +841,12 @@ namespace proyecto_Villarreal_SanLorenzo
 
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
+                        // Lista temporal que almacena todos los datos de la query
                         var listaTemporal = new List<(int Id, string Nombre, string Apellido, int Cantidad)>();
 
                         while (reader.Read())
                         {
+                            // Almacenamos los datos de la query
                             listaTemporal.Add((
                                 Convert.ToInt32(reader["id_usuario"]),
                                 reader["nombre_usuario"].ToString(),
@@ -775,24 +855,34 @@ namespace proyecto_Villarreal_SanLorenzo
                             ));
                         }
 
-                        // Resolver apellidos repetidos
+                        // Agrupamos los elementos de la lista tempral segun apellido
                         var gruposPorApellido = listaTemporal.GroupBy(x => x.Apellido);
+                        // Recorremos uno a uno los grupos por apellido
                         foreach (var grupo in gruposPorApellido)
                         {
+                            // Tal que si el apellido es unico (no se repite)
                             if (grupo.Count() == 1)
                             {
+                                // Agarramos a la persona (unica) de dicho apellido
                                 var unico = grupo.First();
+                                // Y guardamos en la tupla creada al principio el apellido del medico y la cant. de registros
                                 resultados.Add(($"{unico.Apellido}", unico.Cantidad));
                             }
+                            // Si el apellido es repetido en mas de un medico
                             else
                             {
-                                // Si hay repetidos, agregar iniciales del nombre
+                                // Recorremos a todos y cada uno de los medicos en el grupo
                                 foreach (var medico in grupo)
                                 {
+                                    // Tal que dividimos el nombre del medico por los espacios (' ')
                                     string[] partesNombre = medico.Nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                                    // Creamos una variable para almacenar las iniciales
                                     string iniciales = "";
+                                    // Si el medico tenia un nombre o mas, agarramos la inicial del primer nombre
                                     if (partesNombre.Length >= 1) iniciales += partesNombre[0][0];
+                                    // Si el medico tiene 2 nombres, o mas, agarramos la inicial del segundo nombre
                                     if (partesNombre.Length >= 2) iniciales += partesNombre[1][0];
+                                    // Guardamos estos resultados en la tupla 
                                     resultados.Add(($"{medico.Apellido} {iniciales.ToUpper()}", medico.Cantidad));
                                 }
                             }
@@ -808,18 +898,19 @@ namespace proyecto_Villarreal_SanLorenzo
             return resultados;
         }
 
+        // Funcion q se llama para graficar segun los medicos
         private void GraficarSegunMedicos()
         {
             try
             {
-                // 1️⃣ Obtener datos de médicos activos en el rango
+                // Obtenemos los datos por medicos, dado un periodo
                 var datosMedicos = ObtenerDatosPorMedico(fecha_inicio, fecha_fin);
 
-                // 2️⃣ Generar etiquetas (nombres) y valores (cantidad de registros)
+                // Agarramos los nombres, y los valores, de las tuplas devueltas
                 var etiquetas = datosMedicos.Select(d => d.NombreMostrar).ToList();
                 var valores = datosMedicos.Select(d => d.CantidadRegistros).ToList();
 
-                // 3️⃣ Graficar reutilizando la misma función de visualización
+                // Graficamos
                 RealizarGraficoMedicos(etiquetas, valores);
             }
             catch (Exception ex)
@@ -829,9 +920,10 @@ namespace proyecto_Villarreal_SanLorenzo
         }
 
 
-
+        // Funcion que crea el grafico
         private void RealizarGraficoMedicos(List<string> etiquetas, List<int> valores)
         {
+            // Basicamente hace lo mismo q el de grafico para tiempos
             panelGrafico.Controls.Clear();
             Chart chart = new Chart { Dock = DockStyle.Fill };
             panelGrafico.Controls.Add(chart);
@@ -883,18 +975,19 @@ namespace proyecto_Villarreal_SanLorenzo
             chartArea.BackColor = Color.White;
         }
 
+        // Funcion q se llama para graficar segun tipo de consulta
         private void GraficarSegunTiposConsulta()
         {
             try
             {
-                // 1️⃣ Obtener datos agrupados por tipo de consulta
+                // Obtenemos los datos por tipo de consulta
                 var datosTipos = ObtenerDatosPorTipoConsulta(fecha_inicio, fecha_fin);
 
-                // 2️⃣ Generar etiquetas (tipos) y valores (cantidad de registros)
+                // Agarramos las etiquetas y los valores de las tuplas devueltas por la funcion llamada arriba
                 var etiquetas = datosTipos.Select(d => d.NombreMostrar).ToList();
                 var valores = datosTipos.Select(d => d.CantidadRegistros).ToList();
 
-                // 3️⃣ Reutilizar la función de graficado
+                // Graficamos
                 RealizarGraficoTiposConsulta(etiquetas, valores);
             }
             catch (Exception ex)
@@ -903,23 +996,29 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
+        // Funcion para graficar los nombres de los tipos de consulta y los valores segun tipo de consulta
         private List<(string NombreMostrar, int CantidadRegistros)> ObtenerDatosPorTipoConsulta(DateTime inicio, DateTime fin)
         {
+            // Tuplas q se devolveran, con el nombre del tipo de consulta y los valores
             var resultados = new List<(string, int)>();
 
             try
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
+                    /* Obtenemos el nombre de la consulta y el total de ese tipo de consulta
+                     * que existen en el sistema, filtrando por el periodo pasado como
+                     * argumento. Agrupamos segun el nombre del tipo de registro
+                     */
                     string query = @"
-                SELECT 
-                    t.nombre_registro AS TipoConsulta,
-                    COUNT(*) AS CantidadRegistros
-                FROM Registro r
-                INNER JOIN Tipo_registro t ON r.id_tipo_registro = t.id_tipo_registro
-                WHERE r.fecha_registro BETWEEN @inicio AND @fin
-                GROUP BY t.nombre_registro
-                ORDER BY COUNT(*) DESC;";
+                            SELECT 
+                                t.nombre_registro AS TipoConsulta,
+                                COUNT(*) AS CantidadRegistros
+                            FROM Registro r
+                            INNER JOIN Tipo_registro t ON r.id_tipo_registro = t.id_tipo_registro
+                            WHERE r.fecha_registro BETWEEN @inicio AND @fin
+                            GROUP BY t.nombre_registro
+                            ORDER BY COUNT(*) DESC;";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
@@ -931,6 +1030,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
                         while (reader.Read())
                         {
+                            // Guardamos los resultados de las consultas en la tuplas creadas para devolverla dsp
                             resultados.Add((
                                 reader["TipoConsulta"].ToString(),
                                 Convert.ToInt32(reader["CantidadRegistros"])
@@ -947,8 +1047,10 @@ namespace proyecto_Villarreal_SanLorenzo
             return resultados;
         }
 
+        // Funcion para graficar segun tipo de consulta
         private void RealizarGraficoTiposConsulta(List<string> etiquetas, List<int> valores)
         {
+            // Hace lo mismo que las funciones para graficar anteriormente hechas
             panelGrafico.Controls.Clear();
             Chart chart = new Chart { Dock = DockStyle.Fill };
             panelGrafico.Controls.Add(chart);
