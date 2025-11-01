@@ -23,88 +23,11 @@ namespace proyecto_Villarreal_SanLorenzo
         string connectionString = "Server=localhost;Database=proyecto_Villarreal_SanLorenzo;Trusted_Connection=True;";
 
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
+
         public HistorialClinicoControl()
         {
             InitializeComponent();
         }
-
-        /*public HistorialClinicoControl(int p_dni)
-        {
-            InitializeComponent();
-
-            try
-            {
-                using (SqlConnection db = new SqlConnection(connectionString))
-                {
-                    db.Open();
-
-                    // buscar id_historial del paciente
-                    string queryHistorial = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
-                    int idHistorial = 0;
-
-                    using (SqlCommand cmdHistorial = new SqlCommand(queryHistorial, db))
-                    {
-                        cmdHistorial.Parameters.AddWithValue("@dni", p_dni);
-                        object result = cmdHistorial.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
-                            idHistorial = Convert.ToInt32(result);
-                    }
-
-                    if (idHistorial == 0)
-                    {
-                        MostrarMensaje("no se encontró historial para este paciente");
-                        return;
-                    }
-
-                    // obtener todos los registros del historial
-                    string queryRegistros = @"
-                        SELECT id_registro
-                        FROM Registro
-                        WHERE id_historial = @id_historial
-                        ORDER BY fecha_registro DESC;";
-
-                    using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
-                    {
-                        cmdRegistros.Parameters.AddWithValue("@id_historial", idHistorial);
-
-                        using (SqlDataReader reader = cmdRegistros.ExecuteReader())
-                        {
-                            if (!reader.HasRows)
-                            {
-                                MostrarMensaje("no hay registros cargados para este paciente");
-                                return;
-                            }
-
-                            panelContenedorRegistros.Controls.Clear();
-                            int posY = 10;
-
-                            while (reader.Read())
-                            {
-                                int idRegistro = Convert.ToInt32(reader["id_registro"]);
-
-                                PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
-                                panel.Dock = DockStyle.None;
-                                panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
-                                panel.AutoSize = true;
-                                panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                                panel.Margin = new Padding(6);
-                                panel.Location = new Point(10, posY);
-
-                                panelContenedorRegistros.Controls.Add(panel);
-                                panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
-
-                                posY += panel.Height + 10;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MostrarMensaje("error al cargar el historial clínico: " + ex.Message);
-            }
-        }*/
 
         private void HistorialClinicoControl_Load(object sender, EventArgs e)
         {
@@ -251,6 +174,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                 panel.Margin = new Padding(6);
                                 panel.Location = new Point(10, posY);
 
+                                panel.AbrirOtroControl += this.AbrirOtroControl;
                                 panelContenedorRegistros.Controls.Add(panel);
                                 panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
 
@@ -423,6 +347,9 @@ namespace proyecto_Villarreal_SanLorenzo
                                     panel.Margin = new Padding(6);
                                     panel.Location = new Point(10, posY);
 
+                                    panel.AbrirOtroControl += this.AbrirOtroControl;
+                                    panelContenedorRegistros.Controls.Add(panel);
+
                                     panelContenedorRegistros.Controls.Add(panel);
                                     panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
 
@@ -440,6 +367,86 @@ namespace proyecto_Villarreal_SanLorenzo
                 MessageBox.Show("Error al cargar historiales: " + ex.Message);
             }
         }
+
+        //Funcion Tomi
+        /*public HistorialClinicoControl(int p_dni)
+        {
+            InitializeComponent();
+
+            try
+            {
+                using (SqlConnection db = new SqlConnection(connectionString))
+                {
+                    db.Open();
+
+                    // buscar id_historial del paciente
+                    string queryHistorial = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
+                    int idHistorial = 0;
+
+                    using (SqlCommand cmdHistorial = new SqlCommand(queryHistorial, db))
+                    {
+                        cmdHistorial.Parameters.AddWithValue("@dni", p_dni);
+                        object result = cmdHistorial.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                            idHistorial = Convert.ToInt32(result);
+                    }
+
+                    if (idHistorial == 0)
+                    {
+                        MostrarMensaje("no se encontró historial para este paciente");
+                        return;
+                    }
+
+                    // obtener todos los registros del historial
+                    string queryRegistros = @"
+                        SELECT id_registro
+                        FROM Registro
+                        WHERE id_historial = @id_historial
+                        ORDER BY fecha_registro DESC;";
+
+                    using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
+                    {
+                        cmdRegistros.Parameters.AddWithValue("@id_historial", idHistorial);
+
+                        using (SqlDataReader reader = cmdRegistros.ExecuteReader())
+                        {
+                            if (!reader.HasRows)
+                            {
+                                MostrarMensaje("no hay registros cargados para este paciente");
+                                return;
+                            }
+
+                            panelContenedorRegistros.Controls.Clear();
+                            int posY = 10;
+
+                            while (reader.Read())
+                            {
+                                int idRegistro = Convert.ToInt32(reader["id_registro"]);
+
+                                PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                panel.Dock = DockStyle.None;
+                                panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
+                                panel.AutoSize = true;
+                                panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                                panel.Margin = new Padding(6);
+                                panel.Location = new Point(10, posY);
+
+                                panelContenedorRegistros.Controls.Add(panel);
+                                panelContenedorRegistros.Controls.SetChildIndex(panel, 0);
+
+                                posY += panel.Height + 10;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("error al cargar el historial clínico: " + ex.Message);
+            }
+        }*/
+
 
         /*private void bPdfRegistros_Click(object sender, EventArgs e)//Funcion que descarga los registros del paciente en formato PDF
         {

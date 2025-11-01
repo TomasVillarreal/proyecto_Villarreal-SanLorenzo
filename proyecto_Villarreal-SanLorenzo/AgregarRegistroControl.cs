@@ -25,6 +25,8 @@ namespace proyecto_Villarreal_SanLorenzo
         public AgregarRegistroControl(int p_dni, int p_historial, int p_registro)
         {
             InitializeComponent();
+            lDosis.Visible = false;
+            tDosis.Visible = false;
             this.dni = p_dni;
 
             if (dni != 0)
@@ -40,6 +42,8 @@ namespace proyecto_Villarreal_SanLorenzo
         {
 
             InitializeComponent();
+            lDosis.Visible = false;
+            tDosis.Visible = false;
             this.dni = p_dni;
 
             CargarTiposRegistro();
@@ -220,11 +224,13 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             if (comboBoxMedicacion.SelectedIndex != -1)
             {
+                lDosis.Visible = true;
                 tDosis.Visible = true;
                 tDosis.Text = string.Empty; // limpia cualquier valor anterior
             }
             else
             {
+                lDosis.Visible = false;
                 tDosis.Visible = false;
                 tDosis.Text = string.Empty;
             }

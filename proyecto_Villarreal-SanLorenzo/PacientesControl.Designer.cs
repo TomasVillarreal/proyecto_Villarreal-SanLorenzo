@@ -49,17 +49,19 @@
             panelBordes1.Controls.Add(dgPaciente);
             panelBordes1.Controls.Add(tBusquedaPacientes);
             panelBordes1.Controls.Add(lListaPacientes);
-            panelBordes1.Location = new Point(23, 131);
+            panelBordes1.Location = new Point(26, 175);
+            panelBordes1.Margin = new Padding(3, 4, 3, 4);
             panelBordes1.Name = "panelBordes1";
-            panelBordes1.Size = new Size(723, 417);
+            panelBordes1.Size = new Size(826, 556);
             panelBordes1.TabIndex = 0;
             // 
             // rbEliminados
             // 
             rbEliminados.AutoSize = true;
-            rbEliminados.Location = new Point(574, 40);
+            rbEliminados.Location = new Point(656, 53);
+            rbEliminados.Margin = new Padding(3, 4, 3, 4);
             rbEliminados.Name = "rbEliminados";
-            rbEliminados.Size = new Size(136, 19);
+            rbEliminados.Size = new Size(168, 24);
             rbEliminados.TabIndex = 6;
             rbEliminados.Text = "Pacientes eliminados";
             rbEliminados.UseVisualStyleBackColor = true;
@@ -69,9 +71,10 @@
             // 
             rbVisibles.AutoSize = true;
             rbVisibles.Checked = true;
-            rbVisibles.Location = new Point(436, 40);
+            rbVisibles.Location = new Point(498, 53);
+            rbVisibles.Margin = new Padding(3, 4, 3, 4);
             rbVisibles.Name = "rbVisibles";
-            rbVisibles.Size = new Size(116, 19);
+            rbVisibles.Size = new Size(143, 24);
             rbVisibles.TabIndex = 5;
             rbVisibles.TabStop = true;
             rbVisibles.Text = "Pacientes visibles";
@@ -85,18 +88,21 @@
             dgPaciente.BackgroundColor = Color.White;
             dgPaciente.BorderStyle = BorderStyle.None;
             dgPaciente.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgPaciente.Location = new Point(13, 81);
+            dgPaciente.Location = new Point(15, 108);
+            dgPaciente.Margin = new Padding(3, 4, 3, 4);
             dgPaciente.Name = "dgPaciente";
-            dgPaciente.Size = new Size(697, 322);
+            dgPaciente.RowHeadersWidth = 51;
+            dgPaciente.Size = new Size(797, 429);
             dgPaciente.TabIndex = 4;
             dgPaciente.CellContentClick += dgPaciente_CellContentClick;
             // 
             // tBusquedaPacientes
             // 
             tBusquedaPacientes.ForeColor = SystemColors.ActiveBorder;
-            tBusquedaPacientes.Location = new Point(13, 36);
+            tBusquedaPacientes.Location = new Point(15, 48);
+            tBusquedaPacientes.Margin = new Padding(3, 4, 3, 4);
             tBusquedaPacientes.Name = "tBusquedaPacientes";
-            tBusquedaPacientes.Size = new Size(248, 23);
+            tBusquedaPacientes.Size = new Size(283, 27);
             tBusquedaPacientes.TabIndex = 3;
             tBusquedaPacientes.Text = "Buscar por DNI";
             tBusquedaPacientes.KeyDown += tBusquedaPacientes_KeyDown;
@@ -106,9 +112,9 @@
             // 
             lListaPacientes.AutoSize = true;
             lListaPacientes.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lListaPacientes.Location = new Point(12, 12);
+            lListaPacientes.Location = new Point(14, 16);
             lListaPacientes.Name = "lListaPacientes";
-            lListaPacientes.Size = new Size(139, 21);
+            lListaPacientes.Size = new Size(173, 28);
             lListaPacientes.TabIndex = 2;
             lListaPacientes.Text = "Lista de Pacientes";
             // 
@@ -116,9 +122,9 @@
             // 
             lTituloPacientes.AutoSize = true;
             lTituloPacientes.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTituloPacientes.Location = new Point(23, 42);
+            lTituloPacientes.Location = new Point(26, 56);
             lTituloPacientes.Name = "lTituloPacientes";
-            lTituloPacientes.Size = new Size(195, 25);
+            lTituloPacientes.Size = new Size(250, 32);
             lTituloPacientes.TabIndex = 1;
             lTituloPacientes.Text = "Gestion de Pacientes";
             // 
@@ -127,9 +133,9 @@
             lSubtituloPacientes.AutoSize = true;
             lSubtituloPacientes.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lSubtituloPacientes.ForeColor = SystemColors.ControlDark;
-            lSubtituloPacientes.Location = new Point(23, 67);
+            lSubtituloPacientes.Location = new Point(26, 89);
             lSubtituloPacientes.Name = "lSubtituloPacientes";
-            lSubtituloPacientes.Size = new Size(227, 15);
+            lSubtituloPacientes.Size = new Size(289, 20);
             lSubtituloPacientes.TabIndex = 2;
             lSubtituloPacientes.Text = "Sistema de registro y gestion de pacientes";
             // 
@@ -138,9 +144,10 @@
             bRegistrarPaciente.BackColor = SystemColors.Highlight;
             bRegistrarPaciente.ForeColor = Color.Transparent;
             bRegistrarPaciente.Image = Resource1.plus_icon;
-            bRegistrarPaciente.Location = new Point(637, 42);
+            bRegistrarPaciente.Location = new Point(728, 56);
+            bRegistrarPaciente.Margin = new Padding(3, 4, 3, 4);
             bRegistrarPaciente.Name = "bRegistrarPaciente";
-            bRegistrarPaciente.Size = new Size(96, 40);
+            bRegistrarPaciente.Size = new Size(110, 53);
             bRegistrarPaciente.TabIndex = 3;
             bRegistrarPaciente.Text = "Registrar Paciente";
             bRegistrarPaciente.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -149,13 +156,15 @@
             // 
             // PacientesControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(bRegistrarPaciente);
             Controls.Add(lSubtituloPacientes);
             Controls.Add(lTituloPacientes);
             Controls.Add(panelBordes1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "PacientesControl";
+            Size = new Size(878, 767);
             Load += PacientesControl_Load;
             panelBordes1.ResumeLayout(false);
             panelBordes1.PerformLayout();

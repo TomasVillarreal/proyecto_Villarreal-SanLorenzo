@@ -32,13 +32,13 @@
             lTituloHC = new Label();
             lSubtituloHC = new Label();
             panelFiltros = new Panel();
+            bPdfRegistros = new Button();
             bAgregarRegistroPaciente = new Button();
             lDniPaciente = new Label();
             tBusquedaDNI = new TextBox();
             labelSubtitulo = new Label();
             lFiltros = new Label();
             panelContenedorRegistros = new FlowLayoutPanel();
-            bPdfRegistros = new Button();
             panelFiltros.SuspendLayout();
             SuspendLayout();
             // 
@@ -77,11 +77,26 @@
             panelFiltros.Size = new Size(818, 151);
             panelFiltros.TabIndex = 4;
             // 
+            // bPdfRegistros
+            // 
+            bPdfRegistros.BackColor = Color.Transparent;
+            bPdfRegistros.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bPdfRegistros.ForeColor = Color.Black;
+            bPdfRegistros.Image = (Image)resources.GetObject("bPdfRegistros.Image");
+            bPdfRegistros.Location = new Point(677, 64);
+            bPdfRegistros.Margin = new Padding(3, 4, 3, 4);
+            bPdfRegistros.Name = "bPdfRegistros";
+            bPdfRegistros.Size = new Size(138, 48);
+            bPdfRegistros.TabIndex = 15;
+            bPdfRegistros.Text = "Registros";
+            bPdfRegistros.TextImageRelation = TextImageRelation.ImageBeforeText;
+            bPdfRegistros.UseVisualStyleBackColor = false;
+            // 
             // bAgregarRegistroPaciente
             // 
-            bAgregarRegistroPaciente.BackColor = Color.Transparent;
+            bAgregarRegistroPaciente.BackColor = SystemColors.Highlight;
             bAgregarRegistroPaciente.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bAgregarRegistroPaciente.ForeColor = Color.Black;
+            bAgregarRegistroPaciente.ForeColor = Color.White;
             bAgregarRegistroPaciente.Image = Resource1.plus_icon;
             bAgregarRegistroPaciente.Location = new Point(677, 9);
             bAgregarRegistroPaciente.Margin = new Padding(3, 4, 3, 4);
@@ -147,22 +162,6 @@
             panelContenedorRegistros.Size = new Size(818, 528);
             panelContenedorRegistros.TabIndex = 5;
             panelContenedorRegistros.WrapContents = false;
-            // 
-            // bPdfRegistros
-            // 
-            bPdfRegistros.BackColor = Color.Transparent;
-            bPdfRegistros.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bPdfRegistros.ForeColor = Color.Black;
-            bPdfRegistros.Image = (Image)resources.GetObject("bPdfRegistros.Image");
-            bPdfRegistros.Location = new Point(677, 64);
-            bPdfRegistros.Margin = new Padding(3, 4, 3, 4);
-            bPdfRegistros.Name = "bPdfRegistros";
-            bPdfRegistros.Size = new Size(138, 48);
-            bPdfRegistros.TabIndex = 15;
-            bPdfRegistros.Text = "Registros";
-            bPdfRegistros.TextImageRelation = TextImageRelation.ImageBeforeText;
-            bPdfRegistros.UseVisualStyleBackColor = false;
-            //bPdfRegistros.Click += bPdfRegistros_Click;
             // 
             // HistorialClinicoControl
             // 

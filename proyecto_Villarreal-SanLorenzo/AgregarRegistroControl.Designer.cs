@@ -210,9 +210,9 @@
             // 
             // bGuardarRegistro
             // 
-            bGuardarRegistro.BackColor = Color.Transparent;
-            bGuardarRegistro.ForeColor = Color.Black;
-            bGuardarRegistro.Location = new Point(314, 671);
+            bGuardarRegistro.BackColor = Color.Black;
+            bGuardarRegistro.ForeColor = Color.Transparent;
+            bGuardarRegistro.Location = new Point(331, 672);
             bGuardarRegistro.Margin = new Padding(3, 4, 3, 4);
             bGuardarRegistro.Name = "bGuardarRegistro";
             bGuardarRegistro.Size = new Size(138, 48);

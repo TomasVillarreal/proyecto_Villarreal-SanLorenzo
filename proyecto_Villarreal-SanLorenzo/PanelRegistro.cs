@@ -153,16 +153,28 @@ namespace proyecto_Villarreal_SanLorenzo
             if (usuarioActual != 0 && usuarioActual == idUsuarioRegistro)
             {
                 Button bEditar = new Button();
-                bEditar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-                bEditar.Location = new Point(this.Width - bEditar.Width - 15, this.Height - bEditar.Height - 10);
+                bEditar.Text = "Editar";
+                bEditar.Font = new Font("Segoe UI", 9, FontStyle.Regular);
                 bEditar.BackColor = Color.WhiteSmoke;
+                bEditar.ForeColor = Color.Black;
                 bEditar.FlatStyle = FlatStyle.Flat;
                 bEditar.FlatAppearance.BorderColor = Color.LightGray;
                 bEditar.FlatAppearance.MouseOverBackColor = Color.FromArgb(230, 230, 230);
+                bEditar.AutoSize = true;
+                bEditar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                bEditar.Padding = new Padding(8, 4, 8, 4);
+
+                // calcular la posición una vez que tiene tamaño
+                int margenDerecho = 15;
+                int margenInferior = 10;
+                bEditar.Location = new Point(
+                    this.Width - bEditar.PreferredSize.Width - margenDerecho,
+                    this.Height - bEditar.PreferredSize.Height - margenInferior
+                );
+                bEditar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
                 bEditar.Click += (s, e) =>
                 {
-                    // obtener dniPaciente como int
                     var datosPaciente = ObtenerDatosPaciente();
                     if (!int.TryParse(datosPaciente.dni, out int dniPaciente))
                     {
@@ -170,14 +182,10 @@ namespace proyecto_Villarreal_SanLorenzo
                         return;
                     }
 
-                    // crear control de edición pasando el DNI (constructor que usabas antes acepta un int)
                     EditarRegistroControl editarRegistro = new EditarRegistroControl(dniPaciente);
-
-                    // cargar por id de registro el formulario de edición (método que implementaremos en AgregarRegistroControl)
-                    //editarRegistro.CargarRegistroParaEdicion(this.registro);
-
-                    // lanzar evento para que el padre (HistorialClinicoControl) muestre el control de edición
+                    editarRegistro.controlPadreRegistro = this.Parent as HistorialClinicoControl;
                     AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, editarRegistro, false));
+
                 };
 
                 this.Controls.Add(bEditar);

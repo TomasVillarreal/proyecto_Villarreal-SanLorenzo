@@ -81,9 +81,9 @@
             // 
             // bGuardarCambios
             // 
-            bGuardarCambios.BackColor = Color.Transparent;
-            bGuardarCambios.ForeColor = Color.Black;
-            bGuardarCambios.Location = new Point(323, 681);
+            bGuardarCambios.BackColor = Color.Black;
+            bGuardarCambios.ForeColor = Color.Transparent;
+            bGuardarCambios.Location = new Point(335, 680);
             bGuardarCambios.Margin = new Padding(3, 4, 3, 4);
             bGuardarCambios.Name = "bGuardarCambios";
             bGuardarCambios.Size = new Size(138, 48);
@@ -91,6 +91,7 @@
             bGuardarCambios.Text = "Guardar cambios";
             bGuardarCambios.TextImageRelation = TextImageRelation.ImageBeforeText;
             bGuardarCambios.UseVisualStyleBackColor = false;
+            bGuardarCambios.Click += bGuardarCambios_Click;
             // 
             // lErrorMedicacion
             // 
