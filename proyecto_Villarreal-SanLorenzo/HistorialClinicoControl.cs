@@ -24,6 +24,8 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
+        public PacientesControl ControlPadre;
+
         public HistorialClinicoControl()
         {
             InitializeComponent();
@@ -39,7 +41,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         }
 
-        private void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que permite la busqueda de los registros de un paciente por su DNI
+        public void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que permite la busqueda de los registros de un paciente por su DNI
         {
             if (e.KeyCode != Keys.Enter) return;
 
@@ -145,7 +147,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                             SELECT id_registro
                                             FROM Registro
                                             WHERE id_historial = @id_historial
-                                            ORDER BY fecha_registro DESC, id_registro DESC";
+                                            ORDER BY id_registro DESC";
 
                     using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
                     {
@@ -316,7 +318,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                             SELECT id_registro
                                             FROM Registro
                                             WHERE id_historial = @id_historial
-                                            ORDER BY  fecha_registro DESC, id_registro DESC";
+                                            ORDER BY id_registro DESC";
 
                     using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
                     {
@@ -399,7 +401,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         SELECT id_registro
                         FROM Registro
                         WHERE id_historial = @id_historial
-                        ORDER BY fecha_registro DESC, id_registro DESC"
+                        ORDER BY id_registro DESC"
 
                     using (SqlCommand cmdRegistros = new SqlCommand(queryRegistros, db))
                     {
@@ -470,17 +472,30 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
+            // Crear carpeta "Historiales" en el escritorio si no existe
+            string escritorioPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string carpetaHistoriales = Path.Combine(escritorioPath, "Historiales");
+
+            if (!Directory.Exists(carpetaHistoriales))
+            {
+                Directory.CreateDirectory(carpetaHistoriales);
+            }
+
+            // Ruta por defecto del archivo PDF
+            string rutaPorDefecto = Path.Combine(carpetaHistoriales, $"Historial_{dniBusqueda}.pdf");
+
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Archivos PDF (*.pdf)|*.pdf";
-                sfd.FileName = $"Historial_{dniBusqueda}.pdf";
+                sfd.FileName = Path.GetFileName(rutaPorDefecto); // solo el nombre del archivo
+                sfd.InitialDirectory = carpetaHistoriales; // carpeta por defecto en el escritorio
 
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
                         GenerarPDFPaciente(dniBusqueda, registros, sfd.FileName);
-                        MessageBox.Show("El PDF se generó correctamente.",
+                        MessageBox.Show($"El PDF se generó correctamente en:\n{sfd.FileName}",
                                         "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
@@ -503,29 +518,43 @@ namespace proyecto_Villarreal_SanLorenzo
                 PdfWriter.GetInstance(document, fs);
                 document.Open();
 
-                // Fuentes
-                var tituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 16);
-                var seccionFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
-                var textoFont = FontFactory.GetFont(FontFactory.HELVETICA, 11);
+                //fuentes para los titulos, el texto
+                var tituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+                var subtituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.DARK_GRAY);
+                var textoFont = FontFactory.GetFont(FontFactory.HELVETICA, 11, BaseColor.BLACK);
+                var lineaFont = FontFactory.GetFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
 
-                // --- ENCABEZADO DEL PACIENTE ---
                 Registro primerRegistro = registros[0];
-                document.Add(new Paragraph("Historial Clínico del Paciente", tituloFont));
-                document.Add(new Paragraph("\n"));
-                document.Add(new Paragraph($"Nombre: {primerRegistro.NombrePaciente}", textoFont));
-                document.Add(new Paragraph($"DNI: {primerRegistro.DniPaciente}", textoFont));
-                document.Add(new Paragraph($"Fecha de generación: {DateTime.Now.ToShortDateString()}", textoFont));
-                document.Add(new Paragraph("\n--------------------------------------------------\n"));
 
-                // --- REGISTROS MÉDICOS ---
+                //El encabezado del PDf
+                Paragraph titulo = new Paragraph("CLINICKS - HISTORIAL CLÍNICO DEL PACIENTE\n\n", tituloFont);
+                titulo.Alignment = Element.ALIGN_CENTER;
+                document.Add(titulo);
+
+                PdfPTable tablaPaciente = new PdfPTable(2);
+                tablaPaciente.WidthPercentage = 100;
+                tablaPaciente.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+
+                tablaPaciente.AddCell(new Phrase($"Paciente: {primerRegistro.NombrePaciente}", textoFont));
+                tablaPaciente.AddCell(new Phrase($"DNI: {primerRegistro.DniPaciente}", textoFont));
+                tablaPaciente.AddCell(new Phrase($"Fecha de generación: {DateTime.Now:dd/MM/yyyy}", textoFont));
+                tablaPaciente.AddCell(new Phrase(""));
+                document.Add(tablaPaciente);
+
+                document.Add(new Paragraph("\n------------------------------------------------------------\n", lineaFont));
+
+                //Se cargan los registros
                 foreach (var reg in registros)
                 {
-                    document.Add(new Paragraph($"Tipo de registro: {reg.TipoRegistro}", seccionFont));
-                    document.Add(new Paragraph($"Fecha: {reg.Fecha.ToShortDateString()}", textoFont));
+                    Paragraph tipo = new Paragraph($"{reg.TipoRegistro}", subtituloFont);
+                    tipo.SpacingBefore = 8;
+                    document.Add(tipo);
+
+                    document.Add(new Paragraph($"Fecha: {reg.Fecha:dd/MM/yyyy}", textoFont));
                     document.Add(new Paragraph($"Profesional: {reg.Profesional}", textoFont));
                     document.Add(new Paragraph($"Medicación: {reg.Medicacion}", textoFont));
                     document.Add(new Paragraph($"Observaciones: {reg.Observaciones}", textoFont));
-                    document.Add(new Paragraph("--------------------------------------------------\n"));
+                    document.Add(new Paragraph("------------------------------------------------------------", lineaFont));
                 }
 
                 document.Close();
@@ -551,19 +580,25 @@ namespace proyecto_Villarreal_SanLorenzo
 
             string query = @"
                             SELECT 
-                                p.nombre_paciente AS NombrePaciente,
+                                (p.nombre_paciente + ' ' + p.apellido_paciente) AS NombreCompletoPaciente, 
                                 p.dni_paciente AS DniPaciente,
                                 tr.nombre_registro AS TipoRegistro,
                                 r.fecha_registro AS Fecha,
                                 r.observaciones AS Observaciones,
                                 ISNULL(m.nombre_medicacion, 'Ninguna') AS Medicacion,
-                                u.nombre_usuario AS Profesional
+                                (CASE 
+                                    WHEN e.nombre_especialidad LIKE '%Médic%' THEN 'Dr. '
+                                    WHEN e.nombre_especialidad LIKE '%Enfermer%' THEN 'Enf. '
+                                    ELSE ''
+                                 END + u.nombre_usuario + ' ' + u.apellido_usuario + ' - ' + ISNULL(e.nombre_especialidad, 'Sin especialidad')) AS Profesional
                             FROM Registro r
                             INNER JOIN Paciente p ON r.dni_paciente = p.dni_paciente
                             INNER JOIN Tipo_registro tr ON r.id_tipo_registro = tr.id_tipo_registro
                             LEFT JOIN Registro_medicacion rm ON r.id_registro = rm.id_registro
                             LEFT JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
                             INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                            LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
+                            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
                             WHERE p.dni_paciente = @dni
                             ORDER BY r.fecha_registro DESC;";
 
@@ -579,13 +614,12 @@ namespace proyecto_Villarreal_SanLorenzo
                 {
                     Registro registro = new Registro
                     {
-                        NombrePaciente = reader["NombrePaciente"].ToString(),
+                        NombrePaciente = reader["NombreCompletoPaciente"].ToString(),
                         DniPaciente = reader["DniPaciente"].ToString(),
                         TipoRegistro = reader["TipoRegistro"].ToString(),
                         Fecha = Convert.ToDateTime(reader["Fecha"]),
                         Observaciones = reader["Observaciones"].ToString(),
                         Medicacion = reader["Medicacion"].ToString(),
-                        Profesional = reader["Profesional"].ToString()
                     };
 
                     registros.Add(registro);
