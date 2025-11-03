@@ -91,6 +91,7 @@
             bPdfRegistros.Text = "Registros";
             bPdfRegistros.TextImageRelation = TextImageRelation.ImageBeforeText;
             bPdfRegistros.UseVisualStyleBackColor = false;
+            bPdfRegistros.Click += bPdfRegistros_Click;
             // 
             // bAgregarRegistroPaciente
             // 
