@@ -13,11 +13,13 @@ namespace proyecto_Villarreal_SanLorenzo
         public int historial, registro, dni = 0;
         string nombrePaciente;
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
+        private HistorialClinicoControl controlPadreRegistro;
 
-        public PanelRegistro(int p_historial, int p_registro)
+        public PanelRegistro(int p_historial, int p_registro, HistorialClinicoControl padre)
         {
             historial = p_historial;
             registro = p_registro;
+            controlPadreRegistro = padre;
 
             var datosPaciente = ObtenerDatosPaciente();
             if (int.TryParse(datosPaciente.dni, out int dniPaciente))
@@ -182,9 +184,14 @@ namespace proyecto_Villarreal_SanLorenzo
                         return;
                     }
 
-                    EditarRegistroControl editarRegistro = new EditarRegistroControl(dniPaciente);
-                    editarRegistro.controlPadreRegistro = this.Parent as HistorialClinicoControl;
-                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, editarRegistro, false));
+                    int idRegistroActual = ObtenerIdRegistroActual();
+                    EditarRegistroControl editarRegistro = new EditarRegistroControl(dniPaciente, idRegistroActual);
+
+                    // asigno la referencia al padre que guardamos en el constructor
+                    editarRegistro.controlPadreRegistro = this.controlPadreRegistro;
+
+                    // lanzo el evento para que el padre muestre el control de edición
+                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(this, editarRegistro, false));
 
                 };
 
@@ -416,6 +423,11 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             return idUsuario;
+        }
+
+        private int ObtenerIdRegistroActual()//Funcion que devuelve el id del registro actual que sirve luego para la edicion y demas
+        {
+            return registro;
         }
     }
 }

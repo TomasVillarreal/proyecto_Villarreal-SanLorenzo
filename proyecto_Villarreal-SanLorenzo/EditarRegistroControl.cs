@@ -27,7 +27,6 @@ namespace proyecto_Villarreal_SanLorenzo
         public EditarRegistroControl(int p_dni, int p_registro_actual = 0)
         {
             InitializeComponent();
-            comboBoxMedicacion.DropDownStyle = ComboBoxStyle.DropDown;//para borrar lo seleccionado en medicacions
 
             dni = p_dni;
             idRegistroActual = p_registro_actual;
@@ -50,56 +49,67 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = @"SELECT r.observaciones, r.id_tipo_registro, r.id_medicacion, r.dosis, r.fecha_registro,
-                                    t.nombre_registro, m.nombre_medicacion
-                             FROM Registro r
-                             LEFT JOIN Tipo_registro t ON r.id_tipo_registro = t.id_tipo_registro
-                             LEFT JOIN Medicacion m ON r.id_medicacion = m.id_medicacion
-                             WHERE r.id_registro = @id";
+                    string query = @"
+                        SELECT 
+                            r.observaciones, 
+                            tr.nombre_registro, 
+                            m.nombre_medicacion, 
+                            m.dosis_medicacion AS dosis
+                        FROM Registro r
+                        LEFT JOIN Tipo_registro tr ON r.id_tipo_registro = tr.id_tipo_registro
+                        LEFT JOIN Registro_medicacion rm ON r.id_registro = rm.id_registro
+                        LEFT JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
+                        WHERE r.id_registro = @id";
+
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", idRegistro);
+
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                tObservaciones.Text = reader["observaciones"].ToString();
+                                // observaciones
+                                tObservaciones.Text = reader["observaciones"]?.ToString() ?? string.Empty;
 
+                                // tipo de registro
                                 string tipo = reader["nombre_registro"]?.ToString();
                                 if (!string.IsNullOrEmpty(tipo))
                                     comboBoxTipoRegistro.SelectedItem = tipo;
 
+                                // medicación (nombre)
                                 string medicacion = reader["nombre_medicacion"]?.ToString();
                                 if (!string.IsNullOrEmpty(medicacion))
                                 {
                                     comboBoxMedicacion.SelectedItem = medicacion;
-
                                     lDosis.Visible = true;
                                     tDosis.Visible = true;
-
-                                    tDosis.Text = reader["dosis"] != DBNull.Value
-                                        ? reader["dosis"].ToString()
-                                        : string.Empty;
+                                    tDosis.Text = reader["dosis"]?.ToString() ?? string.Empty;
                                 }
                                 else
                                 {
-                                    comboBoxMedicacion.SelectedIndex = -1;
+                                    comboBoxMedicacion.SelectedIndex = 0; // "(ninguna)"
                                     lDosis.Visible = false;
                                     tDosis.Visible = false;
                                     tDosis.Text = string.Empty;
                                 }
                             }
+                            else
+                            {
+                                MessageBox.Show("No se encontró el registro en la base de datos.", 
+                                                "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
                         }
                     }
-                }
+        }
 
-                this.idRegistroActual = idRegistro;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar el registro para edición: " + ex.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        this.idRegistroActual = idRegistro;
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show("Error al cargar el registro para edición: " + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
         }
 
         private void CargarTiposRegistro()//Funcion que carga los tipos de registros al combobox
@@ -146,15 +156,17 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         comboBoxMedicacion.Items.Clear();
 
+                        // 🔹 Insertamos opción "(ninguna)" al principio
+                        comboBoxMedicacion.Items.Add("(ninguna)");
+
                         while (reader.Read())
                         {
                             comboBoxMedicacion.Items.Add(reader["nombre_medicacion"].ToString());
                         }
                     }
 
-                    // No es obligatorio seleccionar medicación
                     comboBoxMedicacion.DropDownStyle = ComboBoxStyle.DropDownList;
-                    comboBoxMedicacion.SelectedIndex = -1;
+                    comboBoxMedicacion.SelectedIndex = 0; // "(ninguna)" como valor por defecto
                 }
             }
             catch (Exception ex)
@@ -197,28 +209,35 @@ namespace proyecto_Villarreal_SanLorenzo
         }//Funcion que carga los datos del paciente
         private void bAtras_Click(object sender, EventArgs e)//Funcion que permite volver a la vista anterior
         {
-            // Volvemos al control que nos llamo.
-            if (controlPadreRegistro != null)
+            var parent = this.Parent; // obtenemos el contenedor del control actual
+
+            if (parent != null && controlPadreRegistro != null)
             {
-                AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(this, controlPadreRegistro, false));
+                controlPadreRegistro.CargarHistoriales(dni);
+                parent.Controls.Clear();
+                parent.Controls.Add(controlPadreRegistro);
+                controlPadreRegistro.Dock = DockStyle.Fill;
             }
             else
             {
-                MessageBox.Show("No se pudo volver atrás: no hay vista anterior definida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No se pudo volver atrás.");
             }
         }
         private void comboBoxMedicacion_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxMedicacion.SelectedIndex != -1)
-            {
-                lDosis.Visible = true;
-                tDosis.Visible = true;
-            }
-            else
+            // Si la opción elegida es distinta de "(ninguna)", mostramos dosis
+            if (comboBoxMedicacion.SelectedItem == null || comboBoxMedicacion.SelectedItem.ToString() == "(ninguna)")
             {
                 lDosis.Visible = false;
                 tDosis.Visible = false;
                 tDosis.Text = string.Empty;
+
+            }
+            else
+            {
+                lDosis.Visible = true;
+                tDosis.Visible = true;
+
             }
         }//Funcion que permite mostrar el textbox de la dosis solo si se seleccionó un medicamento
 
@@ -241,7 +260,8 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         cmd.Parameters.AddWithValue("@obs", tObservaciones.Text.Trim());
                         cmd.Parameters.AddWithValue("@tipo", comboBoxTipoRegistro.SelectedItem?.ToString() ?? (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@medicacion", comboBoxMedicacion.SelectedItem?.ToString() ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@medicacion",(comboBoxMedicacion.SelectedItem != null &&comboBoxMedicacion.SelectedItem.ToString() != "(ninguna)")
+                                                                    ? comboBoxMedicacion.SelectedItem.ToString() : (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@dosis", string.IsNullOrWhiteSpace(tDosis.Text) ? (object)DBNull.Value : tDosis.Text);
                         cmd.Parameters.AddWithValue("@id", idRegistroActual);
 

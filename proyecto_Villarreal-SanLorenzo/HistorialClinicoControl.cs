@@ -166,7 +166,7 @@ namespace proyecto_Villarreal_SanLorenzo
                             {
                                 int idRegistro = Convert.ToInt32(reader["id_registro"]);
 
-                                PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro, this);
                                 panel.Dock = DockStyle.None;
                                 panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
                                 panel.AutoSize = true;
@@ -339,7 +339,7 @@ namespace proyecto_Villarreal_SanLorenzo
                                 {
                                     int idRegistro = Convert.ToInt32(reader["id_registro"]);
 
-                                    PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro);
+                                    PanelRegistro panel = new PanelRegistro(idHistorial, idRegistro, this);
                                     panel.Dock = DockStyle.None;
                                     panel.Width = panelContenedorRegistros.ClientSize.Width - 25;
                                     panel.AutoSize = true;
