@@ -495,7 +495,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     try
                     {
                         GenerarPDFPaciente(dniBusqueda, registros, sfd.FileName);
-                        MessageBox.Show($"El PDF se generó correctamente en:\n{sfd.FileName}",
+                        MessageBox.Show($"El PDF se generó correctamente",
                                         "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)

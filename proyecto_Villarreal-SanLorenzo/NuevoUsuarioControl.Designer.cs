@@ -366,12 +366,13 @@
             bRegistrarUsuario.BackColor = Color.Black;
             bRegistrarUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bRegistrarUsuario.ForeColor = Color.White;
-            bRegistrarUsuario.Location = new Point(263, 474);
+            bRegistrarUsuario.Location = new Point(305, 649);
             bRegistrarUsuario.Name = "bRegistrarUsuario";
             bRegistrarUsuario.Size = new Size(207, 34);
             bRegistrarUsuario.TabIndex = 50;
             bRegistrarUsuario.Text = "Registrar usuario";
             bRegistrarUsuario.UseVisualStyleBackColor = false;
+            bRegistrarUsuario.Click += bRegistrarUsuario_Click;
             // 
             // NuevoUsuarioControl
             // 

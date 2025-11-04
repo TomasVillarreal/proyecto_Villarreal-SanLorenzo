@@ -42,7 +42,7 @@ namespace proyecto_Villarreal_SanLorenzo
             tDosis.Visible = false;
         }
 
-        public void CargarRegistroParaEdicion(int idRegistro)
+        public void CargarRegistroParaEdicion(int idRegistro)//Funcion que carga los datos del registro de acuerdo al id que se pasa por parametro para editar
         {
             try
             {
@@ -241,7 +241,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }//Funcion que permite mostrar el textbox de la dosis solo si se seleccionó un medicamento
 
-        private void bGuardarCambios_Click(object sender, EventArgs e)
+        private void bGuardarCambios_Click(object sender, EventArgs e)//Funcion que mediante el click del boton, guarda los cambios del registro
         {
             try
             {

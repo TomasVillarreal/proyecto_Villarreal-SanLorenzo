@@ -36,7 +36,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 tNombrePacienteRegistro.ReadOnly = true;
                 tApellidoPacienteRegistro.ReadOnly = true;
             }
-            
+
         }
         public AgregarRegistroControl(int p_dni)
         {
@@ -102,15 +102,17 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         comboBoxMedicacion.Items.Clear();
 
+                        // 🔹 Insertamos opción "(ninguna)" al principio
+                        comboBoxMedicacion.Items.Add("(ninguna)");
+
                         while (reader.Read())
                         {
                             comboBoxMedicacion.Items.Add(reader["nombre_medicacion"].ToString());
                         }
                     }
 
-                    // No es obligatorio seleccionar medicación
                     comboBoxMedicacion.DropDownStyle = ComboBoxStyle.DropDownList;
-                    comboBoxMedicacion.SelectedIndex = -1;
+                    comboBoxMedicacion.SelectedIndex = 0; // "(ninguna)" como valor por defecto
                 }
             }
             catch (Exception ex)
@@ -155,7 +157,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private void bGuardarRegistro_Click(object sender, EventArgs e)
         {
             string observaciones = tObservaciones.Text.Trim();
-            string medicacion = comboBoxMedicacion.Text.Trim();
+            string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
             string tipoRegistro = comboBoxTipoRegistro.SelectedItem?.ToString();
             DateTime fecha = DateTime.Now;
 
@@ -168,42 +170,66 @@ namespace proyecto_Villarreal_SanLorenzo
 
             try
             {
+                int idUsuario = SesionUsuario.id_usuario;
+                string especialidad = SesionUsuario.RolActivo ?? "Sin especialidad";
+                int idHistorial = ObtenerOCrearIdHistorialPorDni(this.dni);
+
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     db.Open();
 
-                    string query = @"
-                                INSERT INTO Historial (dni_paciente, tipo_registro, observaciones, medicacion, fecha)
-                                VALUES (@dni, @tipo, @obs, @med, @fecha);";
+                    // 1️⃣ Insertar registro
+                    string insertRegistro = @"
+                                        INSERT INTO Registro (id_historial, dni_paciente, id_tipo_registro, id_usuario, id_especialidad, fecha_registro, observaciones)
+                                        OUTPUT INSERTED.id_registro
+                                        VALUES (@idHistorial, @dni,
+                                            (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
+                                            @idUsuario,
+                                            (SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @especialidad),
+                                            @fecha,
+                                            @obs
+                                        );";
 
-                    using (SqlCommand cmd = new SqlCommand(query, db))
+                    int nuevoIdRegistro;
+
+                    using (SqlCommand cmd = new SqlCommand(insertRegistro, db))
                     {
-
-                        string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
-
-                        if (string.IsNullOrEmpty(medicacionSeleccionada))
-                        {
-                            // Si no hay medicación seleccionada, insertamos un valor por defecto en lugar de NULL o vacío
-                            medicacionSeleccionada = "Sin medicación";
-                        }
+                        cmd.Parameters.AddWithValue("@idHistorial", idHistorial);
                         cmd.Parameters.AddWithValue("@dni", this.dni);
                         cmd.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
-                        cmd.Parameters.AddWithValue("@obs", observaciones);
-                        cmd.Parameters.AddWithValue("@medicacion", medicacionSeleccionada);
+                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        cmd.Parameters.AddWithValue("@especialidad", especialidad);
                         cmd.Parameters.AddWithValue("@fecha", fecha);
+                        cmd.Parameters.AddWithValue("@obs", observaciones);
 
-                        cmd.ExecuteNonQuery();
+                        nuevoIdRegistro = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    // 2️⃣ Insertar medicación si corresponde
+                    if (!string.IsNullOrEmpty(medicacionSeleccionada) && medicacionSeleccionada.ToLower() != "(ninguna)")
+                    {
+                        string insertMedicacion = @"
+                                            INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion)
+                                            VALUES (@idRegistro, @idHistorial, @dni, @idUsuario,
+                                                (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @nombreMed)
+                                            );";
+
+                        using (SqlCommand cmdMed = new SqlCommand(insertMedicacion, db))
+                        {
+                            cmdMed.Parameters.AddWithValue("@idRegistro", nuevoIdRegistro);
+                            cmdMed.Parameters.AddWithValue("@idHistorial", idHistorial);
+                            cmdMed.Parameters.AddWithValue("@dni", this.dni);
+                            cmdMed.Parameters.AddWithValue("@idUsuario", idUsuario);
+                            cmdMed.Parameters.AddWithValue("@nombreMed", medicacionSeleccionada);
+                            cmdMed.ExecuteNonQuery();
+                        }
                     }
 
                     MessageBox.Show("Registro agregado correctamente.",
                                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Volver al historial
                     if (controlPadreRegistro is HistorialClinicoControl historialControl)
-                    {
                         historialControl.CargarHistoriales(this.dni);
-                    }
-                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, controlPadreRegistro, false));
                 }
             }
             catch (Exception ex)
@@ -222,17 +248,55 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void comboBoxMedicacion_SelectedIndexChanged(object sender, EventArgs e)//Funcion que permite mostrar el textbox de la dosis solo si se seleccionó un medicamento
         {
-            if (comboBoxMedicacion.SelectedIndex != -1)
-            {
-                lDosis.Visible = true;
-                tDosis.Visible = true;
-                tDosis.Text = string.Empty; // limpia cualquier valor anterior
-            }
-            else
+            // Si la opción elegida es distinta de "(ninguna)", mostramos dosis
+            if (comboBoxMedicacion.SelectedItem == null || comboBoxMedicacion.SelectedItem.ToString() == "(ninguna)")
             {
                 lDosis.Visible = false;
                 tDosis.Visible = false;
                 tDosis.Text = string.Empty;
+
+            }
+            else
+            {
+                lDosis.Visible = true;
+                tDosis.Visible = true;
+
+            }
+        }
+
+        private int ObtenerOCrearIdHistorialPorDni(int dniPaciente)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Primero intentamos obtener el historial existente
+                string querySelect = "SELECT id_historial FROM Historial WHERE dni_paciente = @dni";
+                using (SqlCommand cmdSelect = new SqlCommand(querySelect, connection))
+                {
+                    cmdSelect.Parameters.AddWithValue("@dni", dniPaciente);
+                    object result = cmdSelect.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToInt32(result); // Ya existe, lo devolvemos
+                    }
+                }
+
+                // Si no existe, historial porque va a ser el priemr registro y leugo su creacion, se crea
+                string queryInsert = @"
+                                    INSERT INTO Historial (dni_paciente, fecha_creacion)
+                                    OUTPUT INSERTED.id_historial
+                                    VALUES (@dni, @fechaCreacion);";
+
+                using (SqlCommand cmdInsert = new SqlCommand(queryInsert, connection))
+                {
+                    cmdInsert.Parameters.AddWithValue("@dni", dniPaciente);
+                    cmdInsert.Parameters.AddWithValue("@fechaCreacion", DateTime.Now);
+
+                    int nuevoIdHistorial = Convert.ToInt32(cmdInsert.ExecuteScalar());
+                    return nuevoIdHistorial;
+                }
             }
         }
     }
