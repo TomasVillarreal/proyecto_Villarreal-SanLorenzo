@@ -167,28 +167,20 @@ namespace proyecto_Villarreal_SanLorenzo
 
             else if (columnaClickeada.Name == "cHistorial")
             {
-                // Obtengo el dni, verifico si existe
+                // Obtener DNI de la celda clickeada
                 object valorCelda = pacienteClickeado.Cells["cDniPaciente"].Value;
+                if (valorCelda == null) return;
 
-               /* if (valorCelda != null && int.TryParse(valorCelda.ToString(), out dni))
-                {
-                    // Creo el control de historial clínico
-                    HistorialClinicoControl historialControl = new HistorialClinicoControl();
+                int dniPaciente = Convert.ToInt32(valorCelda);
 
-                    // Asigno el DNI al TextBox de búsqueda
-                    historialControl.tBusquedaDNI.Text = dni.ToString();
+                HistorialClinicoControl historialControl = new HistorialClinicoControl();
+                historialControl.AbrirOtroControl += this.AbrirOtroControl;
+                historialControl.ControlPadre = this;
 
-                    // Si querés que cargue automáticamente el historial:
-                    // historialControl.CargarHistorialPorDNI(dni);
+                // Pasamos el DNI al historial
+                historialControl.dniInicial = dniPaciente;
 
-                    // Conecto los mismos eventos y referencias que usás en los otros casos
-                    historialControl.AbrirOtroControl += this.AbrirOtroControl;
-                    historialControl.ControlPadre = this;
-
-                    // Lanzo el evento para que el contenedor cambie de vista
-                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(dni, historialControl, true));
-                }*/
-
+                AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(dniPaciente, historialControl, true));
             }
         }
 

@@ -25,6 +25,7 @@ namespace proyecto_Villarreal_SanLorenzo
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
 
         public PacientesControl ControlPadre;
+        public int? dniInicial = null;
 
         public HistorialClinicoControl()
         {
@@ -36,6 +37,12 @@ namespace proyecto_Villarreal_SanLorenzo
         {
             PlaceholderBusqueda(tBusquedaDNI, "Buscar por DNI...");
 
+            if (dniInicial.HasValue)
+            {
+                BuscarHistorialPorDni(dniInicial.Value);
+                return;
+            }
+
             //Se muestra el mensaje inicial
             panelContenedorRegistros.Controls.Clear();
             panelContenedorRegistros.Controls.Add(CrearPanelMensaje("Ingrese un DNI"));
@@ -44,10 +51,19 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public void tBusquedaDNI_KeyDown(object sender, KeyEventArgs e)//Funcion que permite la busqueda de los registros de un paciente por su DNI
         {
-            if (e.KeyCode != Keys.Enter) return;
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
 
-            e.Handled = true;
-            e.SuppressKeyPress = true;
+                if (int.TryParse(tBusquedaDNI.Text.Trim(), out int dni))
+                    BuscarHistorialPorDni(dni);
+            }
+        }
+
+        public void BuscarHistorialPorDni(int dniBusqueda)//Funcion complementaria para buscar los registros por dni
+        {
+            tBusquedaDNI.Text = dniBusqueda.ToString();
 
             string textoDNI = tBusquedaDNI.Text.Trim();
 
@@ -57,7 +73,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (!int.TryParse(textoDNI, out int dniBusqueda))
+            if (!int.TryParse(textoDNI, out int dni))
             {
                 MostrarMensaje("el DNI ingresado no es válido");
                 return;
@@ -70,13 +86,13 @@ namespace proyecto_Villarreal_SanLorenzo
                     db.Open();
 
                     string query = @"
-                                    SELECT dni_paciente, nombre_paciente, apellido_paciente
-                                    FROM Paciente
-                                    WHERE dni_paciente = @dni;";
+                SELECT dni_paciente, nombre_paciente, apellido_paciente
+                FROM Paciente
+                WHERE dni_paciente = @dni;";
 
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
-                        cmd.Parameters.AddWithValue("@dni", dniBusqueda);
+                        cmd.Parameters.AddWithValue("@dni", dni);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -94,7 +110,6 @@ namespace proyecto_Villarreal_SanLorenzo
                                 string nombre = reader["nombre_paciente"].ToString();
                                 string apellido = reader["apellido_paciente"].ToString();
 
-                                // encabezado
                                 Label lblPaciente = new Label();
                                 lblPaciente.Text = $"{apellido}, {nombre} (DNI: {dniPaciente})";
                                 lblPaciente.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
@@ -102,7 +117,6 @@ namespace proyecto_Villarreal_SanLorenzo
                                 lblPaciente.Margin = new Padding(6, 12, 6, 4);
                                 panelContenedorRegistros.Controls.Add(lblPaciente);
 
-                                // cargar historiales
                                 CargarHistoriales(dniPaciente);
                             }
 
