@@ -25,6 +25,7 @@ namespace proyecto_Villarreal_SanLorenzo
         public AgregarRegistroControl(int p_dni, int p_historial, int p_registro)
         {
             InitializeComponent();
+
             lDosis.Visible = false;
             tDosis.Visible = false;
             this.dni = p_dni;
@@ -229,7 +230,12 @@ namespace proyecto_Villarreal_SanLorenzo
                                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     if (controlPadreRegistro is HistorialClinicoControl historialControl)
-                        historialControl.CargarHistoriales(this.dni);
+                    {
+                        historialControl.CargarHistoriales(this.dni, nuevoIdRegistro);
+                    }
+
+                    // Volver a la vista anterior
+                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
                 }
             }
             catch (Exception ex)

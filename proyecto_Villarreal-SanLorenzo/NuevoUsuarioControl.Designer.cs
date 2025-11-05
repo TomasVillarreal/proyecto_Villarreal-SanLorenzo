@@ -56,6 +56,7 @@
             lErrorConfirmPass = new Label();
             lErrorPass = new Label();
             bRegistrarUsuario = new Button();
+            bAtras = new Button();
             flowLayoutPanel8.SuspendLayout();
             flowLayoutPanel9.SuspendLayout();
             SuspendLayout();
@@ -374,10 +375,24 @@
             bRegistrarUsuario.UseVisualStyleBackColor = false;
             bRegistrarUsuario.Click += bRegistrarUsuario_Click;
             // 
+            // bAtras
+            // 
+            bAtras.BackColor = Color.Transparent;
+            bAtras.ForeColor = Color.Black;
+            bAtras.Image = Resource1.flecha_izq;
+            bAtras.Location = new Point(793, 35);
+            bAtras.Margin = new Padding(3, 4, 3, 4);
+            bAtras.Name = "bAtras";
+            bAtras.Size = new Size(41, 41);
+            bAtras.TabIndex = 51;
+            bAtras.UseVisualStyleBackColor = false;
+            bAtras.Click += bAtras_Click;
+            // 
             // NuevoUsuarioControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(bAtras);
             Controls.Add(bRegistrarUsuario);
             Controls.Add(lErrorConfirmPass);
             Controls.Add(lErrorPass);
@@ -442,5 +457,6 @@
         private Label lErrorConfirmPass;
         private Label lErrorPass;
         private Button bRegistrarUsuario;
+        private Button bAtras;
     }
 }

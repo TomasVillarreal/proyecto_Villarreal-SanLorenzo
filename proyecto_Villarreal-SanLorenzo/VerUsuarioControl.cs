@@ -22,7 +22,7 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
             ObtenerRegistro();
         }
-        private void ObtenerRegistro()//Metodo que carga los datos de los usuarios ya registrados
+        public void ObtenerRegistro()//Metodo que carga los datos de los usuarios ya registrados
         {
             string connectionString = "Data Source=localhost;Initial Catalog=proyecto_Villarreal_SanLorenzo;Integrated Security=True;TrustServerCertificate=True;";
 

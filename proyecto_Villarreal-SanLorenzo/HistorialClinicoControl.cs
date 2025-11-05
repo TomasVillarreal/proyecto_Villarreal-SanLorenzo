@@ -31,6 +31,7 @@ namespace proyecto_Villarreal_SanLorenzo
             InitializeComponent();
         }
 
+
         private void HistorialClinicoControl_Load(object sender, EventArgs e)
         {
             PlaceholderBusqueda(tBusquedaDNI, "Buscar por DNI...");
@@ -116,7 +117,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        public void CargarHistoriales(int p_dniPaciente)//Método que carga los registros del paciente
+        public void CargarHistoriales(int p_dniPaciente, int id_registro_resaltado = -1)//Método que carga los registros del paciente
         {
             try
             {
