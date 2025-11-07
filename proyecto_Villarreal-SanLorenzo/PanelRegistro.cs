@@ -248,25 +248,28 @@ namespace proyecto_Villarreal_SanLorenzo
             return (nombreCompleto, dniPaciente);
         }
 
-        private string ObtenerFecha()//Obtiene la fecha en la que se registró por 1era vez al paciente en el sistema
+        private string ObtenerFecha() // Obtiene la fecha real del registro
         {
             string fecha = "";
             using (SqlConnection db = new SqlConnection(connectionString))
             {
-                string query = "SELECT fecha_creacion_registro " +
-                    "FROM Paciente WHERE dni_paciente = @dni";
+                string query = @"
+            SELECT fecha_registro
+            FROM Registro
+            WHERE id_registro = @idRegistro;
+        ";
+
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {
-                    cmd.Parameters.AddWithValue("@dni", this.dni);
+                    cmd.Parameters.AddWithValue("@idRegistro", this.registro);
                     db.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read()) // avanza al primer registro
+                    var result = cmd.ExecuteScalar();
+
+                    if (result != null && DateTime.TryParse(result.ToString(), out DateTime fechaDT))
                     {
-                        DateTime fechaDT = (DateTime)reader["fecha_creacion_registro"];
                         fecha = fechaDT.ToString("dd/MM/yyyy");
                     }
                 }
-                db.Close();
             }
             return fecha;
         }

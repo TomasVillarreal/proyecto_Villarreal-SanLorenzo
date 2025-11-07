@@ -381,6 +381,206 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
+
+        private void bPdfRegistros_Click(object sender, EventArgs e)//Boton que crea el pdf y la ruta donde se guarda
+        {
+            string textoDNI = tBusquedaDNI.Text.Trim();
+
+            if (string.IsNullOrEmpty(textoDNI))
+            {
+                MessageBox.Show("Debe ingresar el DNI del paciente antes de descargar el PDF.",
+                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!int.TryParse(textoDNI, out int dniBusqueda))
+            {
+                MessageBox.Show("El DNI ingresado no es válido.",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Obtener los registros del paciente
+            List<Registro> registros = ObtenerRegistrosPaciente(dniBusqueda);
+
+            if (registros == null || registros.Count == 0)
+            {
+                MessageBox.Show("No hay registros para este paciente.",
+                                "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Crear carpeta "Historiales" en el escritorio si no existe
+            string escritorioPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string carpetaHistoriales = Path.Combine(escritorioPath, "Historiales");
+
+            if (!Directory.Exists(carpetaHistoriales))
+            {
+                Directory.CreateDirectory(carpetaHistoriales);
+            }
+
+            // Ruta por defecto del archivo PDF
+            string rutaPorDefecto = Path.Combine(carpetaHistoriales, $"Historial_{dniBusqueda}.pdf");
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Archivos PDF (*.pdf)|*.pdf";
+                sfd.FileName = Path.GetFileName(rutaPorDefecto); // solo el nombre del archivo
+                sfd.InitialDirectory = carpetaHistoriales; // carpeta por defecto en el escritorio
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        GenerarPDFPaciente(dniBusqueda, registros, sfd.FileName);
+                        MessageBox.Show($"El PDF se generó correctamente",
+                                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al generar el PDF: " + ex.Message,
+                                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void GenerarPDFPaciente(int dni, List<Registro> registros, string rutaArchivo)//Funcion que genera el pdf con los registros del paciente en un pdf
+        {
+            if (registros == null || registros.Count == 0)
+                return;
+
+            iTextSharp.text.Document document = new iTextSharp.text.Document(PageSize.A4, 50, 50, 50, 50);
+            using (FileStream fs = new FileStream(rutaArchivo, FileMode.Create))
+            {
+                PdfWriter.GetInstance(document, fs);
+                document.Open();
+
+                //fuentes para los titulos, el texto
+                var tituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+                var subtituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.DARK_GRAY);
+                var textoFont = FontFactory.GetFont(FontFactory.HELVETICA, 11, BaseColor.BLACK);
+                var lineaFont = FontFactory.GetFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+
+                Registro primerRegistro = registros[0];
+
+                //El encabezado del PDf
+                Paragraph titulo = new Paragraph("CLINICKS - HISTORIAL CLÍNICO DEL PACIENTE\n\n", tituloFont);
+                titulo.Alignment = Element.ALIGN_CENTER;
+                document.Add(titulo);
+
+                PdfPTable tablaPaciente = new PdfPTable(2);
+                tablaPaciente.WidthPercentage = 100;
+                tablaPaciente.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+
+                tablaPaciente.AddCell(new Phrase($"Paciente: {primerRegistro.NombrePaciente}", textoFont));
+                tablaPaciente.AddCell(new Phrase($"DNI: {primerRegistro.DniPaciente}", textoFont));
+                tablaPaciente.AddCell(new Phrase($"Fecha de generación: {DateTime.Now:dd/MM/yyyy}", textoFont));
+                tablaPaciente.AddCell(new Phrase(""));
+                document.Add(tablaPaciente);
+
+                document.Add(new Paragraph("\n------------------------------------------------------------\n", lineaFont));
+
+                //Se cargan los registros
+                foreach (var reg in registros)
+                {
+                    Paragraph tipo = new Paragraph($"{reg.TipoRegistro}", subtituloFont);
+                    tipo.SpacingBefore = 8;
+                    document.Add(tipo);
+
+                    document.Add(new Paragraph($"Fecha: {reg.Fecha:dd/MM/yyyy}", textoFont));
+                    document.Add(new Paragraph($"Profesional: {reg.Profesional}", textoFont));
+                    document.Add(new Paragraph($"Medicación: {reg.Medicacion}", textoFont));
+                    document.Add(new Paragraph($"Observaciones: {reg.Observaciones}", textoFont));
+                    document.Add(new Paragraph("------------------------------------------------------------", lineaFont));
+                }
+
+                document.Close();
+            }
+        }
+
+        // Clase auxiliar para obtener los datos de los registros
+        public class Registro
+        {
+            public string TipoRegistro { get; set; }
+            public DateTime Fecha { get; set; }
+            public string Observaciones { get; set; }
+            public string Medicacion { get; set; }
+            public string Profesional { get; set; }
+            public string NombrePaciente { get; set; }
+            public string DniPaciente { get; set; }
+        }
+
+        // Obtiene toda la información del paciente y sus registros
+        private List<Registro> ObtenerRegistrosPaciente(int dniPaciente)//Funcion que obtiene los registros de los pacientes 
+        {
+            List<Registro> registros = new List<Registro>();
+
+            string query = @"
+                            SELECT 
+                                (p.nombre_paciente + ' ' + p.apellido_paciente) AS NombreCompletoPaciente, 
+                                p.dni_paciente AS DniPaciente,
+                                tr.nombre_registro AS TipoRegistro,
+                                r.fecha_registro AS Fecha,
+                                r.observaciones AS Observaciones,
+                                ISNULL(m.nombre_medicacion, 'Ninguna') AS Medicacion,
+
+                                (CASE 
+                                    WHEN rl.nombre_rol = 'Medico' THEN 'Dr. '
+                                    WHEN rl.nombre_rol = 'Enfermero' THEN 'Enf. '
+                                    ELSE ''
+                                 END
+                                     + u.nombre_usuario + ' ' + u.apellido_usuario
+                                     + CASE 
+                                            WHEN e.nombre_especialidad IS NOT NULL THEN ' (' + e.nombre_especialidad + ')'
+                                            ELSE ''
+                                       END
+                                ) AS Profesional
+
+                            FROM Registro r
+                            INNER JOIN Paciente p ON r.dni_paciente = p.dni_paciente
+                            INNER JOIN Tipo_registro tr ON r.id_tipo_registro = tr.id_tipo_registro
+                            LEFT JOIN Registro_medicacion rm ON r.id_registro = rm.id_registro
+                            LEFT JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
+                            INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
+                            INNER JOIN Usuario_rol ur ON u.id_usuario = ur.id_usuario
+                            INNER JOIN Rol rl ON ur.id_rol = rl.id_rol
+                            LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
+                            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
+
+                            WHERE p.dni_paciente = @dni
+                            ORDER BY r.fecha_registro DESC;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@dni", dniPaciente);
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Registro registro = new Registro
+                    {
+                        NombrePaciente = reader["NombreCompletoPaciente"].ToString(),
+                        DniPaciente = reader["DniPaciente"].ToString(),
+                        TipoRegistro = reader["TipoRegistro"].ToString(),
+                        Fecha = Convert.ToDateTime(reader["Fecha"]),
+                        Observaciones = reader["Observaciones"].ToString(),
+                        Medicacion = reader["Medicacion"].ToString(),
+                        Profesional = reader["Profesional"].ToString(),
+                    };
+
+                    registros.Add(registro);
+                }
+
+                reader.Close();
+            }
+
+            return registros;
+        }
+
         //Funcion Tomi
         /*public HistorialClinicoControl(int p_dni)
         {
@@ -457,194 +657,5 @@ namespace proyecto_Villarreal_SanLorenzo
                 MostrarMensaje("error al cargar el historial clínico: " + ex.Message);
             }
         }*/
-
-
-        private void bPdfRegistros_Click(object sender, EventArgs e)
-        {
-            string textoDNI = tBusquedaDNI.Text.Trim();
-
-            if (string.IsNullOrEmpty(textoDNI))
-            {
-                MessageBox.Show("Debe ingresar el DNI del paciente antes de descargar el PDF.",
-                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!int.TryParse(textoDNI, out int dniBusqueda))
-            {
-                MessageBox.Show("El DNI ingresado no es válido.",
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Obtener los registros del paciente
-            List<Registro> registros = ObtenerRegistrosPaciente(dniBusqueda);
-
-            if (registros == null || registros.Count == 0)
-            {
-                MessageBox.Show("No hay registros para este paciente.",
-                                "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Crear carpeta "Historiales" en el escritorio si no existe
-            string escritorioPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string carpetaHistoriales = Path.Combine(escritorioPath, "Historiales");
-
-            if (!Directory.Exists(carpetaHistoriales))
-            {
-                Directory.CreateDirectory(carpetaHistoriales);
-            }
-
-            // Ruta por defecto del archivo PDF
-            string rutaPorDefecto = Path.Combine(carpetaHistoriales, $"Historial_{dniBusqueda}.pdf");
-
-            using (SaveFileDialog sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "Archivos PDF (*.pdf)|*.pdf";
-                sfd.FileName = Path.GetFileName(rutaPorDefecto); // solo el nombre del archivo
-                sfd.InitialDirectory = carpetaHistoriales; // carpeta por defecto en el escritorio
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        GenerarPDFPaciente(dniBusqueda, registros, sfd.FileName);
-                        MessageBox.Show($"El PDF se generó correctamente",
-                                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al generar el PDF: " + ex.Message,
-                                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-        }
-
-        private void GenerarPDFPaciente(int dni, List<Registro> registros, string rutaArchivo)
-        {
-            if (registros == null || registros.Count == 0)
-                return;
-
-            iTextSharp.text.Document document = new iTextSharp.text.Document(PageSize.A4, 50, 50, 50, 50);
-            using (FileStream fs = new FileStream(rutaArchivo, FileMode.Create))
-            {
-                PdfWriter.GetInstance(document, fs);
-                document.Open();
-
-                //fuentes para los titulos, el texto
-                var tituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
-                var subtituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.DARK_GRAY);
-                var textoFont = FontFactory.GetFont(FontFactory.HELVETICA, 11, BaseColor.BLACK);
-                var lineaFont = FontFactory.GetFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
-
-                Registro primerRegistro = registros[0];
-
-                //El encabezado del PDf
-                Paragraph titulo = new Paragraph("CLINICKS - HISTORIAL CLÍNICO DEL PACIENTE\n\n", tituloFont);
-                titulo.Alignment = Element.ALIGN_CENTER;
-                document.Add(titulo);
-
-                PdfPTable tablaPaciente = new PdfPTable(2);
-                tablaPaciente.WidthPercentage = 100;
-                tablaPaciente.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
-
-                tablaPaciente.AddCell(new Phrase($"Paciente: {primerRegistro.NombrePaciente}", textoFont));
-                tablaPaciente.AddCell(new Phrase($"DNI: {primerRegistro.DniPaciente}", textoFont));
-                tablaPaciente.AddCell(new Phrase($"Fecha de generación: {DateTime.Now:dd/MM/yyyy}", textoFont));
-                tablaPaciente.AddCell(new Phrase(""));
-                document.Add(tablaPaciente);
-
-                document.Add(new Paragraph("\n------------------------------------------------------------\n", lineaFont));
-
-                //Se cargan los registros
-                foreach (var reg in registros)
-                {
-                    Paragraph tipo = new Paragraph($"{reg.TipoRegistro}", subtituloFont);
-                    tipo.SpacingBefore = 8;
-                    document.Add(tipo);
-
-                    document.Add(new Paragraph($"Fecha: {reg.Fecha:dd/MM/yyyy}", textoFont));
-                    document.Add(new Paragraph($"Profesional: {reg.Profesional}", textoFont));
-                    document.Add(new Paragraph($"Medicación: {reg.Medicacion}", textoFont));
-                    document.Add(new Paragraph($"Observaciones: {reg.Observaciones}", textoFont));
-                    document.Add(new Paragraph("------------------------------------------------------------", lineaFont));
-                }
-
-                document.Close();
-            }
-        }
-
-        // Clase auxiliar
-        public class Registro
-        {
-            public string TipoRegistro { get; set; }
-            public DateTime Fecha { get; set; }
-            public string Observaciones { get; set; }
-            public string Medicacion { get; set; }
-            public string Profesional { get; set; }
-            public string NombrePaciente { get; set; }
-            public string DniPaciente { get; set; }
-        }
-
-        // Obtiene toda la información del paciente y sus registros
-        private List<Registro> ObtenerRegistrosPaciente(int dniPaciente)
-        {
-            List<Registro> registros = new List<Registro>();
-
-            string query = @"
-                            SELECT 
-                                (p.nombre_paciente + ' ' + p.apellido_paciente) AS NombreCompletoPaciente, 
-                                p.dni_paciente AS DniPaciente,
-                                tr.nombre_registro AS TipoRegistro,
-                                r.fecha_registro AS Fecha,
-                                r.observaciones AS Observaciones,
-                                ISNULL(m.nombre_medicacion, 'Ninguna') AS Medicacion,
-                                (CASE 
-                                    WHEN e.nombre_especialidad LIKE '%Médic%' THEN 'Dr. '
-                                    WHEN e.nombre_especialidad LIKE '%Enfermer%' THEN 'Enf. '
-                                    ELSE ''
-                                 END + u.nombre_usuario + ' ' + u.apellido_usuario + ' - ' + ISNULL(e.nombre_especialidad, 'Sin especialidad')) AS Profesional
-                            FROM Registro r
-                            INNER JOIN Paciente p ON r.dni_paciente = p.dni_paciente
-                            INNER JOIN Tipo_registro tr ON r.id_tipo_registro = tr.id_tipo_registro
-                            LEFT JOIN Registro_medicacion rm ON r.id_registro = rm.id_registro
-                            LEFT JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
-                            INNER JOIN Usuarios u ON r.id_usuario = u.id_usuario
-                            LEFT JOIN Usuario_especialidad ue ON u.id_usuario = ue.id_usuario
-                            LEFT JOIN Especialidades e ON ue.id_especialidad = e.id_especialidad
-                            WHERE p.dni_paciente = @dni
-                            ORDER BY r.fecha_registro DESC;";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@dni", dniPaciente);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Registro registro = new Registro
-                    {
-                        NombrePaciente = reader["NombreCompletoPaciente"].ToString(),
-                        DniPaciente = reader["DniPaciente"].ToString(),
-                        TipoRegistro = reader["TipoRegistro"].ToString(),
-                        Fecha = Convert.ToDateTime(reader["Fecha"]),
-                        Observaciones = reader["Observaciones"].ToString(),
-                        Medicacion = reader["Medicacion"].ToString(),
-                    };
-
-                    registros.Add(registro);
-                }
-
-                reader.Close();
-            }
-
-            return registros;
-        }
-
     }
 }

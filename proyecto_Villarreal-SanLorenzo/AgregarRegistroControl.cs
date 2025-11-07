@@ -179,17 +179,17 @@ namespace proyecto_Villarreal_SanLorenzo
                 {
                     db.Open();
 
-                    // 1️⃣ Insertar registro
+                    // Insertar registro
                     string insertRegistro = @"
-                                        INSERT INTO Registro (id_historial, dni_paciente, id_tipo_registro, id_usuario, id_especialidad, fecha_registro, observaciones)
-                                        OUTPUT INSERTED.id_registro
-                                        VALUES (@idHistorial, @dni,
-                                            (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
-                                            @idUsuario,
-                                            (SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @especialidad),
-                                            @fecha,
-                                            @obs
-                                        );";
+                                            INSERT INTO Registro (id_historial, dni_paciente, id_tipo_registro, id_usuario, id_especialidad, fecha_registro, observaciones)
+                                            OUTPUT INSERTED.id_registro
+                                            VALUES (@idHistorial, @dni,
+                                                (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
+                                                @idUsuario,
+                                                (SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @especialidad),
+                                                GETDATE(),
+                                                @obs
+                                            );";
 
                     int nuevoIdRegistro;
 
@@ -200,13 +200,12 @@ namespace proyecto_Villarreal_SanLorenzo
                         cmd.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
                         cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
                         cmd.Parameters.AddWithValue("@especialidad", especialidad);
-                        cmd.Parameters.AddWithValue("@fecha", fecha);
                         cmd.Parameters.AddWithValue("@obs", observaciones);
 
                         nuevoIdRegistro = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
-                    // 2️⃣ Insertar medicación si corresponde
+                    // Insertar medicación si corresponde
                     if (!string.IsNullOrEmpty(medicacionSeleccionada) && medicacionSeleccionada.ToLower() != "(ninguna)")
                     {
                         string insertMedicacion = @"
