@@ -86,7 +86,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void RegistrarUsuario()
+        private void RegistrarUsuario()//Funcion que carga los datos del nuevo usuario
         {
             int? especialidad = null;//Se define una variable que puede ser nula (algunos usuarios no tendran especialidad)
             Dictionary<string, object> diccionario = CrearDiccionario();
@@ -108,7 +108,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (comboBoxEsp.SelectedValue != null && comboBoxEsp.SelectedValue != DBNull.Value)
+            if (comboBoxEsp.SelectedValue != null && comboBoxEsp.SelectedValue != DBNull.Value && comboBoxEsp.SelectedValue != "Sin especialidad")
             {
                 especialidad = Convert.ToInt32(comboBoxEsp.SelectedValue);
             }
@@ -132,7 +132,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        public void bRegistrarUsuario_Click(object sender, EventArgs e)
+        public void bRegistrarUsuario_Click(object sender, EventArgs e)//Funcion del boton que llama a la funcion encargada de registrar el nuevo usuario
         {
             Dictionary<string, object> diccionario = CrearDiccionario();
             if (DetectarErrores(diccionario))
@@ -318,7 +318,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 //Fila nula para usuarios sin especialidad
                 DataRow filaVacia = dataTable.NewRow();
                 filaVacia["id_especialidad"] = DBNull.Value;
-                filaVacia["nombre_especialidad"] = "-- Sin especialidad --";
+                filaVacia["nombre_especialidad"] = "Sin especialidad";
                 dataTable.Rows.InsertAt(filaVacia, 0);
 
                 comboBoxEsp.DataSource = dataTable;
@@ -372,8 +372,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             return true;
-        }//Valid que los combobox esten completos
-
+        }//Validar que los combobox esten completos
 
         //Metodos que ocultan/muestran la contraseña
         private void TogglePassword(TextBox textBox, Button button, ref bool visible)
@@ -391,11 +390,11 @@ namespace proyecto_Villarreal_SanLorenzo
                 visible = true;
             }
         }
-        private void bMostrarPass1_Click(object sender, EventArgs e)
+        private void bMostrarPass1_Click(object sender, EventArgs e)//Funcion que mediante un click en el boton, muestra o deja de mostrar la contraseña
         {
             TogglePassword(tbPassUsuario, bMostrarPass1, ref passVisible1);
         }
-        private void bMostrarConfPass2_Click(object sender, EventArgs e)
+        private void bMostrarConfPass2_Click(object sender, EventArgs e)//Funcion que mediante un click en el boton, muestra o deja de mostrar la contraseña
         {
             TogglePassword(tbConfirmPass, bMostrarConfPass2, ref passVisible2);
         }
@@ -520,7 +519,7 @@ namespace proyecto_Villarreal_SanLorenzo
             return todoBien;
         }
 
-        private void bAtras_Click(object sender, EventArgs e)
+        private void bAtras_Click(object sender, EventArgs e)//Funcion que permite volver a la vista que lo llamó
         {
             // Volvemos al control que nos llamo.
             VerUsuarioControl verUsuario = new VerUsuarioControl();

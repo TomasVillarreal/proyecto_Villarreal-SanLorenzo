@@ -164,7 +164,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void EditarUsuario()
+        private void EditarUsuario()//Funcion que edita la informacion de los usuarios
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
@@ -251,7 +251,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void EliminarUsuario()
+        private void EliminarUsuario()//Funcion que permite eliminar a un usuario seleccionado
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
@@ -301,7 +301,7 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
-        private void ReactivarUsuario()
+        private void ReactivarUsuario()//Funcion que permite reactivar a un usuario eliminado, seteeando su columna de activo = 1 nuevamente
         {
             if (dataGridViewUsuarios.CurrentRow != null)
             {
