@@ -684,8 +684,8 @@ namespace proyecto_Villarreal_SanLorenzo
                     // Se ejecuta la query y se obtiene la cantidad y el periodo al cual representan
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
-                        cmd.Parameters.AddWithValue("@inicio", inicio);
-                        cmd.Parameters.AddWithValue("@fin", fin);
+                        cmd.Parameters.Add("@inicio", SqlDbType.DateTime).Value = inicio;
+                        cmd.Parameters.Add("@fin", SqlDbType.DateTime).Value = fin;
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())

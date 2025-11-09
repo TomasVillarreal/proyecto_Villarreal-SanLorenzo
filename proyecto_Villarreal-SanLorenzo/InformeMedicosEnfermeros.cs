@@ -339,13 +339,10 @@ namespace proyecto_Villarreal_SanLorenzo
                     break;
                 // Si la opcion elegida es la de hace un mes:
                 case "Ultimo mes":
-                    // Obtener el primer día del mes anterior
-                    var inicioMesAnterior = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(-1);
-                    // Obtener el último día del mes anterior (día anterior al primer día del mes actual)
-                    var finMesAnterior = new DateTime(hoy.Year, hoy.Month, 1).AddDays(-1).AddDays(1).AddSeconds(-1);
-
-                    fecha_inicio = inicioMesAnterior;
-                    fecha_fin = finMesAnterior;
+                    // Hago que la fecha inicio sea exactamente un mes atras al de hoy
+                    fecha_inicio = hoy.AddMonths(-1).Date;
+                    // Hago que la fecha fin sea hoy hasta las 23:59:59
+                    fecha_fin = hoy.AddDays(1).AddSeconds(-1);
                     break;
                 // Si la opcion elegida es la de hace un año:
                 case "Ultimo año":
