@@ -196,6 +196,7 @@
             comboBoxMedicacion.Size = new Size(756, 28);
             comboBoxMedicacion.TabIndex = 40;
             comboBoxMedicacion.SelectedIndexChanged += comboBoxMedicacion_SelectedIndexChanged;
+            comboBoxMedicacion.TextChanged += comboBoxMedicacion_TextChanged;
             // 
             // lErrorMedicacion
             // 
