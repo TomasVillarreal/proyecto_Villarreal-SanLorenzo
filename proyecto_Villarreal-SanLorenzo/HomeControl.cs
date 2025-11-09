@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -178,6 +179,8 @@ namespace proyecto_Villarreal_SanLorenzo
             }
         }
 
+        
+
         // Funcion que cumple la misma tarea que la de pacientes, solo que esta carga
         // los registros recientes (en la ultima semana)
         private void CrearRegistrosRecientes()
@@ -188,7 +191,6 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
-                    // Se crea la query para contar las filas
                     string queryNroPacientes = "SELECT dni_paciente, id_registro, id_historial FROM Registro " +
                         "WHERE fecha_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_registro <= GETDATE();";
 
@@ -200,12 +202,30 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             while (reader.Read())
                             {
-                                filaPaciente = new FilasUltimaActividad
-                                    (Convert.ToInt32(reader["dni_paciente"]), 
-                                        Convert.ToInt32(reader["id_registro"]), 
-                                        Convert.ToInt32(reader["id_historial"]), 
-                                        false
-                                     );
+                                // Obtengo los datos de la query
+                                int dni = Convert.ToInt32(reader["dni_paciente"]);
+                                int registro = Convert.ToInt32(reader["id_registro"]);
+                                int historial = Convert.ToInt32(reader["id_historial"]);
+
+                                // Creo una nueva fila a colocar
+                                filaPaciente = new FilasUltimaActividad(dni, registro, historial, false);
+
+                                // Y le añado el evento q ocurrira cuando se haga click
+                                filaPaciente.ClickFila += (s, e) =>
+                                {
+
+                                    // Creo el uc de pacientes, le asigno el mismo eventhandler que este uc, y lo invoco
+                                    HistorialClinicoControl historialControl = new HistorialClinicoControl();
+                                    historialControl.AbrirOtroControl += this.AbrirOtroControl;
+                                    historialControl.ControlPadre = null;
+
+                                    // Pasamos el DNI al historial
+                                    historialControl.dniInicial = dni;
+                                    historialControl.registroInicial = registro;
+                                    historialControl.historialInicial = historial;
+
+                                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, historialControl, false));
+                                };
                                 panelContenedorRegistros.Controls.Add(filaPaciente);
                             }
                         }

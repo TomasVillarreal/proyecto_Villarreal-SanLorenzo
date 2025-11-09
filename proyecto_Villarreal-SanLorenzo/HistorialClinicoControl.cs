@@ -26,6 +26,9 @@ namespace proyecto_Villarreal_SanLorenzo
 
         public PacientesControl ControlPadre;
         public int? dniInicial = null;
+        public int? registroInicial = null;
+        public int? historialInicial = null;
+        private PanelRegistro panelResaltadoActual = null;
 
         public HistorialClinicoControl()
         {
@@ -33,13 +36,20 @@ namespace proyecto_Villarreal_SanLorenzo
         }
 
 
+
         private void HistorialClinicoControl_Load(object sender, EventArgs e)
         {
             PlaceholderBusqueda(tBusquedaDNI, "Buscar por DNI...");
 
-            if (dniInicial.HasValue)
+            if (dniInicial.HasValue && !registroInicial.HasValue && !historialInicial.HasValue)
             {
                 BuscarHistorialPorDni(dniInicial.Value);
+                return;
+            }
+            if (dniInicial.HasValue && registroInicial.HasValue && historialInicial.HasValue)
+            {
+                BuscarHistorialPorDni(dniInicial.Value);
+                ResaltarRegistro(historialInicial.Value, registroInicial.Value, dniInicial.Value);
                 return;
             }
 
@@ -579,6 +589,41 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             return registros;
+        }
+
+        public void ResaltarRegistro(int historial, int registro, int dni)
+        {
+                // Recorremos los controles del contenedor buscando el PanelRegistro correspondiente
+                foreach (Control ctrl in panelContenedorRegistros.Controls)
+                {
+                    if (ctrl is PanelRegistro panel)
+                    {
+                        // Si este panel corresponde al registro buscado
+                        if (panel.registro == registro && panel.dni == dni && panel.historial == historial)
+                        {
+                            // Si hay un panel previamente resaltado, restauramos su color original
+                            if (panelResaltadoActual != null && panelResaltadoActual != panel)
+                            {
+                                panelResaltadoActual.BackColor = SystemColors.Control;
+                            }
+
+                            // Cambiamos color de fondo para resaltar
+                            panel.BackColor = Color.FromArgb(255, 255, 200); // Amarillo claro, visible pero no agresivo
+
+                            // Guardamos referencia del resaltado actual
+                            panelResaltadoActual = panel;
+
+                            // Desplazamos el contenedor para que quede visible en el medio de la pantalla
+                            if (panelContenedorRegistros is ScrollableControl scrollable)
+                            {
+                                int yObjetivo = Math.Max(0, panel.Top - scrollable.ClientSize.Height / 2 + panel.Height / 2);
+                                scrollable.AutoScrollPosition = new Point(0, yObjetivo);
+                            }
+
+                            return;
+                        }
+                    }
+                }
         }
 
         //Funcion Tomi
