@@ -33,6 +33,11 @@ namespace proyecto_Villarreal_SanLorenzo
         public HistorialClinicoControl()
         {
             InitializeComponent();
+
+            if(SesionUsuario.RolActivo == "Medico" || SesionUsuario.RolActivo == "Enfermero" || SesionUsuario.RolActivo == "Gerente")
+            {
+                bAgregarRegistroPaciente.Visible = true;
+            }
         }
 
 

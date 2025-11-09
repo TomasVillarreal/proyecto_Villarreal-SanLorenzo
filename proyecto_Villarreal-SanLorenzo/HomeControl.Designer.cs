@@ -44,10 +44,12 @@
             lTituloPacientes = new Label();
             panelContenedorPacientes = new FlowLayoutPanel();
             pbPacientesRecientes = new PanelBordes();
+            panelDatos = new Panel();
             pbActividadReciente.SuspendLayout();
             panelBordes1.SuspendLayout();
             panelBordes2.SuspendLayout();
             pbPacientesRecientes.SuspendLayout();
+            panelDatos.SuspendLayout();
             SuspendLayout();
             // 
             // pbActividadReciente
@@ -56,7 +58,7 @@
             pbActividadReciente.Controls.Add(panelContenedorRegistros);
             pbActividadReciente.Controls.Add(lSubtituloConsultas);
             pbActividadReciente.Controls.Add(lTituloConsultas);
-            pbActividadReciente.Location = new Point(20, 263);
+            pbActividadReciente.Location = new Point(16, 136);
             pbActividadReciente.Name = "pbActividadReciente";
             pbActividadReciente.Size = new Size(355, 288);
             pbActividadReciente.TabIndex = 0;
@@ -120,7 +122,7 @@
             panelBordes1.BackColor = Color.White;
             panelBordes1.Controls.Add(lNumeroPacientesActivos);
             panelBordes1.Controls.Add(lPacientesActivos);
-            panelBordes1.Location = new Point(20, 115);
+            panelBordes1.Location = new Point(433, 3);
             panelBordes1.Name = "panelBordes1";
             panelBordes1.Size = new Size(312, 118);
             panelBordes1.TabIndex = 3;
@@ -153,7 +155,7 @@
             panelBordes2.BackColor = Color.White;
             panelBordes2.Controls.Add(lNroPromedioRegistros);
             panelBordes2.Controls.Add(lPromedioRegistros);
-            panelBordes2.Location = new Point(436, 115);
+            panelBordes2.Location = new Point(16, 3);
             panelBordes2.Name = "panelBordes2";
             panelBordes2.Size = new Size(312, 118);
             panelBordes2.TabIndex = 4;
@@ -222,21 +224,29 @@
             pbPacientesRecientes.Controls.Add(panelContenedorPacientes);
             pbPacientesRecientes.Controls.Add(lTituloPacientes);
             pbPacientesRecientes.Controls.Add(lSubtitloPacientes);
-            pbPacientesRecientes.Location = new Point(397, 263);
+            pbPacientesRecientes.Location = new Point(390, 136);
             pbPacientesRecientes.Name = "pbPacientesRecientes";
             pbPacientesRecientes.Size = new Size(355, 288);
             pbPacientesRecientes.TabIndex = 5;
+            // 
+            // panelDatos
+            // 
+            panelDatos.Controls.Add(panelBordes2);
+            panelDatos.Controls.Add(pbPacientesRecientes);
+            panelDatos.Controls.Add(panelBordes1);
+            panelDatos.Controls.Add(pbActividadReciente);
+            panelDatos.Location = new Point(3, 110);
+            panelDatos.Name = "panelDatos";
+            panelDatos.Size = new Size(762, 462);
+            panelDatos.TabIndex = 6;
             // 
             // HomeControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(pbPacientesRecientes);
-            Controls.Add(panelBordes2);
-            Controls.Add(panelBordes1);
+            Controls.Add(panelDatos);
             Controls.Add(lSubtituloDashboard);
             Controls.Add(lTituloDashboard);
-            Controls.Add(pbActividadReciente);
             Name = "HomeControl";
             Load += HomeControl_Load;
             pbActividadReciente.ResumeLayout(false);
@@ -247,6 +257,7 @@
             panelBordes2.PerformLayout();
             pbPacientesRecientes.ResumeLayout(false);
             pbPacientesRecientes.PerformLayout();
+            panelDatos.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -271,5 +282,6 @@
         private FlowLayoutPanel panelContenedorPacientes;
         private PanelBordes pbPacientesRecientes;
         private FlowLayoutPanel panelContenedorRegistros;
+        private Panel panelDatos;
     }
 }

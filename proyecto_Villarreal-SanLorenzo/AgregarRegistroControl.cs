@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static proyecto_Villarreal_SanLorenzo.HistorialClinicoControl;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -157,7 +158,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bGuardarRegistro_Click(object sender, EventArgs e)
         {
-
+            bool exito = false;
             Dictionary<string, object> diccionario = CrearDiccionario();
             if (DetectarErrores(diccionario))
             {
@@ -170,6 +171,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 {
                     MessageBox.Show("Debe completar las observaciones del registro.",
                                     "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    exito = false;
                     return;
                 }
 
@@ -231,14 +233,22 @@ namespace proyecto_Villarreal_SanLorenzo
 
                         MessageBox.Show("Registro agregado correctamente.",
                                         "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        exito = true;
 
-                        if (controlPadreRegistro is HistorialClinicoControl historialControl)
+                        if (exito)
                         {
-                            historialControl.CargarHistoriales(this.dni, nuevoIdRegistro);
-                        }
+                            // Creo el uc de pacientes, le asigno el mismo eventhandler que este uc, y lo invoco
+                            HistorialClinicoControl historialControl = new HistorialClinicoControl();
+                            historialControl.AbrirOtroControl += this.AbrirOtroControl;
+                            historialControl.ControlPadre = null;
 
-                        // Volver a la vista anterior
-                        AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
+                            // Pasamos el DNI al historial
+                            historialControl.dniInicial = dni;
+                            historialControl.registroInicial = nuevoIdRegistro;
+                            historialControl.historialInicial = idHistorial;
+
+                            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, historialControl, false));
+                        }
                     }
                 }
                 catch (Exception ex)

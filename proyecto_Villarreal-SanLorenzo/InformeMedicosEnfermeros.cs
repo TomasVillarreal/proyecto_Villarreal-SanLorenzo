@@ -383,7 +383,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     // Query donde obtendremos la fecha mas antigua
-                        string queryNroPacientes = "SELECT TOP 1  fecha_registro FROM Registro WHERE id_usuario = @usuario" +
+                        string queryNroPacientes = "SELECT TOP 1  fecha_registro FROM Registro WHERE id_usuario = @usuario " +
                         "ORDER BY fecha_registro ASC";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))

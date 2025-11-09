@@ -23,6 +23,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         int dni = 0;
         int idRegistroActual = 0;
+        int historial = 0;
 
 
         public EditarRegistroControl(int p_dni, int p_registro_actual = 0)
@@ -244,6 +245,7 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bGuardarCambios_Click(object sender, EventArgs e)//Funcion que mediante el click del boton, guarda los cambios del registro
         {
+            bool exito = false;
             Dictionary<string, object> diccionario = CrearDiccionario();
             if (DetectarErrores(diccionario))
             {
@@ -272,9 +274,30 @@ namespace proyecto_Villarreal_SanLorenzo
                             int filas = cmd.ExecuteNonQuery();
 
                             if (filas > 0)
+                            {
                                 MessageBox.Show("Cambios guardados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                exito = true;
+                            }
                             else
+                            {
                                 MessageBox.Show("No se realizaron cambios.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                exito = false;
+                            }
+                                
+                            if (exito)
+                            {
+                                // Creo el uc de pacientes, le asigno el mismo eventhandler que este uc, y lo invoco
+                                HistorialClinicoControl historialControl = new HistorialClinicoControl();
+                                historialControl.AbrirOtroControl += this.AbrirOtroControl;
+                                historialControl.ControlPadre = null;
+
+                                // Pasamos el DNI al historial
+                                historialControl.dniInicial = dni;
+                                historialControl.registroInicial = idRegistroActual;
+                                historialControl.historialInicial = historial;
+
+                                AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, historialControl, false));
+                            }
                         }
                     }
                 }
@@ -282,6 +305,7 @@ namespace proyecto_Villarreal_SanLorenzo
                 {
                     MessageBox.Show("Error al guardar los cambios: " + ex.Message,
                                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    exito = false;
                 }
             }
         }

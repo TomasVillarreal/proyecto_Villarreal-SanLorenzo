@@ -6,9 +6,11 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace proyecto_Villarreal_SanLorenzo
 {
@@ -22,6 +24,29 @@ namespace proyecto_Villarreal_SanLorenzo
         public HomeControl()
         {
             InitializeComponent();
+            if(SesionUsuario.RolActivo == "Medico" || SesionUsuario.RolActivo == "Enfermero" || 
+                SesionUsuario.RolActivo == "Administrativo" || SesionUsuario.RolActivo == "Gerente")
+            {
+                panelDatos.Visible = true;
+            } 
+            else
+            {
+                panelDatos.Visible = false;
+                Label labelAviso1 = new Label();
+                labelAviso1.Text = "Usted no podra ver los datos del sistema ni interactuar con este";
+                labelAviso1.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+                labelAviso1.Location = new Point(20, 122);
+                labelAviso1.AutoSize = true;
+
+                Label labelAviso2 = new Label();
+                labelAviso2.Text = "Por favor contactese con el gerente para que le otorgue permisos o le cambie de rol";
+                labelAviso2.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+                labelAviso2.Location = new Point(20, 154);
+                labelAviso2.AutoSize = true;
+
+                this.Controls.Add(labelAviso1);
+                this.Controls.Add(labelAviso2);
+            }
         }
 
         private void HomeControl_Load(object sender, EventArgs e)
@@ -134,7 +159,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     // Creo la query para que se me devuelva todos los pacientes creados en la ult semaan
                     string queryNroPacientes = "SELECT dni_paciente FROM Paciente " +
                         "WHERE fecha_creacion_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_creacion_registro <= GETDATE() " +
-                        "AND visible = 1;";
+                        "AND visible = 1 ORDER BY fecha_creacion_registro DESC;";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
@@ -192,7 +217,8 @@ namespace proyecto_Villarreal_SanLorenzo
                 using (SqlConnection db = new SqlConnection(connectionString))
                 {
                     string queryNroPacientes = "SELECT dni_paciente, id_registro, id_historial FROM Registro " +
-                        "WHERE fecha_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_registro <= GETDATE();";
+                        "WHERE fecha_registro >= DATEADD(DAY, -7, GETDATE()) AND fecha_registro <= GETDATE()" +
+                        " ORDER BY fecha_registro DESC;";
 
                     using (SqlCommand cmd = new SqlCommand(queryNroPacientes, db))
                     {
