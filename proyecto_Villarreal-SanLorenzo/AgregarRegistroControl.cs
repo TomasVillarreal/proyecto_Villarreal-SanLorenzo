@@ -164,7 +164,7 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 string observaciones = tObservaciones.Text.Trim();
                 string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
-                string tipoRegistro = comboBoxTipoRegistro.Text?.Trim(); // ✅ Ahora toma texto escrito o seleccionado
+                string tipoRegistro = comboBoxTipoRegistro.Text?.Trim();
                 DateTime fecha = DateTime.Now;
 
                 if (string.IsNullOrWhiteSpace(observaciones))
