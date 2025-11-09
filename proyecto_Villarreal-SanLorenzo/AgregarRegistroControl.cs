@@ -157,30 +157,34 @@ namespace proyecto_Villarreal_SanLorenzo
 
         private void bGuardarRegistro_Click(object sender, EventArgs e)
         {
-            string observaciones = tObservaciones.Text.Trim();
-            string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
-            string tipoRegistro = comboBoxTipoRegistro.SelectedItem?.ToString();
-            DateTime fecha = DateTime.Now;
 
-            if (string.IsNullOrWhiteSpace(observaciones))
+            Dictionary<string, object> diccionario = CrearDiccionario();
+            if (DetectarErrores(diccionario))
             {
-                MessageBox.Show("Debe completar las observaciones del registro.",
-                                "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                string observaciones = tObservaciones.Text.Trim();
+                string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
+                string tipoRegistro = comboBoxTipoRegistro.SelectedItem?.ToString();
+                DateTime fecha = DateTime.Now;
 
-            try
-            {
-                int idUsuario = SesionUsuario.id_usuario;
-                string especialidad = SesionUsuario.RolActivo ?? "Sin especialidad";
-                int idHistorial = ObtenerOCrearIdHistorialPorDni(this.dni);
-
-                using (SqlConnection db = new SqlConnection(connectionString))
+                if (string.IsNullOrWhiteSpace(observaciones))
                 {
-                    db.Open();
+                    MessageBox.Show("Debe completar las observaciones del registro.",
+                                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    // Insertar registro
-                    string insertRegistro = @"
+                try
+                {
+                    int idUsuario = SesionUsuario.id_usuario;
+                    string especialidad = SesionUsuario.RolActivo ?? "Sin especialidad";
+                    int idHistorial = ObtenerOCrearIdHistorialPorDni(this.dni);
+
+                    using (SqlConnection db = new SqlConnection(connectionString))
+                    {
+                        db.Open();
+
+                        // Insertar registro
+                        string insertRegistro = @"
                                             INSERT INTO Registro (id_historial, dni_paciente, id_tipo_registro, id_usuario, id_especialidad, fecha_registro, observaciones)
                                             OUTPUT INSERTED.id_registro
                                             VALUES (@idHistorial, @dni,
@@ -191,57 +195,60 @@ namespace proyecto_Villarreal_SanLorenzo
                                                 @obs
                                             );";
 
-                    int nuevoIdRegistro;
+                        int nuevoIdRegistro;
 
-                    using (SqlCommand cmd = new SqlCommand(insertRegistro, db))
-                    {
-                        cmd.Parameters.AddWithValue("@idHistorial", idHistorial);
-                        cmd.Parameters.AddWithValue("@dni", this.dni);
-                        cmd.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
-                        cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
-                        cmd.Parameters.AddWithValue("@especialidad", especialidad);
-                        cmd.Parameters.AddWithValue("@obs", observaciones);
+                        using (SqlCommand cmd = new SqlCommand(insertRegistro, db))
+                        {
+                            cmd.Parameters.AddWithValue("@idHistorial", idHistorial);
+                            cmd.Parameters.AddWithValue("@dni", this.dni);
+                            cmd.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
+                            cmd.Parameters.AddWithValue("@idUsuario", idUsuario);
+                            cmd.Parameters.AddWithValue("@especialidad", especialidad);
+                            cmd.Parameters.AddWithValue("@obs", observaciones);
 
-                        nuevoIdRegistro = Convert.ToInt32(cmd.ExecuteScalar());
-                    }
+                            nuevoIdRegistro = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
 
-                    // Insertar medicación si corresponde
-                    if (!string.IsNullOrEmpty(medicacionSeleccionada) && medicacionSeleccionada.ToLower() != "(ninguna)")
-                    {
-                        string insertMedicacion = @"
+                        // Insertar medicación si corresponde
+                        if (!string.IsNullOrEmpty(medicacionSeleccionada) && medicacionSeleccionada.ToLower() != "(ninguna)")
+                        {
+                            string insertMedicacion = @"
                                             INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion)
                                             VALUES (@idRegistro, @idHistorial, @dni, @idUsuario,
                                                 (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @nombreMed)
                                             );";
 
-                        using (SqlCommand cmdMed = new SqlCommand(insertMedicacion, db))
-                        {
-                            cmdMed.Parameters.AddWithValue("@idRegistro", nuevoIdRegistro);
-                            cmdMed.Parameters.AddWithValue("@idHistorial", idHistorial);
-                            cmdMed.Parameters.AddWithValue("@dni", this.dni);
-                            cmdMed.Parameters.AddWithValue("@idUsuario", idUsuario);
-                            cmdMed.Parameters.AddWithValue("@nombreMed", medicacionSeleccionada);
-                            cmdMed.ExecuteNonQuery();
+                            using (SqlCommand cmdMed = new SqlCommand(insertMedicacion, db))
+                            {
+                                cmdMed.Parameters.AddWithValue("@idRegistro", nuevoIdRegistro);
+                                cmdMed.Parameters.AddWithValue("@idHistorial", idHistorial);
+                                cmdMed.Parameters.AddWithValue("@dni", this.dni);
+                                cmdMed.Parameters.AddWithValue("@idUsuario", idUsuario);
+                                cmdMed.Parameters.AddWithValue("@nombreMed", medicacionSeleccionada);
+                                cmdMed.ExecuteNonQuery();
+                            }
                         }
+
+                        MessageBox.Show("Registro agregado correctamente.",
+                                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        if (controlPadreRegistro is HistorialClinicoControl historialControl)
+                        {
+                            historialControl.CargarHistoriales(this.dni, nuevoIdRegistro);
+                        }
+
+                        // Volver a la vista anterior
+                        AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
                     }
-
-                    MessageBox.Show("Registro agregado correctamente.",
-                                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    if (controlPadreRegistro is HistorialClinicoControl historialControl)
-                    {
-                        historialControl.CargarHistoriales(this.dni, nuevoIdRegistro);
-                    }
-
-                    // Volver a la vista anterior
-                    AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(0, this.controlPadreRegistro, false));
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al guardar el registro: " + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar el registro: " + ex.Message,
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
         }//Funcion que mediante un click en el boton, guarda el nuevo registro
 
         private void bAtras_Click(object sender, EventArgs e)//Funcion que permite volver a la vista anterior
@@ -303,6 +310,105 @@ namespace proyecto_Villarreal_SanLorenzo
                     return nuevoIdHistorial;
                 }
             }
+        }
+
+        // Funcion que crea un diccionario tal que sus claves seran los nombres de los distintos tipos de datos que se colocaron 
+        // en el usercontrol, y cuyos valores son efectivamente estos datos
+        private Dictionary<string, object> CrearDiccionario()
+        {
+            // Creo el diccionario, asigno las claves con los valores y lo devuelvo
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+
+            dic.Add("observaciones", tObservaciones.Text);
+            dic.Add("tipoRegistro", comboBoxTipoRegistro.Text);
+            dic.Add("medicacion", comboBoxMedicacion.Text);
+            dic.Add("dosis", tDosis.Text);
+
+            return dic;
+        }
+
+        /* Funcion que nos permite hacer dos cosas. La primera, devuelve un booleano basado en si hubo algun error
+         * en los datos ingresados en los textbox, dentro de las cosas permitidas. 
+         * La segunda, en base a si hubo estos errores, hace visible unos labels (anteriormente invisibles) y les 
+         * modifica el texto para poder mostrarle al usuario que cosas puso mal.
+        */
+        private bool DetectarErrores(Dictionary<string, object> dic)
+        {
+            // Booleano que luego se devolvera.
+            bool todoBien = true;
+
+            // Recorro uno a uno las claves del diccionario pasado como argumento
+            foreach (var clave in dic.Keys)
+            {
+                // Obtengo el valor que esta asociado en una clave del diccionario (en caso de que exista)
+                string valor = dic[clave]?.ToString() ?? "";
+                /* Creo un string que luego servira para poder acceder al label de error correspondiente
+                 * a dicho tipo de dato. Este string esta formado por la primera parte que corresponde al
+                 * formato del label "lError" y una segunda parte cuyo valor depende de la clave. Por ejemplo,
+                 * si la clave es 'nombre', lo que hago es capitalizar la primera letra, y le concateno esto
+                 * a la parte del formato, de tal forma que quede lErrorDni, tal que esto coincide con el 
+                 * nombre el cual se le puso al label invisible
+                 */
+                string lblErrorNombre = "lError" + char.ToUpper(clave[0]) + clave.Substring(1);
+
+                // Busco el label cuyo nombre coincide con el string creado arriba. El bool
+                // pasado como argumento sirve para ver si se quiere buscar sobre todos los controles hijo.
+                Control[] controles = this.Controls.Find(lblErrorNombre, true);
+                // Si el vector con controles esta vacio, o si no es un label, nos salteamos esta iteracion.
+                // En caso de que si sea un label, se le asigna el nombre de lblError.
+                if (controles.Length == 0 || !(controles[0] is Label lblError))
+                    continue;
+
+                /*
+                 * Colocamos la visibilidad del label error en falso, asi si se verifica mas de una vez
+                 * al registro este no queda visible por los intentos anteriores
+                 */
+                lblError.Visible = false;
+
+                // Si el valor esta vacio, mostramos mensaje de error en el label. Esto afecta a todos los tipos de dato.
+                if (string.IsNullOrWhiteSpace(valor))
+                {
+                    lblError.Visible = true;
+                    lblError.Text = "Por favor rellene este campo";
+                    todoBien = false;
+                }
+                else
+                {
+                    // Si el valor no esta vacio, verificamos que tipo de dato es y mostramos un dato diferente en cada caso
+                    switch (clave)
+                    {
+                        case "tipoRegistro":
+                            // Si tipoRegistro es una selección inválida (ej: item guía)
+                            if (valor == "Seleccione...")
+                            {
+                                lblError.Visible = true;
+                                lblError.Text = "Por favor seleccione un tipo de registro";
+                                todoBien = false;
+                            }
+                            break;
+
+                        case "medicacion":
+                            // En medicacion solo verificamos que no esté vacío porque es un combo predefinido
+                            break;
+
+                        case "dosis":
+                            // Si dosis no es numérica o no es mayor a cero
+                            if (!double.TryParse(valor, out double dosisNum) || dosisNum <= 0)
+                            {
+                                lblError.Visible = true;
+                                lblError.Text = "Por favor inserte una dosis válida (> 0)";
+                                todoBien = false;
+                            }
+                            break;
+
+                        case "observaciones":
+                            // Observaciones puede ser libre, no se aplica validación extra
+                            break;
+                    }
+                }
+            }
+
+            return todoBien;
         }
     }
 }
