@@ -18,6 +18,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private bool passVisible1 = false;
         private bool passVisible2 = false;
         public event EventHandler<AbrirEdicionEventArgs> AbrirOtroControl;
+        public VerUsuarioControl ControlPadre;
         public NuevoUsuarioControl()
         {
             InitializeComponent();
@@ -517,6 +518,14 @@ namespace proyecto_Villarreal_SanLorenzo
             }
 
             return todoBien;
+        }
+
+        private void bAtras_Click(object sender, EventArgs e)
+        {
+            // Volvemos al control que nos llamo.
+            VerUsuarioControl verUsuario = new VerUsuarioControl();
+            verUsuario.AbrirOtroControl += this.AbrirOtroControl;
+            AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, verUsuario, true));
         }
     }
 }

@@ -56,6 +56,7 @@
             lErrorConfirmPass = new Label();
             lErrorPass = new Label();
             bRegistrarUsuario = new Button();
+            bAtras = new Button();
             flowLayoutPanel8.SuspendLayout();
             flowLayoutPanel9.SuspendLayout();
             SuspendLayout();
@@ -65,9 +66,9 @@
             lEspecialidad.AccessibleRole = AccessibleRole.None;
             lEspecialidad.AutoSize = true;
             lEspecialidad.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lEspecialidad.Location = new Point(60, 410);
+            lEspecialidad.Location = new Point(69, 547);
             lEspecialidad.Name = "lEspecialidad";
-            lEspecialidad.Size = new Size(93, 20);
+            lEspecialidad.Size = new Size(117, 25);
             lEspecialidad.TabIndex = 28;
             lEspecialidad.Text = "Especialidad";
             lEspecialidad.TextAlign = ContentAlignment.MiddleCenter;
@@ -77,9 +78,9 @@
             lRol.AccessibleRole = AccessibleRole.None;
             lRol.AutoSize = true;
             lRol.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lRol.Location = new Point(60, 65);
+            lRol.Location = new Point(69, 87);
             lRol.Name = "lRol";
-            lRol.Size = new Size(31, 20);
+            lRol.Size = new Size(39, 25);
             lRol.TabIndex = 43;
             lRol.Text = "Rol";
             lRol.TextAlign = ContentAlignment.MiddleCenter;
@@ -89,9 +90,9 @@
             lConfirmPass.AccessibleRole = AccessibleRole.None;
             lConfirmPass.AutoSize = true;
             lConfirmPass.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lConfirmPass.Location = new Point(404, 331);
+            lConfirmPass.Location = new Point(462, 441);
             lConfirmPass.Name = "lConfirmPass";
-            lConfirmPass.Size = new Size(159, 20);
+            lConfirmPass.Size = new Size(201, 25);
             lConfirmPass.TabIndex = 33;
             lConfirmPass.Text = "Confirmar Contraseña";
             lConfirmPass.TextAlign = ContentAlignment.MiddleCenter;
@@ -101,9 +102,9 @@
             lPassUsuario.AccessibleRole = AccessibleRole.None;
             lPassUsuario.AutoSize = true;
             lPassUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lPassUsuario.Location = new Point(60, 331);
+            lPassUsuario.Location = new Point(69, 441);
             lPassUsuario.Name = "lPassUsuario";
-            lPassUsuario.Size = new Size(86, 20);
+            lPassUsuario.Size = new Size(109, 25);
             lPassUsuario.TabIndex = 34;
             lPassUsuario.Text = "Contraseña";
             lPassUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -113,9 +114,9 @@
             lTelefonoUsuario.AccessibleRole = AccessibleRole.None;
             lTelefonoUsuario.AutoSize = true;
             lTelefonoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTelefonoUsuario.Location = new Point(60, 263);
+            lTelefonoUsuario.Location = new Point(69, 351);
             lTelefonoUsuario.Name = "lTelefonoUsuario";
-            lTelefonoUsuario.Size = new Size(68, 20);
+            lTelefonoUsuario.Size = new Size(85, 25);
             lTelefonoUsuario.TabIndex = 31;
             lTelefonoUsuario.Text = "Telefono";
             lTelefonoUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -125,9 +126,9 @@
             lEmail.AccessibleRole = AccessibleRole.None;
             lEmail.AutoSize = true;
             lEmail.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lEmail.Location = new Point(60, 195);
+            lEmail.Location = new Point(69, 260);
             lEmail.Name = "lEmail";
-            lEmail.Size = new Size(46, 20);
+            lEmail.Size = new Size(59, 25);
             lEmail.TabIndex = 30;
             lEmail.Text = "Email";
             lEmail.TextAlign = ContentAlignment.MiddleCenter;
@@ -137,9 +138,9 @@
             lApellidoUsuario.AccessibleRole = AccessibleRole.None;
             lApellidoUsuario.AutoSize = true;
             lApellidoUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lApellidoUsuario.Location = new Point(404, 128);
+            lApellidoUsuario.Location = new Point(462, 171);
             lApellidoUsuario.Name = "lApellidoUsuario";
-            lApellidoUsuario.Size = new Size(66, 20);
+            lApellidoUsuario.Size = new Size(83, 25);
             lApellidoUsuario.TabIndex = 29;
             lApellidoUsuario.Text = "Apellido";
             lApellidoUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -149,9 +150,9 @@
             lNomUsuario.AccessibleRole = AccessibleRole.None;
             lNomUsuario.AutoSize = true;
             lNomUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lNomUsuario.Location = new Point(60, 128);
+            lNomUsuario.Location = new Point(69, 171);
             lNomUsuario.Name = "lNomUsuario";
-            lNomUsuario.Size = new Size(66, 20);
+            lNomUsuario.Size = new Size(83, 25);
             lNomUsuario.TabIndex = 32;
             lNomUsuario.Text = "Nombre";
             lNomUsuario.TextAlign = ContentAlignment.MiddleCenter;
@@ -160,9 +161,9 @@
             // 
             lTitulo1.AutoSize = true;
             lTitulo1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lTitulo1.Location = new Point(222, 15);
+            lTitulo1.Location = new Point(254, 20);
             lTitulo1.Name = "lTitulo1";
-            lTitulo1.Size = new Size(313, 25);
+            lTitulo1.Size = new Size(399, 32);
             lTitulo1.TabIndex = 16;
             lTitulo1.Text = "Ingrese los datos del nuevo usuario";
             lTitulo1.TextAlign = ContentAlignment.MiddleCenter;
@@ -171,10 +172,9 @@
             // 
             tbNomUsuario.Cursor = Cursors.Hand;
             tbNomUsuario.ForeColor = Color.Black;
-            tbNomUsuario.Location = new Point(60, 150);
-            tbNomUsuario.Margin = new Padding(3, 2, 3, 2);
+            tbNomUsuario.Location = new Point(69, 200);
             tbNomUsuario.Name = "tbNomUsuario";
-            tbNomUsuario.Size = new Size(288, 23);
+            tbNomUsuario.Size = new Size(329, 27);
             tbNomUsuario.TabIndex = 1;
             tbNomUsuario.KeyPress += tbNomUsuario_KeyPress;
             // 
@@ -183,31 +183,28 @@
             comboBoxEsp.ForeColor = Color.Black;
             comboBoxEsp.FormattingEnabled = true;
             comboBoxEsp.Items.AddRange(new object[] { "Clínica", "Obstetricia", "Pediatría", "Cardiología" });
-            comboBoxEsp.Location = new Point(60, 432);
-            comboBoxEsp.Margin = new Padding(3, 2, 3, 2);
+            comboBoxEsp.Location = new Point(69, 576);
             comboBoxEsp.Name = "comboBoxEsp";
-            comboBoxEsp.Size = new Size(288, 23);
+            comboBoxEsp.Size = new Size(329, 28);
             comboBoxEsp.TabIndex = 7;
             // 
             // flowLayoutPanel8
             // 
             flowLayoutPanel8.Controls.Add(tbPassUsuario);
             flowLayoutPanel8.Controls.Add(bMostrarPass1);
-            flowLayoutPanel8.Location = new Point(60, 353);
-            flowLayoutPanel8.Margin = new Padding(3, 2, 3, 2);
+            flowLayoutPanel8.Location = new Point(69, 471);
             flowLayoutPanel8.Name = "flowLayoutPanel8";
-            flowLayoutPanel8.Size = new Size(297, 29);
+            flowLayoutPanel8.Size = new Size(339, 39);
             flowLayoutPanel8.TabIndex = 38;
             // 
             // tbPassUsuario
             // 
             tbPassUsuario.Cursor = Cursors.Hand;
             tbPassUsuario.ForeColor = Color.Black;
-            tbPassUsuario.Location = new Point(3, 2);
-            tbPassUsuario.Margin = new Padding(3, 2, 3, 2);
+            tbPassUsuario.Location = new Point(3, 3);
             tbPassUsuario.Name = "tbPassUsuario";
             tbPassUsuario.PasswordChar = '*';
-            tbPassUsuario.Size = new Size(251, 23);
+            tbPassUsuario.Size = new Size(286, 27);
             tbPassUsuario.TabIndex = 5;
             // 
             // bMostrarPass1
@@ -219,10 +216,9 @@
             bMostrarPass1.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bMostrarPass1.ForeColor = Color.Black;
             bMostrarPass1.Image = Resource1.ojoCerrado;
-            bMostrarPass1.Location = new Point(260, 2);
-            bMostrarPass1.Margin = new Padding(3, 2, 3, 2);
+            bMostrarPass1.Location = new Point(295, 3);
             bMostrarPass1.Name = "bMostrarPass1";
-            bMostrarPass1.Size = new Size(29, 22);
+            bMostrarPass1.Size = new Size(33, 29);
             bMostrarPass1.TabIndex = 20;
             bMostrarPass1.UseVisualStyleBackColor = true;
             bMostrarPass1.Click += bMostrarPass1_Click;
@@ -231,21 +227,19 @@
             // 
             flowLayoutPanel9.Controls.Add(tbConfirmPass);
             flowLayoutPanel9.Controls.Add(bMostrarConfPass2);
-            flowLayoutPanel9.Location = new Point(404, 353);
-            flowLayoutPanel9.Margin = new Padding(3, 2, 3, 2);
+            flowLayoutPanel9.Location = new Point(462, 471);
             flowLayoutPanel9.Name = "flowLayoutPanel9";
-            flowLayoutPanel9.Size = new Size(297, 32);
+            flowLayoutPanel9.Size = new Size(339, 43);
             flowLayoutPanel9.TabIndex = 41;
             // 
             // tbConfirmPass
             // 
             tbConfirmPass.Cursor = Cursors.Hand;
             tbConfirmPass.ForeColor = Color.Black;
-            tbConfirmPass.Location = new Point(3, 2);
-            tbConfirmPass.Margin = new Padding(3, 2, 3, 2);
+            tbConfirmPass.Location = new Point(3, 3);
             tbConfirmPass.Name = "tbConfirmPass";
             tbConfirmPass.PasswordChar = '*';
-            tbConfirmPass.Size = new Size(251, 23);
+            tbConfirmPass.Size = new Size(286, 27);
             tbConfirmPass.TabIndex = 6;
             // 
             // bMostrarConfPass2
@@ -257,10 +251,9 @@
             bMostrarConfPass2.Font = new Font("Tahoma", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bMostrarConfPass2.ForeColor = Color.Black;
             bMostrarConfPass2.Image = Resource1.ojoCerrado;
-            bMostrarConfPass2.Location = new Point(260, 2);
-            bMostrarConfPass2.Margin = new Padding(3, 2, 3, 2);
+            bMostrarConfPass2.Location = new Point(295, 3);
             bMostrarConfPass2.Name = "bMostrarConfPass2";
-            bMostrarConfPass2.Size = new Size(29, 22);
+            bMostrarConfPass2.Size = new Size(33, 29);
             bMostrarConfPass2.TabIndex = 20;
             bMostrarConfPass2.UseVisualStyleBackColor = true;
             bMostrarConfPass2.Click += bMostrarConfPass2_Click;
@@ -269,10 +262,9 @@
             // 
             tbTelefono.Cursor = Cursors.Hand;
             tbTelefono.ForeColor = Color.Black;
-            tbTelefono.Location = new Point(60, 285);
-            tbTelefono.Margin = new Padding(3, 2, 3, 2);
+            tbTelefono.Location = new Point(69, 380);
             tbTelefono.Name = "tbTelefono";
-            tbTelefono.Size = new Size(631, 23);
+            tbTelefono.Size = new Size(721, 27);
             tbTelefono.TabIndex = 4;
             tbTelefono.KeyPress += tbTelefono_KeyPress;
             // 
@@ -280,30 +272,27 @@
             // 
             tbEmail.Cursor = Cursors.Hand;
             tbEmail.ForeColor = Color.Black;
-            tbEmail.Location = new Point(60, 217);
-            tbEmail.Margin = new Padding(3, 2, 3, 2);
+            tbEmail.Location = new Point(69, 289);
             tbEmail.Name = "tbEmail";
-            tbEmail.Size = new Size(631, 23);
+            tbEmail.Size = new Size(721, 27);
             tbEmail.TabIndex = 3;
             // 
             // tbApellidoUsuario
             // 
             tbApellidoUsuario.Cursor = Cursors.Hand;
             tbApellidoUsuario.ForeColor = Color.Black;
-            tbApellidoUsuario.Location = new Point(403, 150);
-            tbApellidoUsuario.Margin = new Padding(3, 2, 3, 2);
+            tbApellidoUsuario.Location = new Point(461, 200);
             tbApellidoUsuario.Name = "tbApellidoUsuario";
-            tbApellidoUsuario.Size = new Size(288, 23);
+            tbApellidoUsuario.Size = new Size(329, 27);
             tbApellidoUsuario.TabIndex = 2;
             tbApellidoUsuario.KeyPress += tbApellidoUsuario_KeyPress;
             // 
             // comboBoxRoles
             // 
             comboBoxRoles.FormattingEnabled = true;
-            comboBoxRoles.Location = new Point(60, 87);
-            comboBoxRoles.Margin = new Padding(3, 2, 3, 2);
+            comboBoxRoles.Location = new Point(69, 116);
             comboBoxRoles.Name = "comboBoxRoles";
-            comboBoxRoles.Size = new Size(288, 23);
+            comboBoxRoles.Size = new Size(329, 28);
             comboBoxRoles.TabIndex = 0;
             comboBoxRoles.SelectedIndexChanged += comboBoxRoles_SelectedIndexChanged;
             // 
@@ -311,9 +300,9 @@
             // 
             lErrorNombre.AutoSize = true;
             lErrorNombre.ForeColor = Color.Red;
-            lErrorNombre.Location = new Point(60, 175);
+            lErrorNombre.Location = new Point(69, 233);
             lErrorNombre.Name = "lErrorNombre";
-            lErrorNombre.Size = new Size(38, 15);
+            lErrorNombre.Size = new Size(50, 20);
             lErrorNombre.TabIndex = 44;
             lErrorNombre.Text = "label1";
             lErrorNombre.Visible = false;
@@ -322,9 +311,9 @@
             // 
             lErrorApellido.AutoSize = true;
             lErrorApellido.ForeColor = Color.Red;
-            lErrorApellido.Location = new Point(404, 175);
+            lErrorApellido.Location = new Point(462, 233);
             lErrorApellido.Name = "lErrorApellido";
-            lErrorApellido.Size = new Size(38, 15);
+            lErrorApellido.Size = new Size(50, 20);
             lErrorApellido.TabIndex = 45;
             lErrorApellido.Text = "label2";
             lErrorApellido.Visible = false;
@@ -333,9 +322,9 @@
             // 
             lErrorEmail.AutoSize = true;
             lErrorEmail.ForeColor = Color.Red;
-            lErrorEmail.Location = new Point(60, 242);
+            lErrorEmail.Location = new Point(69, 323);
             lErrorEmail.Name = "lErrorEmail";
-            lErrorEmail.Size = new Size(38, 15);
+            lErrorEmail.Size = new Size(50, 20);
             lErrorEmail.TabIndex = 46;
             lErrorEmail.Text = "label3";
             lErrorEmail.Visible = false;
@@ -344,9 +333,9 @@
             // 
             lErrorTelefono.AutoSize = true;
             lErrorTelefono.ForeColor = Color.Red;
-            lErrorTelefono.Location = new Point(60, 310);
+            lErrorTelefono.Location = new Point(69, 413);
             lErrorTelefono.Name = "lErrorTelefono";
-            lErrorTelefono.Size = new Size(38, 15);
+            lErrorTelefono.Size = new Size(50, 20);
             lErrorTelefono.TabIndex = 47;
             lErrorTelefono.Text = "label4";
             lErrorTelefono.Visible = false;
@@ -355,9 +344,9 @@
             // 
             lErrorConfirmPass.AutoSize = true;
             lErrorConfirmPass.ForeColor = Color.Red;
-            lErrorConfirmPass.Location = new Point(407, 380);
+            lErrorConfirmPass.Location = new Point(465, 507);
             lErrorConfirmPass.Name = "lErrorConfirmPass";
-            lErrorConfirmPass.Size = new Size(38, 15);
+            lErrorConfirmPass.Size = new Size(50, 20);
             lErrorConfirmPass.TabIndex = 49;
             lErrorConfirmPass.Text = "label6";
             lErrorConfirmPass.Visible = false;
@@ -366,9 +355,9 @@
             // 
             lErrorPass.AutoSize = true;
             lErrorPass.ForeColor = Color.Red;
-            lErrorPass.Location = new Point(60, 380);
+            lErrorPass.Location = new Point(69, 507);
             lErrorPass.Name = "lErrorPass";
-            lErrorPass.Size = new Size(38, 15);
+            lErrorPass.Size = new Size(50, 20);
             lErrorPass.TabIndex = 48;
             lErrorPass.Text = "label5";
             lErrorPass.Visible = false;
@@ -378,17 +367,32 @@
             bRegistrarUsuario.BackColor = Color.Black;
             bRegistrarUsuario.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             bRegistrarUsuario.ForeColor = Color.White;
-            bRegistrarUsuario.Location = new Point(263, 474);
+            bRegistrarUsuario.Location = new Point(305, 649);
             bRegistrarUsuario.Name = "bRegistrarUsuario";
             bRegistrarUsuario.Size = new Size(207, 34);
             bRegistrarUsuario.TabIndex = 50;
             bRegistrarUsuario.Text = "Registrar usuario";
             bRegistrarUsuario.UseVisualStyleBackColor = false;
+            bRegistrarUsuario.Click += bRegistrarUsuario_Click;
+            // 
+            // bAtras
+            // 
+            bAtras.BackColor = Color.Transparent;
+            bAtras.ForeColor = Color.Black;
+            bAtras.Image = Resource1.flecha_izq;
+            bAtras.Location = new Point(793, 35);
+            bAtras.Margin = new Padding(3, 4, 3, 4);
+            bAtras.Name = "bAtras";
+            bAtras.Size = new Size(41, 41);
+            bAtras.TabIndex = 51;
+            bAtras.UseVisualStyleBackColor = false;
+            bAtras.Click += bAtras_Click;
             // 
             // NuevoUsuarioControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(bAtras);
             Controls.Add(bRegistrarUsuario);
             Controls.Add(lErrorConfirmPass);
             Controls.Add(lErrorPass);
@@ -413,8 +417,8 @@
             Controls.Add(lNomUsuario);
             Controls.Add(flowLayoutPanel8);
             Controls.Add(flowLayoutPanel9);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "NuevoUsuarioControl";
+            Size = new Size(878, 767);
             flowLayoutPanel8.ResumeLayout(false);
             flowLayoutPanel8.PerformLayout();
             flowLayoutPanel9.ResumeLayout(false);
@@ -453,5 +457,6 @@
         private Label lErrorConfirmPass;
         private Label lErrorPass;
         private Button bRegistrarUsuario;
+        private Button bAtras;
     }
 }
