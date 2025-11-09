@@ -1116,7 +1116,7 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 GraficarSegunTiempo();
             }
-            else if (cbSeleccionGrafico.SelectedItem.ToString() == "Segun medicos")
+            else if (cbSeleccionGrafico.SelectedItem.ToString() == "Segun profesionales")
             {
                 GraficarSegunMedicos();
             }

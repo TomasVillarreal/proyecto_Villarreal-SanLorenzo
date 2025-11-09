@@ -233,11 +233,11 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(508, 20);
+            label2.Location = new Point(488, 20);
             label2.Name = "label2";
-            label2.Size = new Size(147, 21);
+            label2.Size = new Size(173, 21);
             label2.TabIndex = 1;
-            label2.Text = "Medico más activo";
+            label2.Text = "Profesional más activo";
             // 
             // label1
             // 
@@ -274,7 +274,7 @@
             // 
             cbSeleccionGrafico.DropDownStyle = ComboBoxStyle.DropDownList;
             cbSeleccionGrafico.FormattingEnabled = true;
-            cbSeleccionGrafico.Items.AddRange(new object[] { "Segun tiempos", "Segun medicos", "Segun consultas" });
+            cbSeleccionGrafico.Items.AddRange(new object[] { "Segun tiempos", "Segun profesionales", "Segun consultas" });
             cbSeleccionGrafico.Location = new Point(80, 34);
             cbSeleccionGrafico.Name = "cbSeleccionGrafico";
             cbSeleccionGrafico.Size = new Size(121, 23);
