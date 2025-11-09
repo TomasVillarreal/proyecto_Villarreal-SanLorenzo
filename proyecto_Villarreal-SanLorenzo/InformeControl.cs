@@ -591,6 +591,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private Dictionary<DateTime, int> ObtenerDatosPorPeriodos(DateTime inicio, DateTime fin, string escala)
         {
 
+
             // Creacion del diccionario que se devolvera
             var resultados = new Dictionary<DateTime, int>();
             try
