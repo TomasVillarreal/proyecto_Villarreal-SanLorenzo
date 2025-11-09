@@ -38,7 +38,6 @@
             lNomUsuario = new Label();
             lTitulo1 = new Label();
             tbNomUsuario = new TextBox();
-            comboBoxEsp = new ComboBox();
             flowLayoutPanel8 = new FlowLayoutPanel();
             tbPassUsuario = new TextBox();
             bMostrarPass1 = new Button();
@@ -57,6 +56,7 @@
             lErrorPass = new Label();
             bRegistrarUsuario = new Button();
             bAtras = new Button();
+            comboBoxEsp = new ComboBox();
             flowLayoutPanel8.SuspendLayout();
             flowLayoutPanel9.SuspendLayout();
             SuspendLayout();
@@ -177,16 +177,6 @@
             tbNomUsuario.Size = new Size(329, 27);
             tbNomUsuario.TabIndex = 1;
             tbNomUsuario.KeyPress += tbNomUsuario_KeyPress;
-            // 
-            // comboBoxEsp
-            // 
-            comboBoxEsp.ForeColor = Color.Black;
-            comboBoxEsp.FormattingEnabled = true;
-            comboBoxEsp.Items.AddRange(new object[] { "Clínica", "Obstetricia", "Pediatría", "Cardiología" });
-            comboBoxEsp.Location = new Point(69, 576);
-            comboBoxEsp.Name = "comboBoxEsp";
-            comboBoxEsp.Size = new Size(329, 28);
-            comboBoxEsp.TabIndex = 7;
             // 
             // flowLayoutPanel8
             // 
@@ -388,10 +378,19 @@
             bAtras.UseVisualStyleBackColor = false;
             bAtras.Click += bAtras_Click;
             // 
+            // comboBoxEsp
+            // 
+            comboBoxEsp.FormattingEnabled = true;
+            comboBoxEsp.Location = new Point(69, 575);
+            comboBoxEsp.Name = "comboBoxEsp";
+            comboBoxEsp.Size = new Size(329, 28);
+            comboBoxEsp.TabIndex = 52;
+            // 
             // NuevoUsuarioControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(comboBoxEsp);
             Controls.Add(bAtras);
             Controls.Add(bRegistrarUsuario);
             Controls.Add(lErrorConfirmPass);
@@ -400,7 +399,6 @@
             Controls.Add(lErrorEmail);
             Controls.Add(lErrorApellido);
             Controls.Add(lErrorNombre);
-            Controls.Add(comboBoxEsp);
             Controls.Add(tbTelefono);
             Controls.Add(tbEmail);
             Controls.Add(tbApellidoUsuario);
@@ -439,7 +437,6 @@
         private Label lNomUsuario;
         private Label lTitulo1;
         private TextBox tbNomUsuario;
-        private ComboBox comboBoxEsp;
         private FlowLayoutPanel flowLayoutPanel8;
         private TextBox tbPassUsuario;
         private Button bMostrarPass1;
@@ -458,5 +455,6 @@
         private Label lErrorPass;
         private Button bRegistrarUsuario;
         private Button bAtras;
+        private ComboBox comboBoxEsp;
     }
 }

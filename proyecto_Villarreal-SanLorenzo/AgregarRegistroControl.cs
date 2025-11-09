@@ -164,7 +164,7 @@ namespace proyecto_Villarreal_SanLorenzo
             {
                 string observaciones = tObservaciones.Text.Trim();
                 string medicacionSeleccionada = comboBoxMedicacion.SelectedItem?.ToString()?.Trim();
-                string tipoRegistro = comboBoxTipoRegistro.SelectedItem?.ToString();
+                string tipoRegistro = comboBoxTipoRegistro.Text?.Trim(); // ✅ Ahora toma texto escrito o seleccionado
                 DateTime fecha = DateTime.Now;
 
                 if (string.IsNullOrWhiteSpace(observaciones))
@@ -185,17 +185,31 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         db.Open();
 
+                        //insertar el nuevo tipo de registro si no se carga de la base de datos porque no existe
+                        string insertarTipoSiNoExiste = @"
+                                            IF (LEN(@tipo) > 0) AND NOT EXISTS (SELECT 1 FROM Tipo_registro WHERE nombre_registro = @tipo)
+                                            BEGIN
+                                                INSERT INTO Tipo_registro (nombre_registro)
+                                                VALUES (@tipo);
+                                            END";
+
+                        using (SqlCommand cmdTipo = new SqlCommand(insertarTipoSiNoExiste, db))
+                        {
+                            cmdTipo.Parameters.AddWithValue("@tipo", tipoRegistro ?? "Consulta Médica");
+                            cmdTipo.ExecuteNonQuery();
+                        }
+
                         // Insertar registro
                         string insertRegistro = @"
-                                            INSERT INTO Registro (id_historial, dni_paciente, id_tipo_registro, id_usuario, id_especialidad, fecha_registro, observaciones)
-                                            OUTPUT INSERTED.id_registro
-                                            VALUES (@idHistorial, @dni,
-                                                (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
-                                                @idUsuario,
-                                                (SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @especialidad),
-                                                GETDATE(),
-                                                @obs
-                                            );";
+                                        INSERT INTO Registro (id_historial, dni_paciente, id_tipo_registro, id_usuario, id_especialidad, fecha_registro, observaciones)
+                                        OUTPUT INSERTED.id_registro
+                                        VALUES (@idHistorial, @dni,
+                                            (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
+                                            @idUsuario,
+                                            (SELECT id_especialidad FROM Especialidades WHERE nombre_especialidad = @especialidad),
+                                            GETDATE(),
+                                            @obs
+                                        );";
 
                         int nuevoIdRegistro;
 
@@ -215,10 +229,10 @@ namespace proyecto_Villarreal_SanLorenzo
                         if (!string.IsNullOrEmpty(medicacionSeleccionada) && medicacionSeleccionada.ToLower() != "(ninguna)")
                         {
                             string insertMedicacion = @"
-                                            INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion)
-                                            VALUES (@idRegistro, @idHistorial, @dni, @idUsuario,
-                                                (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @nombreMed)
-                                            );";
+                                        INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion)
+                                        VALUES (@idRegistro, @idHistorial, @dni, @idUsuario,
+                                            (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @nombreMed)
+                                        );";
 
                             using (SqlCommand cmdMed = new SqlCommand(insertMedicacion, db))
                             {
@@ -258,7 +272,6 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
 
             }
-
         }//Funcion que mediante un click en el boton, guarda el nuevo registro
 
         private void bAtras_Click(object sender, EventArgs e)//Funcion que permite volver a la vista anterior
