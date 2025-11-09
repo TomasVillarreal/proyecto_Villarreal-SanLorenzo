@@ -34,12 +34,14 @@ namespace proyecto_Villarreal_SanLorenzo
             cbDecisionIntervalo.SelectedIndex = 4;
 
             // En un principio, colocaremos la fecha actual en los datatimepicker (dtp)
-            dtpFechaInicio.Value = DateTime.Now;
+            dtpFechaInicio.Value = DateTime.Now.Add(new System.TimeSpan(-7, 0, 0, 0));
             dtpFechaFin.Value = DateTime.Now;
 
             // Y pondremos que la fecha maxima de ambos dtp en la fecha actual
             dtpFechaFin.MaxDate = DateTime.Now;
             dtpFechaInicio.MaxDate = DateTime.Now;
+
+            comboBox1_SelectedIndexChanged(cbDecisionIntervalo, EventArgs.Empty);
 
             // Graficamos y actualizamos las stats
             ActualizarStats();
@@ -324,7 +326,7 @@ namespace proyecto_Villarreal_SanLorenzo
             panelSeleccionIntervalo.Visible = opcion == "Personalizado";
             bActualizarGrafico.Visible = opcion == "Personalizado";
             // Obtengo la fecha de hoy
-            DateTime hoy = DateTime.Now.Date;
+            DateTime hoy = DateTime.Today;
             // Veremos que opcion fue elegida, en un string:
             switch (opcion)
             {
@@ -337,10 +339,13 @@ namespace proyecto_Villarreal_SanLorenzo
                     break;
                 // Si la opcion elegida es la de hace un mes:
                 case "Ultimo mes":
-                    // Hago que la fecha inicio sea exactamente un mes atras al de hoy
-                    fecha_inicio = hoy.AddMonths(-1).Date;
-                    // Hago que la fecha fin sea hoy hasta las 23:59:59
-                    fecha_fin = hoy.AddDays(1).AddSeconds(-1);
+                    // Obtener el primer día del mes anterior
+                    var inicioMesAnterior = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(-1);
+                    // Obtener el último día del mes anterior (día anterior al primer día del mes actual)
+                    var finMesAnterior = new DateTime(hoy.Year, hoy.Month, 1).AddDays(-1).AddDays(1).AddSeconds(-1);
+
+                    fecha_inicio = inicioMesAnterior;
+                    fecha_fin = finMesAnterior;
                     break;
                 // Si la opcion elegida es la de hace un año:
                 case "Ultimo año":

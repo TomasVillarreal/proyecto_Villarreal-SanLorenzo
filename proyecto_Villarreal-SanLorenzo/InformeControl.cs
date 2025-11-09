@@ -39,12 +39,14 @@ namespace proyecto_Villarreal_SanLorenzo
             cbSeleccionGrafico.SelectedIndex = 0;
 
             // En un principio, colocaremos la fecha actual en los datatimepicker (dtp)
-            dtpFechaInicio.Value = DateTime.Now;
+            dtpFechaInicio.Value = DateTime.Now.Add(new System.TimeSpan(-7, 0, 0, 0));
             dtpFechaFin.Value = DateTime.Now;
 
             // Y pondremos que la fecha maxima de ambos dtp en la fecha actual
             dtpFechaFin.MaxDate = DateTime.Now;
             dtpFechaInicio.MaxDate = DateTime.Now;
+
+            comboBox1_SelectedIndexChanged(cbDecisionIntervalo, EventArgs.Empty);
 
             // Graficamos y actualizamos las stats
             ActualizarStats();
