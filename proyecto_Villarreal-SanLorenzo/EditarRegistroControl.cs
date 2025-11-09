@@ -26,7 +26,7 @@ namespace proyecto_Villarreal_SanLorenzo
         int historial = 0;
 
 
-        public EditarRegistroControl(int p_dni, int p_registro_actual = 0)
+        public EditarRegistroControl(int p_dni, int historial, int p_registro_actual = 0)
         {
             InitializeComponent();
 
@@ -54,6 +54,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     string query = @"
                         SELECT 
                             r.observaciones, 
+                            r.id_historial,
                             tr.nombre_registro, 
                             m.nombre_medicacion, 
                             m.dosis_medicacion AS dosis
@@ -71,6 +72,9 @@ namespace proyecto_Villarreal_SanLorenzo
                         {
                             if (reader.Read())
                             {
+                                //se guarda el id del historial
+                                this.historial = Convert.ToInt32(reader["id_historial"]);
+
                                 // observaciones
                                 tObservaciones.Text = reader["observaciones"]?.ToString() ?? string.Empty;
 
@@ -246,7 +250,10 @@ namespace proyecto_Villarreal_SanLorenzo
         private void bGuardarCambios_Click(object sender, EventArgs e)//Funcion que mediante el click del boton, guarda los cambios del registro
         {
             bool exito = false;
+            var parent = this.Parent;
+            int filas = 0;
             Dictionary<string, object> diccionario = CrearDiccionario();
+
             if (DetectarErrores(diccionario))
             {
                 try
@@ -258,7 +265,9 @@ namespace proyecto_Villarreal_SanLorenzo
                         // aca se actualiaz el registro
                         string updateRegistro = @"
                                                 UPDATE Registro
-                                                SET observaciones = @obs, id_tipo_registro = (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo)
+                                                SET observaciones = @obs,
+                                                    id_tipo_registro = (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
+                                                    fecha_modificacion = GETDATE()
                                                 WHERE id_registro = @id";
 
                         using (SqlCommand cmd = new SqlCommand(updateRegistro, conn))
@@ -266,38 +275,25 @@ namespace proyecto_Villarreal_SanLorenzo
                             cmd.Parameters.AddWithValue("@obs", tObservaciones.Text.Trim());
                             cmd.Parameters.AddWithValue("@tipo", comboBoxTipoRegistro.SelectedItem?.ToString());
                             cmd.Parameters.AddWithValue("@id", idRegistroActual);
-                            cmd.ExecuteNonQuery();
+
+                            // CORRECCIÓN: Ejecutar UNA sola vez.
+                            filas = cmd.ExecuteNonQuery();
                         }
 
-                        // para la medicacion y por ende la dosis
+                        // para la medicacion
                         string medicacion = comboBoxMedicacion.SelectedItem?.ToString();
-                        string dosis = string.IsNullOrWhiteSpace(tDosis.Text) ? null : tDosis.Text;
 
-                            if (filas > 0)
-                            {
-                                MessageBox.Show("Cambios guardados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                exito = true;
-                            }
-                            else
-                            {
-                                MessageBox.Show("No se realizaron cambios.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                exito = false;
-                            }
-                                
-                            if (exito)
-                            {
-                                // Creo el uc de pacientes, le asigno el mismo eventhandler que este uc, y lo invoco
-                                HistorialClinicoControl historialControl = new HistorialClinicoControl();
-                                historialControl.AbrirOtroControl += this.AbrirOtroControl;
-                                historialControl.ControlPadre = null;
+                        if (filas > 0)
+                        {
+                            MessageBox.Show("Cambios guardados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            exito = true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se realizaron cambios.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            exito = false;
+                        }
 
-                                // Pasamos el DNI al historial
-                                historialControl.dniInicial = dni;
-                                historialControl.registroInicial = idRegistroActual;
-                                historialControl.historialInicial = historial;
-
-                                AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, historialControl, false));
-                            }
                         // si no se selecciona medicacion, se cambia la actual por ninguna
                         if (medicacion == "(ninguna)" || medicacion == null)
                         {
@@ -310,7 +306,7 @@ namespace proyecto_Villarreal_SanLorenzo
                         }
                         else
                         {
-                            // por ende, si no hay medicacion ahora se elimina la que  se supone que habia antes
+                            // primero borro la medicacion anterior (si la hay)
                             string deleteMed = "DELETE FROM Registro_medicacion WHERE id_registro = @id";
                             using (SqlCommand cmd = new SqlCommand(deleteMed, conn))
                             {
@@ -318,30 +314,39 @@ namespace proyecto_Villarreal_SanLorenzo
                                 cmd.ExecuteNonQuery();
                             }
 
-                            // caso contrariom si ahora hay una medicacion asignada, se asigna dosis
+                            // ahora obtengo el id_medicacion desde la tabla Medicacion
+                            int idMedicacion = 0;
+
+                            string queryMed = @"SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @med";
+                            using (SqlCommand cmdMed = new SqlCommand(queryMed, conn))
+                            {
+                                cmdMed.Parameters.AddWithValue("@med", medicacion);
+                                object result = cmdMed.ExecuteScalar();
+                                if (result != null)
+                                    idMedicacion = Convert.ToInt32(result);
+                            }
+
+                            // inserto en la tabla de registro_medicacion, que no hay dosis
                             string insertMed = @"
-                                            INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion, dosis_medicacion)
-                                            VALUES (
-                                                @idRegistro,
-                                                (SELECT id_historial FROM Registro WHERE id_registro = @idRegistro),
-                                                (SELECT dni_paciente FROM Registro WHERE id_registro = @idRegistro),
-                                                @idUsuario,
-                                                (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @med),
-                                                @dosis
-                                            )";
+                                        INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion)
+                                        VALUES (
+                                            @idRegistro,
+                                            (SELECT id_historial FROM Registro WHERE id_registro = @idRegistro),
+                                            (SELECT dni_paciente FROM Registro WHERE id_registro = @idRegistro),
+                                            @idUsuario,
+                                            @idMedicacion
+                                        )";
 
                             using (SqlCommand cmd = new SqlCommand(insertMed, conn))
                             {
                                 cmd.Parameters.AddWithValue("@idRegistro", idRegistroActual);
                                 cmd.Parameters.AddWithValue("@idUsuario", SesionUsuario.id_usuario);
-                                cmd.Parameters.AddWithValue("@med", medicacion);
-                                cmd.Parameters.AddWithValue("@dosis", (object)dosis ?? DBNull.Value);
+                                cmd.Parameters.AddWithValue("@idMedicacion", idMedicacion);
                                 cmd.ExecuteNonQuery();
                             }
                         }
 
-                        MessageBox.Show("Cambios guardados correctamente.",
-                                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        exito = true;
                     }
                 }
                 catch (Exception ex)
@@ -350,6 +355,15 @@ namespace proyecto_Villarreal_SanLorenzo
                                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     exito = false;
                 }
+            }
+
+            if (exito && parent != null && controlPadreRegistro != null)
+            {
+                controlPadreRegistro.CargarHistoriales(dni, idRegistroActual);
+                controlPadreRegistro.ResaltarRegistro(this.historial, idRegistroActual, dni);
+                parent.Controls.Clear();
+                parent.Controls.Add(controlPadreRegistro);
+                controlPadreRegistro.Dock = DockStyle.Fill;
             }
         }
 

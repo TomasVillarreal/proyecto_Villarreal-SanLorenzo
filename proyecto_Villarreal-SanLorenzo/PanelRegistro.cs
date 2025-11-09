@@ -185,7 +185,8 @@ namespace proyecto_Villarreal_SanLorenzo
                     }
 
                     int idRegistroActual = ObtenerIdRegistroActual();
-                    EditarRegistroControl editarRegistro = new EditarRegistroControl(dniPaciente, idRegistroActual);
+                    int historialActual = ObtenerHistorialActual();
+                    EditarRegistroControl editarRegistro = new EditarRegistroControl(dniPaciente, historialActual, idRegistroActual);
 
                     // asigno la referencia al padre que guardamos en el constructor
                     editarRegistro.controlPadreRegistro = this.controlPadreRegistro;
@@ -430,6 +431,10 @@ namespace proyecto_Villarreal_SanLorenzo
         private int ObtenerIdRegistroActual()//Funcion que devuelve el id del registro actual que sirve luego para la edicion y demas
         {
             return registro;
+        }
+        private int ObtenerHistorialActual()//Funcion que devuelve el id del historial actual que sirve luego para la edicion y demas
+        {
+            return historial;
         }
     }
 }
