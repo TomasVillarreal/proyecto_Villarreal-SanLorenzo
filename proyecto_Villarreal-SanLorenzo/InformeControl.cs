@@ -590,6 +590,7 @@ namespace proyecto_Villarreal_SanLorenzo
         // funcion que devuelve un diccionario de un datetime y la cantidad de registros asociados a esa fecha
         private Dictionary<DateTime, int> ObtenerDatosPorPeriodos(DateTime inicio, DateTime fin, string escala)
         {
+
             // Creacion del diccionario que se devolvera
             var resultados = new Dictionary<DateTime, int>();
             try
@@ -634,15 +635,17 @@ namespace proyecto_Villarreal_SanLorenzo
                              * 
                              */
                             query = @"
-                                SELECT 
-                                    DATEADD(DAY, 
-                                            -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), 
-                                            CAST(fecha_registro AS DATE)) AS PeriodoRep,
-                                    COUNT(*) AS Cantidad
-                                FROM Registro
-                                WHERE fecha_registro BETWEEN @inicio AND @fin
-                                GROUP BY DATEADD(DAY, -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), CAST(fecha_registro AS DATE))
-                                ORDER BY PeriodoRep";
+                            SET DATEFIRST 1; 
+
+                            SELECT  
+                                DATEADD(DAY, 
+                                        1 - DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)),  
+                                        CAST(fecha_registro AS DATE)) AS PeriodoRep,
+                                COUNT(*) AS Cantidad
+                            FROM Registro
+                            WHERE fecha_registro BETWEEN @inicio AND @fin
+                            GROUP BY DATEADD(DAY, 1 - DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)), CAST(fecha_registro AS DATE))
+                            ORDER BY PeriodoRep";
                             break;
 
                         // Para el caso de los meses
