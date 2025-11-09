@@ -488,7 +488,7 @@ namespace proyecto_Villarreal_SanLorenzo
                     El -1 es para poder ajustar a que sucederia con el dia lunes, pq por la funcion DayOfWeek
                     devuelve 1 para los dias lunes. El +7 es para cuando el resultado sea domingo, por ejemplo.
                     Y el %7 es para obtener el resto de la division de ese numero obtenido por 7.*/
-                    int daysToSubtract = ((int)inicio.DayOfWeek + 6) % 7;
+                    int daysToSubtract = ((int)inicio.DayOfWeek - 1 + 7) % 7;
                     /* Ahora ajustaremos la fecha de inicio restandole la cantidad de dias que fueron obtenidos
                      * arriba, y asi ahora la fecha de inicio sera igual al lunes de esa semana */
                     var currentSemana = inicio.Date.AddDays(-daysToSubtract);
@@ -590,7 +590,6 @@ namespace proyecto_Villarreal_SanLorenzo
         // funcion que devuelve un diccionario de un datetime y la cantidad de registros asociados a esa fecha
         private Dictionary<DateTime, int> ObtenerDatosPorPeriodos(DateTime inicio, DateTime fin, string escala)
         {
-            MessageBox.Show($"Inicio: {inicio}\nFin: {fin}");
             // Creacion del diccionario que se devolvera
             var resultados = new Dictionary<DateTime, int>();
             try
@@ -685,8 +684,8 @@ namespace proyecto_Villarreal_SanLorenzo
                     // Se ejecuta la query y se obtiene la cantidad y el periodo al cual representan
                     using (SqlCommand cmd = new SqlCommand(query, db))
                     {
-                        cmd.Parameters.Add("@inicio", SqlDbType.DateTime).Value = inicio;
-                        cmd.Parameters.Add("@fin", SqlDbType.DateTime).Value = fin;
+                        cmd.Parameters.AddWithValue("@inicio", inicio);
+                        cmd.Parameters.AddWithValue("@fin", fin);
                         db.Open();
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
