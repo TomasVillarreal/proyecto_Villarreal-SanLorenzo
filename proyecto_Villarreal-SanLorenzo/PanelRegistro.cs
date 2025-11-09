@@ -254,10 +254,9 @@ namespace proyecto_Villarreal_SanLorenzo
             using (SqlConnection db = new SqlConnection(connectionString))
             {
                 string query = @"
-            SELECT fecha_registro
-            FROM Registro
-            WHERE id_registro = @idRegistro;
-        ";
+                                SELECT fecha_registro
+                                FROM Registro
+                                WHERE id_registro = @idRegistro;";
 
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {
@@ -369,10 +368,10 @@ namespace proyecto_Villarreal_SanLorenzo
             using (SqlConnection db = new SqlConnection(connectionString))
             {
                 string query = @"
-            SELECT m.nombre_medicacion, m.dosis_medicacion
-            FROM Registro_medicacion rm
-            INNER JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
-            WHERE rm.id_registro = @idRegistro";
+                                SELECT m.nombre_medicacion, m.dosis_medicacion
+                                FROM Registro_medicacion rm
+                                INNER JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
+                                WHERE rm.id_registro = @idRegistro";
 
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {

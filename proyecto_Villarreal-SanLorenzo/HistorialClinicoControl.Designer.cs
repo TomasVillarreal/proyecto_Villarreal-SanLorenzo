@@ -140,7 +140,7 @@
             labelSubtitulo.Name = "labelSubtitulo";
             labelSubtitulo.Size = new Size(360, 15);
             labelSubtitulo.TabIndex = 5;
-            labelSubtitulo.Text = "Busque los registros de un paciente por su DNI y nombre completo";
+            labelSubtitulo.Text = "Busque los registros de un paciente por su DNI";
             // 
             // lFiltros
             // 

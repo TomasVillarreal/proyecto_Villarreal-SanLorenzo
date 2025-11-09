@@ -255,23 +255,23 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         conn.Open();
 
-                        string query = @"UPDATE Registro
-                             SET observaciones = @obs,
-                                 id_tipo_registro = (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
-                                 id_medicacion = (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @medicacion),
-                                 dosis = @dosis
-                             WHERE id_registro = @id";
+                        // aca se actualiaz el registro
+                        string updateRegistro = @"
+                                                UPDATE Registro
+                                                SET observaciones = @obs, id_tipo_registro = (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo)
+                                                WHERE id_registro = @id";
 
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        using (SqlCommand cmd = new SqlCommand(updateRegistro, conn))
                         {
                             cmd.Parameters.AddWithValue("@obs", tObservaciones.Text.Trim());
-                            cmd.Parameters.AddWithValue("@tipo", comboBoxTipoRegistro.SelectedItem?.ToString() ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@medicacion", (comboBoxMedicacion.SelectedItem != null && comboBoxMedicacion.SelectedItem.ToString() != "(ninguna)")
-                                                                        ? comboBoxMedicacion.SelectedItem.ToString() : (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@dosis", string.IsNullOrWhiteSpace(tDosis.Text) ? (object)DBNull.Value : tDosis.Text);
+                            cmd.Parameters.AddWithValue("@tipo", comboBoxTipoRegistro.SelectedItem?.ToString());
                             cmd.Parameters.AddWithValue("@id", idRegistroActual);
+                            cmd.ExecuteNonQuery();
+                        }
 
-                            int filas = cmd.ExecuteNonQuery();
+                        // para la medicacion y por ende la dosis
+                        string medicacion = comboBoxMedicacion.SelectedItem?.ToString();
+                        string dosis = string.IsNullOrWhiteSpace(tDosis.Text) ? null : tDosis.Text;
 
                             if (filas > 0)
                             {
@@ -298,7 +298,50 @@ namespace proyecto_Villarreal_SanLorenzo
 
                                 AbrirOtroControl?.Invoke(this, new AbrirEdicionEventArgs(null, historialControl, false));
                             }
+                        // si no se selecciona medicacion, se cambia la actual por ninguna
+                        if (medicacion == "(ninguna)" || medicacion == null)
+                        {
+                            string deleteMed = "DELETE FROM Registro_medicacion WHERE id_registro = @id";
+                            using (SqlCommand cmd = new SqlCommand(deleteMed, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@id", idRegistroActual);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
+                        else
+                        {
+                            // por ende, si no hay medicacion ahora se elimina la que  se supone que habia antes
+                            string deleteMed = "DELETE FROM Registro_medicacion WHERE id_registro = @id";
+                            using (SqlCommand cmd = new SqlCommand(deleteMed, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@id", idRegistroActual);
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            // caso contrariom si ahora hay una medicacion asignada, se asigna dosis
+                            string insertMed = @"
+                                            INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion, dosis_medicacion)
+                                            VALUES (
+                                                @idRegistro,
+                                                (SELECT id_historial FROM Registro WHERE id_registro = @idRegistro),
+                                                (SELECT dni_paciente FROM Registro WHERE id_registro = @idRegistro),
+                                                @idUsuario,
+                                                (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @med),
+                                                @dosis
+                                            )";
+
+                            using (SqlCommand cmd = new SqlCommand(insertMed, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@idRegistro", idRegistroActual);
+                                cmd.Parameters.AddWithValue("@idUsuario", SesionUsuario.id_usuario);
+                                cmd.Parameters.AddWithValue("@med", medicacion);
+                                cmd.Parameters.AddWithValue("@dosis", (object)dosis ?? DBNull.Value);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        MessageBox.Show("Cambios guardados correctamente.",
+                                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception ex)
