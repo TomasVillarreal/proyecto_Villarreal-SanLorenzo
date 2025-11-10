@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSeleccionRol));
             lRol = new Label();
             comboBoxRoles = new ComboBox();
             bIniciarSesion = new Button();
@@ -78,8 +79,9 @@
             Controls.Add(bIniciarSesion);
             Controls.Add(comboBoxRoles);
             Controls.Add(lRol);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FormSeleccionRol";
-            Text = "FormSeleccionRol";
+            Text = "Selección rol";
             ResumeLayout(false);
             PerformLayout();
         }

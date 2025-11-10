@@ -34,6 +34,7 @@ namespace proyecto_Villarreal_SanLorenzo
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHome));
             panelSidebar = new Panel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             bHome = new BotonSidebar();
@@ -42,6 +43,7 @@ namespace proyecto_Villarreal_SanLorenzo
             bUsuarios = new BotonSidebar();
             bInforme = new BotonSidebar();
             label1 = new Label();
+            labelSH = new Label();
             labelClinicks = new Label();
             flowLayoutPanel2 = new FlowLayoutPanel();
             bCerrarSesion = new BotonSidebar();
@@ -53,7 +55,6 @@ namespace proyecto_Villarreal_SanLorenzo
             panelDefault = new Panel();
             timerBackup = new System.Windows.Forms.Timer(components);
             flowLayoutPanelUsuario = new FlowLayoutPanel();
-            labelSH = new Label();
             panelSidebar.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
@@ -226,6 +227,18 @@ namespace proyecto_Villarreal_SanLorenzo
             label1.TabIndex = 3;
             label1.Text = "NAVEGACION PRINCIPAL";
             // 
+            // labelSH
+            // 
+            labelSH.AccessibleRole = AccessibleRole.None;
+            labelSH.AutoSize = true;
+            labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelSH.Location = new Point(46, 75);
+            labelSH.Name = "labelSH";
+            labelSH.Size = new Size(142, 25);
+            labelSH.TabIndex = 2;
+            labelSH.Text = "Sistema Clínico";
+            labelSH.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // labelClinicks
             // 
             labelClinicks.AutoSize = true;
@@ -396,18 +409,6 @@ namespace proyecto_Villarreal_SanLorenzo
             flowLayoutPanelUsuario.Size = new Size(179, 48);
             flowLayoutPanelUsuario.TabIndex = 4;
             // 
-            // labelSH
-            // 
-            labelSH.AccessibleRole = AccessibleRole.None;
-            labelSH.AutoSize = true;
-            labelSH.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelSH.Location = new Point(46, 75);
-            labelSH.Name = "labelSH";
-            labelSH.Size = new Size(142, 25);
-            labelSH.TabIndex = 2;
-            labelSH.Text = "Sistema Clínico";
-            labelSH.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // FormHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -418,11 +419,12 @@ namespace proyecto_Villarreal_SanLorenzo
             Controls.Add(panelDefault);
             Controls.Add(panelSidebar);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormHome";
-            Text = "FormHome";
+            Text = "Inicio";
             Load += FormHome_Load;
             Resize += FormHome_Resize;
             panelSidebar.ResumeLayout(false);

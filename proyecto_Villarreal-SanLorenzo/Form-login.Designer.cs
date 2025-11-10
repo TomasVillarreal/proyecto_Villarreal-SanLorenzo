@@ -200,7 +200,7 @@
             bIniciarSesion.Click += bIniciarSesion_Click;
             // 
             // bMostrarPass
-            //
+            // 
             bMostrarPass.Cursor = Cursors.Hand;
             bMostrarPass.FlatAppearance.BorderColor = Color.Silver;
             bMostrarPass.FlatAppearance.MouseDownBackColor = Color.LightGray;
@@ -251,8 +251,9 @@
             Controls.Add(labelA);
             Controls.Add(labelBienvenido);
             Controls.Add(labelClinicks);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form_login";
-            Text = "Form_login";
+            Text = "Inicio de Sesión";
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

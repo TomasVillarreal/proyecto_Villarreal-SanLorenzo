@@ -277,11 +277,11 @@ namespace proyecto_Villarreal_SanLorenzo
 
                         // aca se actualiza el registro
                         string updateRegistro = @"
-                                UPDATE Registro
-                                SET observaciones = @obs,
-                                    id_tipo_registro = (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
-                                    fecha_modificacion = GETDATE()
-                                WHERE id_registro = @id";
+                                            UPDATE Registro
+                                            SET observaciones = @obs,
+                                                id_tipo_registro = (SELECT id_tipo_registro FROM Tipo_registro WHERE nombre_registro = @tipo),
+                                                fecha_modificacion = GETDATE()
+                                            WHERE id_registro = @id";
 
                         using (SqlCommand cmd = new SqlCommand(updateRegistro, conn))
                         {
@@ -308,6 +308,15 @@ namespace proyecto_Villarreal_SanLorenzo
                         }
                         else
                         {
+                            // se detiene la ejecución si la dosis, en su textbox, esta vacia.
+                            if (string.IsNullOrWhiteSpace(dosis))
+                            {
+                                MessageBox.Show("Debe ingresar una dosis antes de guardar la medicación.",
+                                                "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                tDosis.Focus();
+                                return;
+                            }
+
                             // primero borro la medicacion anterior (si la hay)
                             string deleteMed = "DELETE FROM Registro_medicacion WHERE id_registro = @id";
                             using (SqlCommand cmd = new SqlCommand(deleteMed, conn))
@@ -318,10 +327,10 @@ namespace proyecto_Villarreal_SanLorenzo
 
                             // se permite agregar nuevas medicaciones en caso de que no esten en la base de datos
                             string insertarMedSiNoExiste = @"
-                                                            IF (LEN(@nombreMed) > 0) AND NOT EXISTS (SELECT 1 FROM Medicacion WHERE nombre_medicacion = @nombreMed)
-                                                            BEGIN
-                                                                INSERT INTO Medicacion (nombre_medicacion) VALUES (@nombreMed);
-                                                            END";
+                                                IF (LEN(@nombreMed) > 0) AND NOT EXISTS (SELECT 1 FROM Medicacion WHERE nombre_medicacion = @nombreMed)
+                                                BEGIN
+                                                    INSERT INTO Medicacion (nombre_medicacion) VALUES (@nombreMed);
+                                                END";
                             using (SqlCommand cmdMedNueva = new SqlCommand(insertarMedSiNoExiste, conn))
                             {
                                 cmdMedNueva.Parameters.AddWithValue("@nombreMed", medicacionSeleccionada);
@@ -330,15 +339,15 @@ namespace proyecto_Villarreal_SanLorenzo
 
                             // se insertan los registros con la dosis per usando registro_medicacion
                             string insertMed = @"
-                                            INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion, dosis)
-                                            VALUES (
-                                                @idRegistro,
-                                                (SELECT id_historial FROM Registro WHERE id_registro = @idRegistro),
-                                                (SELECT dni_paciente FROM Registro WHERE id_registro = @idRegistro),
-                                                @idUsuario,
-                                                (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @nombreMed),
-                                                @dosis
-                                            );";
+                                    INSERT INTO Registro_medicacion (id_registro, id_historial, dni_paciente, id_usuario, id_medicacion, dosis)
+                                    VALUES (
+                                        @idRegistro,
+                                        (SELECT id_historial FROM Registro WHERE id_registro = @idRegistro),
+                                        (SELECT dni_paciente FROM Registro WHERE id_registro = @idRegistro),
+                                        @idUsuario,
+                                        (SELECT id_medicacion FROM Medicacion WHERE nombre_medicacion = @nombreMed),
+                                        @dosis
+                                    );";
 
                             using (SqlCommand cmd = new SqlCommand(insertMed, conn))
                             {
@@ -366,8 +375,18 @@ namespace proyecto_Villarreal_SanLorenzo
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al guardar los cambios: " + ex.Message,
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // se muestra un mensaje mas amigable si hay error del sql
+                    if (ex.Message.Contains("CK_registromed_dosis_formato_registromed"))
+                    {
+                        MessageBox.Show("La dosis ingresada no cumple con el formato esperado o está vacía.\nPor favor, ingrese una dosis válida.",
+                                        "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        tDosis.Focus(); // vuelve al campo dosis
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al guardar los cambios: " + ex.Message,
+                                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     exito = false;
                 }
             }
