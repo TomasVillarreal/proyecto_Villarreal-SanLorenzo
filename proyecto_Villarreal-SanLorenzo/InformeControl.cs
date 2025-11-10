@@ -33,10 +33,10 @@ namespace proyecto_Villarreal_SanLorenzo
         // Al cargar el usercontrol:
         private void InformeControl_Load(object sender, EventArgs e)
         {
-            // Pondremos el combobox dela decision de periodo de tiempo en "Personalizado"
-            cbDecisionIntervalo.SelectedIndex = 4;
             // Y la de seleccion de grafico en "Segun tiempos"
             cbSeleccionGrafico.SelectedIndex = 0;
+            // Pondremos el combobox dela decision de periodo de tiempo en "Personalizado"
+            cbDecisionIntervalo.SelectedIndex = 4;
 
             // En un principio, colocaremos la fecha actual en los datatimepicker (dtp)
             dtpFechaInicio.Value = DateTime.Now.Add(new System.TimeSpan(-7, 0, 0, 0));
@@ -401,12 +401,9 @@ namespace proyecto_Villarreal_SanLorenzo
                     fecha_fin = dtpFechaFin.Value.Date.AddDays(1).AddSeconds(-1);
                     break;
             }
-            // Actualizo el grafico y las estadisticas cada vez q se cambia de periodo, y este no sea "personalizado"
-            if (opcion != "Personalizado")
-            {
-                GraficarSegunRadioButton();
-                ActualizarStats();
-            }
+            // Actualizo el grafico y las estadisticas cada vez q se cambia de periodo
+            GraficarSegunRadioButton();
+            ActualizarStats();
         }
 
         /* Funcion para poder determinar la escala de tiempo que se usara para las etiquetas

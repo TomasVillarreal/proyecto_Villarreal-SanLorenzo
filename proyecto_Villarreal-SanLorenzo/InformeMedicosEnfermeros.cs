@@ -367,11 +367,8 @@ namespace proyecto_Villarreal_SanLorenzo
                     break;
             }
             // Actualizo el grafico y las estadisticas cada vez q se cambia de periodo, y este no sea "personalizado"
-            if (opcion != "Personalizado")
-            {
-                GraficarSegunRadioButton();
-                ActualizarStats();
-            }
+            GraficarSegunRadioButton();
+            ActualizarStats();
         }
 
         // Funcion con el cual obtendremos la fecha mas antigua de actividad en todo el sistema
