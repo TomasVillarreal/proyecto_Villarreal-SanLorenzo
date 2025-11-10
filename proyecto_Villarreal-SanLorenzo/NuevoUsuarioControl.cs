@@ -108,13 +108,14 @@ namespace proyecto_Villarreal_SanLorenzo
                 return;
             }
 
-            if (comboBoxEsp.SelectedValue != null && comboBoxEsp.SelectedValue != DBNull.Value && comboBoxEsp.SelectedValue != "Sin especialidad")
+            if (comboBoxEsp.Visible)
             {
-                especialidad = Convert.ToInt32(comboBoxEsp.SelectedValue);
-            }
-            else
-            {
-                especialidad = null; // Sin especialidad
+                string nombreEsp = comboBoxEsp.Text.Trim();
+
+                if (!string.IsNullOrWhiteSpace(nombreEsp) && nombreEsp.ToLower() != "sin especialidad")
+                {
+                    especialidad = ObtenerIdEspecialidad(nombreEsp);
+                }
             }
 
             if (!CheckPassword())

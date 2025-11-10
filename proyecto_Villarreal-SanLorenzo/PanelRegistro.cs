@@ -62,7 +62,7 @@ namespace proyecto_Villarreal_SanLorenzo
             lProfesional.ForeColor = Color.Gray;
 
             var datos = ObtenerDatosProfesional();
-            string prefijo = datos.rol.Equals("Médico", StringComparison.OrdinalIgnoreCase) ? "Dr. " :
+            string prefijo = datos.rol.Equals("Medico", StringComparison.OrdinalIgnoreCase) ? "Dr. " :
                              datos.rol.Equals("Enfermero", StringComparison.OrdinalIgnoreCase) ? "Enf. " : "";
 
             string textoProf = $"{prefijo}{datos.nombreCompleto}";
@@ -369,10 +369,10 @@ namespace proyecto_Villarreal_SanLorenzo
             using (SqlConnection db = new SqlConnection(connectionString))
             {
                 string query = @"
-                                SELECT m.nombre_medicacion, m.dosis_medicacion
-                                FROM Registro_medicacion rm
-                                INNER JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
-                                WHERE rm.id_registro = @idRegistro";
+                        SELECT m.nombre_medicacion, rm.dosis
+                        FROM Registro_medicacion rm
+                        INNER JOIN Medicacion m ON rm.id_medicacion = m.id_medicacion
+                        WHERE rm.id_registro = @idRegistro";
 
                 using (SqlCommand cmd = new SqlCommand(query, db))
                 {
@@ -382,11 +382,16 @@ namespace proyecto_Villarreal_SanLorenzo
                     {
                         if (reader.Read())
                         {
-                            string nombre = reader["nombre_medicacion"].ToString();
-                            string dosis = reader["dosis_medicacion"].ToString();
+                            string nombre = reader["nombre_medicacion"] != DBNull.Value ? reader["nombre_medicacion"].ToString() : "";
+                            string dosis = reader["dosis"] != DBNull.Value ? reader["dosis"].ToString() : "";
 
                             if (!string.IsNullOrWhiteSpace(nombre))
-                                medicacionInfo = $"{nombre} ({dosis})";
+                            {
+                                if (!string.IsNullOrWhiteSpace(dosis))
+                                    medicacionInfo = $"{nombre} ({dosis})";
+                                else
+                                    medicacionInfo = $"{nombre}";
+                            }
                         }
                     }
                 }
