@@ -641,15 +641,16 @@ namespace proyecto_Villarreal_SanLorenzo
                              * 
                              */
                             query = @"
-                                SELECT 
+                                SET DATEFIRST 1; 
+
+                                SELECT  
                                     DATEADD(DAY, 
-                                            -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), 
+                                            1 - DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)),  
                                             CAST(fecha_registro AS DATE)) AS PeriodoRep,
                                     COUNT(*) AS Cantidad
                                 FROM Registro
                                 WHERE fecha_registro BETWEEN @inicio AND @fin
-                                      AND id_usuario = @usuario
-                                GROUP BY DATEADD(DAY, -((DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)) + 5) % 7), CAST(fecha_registro AS DATE))
+                                GROUP BY DATEADD(DAY, 1 - DATEPART(WEEKDAY, CAST(fecha_registro AS DATE)), CAST(fecha_registro AS DATE))
                                 ORDER BY PeriodoRep";
                             break;
 
